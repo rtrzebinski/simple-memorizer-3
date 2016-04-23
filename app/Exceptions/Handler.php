@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -33,6 +34,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        // If we are testing, just throw the exception.
+        if (App::environment() == 'testing') {
+            throw $e;
+        }
         parent::report($e);
     }
 
