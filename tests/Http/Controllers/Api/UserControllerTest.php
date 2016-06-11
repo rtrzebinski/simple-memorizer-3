@@ -32,7 +32,7 @@ class UserControllerTest extends TestCase
             'password' => $password,
         ]);
 
-        $this->assertResponseOk();
+        $this->assertResponseStatus(Response::HTTP_CREATED);
     }
 
     public function testItShould_notSignupUser_invalidInput()

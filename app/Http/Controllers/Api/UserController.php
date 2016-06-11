@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $userRepository->create($request->all());
 
-        return $this->createResponse(Response::HTTP_OK);
+        return $this->createResponse(Response::HTTP_CREATED);
     }
 
     /**
