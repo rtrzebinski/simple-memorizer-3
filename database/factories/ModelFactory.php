@@ -11,10 +11,23 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+use App\Exercise;
+use App\User;
+
+$factory->define(User::class, function () {
     return [
-        'email' => $faker->safeEmail,
+        'email' => uniqid() . '@example.com',
         'password' => uniqid(),
         'api_token' => uniqid(),
+    ];
+});
+
+$factory->define(Exercise::class, function () {
+    return [
+        'user_id' => function () {
+            return factory(User::class)->create()->id;
+        },
+        'question' => uniqid(),
+        'answer' => uniqid(),
     ];
 });

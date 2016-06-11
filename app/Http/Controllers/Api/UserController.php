@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $userRepository->create($request->all());
 
-        return $this->createResponse(Response::HTTP_CREATED);
+        return $this->status(Response::HTTP_CREATED);
     }
 
     /**
@@ -33,7 +33,7 @@ class UserController extends Controller
         $user = $userRepository->findByCredentials($request->email, $request->password);
 
         if (!$user instanceof User) {
-            return $this->createResponse(Response::HTTP_UNAUTHORIZED);
+            return $this->status(Response::HTTP_UNAUTHORIZED);
         }
 
         return JsonResponse::create([

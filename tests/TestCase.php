@@ -1,5 +1,6 @@
 <?php
 
+use App\Exercise;
 use App\User;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
@@ -26,6 +27,23 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
+     * Call api as authenticated user
+     * @param $method
+     * @param $uri
+     * @param array $data
+     * @param User $user
+     * @return $this
+     */
+    protected function callApi($method, $uri, array $data = [], User $user = null)
+    {
+        $headers = [];
+        if ($user instanceof User) {
+            $headers = ['Authorization' => 'Bearer ' . $user->api_token];
+        }
+        return parent::json($method, $uri, $data, $headers);
+    }
+
+    /**
      * Random valid email address.
      * @return string
      */
@@ -46,10 +64,25 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     /**
      * Create object and save to db.
      * @param array $data
-     * @return mixed
+     * @return User
      */
     protected function createUser(array $data = [])
     {
         return factory(User::class)->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Exercise
+     */
+    protected function createExercise(array $data = [])
+    {
+        return factory(Exercise::class)->create($data);
+    }
+
+    protected function assertJsonResponse($input, $statusCode = 200)
+    {
+        $this->assertResponseStatus($statusCode);
+        $this->assertEquals(json_encode($input), $this->response->getContent());
     }
 }
