@@ -27,7 +27,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * Call api as authenticated user
+     * Call api route as guest, or authenticated user.
      * @param $method
      * @param $uri
      * @param array $data
@@ -41,6 +41,17 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             $headers = ['Authorization' => 'Bearer ' . $user->api_token];
         }
         return parent::json($method, $uri, $data, $headers);
+    }
+
+    /**
+     * Compare route response and status code to provided parameters.
+     * @param $input
+     * @param int $statusCode
+     */
+    protected function assertJsonResponse($input, int $statusCode = 200)
+    {
+        $this->assertResponseStatus($statusCode);
+        $this->assertEquals(json_encode($input), $this->response->getContent());
     }
 
     /**
@@ -68,11 +79,5 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function createExercise(array $data = [])
     {
         return factory(Exercise::class)->create($data);
-    }
-
-    protected function assertJsonResponse($input, $statusCode = 200)
-    {
-        $this->assertResponseStatus($statusCode);
-        $this->assertEquals(json_encode($input), $this->response->getContent());
     }
 }
