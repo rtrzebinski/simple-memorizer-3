@@ -53,16 +53,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * Make object without saving to db.
-     * @return User
-     */
-    protected function makeUser()
-    {
-        return factory(User::class)->make();
-    }
-
-    /**
-     * Create object and save to db.
      * @param array $data
      * @return User
      */

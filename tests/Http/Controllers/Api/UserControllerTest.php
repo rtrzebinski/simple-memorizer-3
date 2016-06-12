@@ -4,10 +4,14 @@ namespace Tests\Http\Controllers\Api;
 
 use App\Repositories\UserRepository;
 use Illuminate\Http\Response;
+use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
 
 class UserControllerTest extends TestCase
 {
+    /**
+     * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
+     */
     private $userRepositoryMock;
 
     public function setUp()
@@ -52,7 +56,7 @@ class UserControllerTest extends TestCase
     {
         $email = uniqid();
         $password = uniqid();
-        $user = $this->makeUser();
+        $user = $this->createUser();
 
         $this->userRepositoryMock->expects($this->once())->method('findByCredentials')
             ->with($email, $password)->willReturn($user);
