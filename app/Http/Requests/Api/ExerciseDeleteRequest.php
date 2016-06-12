@@ -3,13 +3,15 @@
 namespace App\Http\Requests\Api;
 
 use App\Http\Requests\Request;
+use Auth;
+use DB;
 
 /**
- * Class CreateExerciseRequest
+ * Class ExerciseDeleteRequest
  * @property mixed exercise_id
  * @package App\Http\Requests\Api
  */
-class CreateExerciseRequest extends Request
+class ExerciseDeleteRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,7 +20,10 @@ class CreateExerciseRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return DB::table('exercises')
+            ->where('id', '=', $this->route('exercise_id'))
+            ->where('user_id', '=', Auth::guard('api')->user()->id)
+            ->exists();
     }
 
     /**
@@ -29,8 +34,7 @@ class CreateExerciseRequest extends Request
     public function rules()
     {
         return [
-            'question' => 'required',
-            'answer' => 'required',
+            //
         ];
     }
 }

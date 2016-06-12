@@ -7,11 +7,11 @@ use Auth;
 use DB;
 
 /**
- * Class UpdateExerciseRequest
+ * Class ExerciseUpdateRequest
  * @property mixed exercise_id
  * @package App\Http\Requests\Api
  */
-class UpdateExerciseRequest extends Request
+class ExerciseUpdateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
