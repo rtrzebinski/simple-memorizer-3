@@ -4,11 +4,6 @@ namespace App\Http\Requests\Api;
 
 use App\Http\Requests\Request;
 
-/**
- * Class ExerciseCreateRequest
- * @property mixed exercise_id
- * @package App\Http\Requests\Api
- */
 class ExerciseCreateRequest extends Request
 {
     /**

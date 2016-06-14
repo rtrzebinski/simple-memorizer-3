@@ -6,11 +6,6 @@ use App\Http\Requests\Request;
 use Auth;
 use DB;
 
-/**
- * Class ExerciseDeleteRequest
- * @property mixed exercise_id
- * @package App\Http\Requests\Api
- */
 class ExerciseDeleteRequest extends Request
 {
     /**

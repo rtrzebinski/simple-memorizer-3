@@ -10,10 +10,6 @@ use App\Repositories\ExerciseRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-/**
- * Class ExerciseController
- * @package App\Http\Controllers\Api
- */
 class ExerciseController extends Controller
 {
     /**
