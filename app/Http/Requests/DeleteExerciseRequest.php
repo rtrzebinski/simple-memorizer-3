@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use Auth;
 use DB;
 
-class ExerciseUpdateRequest extends Request
+/**
+ * @property mixed exercise_id
+ */
+class DeleteExerciseRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +32,7 @@ class ExerciseUpdateRequest extends Request
     public function rules()
     {
         return [
-            'question' => 'required',
-            'answer' => 'required',
+            //
         ];
     }
 }

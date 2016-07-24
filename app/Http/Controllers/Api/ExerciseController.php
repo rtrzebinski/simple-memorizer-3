@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\ExerciseAccessRequest;
-use App\Http\Requests\Api\ExerciseCreateRequest;
-use App\Http\Requests\Api\ExerciseUpdateRequest;
-use App\Http\Requests\Api\ExerciseDeleteRequest;
+use App\Http\Requests\FetchExerciseRequest;
+use App\Http\Requests\CreateExerciseRequest;
+use App\Http\Requests\UpdateExerciseRequest;
+use App\Http\Requests\DeleteExerciseRequest;
 use App\Models\Exercise\ExerciseRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -14,10 +14,10 @@ class ExerciseController extends Controller
 {
     /**
      * @param ExerciseRepository $exerciseRepository
-     * @param ExerciseCreateRequest $request
+     * @param CreateExerciseRequest $request
      * @return JsonResponse
      */
-    public function createExercise(ExerciseRepository $exerciseRepository, ExerciseCreateRequest $request)
+    public function createExercise(ExerciseRepository $exerciseRepository, CreateExerciseRequest $request)
     {
         $exercise = $exerciseRepository->createExercise($this->user()->id, $request->all());
         return $this->response($exercise, Response::HTTP_CREATED);
@@ -35,10 +35,10 @@ class ExerciseController extends Controller
 
     /**
      * @param ExerciseRepository $exerciseRepository
-     * @param ExerciseAccessRequest $request
+     * @param FetchExerciseRequest $request
      * @return JsonResponse
      */
-    public function fetchExercise(ExerciseRepository $exerciseRepository, ExerciseAccessRequest $request)
+    public function fetchExercise(ExerciseRepository $exerciseRepository, FetchExerciseRequest $request)
     {
         $exercise = $exerciseRepository->findExerciseById($request->exercise_id);
         return $this->response($exercise);
@@ -46,10 +46,10 @@ class ExerciseController extends Controller
 
     /**
      * @param ExerciseRepository $exerciseRepository
-     * @param ExerciseUpdateRequest $request
+     * @param UpdateExerciseRequest $request
      * @return JsonResponse
      */
-    public function updateExercise(ExerciseRepository $exerciseRepository, ExerciseUpdateRequest $request)
+    public function updateExercise(ExerciseRepository $exerciseRepository, UpdateExerciseRequest $request)
     {
         $exercise = $exerciseRepository->updateExercise($request->exercise_id, $request->except('exercise_id'));
         return $this->response($exercise);
@@ -57,10 +57,10 @@ class ExerciseController extends Controller
 
     /**
      * @param ExerciseRepository $exerciseRepository
-     * @param ExerciseDeleteRequest $request
+     * @param DeleteExerciseRequest $request
      * @return Response
      */
-    public function deleteExercise(ExerciseRepository $exerciseRepository, ExerciseDeleteRequest $request)
+    public function deleteExercise(ExerciseRepository $exerciseRepository, DeleteExerciseRequest $request)
     {
         $exerciseRepository->deleteExercise($request->exercise_id);
         return $this->status(Response::HTTP_NO_CONTENT);

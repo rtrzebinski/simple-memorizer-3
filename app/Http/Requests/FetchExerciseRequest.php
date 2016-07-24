@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use Auth;
 use DB;
 
-class ExerciseAccessRequest extends Request
+/**
+ * @property mixed exercise_id
+ */
+class FetchExerciseRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

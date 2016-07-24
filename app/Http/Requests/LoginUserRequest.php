@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
-use Auth;
-use DB;
 
-class ExerciseDeleteRequest extends Request
+/**
+ * @property mixed email
+ * @property mixed password
+ */
+class LoginUserRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,10 +17,7 @@ class ExerciseDeleteRequest extends Request
      */
     public function authorize()
     {
-        return DB::table('exercises')
-            ->where('id', '=', $this->route('exercise_id'))
-            ->where('user_id', '=', Auth::guard('api')->user()->id)
-            ->exists();
+        return true;
     }
 
     /**
@@ -29,7 +28,8 @@ class ExerciseDeleteRequest extends Request
     public function rules()
     {
         return [
-            //
+            'email' => 'required|email',
+            'password' => 'required',
         ];
     }
 }
