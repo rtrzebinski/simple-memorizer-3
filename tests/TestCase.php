@@ -44,17 +44,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * Compare route response and status code to provided parameters.
-     * @param $input
-     * @param int $statusCode
-     */
-    protected function assertJsonResponse($input, int $statusCode = 200)
-    {
-        $this->assertResponseStatus($statusCode);
-        $this->assertEquals(json_encode($input), $this->response->getContent());
-    }
-
-    /**
      * Random valid email address.
      * @return string
      */

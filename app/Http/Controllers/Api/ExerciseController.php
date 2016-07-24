@@ -63,6 +63,5 @@ class ExerciseController extends Controller
     public function deleteExercise(ExerciseRepository $exerciseRepository, DeleteExerciseRequest $request)
     {
         $exerciseRepository->deleteExercise($request->exercise_id);
-        return $this->status(Response::HTTP_NO_CONTENT);
     }
 }

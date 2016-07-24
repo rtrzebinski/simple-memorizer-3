@@ -47,20 +47,17 @@ class ExerciseControllerTest extends TestCase
     {
         $user = $this->createUser();
         $exercise = $this->createExercise();
-        $question = uniqid();
-        $answer = uniqid();
 
         $input = [
-            'question' => $question,
-            'answer' => $answer,
+            'question' => uniqid(),
+            'answer' => uniqid(),
         ];
 
-        $this->exerciseRepositoryMock->method('createExercise')->with($user->id, $input)
-            ->willReturn($exercise);
+        $this->exerciseRepositoryMock->method('createExercise')->with($user->id, $input)->willReturn($exercise);
 
-        $this->callApi('POST', '/exercises', $input, $user);
-
-        $this->assertJsonResponse($exercise, Response::HTTP_CREATED);
+        $this->callApi('POST', '/exercises', $input, $user)
+            ->seeJson($exercise->toArray())
+            ->assertResponseStatus(Response::HTTP_CREATED);
     }
 
     public function testItShould_notCreateExercise_invalidInput()
@@ -79,9 +76,8 @@ class ExerciseControllerTest extends TestCase
 
         $this->exerciseRepositoryMock->method('fetchExercisesOfUser')->with($user->id)->willReturn(collect([$exercise]));
 
-        $this->callApi('GET', '/exercises', [], $user);
-
-        $this->assertJsonResponse([$exercise]);
+        $this->callApi('GET', '/exercises', [], $user)
+            ->seeJson([$exercise->toArray()]);
     }
 
     public function testItShould_fetchExercise()
@@ -91,9 +87,8 @@ class ExerciseControllerTest extends TestCase
 
         $this->exerciseRepositoryMock->method('findExerciseById')->with($exercise->id)->willReturn($exercise);
 
-        $this->callApi('GET', '/exercises/' . $exercise->id, [], $user);
-
-        $this->assertJsonResponse($exercise);
+        $this->callApi('GET', '/exercises/' . $exercise->id, [], $user)
+            ->seeJson($exercise->toArray());
     }
 
     public function testItShould_notFetchExercise_exerciseDoesNotExist()
@@ -132,9 +127,8 @@ class ExerciseControllerTest extends TestCase
 
         $this->exerciseRepositoryMock->method('updateExercise')->with($exercise->id, $input)->willReturn($exercise);
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
-
-        $this->assertJsonResponse($exercise);
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user)
+            ->seeJson($exercise->toArray());
     }
 
     public function testItShould_notUpdateExercise_exerciseDoesNotExist()
@@ -193,7 +187,7 @@ class ExerciseControllerTest extends TestCase
 
         $this->callApi('DELETE', '/exercises/' . $exercise->id, [], $user);
 
-        $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
+        $this->assertResponseOk();
     }
 
     public function testItShould_notDeleteExercise_exerciseDoesNotBelongToUser()
@@ -204,6 +198,17 @@ class ExerciseControllerTest extends TestCase
         $this->exerciseRepositoryMock->expects($this->never())->method('deleteExercise');
 
         $this->callApi('DELETE', '/exercises/' . $exercise->id, [], $user);
+
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testItShould_notDeleteExercise_exerciseDoesNotExist()
+    {
+        $user = $this->createUser();
+
+        $this->exerciseRepositoryMock->expects($this->never())->method('deleteExercise');
+
+        $this->callApi('DELETE', '/exercises/-1', [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }

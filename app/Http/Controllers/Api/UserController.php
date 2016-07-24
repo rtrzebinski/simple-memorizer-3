@@ -6,7 +6,6 @@ use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\SignupUserRequest;
 use App\Models\User\User;
 use App\Models\User\UserRepository;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -19,7 +18,7 @@ class UserController extends Controller
     public function signup(SignupUserRequest $request, UserRepository $userRepository)
     {
         $user = $userRepository->create($request->all());
-        return JsonResponse::create($user)->setStatusCode(Response::HTTP_CREATED);
+        return $this->response($user, Response::HTTP_CREATED);
     }
 
     /**
@@ -35,6 +34,6 @@ class UserController extends Controller
             return $this->status(Response::HTTP_UNAUTHORIZED);
         }
 
-        return JsonResponse::create($user)->setStatusCode(Response::HTTP_OK);
+        return $this->response($user);
     }
 }

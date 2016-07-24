@@ -32,7 +32,7 @@ class UserControllerTest extends TestCase
             'password' => $password,
         ])->willReturn($user);
 
-        $this->json('POST', '/api/signup', [
+        $this->callApi('POST', '/api/signup', [
             'email' => $email,
             'password' => $password,
         ])->seeJson($user->toArray());
@@ -42,7 +42,7 @@ class UserControllerTest extends TestCase
 
     public function testItShould_notSignupUser_invalidInput()
     {
-        $this->json('POST', '/api/signup');
+        $this->callApi('POST', '/api/signup');
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -56,7 +56,7 @@ class UserControllerTest extends TestCase
         $this->userRepositoryMock->expects($this->once())->method('findByCredentials')
             ->with($email, $password)->willReturn($user);
 
-        $this->json('POST', '/api/login', [
+        $this->callApi('POST', '/api/login', [
             'email' => $email,
             'password' => $password,
         ])->seeJson($user->toArray());
@@ -68,7 +68,7 @@ class UserControllerTest extends TestCase
     {
         $this->userRepositoryMock->expects($this->never())->method('findByCredentials');
 
-        $this->json('POST', '/api/login');
+        $this->callApi('POST', '/api/login');
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -78,10 +78,9 @@ class UserControllerTest extends TestCase
         $email = $this->randomEmail();
         $password = $this->randomPassword();
 
-        $this->userRepositoryMock->expects($this->once())->method('findByCredentials')
-            ->with($email, $password);
+        $this->userRepositoryMock->expects($this->once())->method('findByCredentials')->with($email, $password);
 
-        $this->json('POST', '/api/login', [
+        $this->callApi('POST', '/api/login', [
             'email' => $email,
             'password' => $password,
         ]);
