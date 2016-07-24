@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Models\Exercise;
 
-use App\Exercise;
 use Illuminate\Support\Collection;
 
 class ExerciseRepository

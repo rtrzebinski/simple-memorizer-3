@@ -1,7 +1,7 @@
 <?php
 
-use App\Exercise;
-use App\User;
+use App\Models\Exercise\Exercise;
+use App\Models\User\User;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Http\Repositories;
+namespace Tests\Models\Users;
 
-use App\Repositories\UserRepository;
-use App\User;
+use App\Models\User\UserRepository;
+use App\Models\User\User;
 use Hash;
 use TestCase;
 

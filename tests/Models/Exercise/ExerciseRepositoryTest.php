@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Http\Repositories;
+namespace Tests\Models\Exercise;
 
-use App\Exercise;
-use App\Repositories\ExerciseRepository;
+use App\Models\Exercise\Exercise;
+use App\Models\Exercise\ExerciseRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use TestCase;
 

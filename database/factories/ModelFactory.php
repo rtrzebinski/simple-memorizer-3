@@ -11,8 +11,8 @@
 |
 */
 
-use App\Exercise;
-use App\User;
+use App\Models\Exercise\Exercise;
+use App\Models\User\User;
 
 $factory->define(User::class, function () {
     return [

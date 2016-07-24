@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models\User;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * App\User
+ * App\Models\User\User
  *
  * @property integer $id
  * @property string $email
@@ -13,12 +13,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $api_token
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\User whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\User whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\App\User wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\App\User whereApiToken($value)
- * @method static \Illuminate\Database\Query\Builder|\App\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereApiToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable

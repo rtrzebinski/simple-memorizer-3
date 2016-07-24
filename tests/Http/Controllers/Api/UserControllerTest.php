@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Repositories\UserRepository;
+use App\Models\User\UserRepository;
 use Illuminate\Http\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;

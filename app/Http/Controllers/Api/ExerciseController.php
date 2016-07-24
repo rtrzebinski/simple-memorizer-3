@@ -6,7 +6,7 @@ use App\Http\Requests\Api\ExerciseAccessRequest;
 use App\Http\Requests\Api\ExerciseCreateRequest;
 use App\Http\Requests\Api\ExerciseUpdateRequest;
 use App\Http\Requests\Api\ExerciseDeleteRequest;
-use App\Repositories\ExerciseRepository;
+use App\Models\Exercise\ExerciseRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
