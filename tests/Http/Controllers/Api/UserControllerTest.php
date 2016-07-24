@@ -24,38 +24,33 @@ class UserControllerTest extends TestCase
     public function testItShould_signupUser()
     {
         $email = $this->randomEmail();
-        $password = uniqid();
+        $password = $this->randomPassword();
+        $user = $this->createUser();
 
         $this->userRepositoryMock->expects($this->once())->method('create')->with([
             'email' => $email,
             'password' => $password,
-        ]);
+        ])->willReturn($user);
 
         $this->json('POST', '/api/signup', [
             'email' => $email,
             'password' => $password,
-        ]);
+        ])->seeJson($user->toArray());
 
         $this->assertResponseStatus(Response::HTTP_CREATED);
     }
 
     public function testItShould_notSignupUser_invalidInput()
     {
-        $email = uniqid();
-        $password = uniqid();
-
-        $this->json('POST', '/api/signup', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $this->json('POST', '/api/signup');
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testItShould_loginUser()
     {
-        $email = uniqid();
-        $password = uniqid();
+        $email = $this->randomEmail();
+        $password = $this->randomPassword();
         $user = $this->createUser();
 
         $this->userRepositoryMock->expects($this->once())->method('findByCredentials')
@@ -64,15 +59,24 @@ class UserControllerTest extends TestCase
         $this->json('POST', '/api/login', [
             'email' => $email,
             'password' => $password,
-        ])->seeJson(['token' => $user->api_token]);
+        ])->seeJson($user->toArray());
 
         $this->assertResponseOk();
     }
 
+    public function testItShould_notLoginUser_invalidInput()
+    {
+        $this->userRepositoryMock->expects($this->never())->method('findByCredentials');
+
+        $this->json('POST', '/api/login');
+
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
     public function testItShould_notLoginUser_incorrectCredentials()
     {
-        $email = uniqid();
-        $password = uniqid();
+        $email = $this->randomEmail();
+        $password = $this->randomPassword();
 
         $this->userRepositoryMock->expects($this->once())->method('findByCredentials')
             ->with($email, $password);

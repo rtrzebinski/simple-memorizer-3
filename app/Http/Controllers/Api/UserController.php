@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\LoginUserRequest;
+use App\Http\Requests\Api\UserSignupRequest;
 use App\Models\User\User;
 use App\Models\User\UserRepository;
-use App\Http\Requests\Api\UserSignupRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -18,17 +18,16 @@ class UserController extends Controller
      */
     public function signup(UserSignupRequest $request, UserRepository $userRepository)
     {
-        $userRepository->create($request->all());
-
-        return $this->status(Response::HTTP_CREATED);
+        $user = $userRepository->create($request->all());
+        return JsonResponse::create($user)->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
-     * @param Request $request
+     * @param LoginUserRequest $request
      * @param UserRepository $userRepository
      * @return Response
      */
-    public function login(Request $request, UserRepository $userRepository)
+    public function login(LoginUserRequest $request, UserRepository $userRepository)
     {
         $user = $userRepository->findByCredentials($request->email, $request->password);
 
@@ -36,9 +35,6 @@ class UserController extends Controller
             return $this->status(Response::HTTP_UNAUTHORIZED);
         }
 
-        return JsonResponse::create([
-                'token' => $user->api_token
-            ]
-        );
+        return JsonResponse::create($user)->setStatusCode(Response::HTTP_OK);
     }
 }

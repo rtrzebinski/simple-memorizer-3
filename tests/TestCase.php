@@ -64,6 +64,15 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
+     * Random valid password.
+     * @return string
+     */
+    protected function randomPassword() : string
+    {
+        return uniqid();
+    }
+
+    /**
      * @param array $data
      * @return User
      */
