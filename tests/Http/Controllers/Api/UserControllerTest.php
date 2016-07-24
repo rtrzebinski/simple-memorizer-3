@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\User\UserRepository;
+use App\Models\User\UserRepositoryInterface;
 use Illuminate\Http\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
@@ -10,15 +10,15 @@ use TestCase;
 class UserControllerTest extends TestCase
 {
     /**
-     * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var UserRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
      */
     private $userRepositoryMock;
 
     public function setUp()
     {
         parent::setUp();
-        $this->userRepositoryMock = $this->getMock(UserRepository::class);
-        $this->app->instance(UserRepository::class, $this->userRepositoryMock);
+        $this->userRepositoryMock = $this->getMock(UserRepositoryInterface::class);
+        $this->app->instance(UserRepositoryInterface::class, $this->userRepositoryMock);
     }
 
     public function testItShould_signupUser()

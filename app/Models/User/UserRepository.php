@@ -4,17 +4,16 @@ namespace App\Models\User;
 
 use Hash;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
     /**
-     * @param array $data
+     * @param array $attributes
      * @return User
      */
-    public function create(array $data)
+    public function create(array $attributes) : User
     {
-        $user = new User();
-        $user->fill($data);
-        $user->password = Hash::make($data['password']);
+        $user = new User($attributes);
+        $user->password = Hash::make($attributes['password']);
         $user->api_token = md5(uniqid());
         $user->save();
         return $user;

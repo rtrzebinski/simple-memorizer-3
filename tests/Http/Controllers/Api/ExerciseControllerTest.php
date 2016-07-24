@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\Exercise\ExerciseRepository;
+use App\Models\Exercise\ExerciseRepositoryInterface;
 use Illuminate\Http\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
@@ -10,15 +10,15 @@ use TestCase;
 class ExerciseControllerTest extends TestCase
 {
     /**
-     * @var ExerciseRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var ExerciseRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    private $exerciseRepositoryMock;
+    private $exerciseRepository;
 
     public function setUp()
     {
         parent::setUp();
-        $this->exerciseRepositoryMock = $this->getMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $this->exerciseRepositoryMock);
+        $this->exerciseRepository = $this->getMock(ExerciseRepositoryInterface::class);
+        $this->app->instance(ExerciseRepositoryInterface::class, $this->exerciseRepository);
     }
 
     public function protectedRoutesProvider()
@@ -53,7 +53,7 @@ class ExerciseControllerTest extends TestCase
             'answer' => uniqid(),
         ];
 
-        $this->exerciseRepositoryMock->method('createExercise')->with($user->id, $input)->willReturn($exercise);
+        $this->exerciseRepository->method('createExercise')->with($user->id, $input)->willReturn($exercise);
 
         $this->callApi('POST', '/exercises', $input, $user)
             ->seeJson($exercise->toArray())
@@ -64,7 +64,7 @@ class ExerciseControllerTest extends TestCase
     {
         $this->callApi('POST', '/exercises', [], $this->createUser());
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('createExercise');
+        $this->exerciseRepository->expects($this->never())->method('createExercise');
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -74,7 +74,7 @@ class ExerciseControllerTest extends TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->exerciseRepositoryMock->method('fetchExercisesOfUser')->with($user->id)->willReturn(collect([$exercise]));
+        $this->exerciseRepository->method('fetchExercisesOfUser')->with($user->id)->willReturn(collect([$exercise]));
 
         $this->callApi('GET', '/exercises', [], $user)
             ->seeJson([$exercise->toArray()]);
@@ -85,7 +85,7 @@ class ExerciseControllerTest extends TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise(['user_id' => $user->id]);
 
-        $this->exerciseRepositoryMock->method('findExerciseById')->with($exercise->id)->willReturn($exercise);
+        $this->exerciseRepository->method('findExerciseById')->with($exercise->id)->willReturn($exercise);
 
         $this->callApi('GET', '/exercises/' . $exercise->id, [], $user)
             ->seeJson($exercise->toArray());
@@ -95,7 +95,7 @@ class ExerciseControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('findExerciseById');
+        $this->exerciseRepository->expects($this->never())->method('findExerciseById');
 
         $this->callApi('GET', '/exercises/' . -1, [], $user);
 
@@ -106,7 +106,7 @@ class ExerciseControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('findExerciseById');
+        $this->exerciseRepository->expects($this->never())->method('findExerciseById');
 
         $this->callApi('GET', '/exercises/' . $this->createExercise()->id, [], $user);
 
@@ -125,7 +125,7 @@ class ExerciseControllerTest extends TestCase
             'answer' => $answer,
         ];
 
-        $this->exerciseRepositoryMock->method('updateExercise')->with($exercise->id, $input)->willReturn($exercise);
+        $this->exerciseRepository->method('updateExercise')->with($exercise->id, $input)->willReturn($exercise);
 
         $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user)
             ->seeJson($exercise->toArray());
@@ -135,7 +135,7 @@ class ExerciseControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('updateExercise');
+        $this->exerciseRepository->expects($this->never())->method('updateExercise');
 
         $this->callApi('PATCH', '/exercises/' . -1, [
             'question' => uniqid(),
@@ -150,7 +150,7 @@ class ExerciseControllerTest extends TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise(['user_id' => $user->id]);
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('updateExercise');
+        $this->exerciseRepository->expects($this->never())->method('updateExercise');
 
         $this->callApi('PATCH', '/exercises/' . $exercise->id, [], $user);
 
@@ -169,9 +169,9 @@ class ExerciseControllerTest extends TestCase
             'answer' => $answer,
         ];
 
-        $this->exerciseRepositoryMock->method('findExerciseById')
+        $this->exerciseRepository->method('findExerciseById')
             ->with($exercise->id)->willReturn($exercise);
-        $this->exerciseRepositoryMock->method('updateExercise')->with($exercise->id, $input)->willReturn($exercise);
+        $this->exerciseRepository->method('updateExercise')->with($exercise->id, $input)->willReturn($exercise);
 
         $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
 
@@ -183,7 +183,7 @@ class ExerciseControllerTest extends TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise(['user_id' => $user->id]);
 
-        $this->exerciseRepositoryMock->expects($this->once())->method('deleteExercise')->with($exercise->id);
+        $this->exerciseRepository->expects($this->once())->method('deleteExercise')->with($exercise->id);
 
         $this->callApi('DELETE', '/exercises/' . $exercise->id, [], $user);
 
@@ -195,7 +195,7 @@ class ExerciseControllerTest extends TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('deleteExercise');
+        $this->exerciseRepository->expects($this->never())->method('deleteExercise');
 
         $this->callApi('DELETE', '/exercises/' . $exercise->id, [], $user);
 
@@ -206,7 +206,7 @@ class ExerciseControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->exerciseRepositoryMock->expects($this->never())->method('deleteExercise');
+        $this->exerciseRepository->expects($this->never())->method('deleteExercise');
 
         $this->callApi('DELETE', '/exercises/-1', [], $user);
 

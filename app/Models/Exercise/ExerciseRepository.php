@@ -4,7 +4,7 @@ namespace App\Models\Exercise;
 
 use Illuminate\Support\Collection;
 
-class ExerciseRepository
+class ExerciseRepository implements ExerciseRepositoryInterface
 {
     /**
      * @param int $userId
@@ -26,12 +26,12 @@ class ExerciseRepository
 
     /**
      * @param int $userId
-     * @param array $input
+     * @param array $attributes
      * @return Exercise
      */
-    public function createExercise(int $userId, array $input) : Exercise
+    public function createExercise(int $userId, array $attributes) : Exercise
     {
-        $exercise = new Exercise($input);
+        $exercise = new Exercise($attributes);
         $exercise->user_id = $userId;
         $exercise->save();
         return $exercise;
@@ -39,13 +39,13 @@ class ExerciseRepository
 
     /**
      * @param int $exerciseId
-     * @param array $input
+     * @param array $attributes
      * @return Exercise
      */
-    public function updateExercise(int $exerciseId, array $input) : Exercise
+    public function updateExercise(int $exerciseId, array $attributes) : Exercise
     {
-        $exercise = $this->findExerciseById($exerciseId);
-        $exercise->fill($input);
+        $exercise = Exercise::findOrFail($exerciseId);
+        $exercise->fill($attributes);
         $exercise->save();
         return $exercise;
     }
@@ -56,7 +56,6 @@ class ExerciseRepository
      */
     public function deleteExercise(int $exerciseId)
     {
-        $exercise = $this->findExerciseById($exerciseId);
-        $exercise->delete();
+        Exercise::findOrFail($exerciseId)->delete();
     }
 }
