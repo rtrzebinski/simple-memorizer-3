@@ -18,7 +18,7 @@ class UserController extends Controller
     public function signup(SignupUserRequest $request, UserRepositoryInterface $userRepository)
     {
         $user = $userRepository->create($request->all());
-        return $this->response($user, Response::HTTP_CREATED);
+        return $this->response($user->makeVisible('api_token'), Response::HTTP_CREATED);
     }
 
     /**
@@ -34,6 +34,6 @@ class UserController extends Controller
             return $this->status(Response::HTTP_UNAUTHORIZED);
         }
 
-        return $this->response($user);
+        return $this->response($user->makeVisible('api_token'));
     }
 }

@@ -35,7 +35,7 @@ class UserControllerTest extends TestCase
         $this->callApi('POST', '/api/signup', [
             'email' => $email,
             'password' => $password,
-        ])->seeJson($user->toArray());
+        ])->seeJson($user->makeVisible('api_token')->toArray());
 
         $this->assertResponseStatus(Response::HTTP_CREATED);
     }
@@ -59,7 +59,7 @@ class UserControllerTest extends TestCase
         $this->callApi('POST', '/api/login', [
             'email' => $email,
             'password' => $password,
-        ])->seeJson($user->toArray());
+        ])->seeJson($user->makeVisible('api_token')->toArray());
 
         $this->assertResponseOk();
     }
