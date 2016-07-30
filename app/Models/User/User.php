@@ -3,7 +3,9 @@
 namespace App\Models\User;
 
 use App\Models\Lesson\Lesson;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 /**
  * App\Models\User\User
@@ -14,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $api_token
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $lessons
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereEmail($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User wherePassword($value)
@@ -41,6 +44,9 @@ class User extends Authenticatable
         'api_token',
     ];
 
+    /**
+     * @return BelongsToMany
+     */
     public function lessons()
     {
         return $this->belongsToMany(Lesson::class);
