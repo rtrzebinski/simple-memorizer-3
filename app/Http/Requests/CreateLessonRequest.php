@@ -2,13 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Auth;
-use DB;
-
-/**
- * @property mixed exercise_id
- */
-class DeleteExerciseRequest extends Request
+class CreateLessonRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,10 +11,7 @@ class DeleteExerciseRequest extends Request
      */
     public function authorize()
     {
-        return DB::table('exercises')
-            ->where('id', '=', $this->route('exercise_id'))
-            ->where('user_id', '=', Auth::guard('api')->user()->id)
-            ->exists();
+        return true;
     }
 
     /**
@@ -31,7 +22,8 @@ class DeleteExerciseRequest extends Request
     public function rules()
     {
         return [
-            //
+            'visibility' => 'required|in:public,private',
+            'name' => 'required|string',
         ];
     }
 }

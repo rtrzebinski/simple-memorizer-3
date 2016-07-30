@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Exercise\Exercise;
+use App\Models\Lesson\Lesson;
 use App\Models\User\User;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
@@ -77,5 +78,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function createExercise(array $data = [])
     {
         return factory(Exercise::class)->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Lesson
+     */
+    protected function createLesson(array $data = [])
+    {
+        return factory(Lesson::class)->create($data);
     }
 }

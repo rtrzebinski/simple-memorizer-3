@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Lesson\Lesson;
 use Auth;
-use DB;
 
 /**
- * @property mixed exercise_id
+ * @property mixed lesson_id
  */
-class DeleteExerciseRequest extends Request
+class UnsubscribeLessonRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,9 +17,9 @@ class DeleteExerciseRequest extends Request
      */
     public function authorize()
     {
-        return DB::table('exercises')
-            ->where('id', '=', $this->route('exercise_id'))
-            ->where('user_id', '=', Auth::guard('api')->user()->id)
+        return Lesson::whereId($this->route('lesson_id'))
+            ->join('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
+            ->where('lesson_user.user_id', '=', Auth::guard('api')->user()->id)
             ->exists();
     }
 

@@ -20,4 +20,12 @@ Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
     Route::delete('/exercises/{exercise_id}', 'Api\ExerciseController@deleteExercise');
     Route::get('/exercises', 'Api\ExerciseController@fetchExercisesOfUser');
     Route::post('/exercises', 'Api\ExerciseController@createExercise');
+
+    Route::post('/lessons', 'Api\LessonController@createLesson');
+    Route::post('/lessons/{lesson_id}/user', 'Api\LessonController@subscribeLesson');
+    Route::delete('/lessons/{lesson_id}/user', 'Api\LessonController@unsubscribeLesson');
+    Route::patch('/lessons/{lesson_id}', 'Api\LessonController@updateLesson');
+    Route::get('/lessons/owned', 'Api\LessonController@fetchOwnedLessons');
+    Route::get('/lessons/subscribed', 'Api\LessonController@fetchSubscribedLessons');
+    Route::delete('/lessons/{lesson_id}', 'Api\LessonController@deleteLesson');
 });

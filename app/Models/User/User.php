@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\Lesson\Lesson;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -39,4 +40,9 @@ class User extends Authenticatable
         'password',
         'api_token',
     ];
+
+    public function lessons()
+    {
+        return $this->belongsToMany(Lesson::class);
+    }
 }

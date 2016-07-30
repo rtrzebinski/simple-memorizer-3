@@ -12,6 +12,7 @@
 */
 
 use App\Models\Exercise\Exercise;
+use App\Models\Lesson\Lesson;
 use App\Models\User\User;
 
 $factory->define(User::class, function () {
@@ -29,5 +30,15 @@ $factory->define(Exercise::class, function () {
         },
         'question' => uniqid(),
         'answer' => uniqid(),
+    ];
+});
+
+$factory->define(Lesson::class, function () {
+    return [
+        'owner_id' => function () {
+            return factory(User::class)->create()->id;
+        },
+        'name' => uniqid(),
+        'visibility' => 'public',
     ];
 });
