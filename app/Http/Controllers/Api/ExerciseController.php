@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\FetchExerciseRequest;
 use App\Http\Requests\CreateExerciseRequest;
+use App\Http\Requests\FetchExercisesOfLessonRequest;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Http\Requests\DeleteExerciseRequest;
 use App\Models\Exercise\ExerciseRepositoryInterface;
@@ -19,18 +20,8 @@ class ExerciseController extends Controller
      */
     public function createExercise(ExerciseRepositoryInterface $exerciseRepository, CreateExerciseRequest $request)
     {
-        $exercise = $exerciseRepository->createExercise($this->user()->id, $request->all());
+        $exercise = $exerciseRepository->createExercise($request->except('lesson_id'), $request->lesson_id);
         return $this->response($exercise, Response::HTTP_CREATED);
-    }
-
-    /**
-     * @param ExerciseRepositoryInterface $exerciseRepository
-     * @return JsonResponse
-     */
-    public function fetchExercisesOfUser(ExerciseRepositoryInterface $exerciseRepository)
-    {
-        $exercises = $exerciseRepository->fetchExercisesOfUser($this->user()->id);
-        return $this->response($exercises);
     }
 
     /**
@@ -46,19 +37,31 @@ class ExerciseController extends Controller
 
     /**
      * @param ExerciseRepositoryInterface $exerciseRepository
+     * @param FetchExercisesOfLessonRequest $request
+     * @return JsonResponse
+     */
+    public function fetchExercisesOfLesson(
+        ExerciseRepositoryInterface $exerciseRepository,
+        FetchExercisesOfLessonRequest $request
+    ) {
+        $exercises = $exerciseRepository->fetchExercisesOfLesson($request->lesson_id);
+        return $this->response($exercises);
+    }
+
+    /**
+     * @param ExerciseRepositoryInterface $exerciseRepository
      * @param UpdateExerciseRequest $request
      * @return JsonResponse
      */
     public function updateExercise(ExerciseRepositoryInterface $exerciseRepository, UpdateExerciseRequest $request)
     {
-        $exercise = $exerciseRepository->updateExercise($request->exercise_id, $request->except('exercise_id'));
+        $exercise = $exerciseRepository->updateExercise($request->except('exercise_id'), $request->exercise_id);
         return $this->response($exercise);
     }
 
     /**
      * @param ExerciseRepositoryInterface $exerciseRepository
      * @param DeleteExerciseRequest $request
-     * @return Response
      */
     public function deleteExercise(ExerciseRepositoryInterface $exerciseRepository, DeleteExerciseRequest $request)
     {

@@ -19,8 +19,9 @@ class UpdateExerciseRequest extends Request
     public function authorize()
     {
         return DB::table('exercises')
-            ->where('id', '=', $this->route('exercise_id'))
-            ->where('user_id', '=', Auth::guard('api')->user()->id)
+            ->where('exercises.id', '=', $this->route('exercise_id'))
+            ->join('lessons', 'lessons.id', '=', 'exercises.lesson_id')
+            ->where('lessons.owner_id', '=', Auth::guard('api')->user()->id)
             ->exists();
     }
 

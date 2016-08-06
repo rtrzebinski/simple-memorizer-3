@@ -7,12 +7,16 @@ use Illuminate\Support\Collection;
 class ExerciseRepository implements ExerciseRepositoryInterface
 {
     /**
-     * @param int $userId
-     * @return Collection
+     * @param array $attributes
+     * @param int $lessonId
+     * @return Exercise
      */
-    public function fetchExercisesOfUser(int $userId) : Collection
+    public function createExercise(array $attributes, int $lessonId) : Exercise
     {
-        return Exercise::whereUserId($userId)->get();
+        $exercise = new Exercise($attributes);
+        $exercise->lesson_id = $lessonId;
+        $exercise->save();
+        return $exercise;
     }
 
     /**
@@ -25,24 +29,20 @@ class ExerciseRepository implements ExerciseRepositoryInterface
     }
 
     /**
-     * @param int $userId
-     * @param array $attributes
-     * @return Exercise
+     * @param int $lessonId
+     * @return Collection
      */
-    public function createExercise(int $userId, array $attributes) : Exercise
+    public function fetchExercisesOfLesson(int $lessonId) : Collection
     {
-        $exercise = new Exercise($attributes);
-        $exercise->user_id = $userId;
-        $exercise->save();
-        return $exercise;
+        return Exercise::whereLessonId($lessonId)->get();
     }
 
     /**
-     * @param int $exerciseId
      * @param array $attributes
+     * @param int $exerciseId
      * @return Exercise
      */
-    public function updateExercise(int $exerciseId, array $attributes) : Exercise
+    public function updateExercise(array $attributes, int $exerciseId) : Exercise
     {
         $exercise = Exercise::findOrFail($exerciseId);
         $exercise->fill($attributes);

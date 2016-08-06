@@ -25,8 +25,8 @@ $factory->define(User::class, function () {
 
 $factory->define(Exercise::class, function () {
     return [
-        'user_id' => function () {
-            return factory(User::class)->create()->id;
+        'lesson_id' => function () {
+            return factory(Lesson::class)->create()->id;
         },
         'question' => uniqid(),
         'answer' => uniqid(),

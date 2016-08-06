@@ -5,6 +5,7 @@ namespace Tests\Models\Exercise;
 use App\Models\Exercise\Exercise;
 use App\Models\Exercise\ExerciseRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 use TestCase;
 
 class ExerciseRepositoryTest extends TestCase
@@ -20,15 +21,21 @@ class ExerciseRepositoryTest extends TestCase
         $this->repository = new ExerciseRepository();
     }
 
-    public function testItShould_fetchExercisesOfUser()
+    public function testItShould_createExercise()
     {
-        $user = $this->createUser();
-        $exercise = $this->createExercise(['user_id' => $user->id]);
+        $lesson = $this->createLesson();
+        $question = uniqid();
+        $answer = uniqid();
 
-        $result = $this->repository->fetchExercisesOfUser($user->id);
+        $exercise = $this->repository->createExercise([
+            'question' => $question,
+            'answer' => $answer,
+        ], $lesson->id);
 
-        $this->assertCount(1, $result);
-        $this->assertEquals($exercise->id, $result[0]->id);
+        $this->assertInstanceOf(Exercise::class, $exercise);
+        $this->assertEquals($question, $exercise->question);
+        $this->assertEquals($answer, $exercise->answer);
+        $this->assertEquals($lesson->id, $exercise->lesson_id);
     }
 
     public function testItShould_findExerciseById()
@@ -43,21 +50,16 @@ class ExerciseRepositoryTest extends TestCase
         $this->repository->findExerciseById(-1);
     }
 
-    public function testItShould_createExercise()
+    public function testItShould_fetchExercisesOfLesson()
     {
-        $user = $this->createUser();
-        $question = uniqid();
-        $answer = uniqid();
+        $exercise = $this->createExercise();
 
-        $exercise = $this->repository->createExercise($user->id, [
-            'question' => $question,
-            'answer' => $answer,
-        ]);
+        $result = $this->repository->fetchExercisesOfLesson($exercise->lesson_id);
 
-        $this->assertInstanceOf(Exercise::class, $exercise);
-        $this->assertEquals($question, $exercise->question);
-        $this->assertEquals($answer, $exercise->answer);
-        $this->assertEquals($user->id, $exercise->user_id);
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(Exercise::class, $result[0]);
+        $this->assertEquals($exercise->id, $result[0]->id);
     }
 
     public function testItShould_updateExercise()
@@ -66,10 +68,10 @@ class ExerciseRepositoryTest extends TestCase
         $question = uniqid();
         $answer = uniqid();
 
-        $exercise = $this->repository->updateExercise($exercise->id, [
+        $exercise = $this->repository->updateExercise([
             'question' => $question,
             'answer' => $answer,
-        ])->fresh();
+        ], $exercise->id)->fresh();
 
         $this->assertInstanceOf(Exercise::class, $exercise);
         $this->assertEquals($question, $exercise->question);
@@ -79,7 +81,7 @@ class ExerciseRepositoryTest extends TestCase
     public function testItShould_notUpdateExercise_exerciseDoesNotExist()
     {
         $this->expectException(ModelNotFoundException::class);
-        $this->repository->updateExercise(-1, []);
+        $this->repository->updateExercise([], -1);
     }
 
     public function testItShould_deleteExercise()

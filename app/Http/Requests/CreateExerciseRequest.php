@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
+use App\Models\Lesson\Lesson;
+use Auth;
 
+/**
+ * @property mixed lesson_id
+ */
 class CreateExerciseRequest extends Request
 {
     /**
@@ -13,7 +17,9 @@ class CreateExerciseRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return Lesson::whereId($this->route('lesson_id'))
+            ->where('owner_id', '=', Auth::guard('api')->user()->id)
+            ->exists();
     }
 
     /**

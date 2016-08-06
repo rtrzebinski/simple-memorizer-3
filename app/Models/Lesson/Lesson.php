@@ -2,7 +2,9 @@
 
 namespace App\Models\Lesson;
 
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Lesson\Lesson
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $visibility
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\User\User $owner
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Lesson\Lesson whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Lesson\Lesson whereOwnerId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Lesson\Lesson whereName($value)
@@ -23,4 +26,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Lesson extends Model
 {
+    /**
+     * @return BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 }
