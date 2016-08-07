@@ -3,9 +3,12 @@
 use App\Models\Exercise\Exercise;
 use App\Models\Lesson\Lesson;
 use App\Models\User\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * The base URL to use while testing the application.
      *
