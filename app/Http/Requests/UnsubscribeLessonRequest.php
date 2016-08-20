@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Lesson\Lesson;
-use Auth;
+use App\Models\Lesson\LessonRepositoryInterface;
 
 /**
  * @property mixed lesson_id
@@ -13,14 +12,12 @@ class UnsubscribeLessonRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @param LessonRepositoryInterface $lessonRepository
      * @return bool
      */
-    public function authorize()
+    public function authorize(LessonRepositoryInterface $lessonRepository)
     {
-        return Lesson::whereId($this->route('lesson_id'))
-            ->join('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->where('lesson_user.user_id', '=', Auth::guard('api')->user()->id)
-            ->exists();
+        return $lessonRepository->authorizeUnsubscribeLesson($this->userId(), $this->route('lesson_id'));
     }
 
     /**

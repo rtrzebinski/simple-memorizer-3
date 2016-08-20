@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Lesson\Lesson;
-use Illuminate\Database\Eloquent\Builder;
-use Auth;
+use App\Models\Lesson\LessonRepositoryInterface;
 
 /**
  * @property mixed lesson_id
@@ -14,17 +12,12 @@ class SubscribeLessonRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @param LessonRepositoryInterface $lessonRepository
      * @return bool
      */
-    public function authorize()
+    public function authorize(LessonRepositoryInterface $lessonRepository)
     {
-        return Lesson::whereId($this->route('lesson_id'))
-            ->where(function (Builder $query) {
-                $query->where('visibility', '=', 'public')
-                    ->orWhere('owner_id', '=', Auth::guard('api')->user()->id);
-            })->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->whereNull('lesson_user.user_id')
-            ->exists();
+        return $lessonRepository->authorizeSubscribeLesson($this->userId(), $this->route('lesson_id'));
     }
 
     /**

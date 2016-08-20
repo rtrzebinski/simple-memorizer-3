@@ -27,13 +27,17 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
+
         $input = [
             'visibility' => 'public',
             'name' => uniqid(),
         ];
 
-        $this->lessonRepository->expects($this->once())->method('createLesson')->with($input,
-            $user->id)->willReturn($lesson);
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('createLesson')
+            ->with($input, $user->id)
+            ->willReturn($lesson);
 
         $this->callApi('POST', 'lessons', $input, $user)->seeJson($lesson->toArray());
 
@@ -44,107 +48,50 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->lessonRepository->expects($this->never())->method('createLesson');
+        $this->lessonRepository
+            ->expects($this->never())
+            ->method('createLesson');
 
         $this->callApi('POST', 'lessons', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function testItShould_subscribePublicAndNotOwnedLesson()
+    public function testItShould_subscribeLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson();
+        $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->once())->method('subscribeLesson')->with($user->id, $lesson->id);
+        $this->lessonRepository
+            ->method('authorizeSubscribeLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
+
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('subscribeLesson')
+            ->with($user->id, $lesson->id);
 
         $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
 
         $this->assertResponseOk();
     }
 
-    public function testItShould_subscribePublicAndOwnedLesson()
+    public function testItShould_notSubscribeLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson($user);
+        $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->once())->method('subscribeLesson')->with($user->id, $lesson->id);
+        $this->lessonRepository
+            ->method('authorizeSubscribeLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(false);
+
+        $this->lessonRepository
+            ->expects($this->never())
+            ->method('subscribeLesson');
 
         $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
-
-        $this->assertResponseOk();
-    }
-
-    public function testItShould_subscribePrivateAndOwnedLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPrivateLesson($user);
-
-        $this->lessonRepository->expects($this->once())->method('subscribeLesson')->with($user->id, $lesson->id);
-
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
-
-        $this->assertResponseOk();
-    }
-
-    public function testItShould_notSubscribePrivateAndNotOwnedLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPrivateLesson();
-
-        $this->lessonRepository->expects($this->never())->method('subscribeLesson');
-
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notSubscribeLesson_userAlreadySubscribedPublicAndOwnedLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPublicLesson($user);
-        $user->subscribedLessons()->save($lesson);
-
-        $this->lessonRepository->expects($this->never())->method('subscribeLesson');
-
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notSubscribeLesson_userAlreadySubscribedPublicAndNotOwnedLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPublicLesson();
-        $user->subscribedLessons()->save($lesson);
-
-        $this->lessonRepository->expects($this->never())->method('subscribeLesson');
-
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notSubscribeLesson_userAlreadySubscribedPrivateAndOwnedLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPrivateLesson($user);
-        $user->subscribedLessons()->save($lesson);
-
-        $this->lessonRepository->expects($this->never())->method('subscribeLesson');
-
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notSubscribeLesson_lessonDoesNotExist()
-    {
-        $user = $this->createUser();
-
-        $this->lessonRepository->expects($this->never())->method('subscribeLesson');
-
-        $this->callApi('POST', 'lessons/-1/user', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
@@ -152,33 +99,36 @@ class LessonControllerTest extends TestCase
     public function testItShould_unsubscribeLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson();
-        $user->subscribedLessons()->save($lesson);
+        $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->once())->method('unsubscribeLesson')->with($user->id, $lesson->id);
+        $this->lessonRepository
+            ->method('authorizeUnsubscribeLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
+
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('unsubscribeLesson')
+            ->with($user->id, $lesson->id);
 
         $this->callApi('DELETE', 'lessons/' . $lesson->id . '/user', $input = [], $user);
 
         $this->assertResponseOk();
     }
 
-    public function testItShould_notUnsubscribeLesson_lessonDoesNotExist()
+    public function testItShould_notUnsubscribeLesson_forbidden()
     {
         $user = $this->createUser();
+        $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->never())->method('unsubscribeLesson');
+        $this->lessonRepository
+            ->method('authorizeUnsubscribeLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(false);
 
-        $this->callApi('DELETE', 'lessons/-1/user', $input = [], $user);
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notUnsubscribeLesson_userDoesNotSubscribeLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPublicLesson();
-
-        $this->lessonRepository->expects($this->never())->method('unsubscribeLesson');
+        $this->lessonRepository
+            ->expects($this->never())
+            ->method('unsubscribeLesson');
 
         $this->callApi('DELETE', 'lessons/' . $lesson->id . '/user', $input = [], $user);
 
@@ -188,14 +138,22 @@ class LessonControllerTest extends TestCase
     public function testItShould_updateLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson($user);
+        $lesson = $this->createLesson();
 
         $input = [
             'visibility' => 'public',
             'name' => uniqid(),
         ];
 
-        $this->lessonRepository->expects($this->once())->method('updateLesson')->with($input, $lesson->id)
+        $this->lessonRepository
+            ->method('authorizeUpdateLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
+
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('updateLesson')
+            ->with($input, $lesson->id)
             ->willReturn($lesson);
 
         $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
@@ -206,30 +164,44 @@ class LessonControllerTest extends TestCase
     public function testItShould_notUpdateLesson_invalidInput()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson($user);
+        $lesson = $this->createLesson();
 
         $input = [
             'visibility' => uniqid(),
         ];
 
-        $this->lessonRepository->expects($this->never())->method('updateLesson');
+        $this->lessonRepository
+            ->method('authorizeUpdateLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
+
+        $this->lessonRepository
+            ->expects($this->never())
+            ->method('updateLesson');
 
         $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function testItShould_notUpdateLesson_userIsNotLessonOwner()
+    public function testItShould_notUpdateLesson_forbidden()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson();
+        $lesson = $this->createLesson();
 
         $input = [
             'visibility' => 'public',
             'name' => uniqid(),
         ];
 
-        $this->lessonRepository->expects($this->never())->method('updateLesson');
+        $this->lessonRepository
+            ->method('authorizeUpdateLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(false);
+
+        $this->lessonRepository
+            ->expects($this->never())
+            ->method('updateLesson');
 
         $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
 
@@ -241,8 +213,11 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->once())->method('fetchOwnedLessons')
-            ->with($user->id)->willReturn(collect([$lesson]));
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('fetchOwnedLessons')
+            ->with($user->id)
+            ->willReturn(collect([$lesson]));
 
         $this->callApi('GET', 'lessons/owned', $input = [], $user)->seeJson([$lesson->toArray()]);
 
@@ -254,8 +229,11 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->once())->method('fetchSubscribedLessons')
-            ->with($user->id)->willReturn(collect([$lesson]));
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('fetchSubscribedLessons')
+            ->with($user->id)
+            ->willReturn(collect([$lesson]));
 
         $this->callApi('GET', 'lessons/subscribed', $input = [], $user)->seeJson([$lesson->toArray()]);
 
@@ -265,57 +243,39 @@ class LessonControllerTest extends TestCase
     public function testItShould_deleteLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson($user);
+        $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->once())->method('deleteLesson')->with($lesson->id);
+        $this->lessonRepository
+            ->method('authorizeDeleteLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
+
+        $this->lessonRepository
+            ->expects($this->once())
+            ->method('deleteLesson')
+            ->with($lesson->id);
 
         $this->callApi('DELETE', 'lessons/' . $lesson->id, $input = [], $user);
 
         $this->assertResponseOk();
     }
 
-    public function testItShould_notDeleteLesson_lessonDoesNotExist()
+    public function testItShould_notDeleteLesson_forbidden()
     {
         $user = $this->createUser();
+        $lesson = $this->createLesson();
 
-        $this->lessonRepository->expects($this->never())->method('deleteLesson');
+        $this->lessonRepository
+            ->method('authorizeDeleteLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(false);
 
-        $this->callApi('DELETE', 'lessons/-1', $input = [], $user);
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notDeleteLesson_userIsNotLessonOwner()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createPublicLesson();
-
-        $this->lessonRepository->expects($this->never())->method('deleteLesson');
+        $this->lessonRepository
+            ->expects($this->never())
+            ->method('deleteLesson');
 
         $this->callApi('DELETE', 'lessons/' . $lesson->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    protected function createPublicLesson(User $user = null) : Lesson
-    {
-        $attributes = ['visibility' => 'public'];
-
-        if ($user) {
-            $attributes['owner_id'] = $user->id;
-        }
-
-        return $this->createLesson($attributes);
-    }
-
-    protected function createPrivateLesson(User $user = null) : Lesson
-    {
-        $attributes = ['visibility' => 'private'];
-
-        if ($user) {
-            $attributes['owner_id'] = $user->id;
-        }
-
-        return $this->createLesson($attributes);
     }
 }

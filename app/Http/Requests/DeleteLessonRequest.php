@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Lesson\Lesson;
-use Auth;
+use App\Models\Lesson\LessonRepositoryInterface;
 
 /**
  * @property mixed lesson_id
@@ -13,13 +12,12 @@ class DeleteLessonRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @param LessonRepositoryInterface $lessonRepository
      * @return bool
      */
-    public function authorize()
+    public function authorize(LessonRepositoryInterface $lessonRepository)
     {
-        return Lesson::whereId($this->route('lesson_id'))
-            ->whereOwnerId(Auth::guard('api')->user()->id)
-            ->exists();
+        return $lessonRepository->authorizeDeleteLesson($this->userId(), $this->route('lesson_id'));
     }
 
     /**

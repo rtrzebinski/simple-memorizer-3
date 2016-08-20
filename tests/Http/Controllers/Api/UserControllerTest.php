@@ -27,10 +27,12 @@ class UserControllerTest extends TestCase
         $password = $this->randomPassword();
         $user = $this->createUser();
 
-        $this->userRepositoryMock->expects($this->once())->method('create')->with([
-            'email' => $email,
-            'password' => $password,
-        ])->willReturn($user);
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('create')->with([
+                'email' => $email,
+                'password' => $password,
+            ])->willReturn($user);
 
         $this->callApi('POST', '/api/signup', [
             'email' => $email,
@@ -53,8 +55,11 @@ class UserControllerTest extends TestCase
         $password = $this->randomPassword();
         $user = $this->createUser();
 
-        $this->userRepositoryMock->expects($this->once())->method('findByCredentials')
-            ->with($email, $password)->willReturn($user);
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('findByCredentials')
+            ->with($email, $password)
+            ->willReturn($user);
 
         $this->callApi('POST', '/api/login', [
             'email' => $email,
@@ -66,7 +71,9 @@ class UserControllerTest extends TestCase
 
     public function testItShould_notLoginUser_invalidInput()
     {
-        $this->userRepositoryMock->expects($this->never())->method('findByCredentials');
+        $this->userRepositoryMock
+            ->expects($this->never())
+            ->method('findByCredentials');
 
         $this->callApi('POST', '/api/login');
 
@@ -78,7 +85,10 @@ class UserControllerTest extends TestCase
         $email = $this->randomEmail();
         $password = $this->randomPassword();
 
-        $this->userRepositoryMock->expects($this->once())->method('findByCredentials')->with($email, $password);
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('findByCredentials')
+            ->with($email, $password);
 
         $this->callApi('POST', '/api/login', [
             'email' => $email,

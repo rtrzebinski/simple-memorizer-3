@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Auth;
-use DB;
+use App\Models\Exercise\ExerciseRepositoryInterface;
 
 /**
  * @property mixed exercise_id
@@ -13,15 +12,12 @@ class DeleteExerciseRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @param ExerciseRepositoryInterface $exerciseRepository
      * @return bool
      */
-    public function authorize()
+    public function authorize(ExerciseRepositoryInterface $exerciseRepository)
     {
-        return DB::table('exercises')
-            ->where('exercises.id', '=', $this->route('exercise_id'))
-            ->join('lessons', 'lessons.id', '=', 'exercises.lesson_id')
-            ->where('lessons.owner_id', '=', Auth::guard('api')->user()->id)
-            ->exists();
+        return $exerciseRepository->authorizeDeleteExercise($this->userId(), $this->route('exercise_id'));
     }
 
     /**

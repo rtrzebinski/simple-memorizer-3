@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Lesson\Lesson;
-use Auth;
+use App\Models\Exercise\ExerciseRepositoryInterface;
 
 /**
  * @property mixed lesson_id
@@ -13,13 +12,12 @@ class CreateExerciseRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @param ExerciseRepositoryInterface $exerciseRepository
      * @return bool
      */
-    public function authorize()
+    public function authorize(ExerciseRepositoryInterface $exerciseRepository)
     {
-        return Lesson::whereId($this->route('lesson_id'))
-            ->where('owner_id', '=', Auth::guard('api')->user()->id)
-            ->exists();
+        return $exerciseRepository->authorizeCreateExercise($this->userId(), $this->route('lesson_id'));
     }
 
     /**

@@ -45,6 +45,8 @@ class ExerciseControllerTest extends TestCase
 
     public function testItShould_createExercise()
     {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
         $exercise = $this->createExercise();
 
         $input = [
@@ -53,47 +55,43 @@ class ExerciseControllerTest extends TestCase
         ];
 
         $this->exerciseRepository
+            ->method('authorizeCreateExercise')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
+
+        $this->exerciseRepository
             ->expects($this->once())
             ->method('createExercise')
-            ->with($input, $exercise->lesson->id)
+            ->with($input, $lesson->id)
             ->willReturn($exercise);
 
-        $this->callApi('POST', '/lessons/' . $exercise->lesson->id . '/exercises', $input, $exercise->lesson->owner)
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user)
             ->seeJson($exercise->toArray())
             ->assertResponseStatus(Response::HTTP_CREATED);
     }
 
     public function testItShould_notCreateExercise_invalidInput()
     {
+        $user = $this->createUser();
         $lesson = $this->createLesson();
+
+        $this->exerciseRepository
+            ->method('authorizeCreateExercise')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
 
         $this->exerciseRepository
             ->expects($this->never())
             ->method('createExercise');
 
-        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input = [], $lesson->owner);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function testItShould_notCreateExercise_lessonDoesNotExist()
+    public function testItShould_notCreateExercise_forbidden()
     {
-        $input = [
-            'question' => uniqid(),
-            'answer' => uniqid(),
-        ];
-
-        $this->exerciseRepository
-            ->expects($this->never())
-            ->method('createExercise');
-
-        $this->callApi('POST', '/lessons/-1/exercises', $input, $this->createUser());
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notCreateExercise_userIsNotLessonOwner()
-    {
+        $user = $this->createUser();
         $lesson = $this->createLesson();
 
         $input = [
@@ -102,17 +100,28 @@ class ExerciseControllerTest extends TestCase
         ];
 
         $this->exerciseRepository
+            ->method('authorizeCreateExercise')
+            ->with($user->id, $lesson->id)
+            ->willReturn(false);
+
+        $this->exerciseRepository
             ->expects($this->never())
             ->method('createExercise');
 
-        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $this->createUser());
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 
     public function testItShould_fetchExercise()
     {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
+
+        $this->exerciseRepository
+            ->method('authorizeFetchExerciseById')
+            ->with($user->id, $exercise->id)
+            ->willReturn(true);
 
         $this->exerciseRepository
             ->expects($this->once())
@@ -120,80 +129,83 @@ class ExerciseControllerTest extends TestCase
             ->with($exercise->id)
             ->willReturn($exercise);
 
-        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $exercise->lesson->owner)
+        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $user)
             ->seeJson($exercise->toArray());
     }
 
-    public function testItShould_notFetchExercise_exerciseDoesNotExist()
+    public function testItShould_notFetchExercise_forbidden()
     {
-        $this->exerciseRepository
-            ->expects($this->never())
-            ->method('findExerciseById');
-
-        $this->callApi('GET', '/exercises/-1', $input = [], $this->createUser());
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notFetchExercise_userIsNotLessonOwner()
-    {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
 
         $this->exerciseRepository
+            ->method('authorizeFetchExerciseById')
+            ->with($user->id, $exercise->id)
+            ->willReturn(false);
+
+        $this->exerciseRepository
             ->expects($this->never())
             ->method('findExerciseById');
 
-        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $this->createUser());
+        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 
     public function testItShould_fetchExercisesOfLesson()
     {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
         $exercise = $this->createExercise();
+
+        $this->exerciseRepository
+            ->method('authorizeFetchExercisesOfLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(true);
 
         $this->exerciseRepository
             ->expects($this->once())
             ->method('fetchExercisesOfLesson')
-            ->with($exercise->lesson->id)
+            ->with($lesson->id)
             ->willReturn(collect([$exercise]));
 
-        $this->callApi('GET', '/lessons/' . $exercise->lesson->id . '/exercises', $input = [], $exercise->lesson->owner)
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user)
             ->seeJson([$exercise->toArray()]);
     }
 
-    public function testItShould_notFetchExercisesOfLesson_lessonDoesNotExist()
+    public function testItShould_notFetchExercisesOfLesson_forbidden()
     {
-        $this->exerciseRepository
-            ->expects($this->never())
-            ->method('fetchExercisesOfLesson');
-
-        $this->callApi('GET', '/lessons/-1/exercises', $input = [], $this->createUser());
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notFetchExercisesOfLesson_userIsNotLessonOwner()
-    {
+        $user = $this->createUser();
         $lesson = $this->createLesson();
 
         $this->exerciseRepository
+            ->method('authorizeFetchExercisesOfLesson')
+            ->with($user->id, $lesson->id)
+            ->willReturn(false);
+
+        $this->exerciseRepository
             ->expects($this->never())
             ->method('fetchExercisesOfLesson');
 
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $this->createUser());
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 
     public function testItShould_updateExercise()
     {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
 
         $input = [
             'question' => uniqid(),
             'answer' => uniqid(),
         ];
+
+        $this->exerciseRepository
+            ->method('authorizeUpdateExercise')
+            ->with($user->id, $exercise->id)
+            ->willReturn(true);
 
         $this->exerciseRepository
             ->expects($this->once())
@@ -201,41 +213,32 @@ class ExerciseControllerTest extends TestCase
             ->with($input, $exercise->id)
             ->willReturn($exercise);
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $exercise->lesson->owner)
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user)
             ->seeJson($exercise->toArray());
     }
 
     public function testItShould_notUpdateExercise_invalidInput()
     {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
+
+        $this->exerciseRepository
+            ->method('authorizeUpdateExercise')
+            ->with($user->id, $exercise->id)
+            ->willReturn(true);
 
         $this->exerciseRepository
             ->expects($this->never())
             ->method('updateExercise');
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input = [], $exercise->lesson->owner);
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function testItShould_notUpdateExercise_exerciseDoesNotExist()
+    public function testItShould_notUpdateExercise_forbidden()
     {
-        $input = [
-            'question' => uniqid(),
-            'answer' => uniqid(),
-        ];
-
-        $this->exerciseRepository
-            ->expects($this->never())
-            ->method('updateExercise');
-
-        $this->callApi('PATCH', '/exercises/-1', $input, $this->createUser());
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notUpdateExercise_userIsNotLessonOwner()
-    {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
 
         $input = [
@@ -244,48 +247,54 @@ class ExerciseControllerTest extends TestCase
         ];
 
         $this->exerciseRepository
+            ->method('authorizeUpdateExercise')
+            ->with($user->id, $exercise->id)
+            ->willReturn(false);
+
+        $this->exerciseRepository
             ->expects($this->never())
             ->method('updateExercise');
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $this->createUser());
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 
     public function testItShould_deleteExercise()
     {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
+
+        $this->exerciseRepository
+            ->method('authorizeDeleteExercise')
+            ->with($user->id, $exercise->id)
+            ->willReturn(true);
 
         $this->exerciseRepository
             ->expects($this->once())
             ->method('deleteExercise')
             ->with($exercise->id);
 
-        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $exercise->lesson->owner);
+        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
     }
 
-    public function testItShould_notDeleteExercise_exerciseDoesNotExist()
+    public function testItShould_notDeleteExercise_forbidden()
     {
-        $this->exerciseRepository
-            ->expects($this->never())
-            ->method('deleteExercise');
-
-        $this->callApi('DELETE', '/exercises/-1', $input = [], $this->createUser());
-
-        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testItShould_notDeleteExercise_userIsNotLessonOwner()
-    {
+        $user = $this->createUser();
         $exercise = $this->createExercise();
 
         $this->exerciseRepository
+            ->method('authorizeDeleteExercise')
+            ->with($user->id, $exercise->id)
+            ->willReturn(false);
+
+        $this->exerciseRepository
             ->expects($this->never())
             ->method('deleteExercise');
 
-        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $this->createUser());
+        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
