@@ -17,16 +17,6 @@ class Controller extends BaseController
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
     /**
-     * Http response with provided code, and status message content.
-     * @param int $statusCode
-     * @return Response
-     */
-    protected function status(int $statusCode) : Response
-    {
-        return Response::create(Response::$statusTexts[$statusCode], $statusCode);
-    }
-
-    /**
      * API response wrapper.
      * @param mixed $data
      * @param int $statusCode

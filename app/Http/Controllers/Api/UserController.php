@@ -7,6 +7,7 @@ use App\Http\Requests\SignupUserRequest;
 use App\Models\User\User;
 use App\Models\User\UserRepositoryInterface;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UserController extends Controller
 {
@@ -31,7 +32,7 @@ class UserController extends Controller
         $user = $userRepository->findByCredentials($request->email, $request->password);
 
         if (!$user instanceof User) {
-            return $this->status(Response::HTTP_UNAUTHORIZED);
+            throw new HttpException(Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->response($user->makeVisible('api_token'));
