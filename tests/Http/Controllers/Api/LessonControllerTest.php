@@ -19,7 +19,7 @@ class LessonControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->lessonRepository = $this->getMock(LessonRepositoryInterface::class);
+        $this->lessonRepository = $this->createMock(LessonRepositoryInterface::class);
         $this->app->instance(LessonRepositoryInterface::class, $this->lessonRepository);
     }
 

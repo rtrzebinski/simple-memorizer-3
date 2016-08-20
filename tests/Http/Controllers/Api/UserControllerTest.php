@@ -17,7 +17,7 @@ class UserControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->userRepositoryMock = $this->getMock(UserRepositoryInterface::class);
+        $this->userRepositoryMock = $this->createMock(UserRepositoryInterface::class);
         $this->app->instance(UserRepositoryInterface::class, $this->userRepositoryMock);
     }
 

@@ -17,7 +17,7 @@ class ExerciseControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->exerciseRepository = $this->getMock(ExerciseRepositoryInterface::class);
+        $this->exerciseRepository = $this->createMock(ExerciseRepositoryInterface::class);
         $this->app->instance(ExerciseRepositoryInterface::class, $this->exerciseRepository);
     }
 
