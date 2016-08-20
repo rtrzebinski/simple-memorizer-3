@@ -98,4 +98,172 @@ class ExerciseRepositoryTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $this->repository->deleteExercise(-1);
     }
+
+    public function testItShould_authorizeCreateExercise_userIsLessonOwner()
+    {
+        $lesson = $this->createLesson();
+        $user = $lesson->owner;
+
+        $this->assertTrue($this->repository->authorizeCreateExercise($user->id, $lesson->id));
+    }
+
+    public function testItShould_notAuthorizeCreateExercise_userIsNotLessonOwner()
+    {
+        $lesson = $this->createLesson();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeCreateExercise($user->id, $lesson->id));
+    }
+
+    public function testItShould_notAuthorizeCreateExercise_usersDoesNotExist()
+    {
+        $lesson = $this->createLesson();
+
+        $this->assertFalse($this->repository->authorizeCreateExercise(-1, $lesson->id));
+    }
+
+    public function testItShould_notAuthorizeCreateExercise_lessonDoesNotExist()
+    {
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeCreateExercise($user->id, -1));
+    }
+
+    public function testItShould_authorizeFetchExerciseById_userIsLessonOwner()
+    {
+        $exercise = $this->createExercise();
+        $user = $exercise->lesson->owner;
+
+        $this->assertTrue($this->repository->authorizeFetchExerciseById($user->id, $exercise->id));
+    }
+
+    public function testItShould_authorizeFetchExerciseById_userSubscribesLesson()
+    {
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
+        $user->subscribedLessons()->attach($exercise->lesson);
+
+        $this->assertTrue($this->repository->authorizeFetchExerciseById($user->id, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeFetchExerciseById_userIsNotLessonOwnerAndDoesNotSubscribeIt()
+    {
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeFetchExerciseById($user->id, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeFetchExerciseById_usersDoesNotExist()
+    {
+        $exercise = $this->createExercise();
+
+        $this->assertFalse($this->repository->authorizeFetchExerciseById(-1, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeFetchExerciseById_exerciseDoesNotExist()
+    {
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeFetchExerciseById($user->id, -1));
+    }
+
+    public function testItShould_authorizeFetchExercisesOfLesson_userIsLessonOwner()
+    {
+        $lesson = $this->createLesson();
+        $user = $lesson->owner;
+
+        $this->assertTrue($this->repository->authorizeFetchExercisesOfLesson($user->id, $lesson->id));
+    }
+
+    public function testItShould_authorizeFetchExercisesOfLesson_userSubscribesLesson()
+    {
+        $lesson = $this->createLesson();
+        $user = $this->createUser();
+        $user->subscribedLessons()->attach($lesson);
+
+        $this->assertTrue($this->repository->authorizeFetchExercisesOfLesson($user->id, $lesson->id));
+    }
+
+    public function testItShould_notAuthorizeFetchExercisesOfLesson_userIsNotLessonOwnerAndDoesNotSubscribeIt()
+    {
+        $lesson = $this->createLesson();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeFetchExercisesOfLesson($user->id, $lesson->id));
+    }
+
+    public function testItShould_notAuthorizeFetchExercisesOfLesson_usersDoesNotExist()
+    {
+        $lesson = $this->createLesson();
+
+        $this->assertFalse($this->repository->authorizeFetchExercisesOfLesson(-1, $lesson->id));
+    }
+
+    public function testItShould_notAuthorizeFetchExercisesOfLesson_lessonDoesNotExist()
+    {
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeFetchExercisesOfLesson($user->id, -1));
+    }
+
+    public function testItShould_authorizeUpdateExercise_userIsLessonOwner()
+    {
+        $exercise = $this->createExercise();
+        $user = $exercise->lesson->owner;
+
+        $this->assertTrue($this->repository->authorizeUpdateExercise($user->id, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeUpdateExercise_userIsNotLessonOwner()
+    {
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeUpdateExercise($user->id, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeUpdateExercise_usersDoesNotExist()
+    {
+        $exercise = $this->createExercise();
+
+        $this->assertFalse($this->repository->authorizeUpdateExercise(-1, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeUpdateExercise_exerciseDoesNotExist()
+    {
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeUpdateExercise($user->id, -1));
+    }
+
+    public function testItShould_authorizeDeleteExercise_userIsLessonOwner()
+    {
+        $exercise = $this->createExercise();
+        $user = $exercise->lesson->owner;
+
+        $this->assertTrue($this->repository->authorizeDeleteExercise($user->id, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeDeleteExercise_userIsNotLessonOwner()
+    {
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeDeleteExercise($user->id, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeDeleteExercise_usersDoesNotExist()
+    {
+        $exercise = $this->createExercise();
+
+        $this->assertFalse($this->repository->authorizeDeleteExercise(-1, $exercise->id));
+    }
+
+    public function testItShould_notAuthorizeDeleteExercise_exerciseDoesNotExist()
+    {
+        $user = $this->createUser();
+
+        $this->assertFalse($this->repository->authorizeDeleteExercise($user->id, -1));
+    }
 }

@@ -4,8 +4,8 @@ namespace App\Models\User;
 
 use App\Models\Lesson\Lesson;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
 
 /**
  * App\Models\User\User
@@ -24,6 +24,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $subscribedLessons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $ownedLessons
  */
 class User extends Authenticatable
 {
@@ -47,8 +49,16 @@ class User extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    public function lessons()
+    public function subscribedLessons()
     {
         return $this->belongsToMany(Lesson::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function ownedLessons()
+    {
+        return $this->hasMany(Lesson::class, 'owner_id');
     }
 }

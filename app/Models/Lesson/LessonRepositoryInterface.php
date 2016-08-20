@@ -19,4 +19,12 @@ interface LessonRepositoryInterface
     public function fetchSubscribedLessons(int $userId) : Collection;
 
     public function deleteLesson(int $lessonId);
+
+    public function authorizeSubscribeLesson(int $userId, int $lessonId) : bool;
+
+    public function authorizeUnsubscribeLesson(int $userId, int $lessonId) : bool;
+
+    public function authorizeUpdateLesson(int $userId, int $lessonId) : bool;
+
+    public function authorizeDeleteLesson(int $userId, int $lessonId) : bool;
 }

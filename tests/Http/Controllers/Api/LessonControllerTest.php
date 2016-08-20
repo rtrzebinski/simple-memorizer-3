@@ -103,7 +103,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
-        $user->lessons()->save($lesson);
+        $user->subscribedLessons()->save($lesson);
 
         $this->lessonRepository->expects($this->never())->method('subscribeLesson');
 
@@ -116,7 +116,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
-        $user->lessons()->save($lesson);
+        $user->subscribedLessons()->save($lesson);
 
         $this->lessonRepository->expects($this->never())->method('subscribeLesson');
 
@@ -129,7 +129,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson($user);
-        $user->lessons()->save($lesson);
+        $user->subscribedLessons()->save($lesson);
 
         $this->lessonRepository->expects($this->never())->method('subscribeLesson');
 
@@ -153,7 +153,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
-        $user->lessons()->save($lesson);
+        $user->subscribedLessons()->save($lesson);
 
         $this->lessonRepository->expects($this->once())->method('unsubscribeLesson')->with($user->id, $lesson->id);
 

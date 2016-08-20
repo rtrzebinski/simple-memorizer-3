@@ -2,6 +2,9 @@
 
 namespace App\Models\Exercise;
 
+use App\Models\User\User;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ExerciseRepository implements ExerciseRepositoryInterface
@@ -52,10 +55,96 @@ class ExerciseRepository implements ExerciseRepositoryInterface
 
     /**
      * @param int $exerciseId
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteExercise(int $exerciseId)
     {
         Exercise::findOrFail($exerciseId)->delete();
+    }
+
+    /**
+     * Whether user is permitted to create exercise of lesson.
+     * @param int $userId
+     * @param int $lessonId
+     * @return bool
+     */
+    public function authorizeCreateExercise(int $userId, int $lessonId) : bool
+    {
+        return User::query()
+            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
+            ->where('lessons.id', '=', $lessonId)
+            ->where('users.id', '=', $userId)
+            ->exists();
+    }
+
+    /**
+     * Whether user is permitted to fetch exercise by id.
+     * @param int $userId
+     * @param int $exerciseId
+     * @return bool
+     */
+    public function authorizeFetchExerciseById(int $userId, int $exerciseId) : bool
+    {
+        return User::query()
+            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
+            ->join('exercises', 'exercises.lesson_id', '=', 'lessons.id')
+            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
+            ->where('exercises.id', '=', $exerciseId)
+            ->where(function (Builder $query) use ($userId) {
+                $query->where('users.id', '=', $userId)
+                    ->orWhere('lesson_user.user_id', '=', $userId);
+            })
+            ->exists();
+    }
+
+    /**
+     * Whether user is permitted to fetch exercises of lesson.
+     * @param int $userId
+     * @param int $lessonId
+     * @return bool
+     */
+    public function authorizeFetchExercisesOfLesson(int $userId, int $lessonId) : bool
+    {
+        return User::query()
+            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
+            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
+            ->where('lessons.id', '=', $lessonId)
+            ->where(function (Builder $query) use ($userId) {
+                $query->where('users.id', '=', $userId)
+                    ->orWhere('lesson_user.user_id', '=', $userId);
+            })
+            ->exists();
+    }
+
+    /**
+     * Whether user is permitted to update exercise.
+     * @param int $userId
+     * @param int $exerciseId
+     * @return bool
+     */
+    public function authorizeUpdateExercise(int $userId, int $exerciseId): bool
+    {
+        return User::query()
+            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
+            ->join('exercises', 'exercises.lesson_id', '=', 'lessons.id')
+            ->where('exercises.id', '=', $exerciseId)
+            ->where('users.id', '=', $userId)
+            ->exists();
+    }
+
+    /**
+     * Whether user is permitted to delete exercise.
+     * @param int $userId
+     * @param int $exerciseId
+     * @return bool
+     */
+    public function authorizeDeleteExercise(int $userId, int $exerciseId): bool
+    {
+        return User::query()
+            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
+            ->join('exercises', 'exercises.lesson_id', '=', 'lessons.id')
+            ->where('exercises.id', '=', $exerciseId)
+            ->where('users.id', '=', $userId)
+            ->exists();
     }
 }
