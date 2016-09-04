@@ -2,15 +2,17 @@
 
 namespace App\Http\Requests;
 
+use Gate as GateFacade;
+use Illuminate\Auth\Access\Gate as AccessGate;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest
 {
     /**
-     * @return int
+     * @return AccessGate
      */
-    protected function userId() : int
+    protected function gate() : AccessGate
     {
-        return $this->user('api')->id;
+        return GateFacade::forUser($this->user('api'));
     }
 }

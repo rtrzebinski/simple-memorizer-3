@@ -36,6 +36,15 @@ class Exercise extends Model
     ];
 
     /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'lesson_id' => 'int',
+    ];
+
+    /**
      * @return BelongsTo
      */
     public function lesson()

@@ -2,83 +2,83 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\CreateLessonRequest;
-use App\Http\Requests\DeleteLessonRequest;
-use App\Http\Requests\SubscribeLessonRequest;
-use App\Http\Requests\UnsubscribeLessonRequest;
 use App\Http\Requests\UpdateLessonRequest;
-use App\Models\Lesson\LessonRepositoryInterface;
+use App\Models\Lesson\Lesson;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class LessonController extends Controller
 {
     /**
-     * @param LessonRepositoryInterface $lessonRepository
-     * @param CreateLessonRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function createLesson(LessonRepositoryInterface $lessonRepository, CreateLessonRequest $request)
+    public function createLesson(Request $request)
     {
-        $lesson = $lessonRepository->createLesson($request->all(), $this->user()->id);
+        $this->validate($request, [
+            'visibility' => 'required|in:public,private',
+            'name' => 'required|string',
+        ]);
+
+        $lesson = new Lesson($request->all());
+        $lesson->owner_id = $this->user()->id;
+        $lesson->save();
+
         return $this->response($lesson, Response::HTTP_CREATED);
     }
 
     /**
-     * @param LessonRepositoryInterface $lessonRepository
-     * @param SubscribeLessonRequest $request
+     * @param Lesson $lesson
      */
-    public function subscribeLesson(LessonRepositoryInterface $lessonRepository, SubscribeLessonRequest $request)
+    public function subscribeLesson(Lesson $lesson)
     {
-        $lessonRepository->subscribeLesson($this->user()->id, $request->lesson_id);
+        $this->authorizeForUser($this->user(), 'subscribe', $lesson);
+        $lesson->subscribe($this->user());
     }
 
     /**
-     * @param LessonRepositoryInterface $lessonRepository
-     * @param UnsubscribeLessonRequest $request
+     * @param Lesson $lesson
      */
-    public function unsubscribeLesson(LessonRepositoryInterface $lessonRepository, UnsubscribeLessonRequest $request)
+    public function unsubscribeLesson(Lesson $lesson)
     {
-        $lessonRepository->unsubscribeLesson($this->user()->id, $request->lesson_id);
+        $this->authorizeForUser($this->user(), 'unsubscribe', $lesson);
+        $lesson->unsubscribe($this->user());
     }
 
     /**
-     * @param LessonRepositoryInterface $lessonRepository
      * @param UpdateLessonRequest $request
+     * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function updateLesson(LessonRepositoryInterface $lessonRepository, UpdateLessonRequest $request)
+    public function updateLesson(UpdateLessonRequest $request, Lesson $lesson)
     {
-        $lesson = $lessonRepository->updateLesson($request->all(), $request->lesson_id);
+        $lesson->update($request->all());
         return $this->response($lesson);
     }
 
     /**
-     * @param LessonRepositoryInterface $lessonRepository
      * @return JsonResponse
      */
-    public function fetchOwnedLessons(LessonRepositoryInterface $lessonRepository)
+    public function fetchOwnedLessons()
     {
-        $lessons = $lessonRepository->fetchOwnedLessons($this->user()->id);
-        return $this->response($lessons);
+        return $this->response($this->user()->ownedLessons);
     }
 
     /**
-     * @param LessonRepositoryInterface $lessonRepository
      * @return JsonResponse
      */
-    public function fetchSubscribedLessons(LessonRepositoryInterface $lessonRepository)
+    public function fetchSubscribedLessons()
     {
-        $lessons = $lessonRepository->fetchSubscribedLessons($this->user()->id);
-        return $this->response($lessons);
+        return $this->response($this->user()->subscribedLessons);
     }
 
     /**
-     * @param LessonRepositoryInterface $lessonRepository
-     * @param DeleteLessonRequest $request
+     * @param Lesson $lesson
      */
-    public function deleteLesson(LessonRepositoryInterface $lessonRepository, DeleteLessonRequest $request)
+    public function deleteLesson(Lesson $lesson)
     {
-        $lessonRepository->deleteLesson($request->lesson_id);
+        $this->authorizeForUser($this->user(), 'delete', $lesson);
+        $lesson->delete();
     }
 }

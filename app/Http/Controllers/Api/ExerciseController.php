@@ -2,69 +2,68 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\FetchExerciseRequest;
 use App\Http\Requests\CreateExerciseRequest;
-use App\Http\Requests\FetchExercisesOfLessonRequest;
 use App\Http\Requests\UpdateExerciseRequest;
-use App\Http\Requests\DeleteExerciseRequest;
-use App\Models\Exercise\ExerciseRepositoryInterface;
+use App\Models\Exercise\Exercise;
+use App\Models\Lesson\Lesson;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class ExerciseController extends Controller
 {
     /**
-     * @param ExerciseRepositoryInterface $exerciseRepository
      * @param CreateExerciseRequest $request
+     * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function createExercise(ExerciseRepositoryInterface $exerciseRepository, CreateExerciseRequest $request)
+    public function createExercise(CreateExerciseRequest $request, Lesson $lesson)
     {
-        $exercise = $exerciseRepository->createExercise($request->except('lesson_id'), $request->lesson_id);
+        $exercise = new Exercise($request->all());
+        $exercise->lesson_id = $lesson->id;
+        $exercise->save();
+
         return $this->response($exercise, Response::HTTP_CREATED);
     }
 
     /**
-     * @param ExerciseRepositoryInterface $exerciseRepository
-     * @param FetchExerciseRequest $request
+     * @param Exercise $exercise
      * @return JsonResponse
      */
-    public function fetchExercise(ExerciseRepositoryInterface $exerciseRepository, FetchExerciseRequest $request)
+    public function fetchExercise(Exercise $exercise)
     {
-        $exercise = $exerciseRepository->findExerciseById($request->exercise_id);
+        $this->authorizeForUser($this->user(), 'fetch', $exercise);
         return $this->response($exercise);
     }
 
     /**
-     * @param ExerciseRepositoryInterface $exerciseRepository
-     * @param FetchExercisesOfLessonRequest $request
+     * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function fetchExercisesOfLesson(
-        ExerciseRepositoryInterface $exerciseRepository,
-        FetchExercisesOfLessonRequest $request
-    ) {
-        $exercises = $exerciseRepository->fetchExercisesOfLesson($request->lesson_id);
-        return $this->response($exercises);
+    public function fetchExercisesOfLesson(Lesson $lesson)
+    {
+        $this->authorizeForUser($this->user(), 'fetchExercisesOfLesson', $lesson);
+        return $this->response($lesson->exercises);
     }
 
     /**
-     * @param ExerciseRepositoryInterface $exerciseRepository
      * @param UpdateExerciseRequest $request
+     * @param Exercise $exercise
      * @return JsonResponse
      */
-    public function updateExercise(ExerciseRepositoryInterface $exerciseRepository, UpdateExerciseRequest $request)
+    public function updateExercise(UpdateExerciseRequest $request, Exercise $exercise)
     {
-        $exercise = $exerciseRepository->updateExercise($request->except('exercise_id'), $request->exercise_id);
+        $exercise->update($request->all());
         return $this->response($exercise);
     }
 
     /**
-     * @param ExerciseRepositoryInterface $exerciseRepository
-     * @param DeleteExerciseRequest $request
+     * @param Exercise $exercise
+     * @throws Exception
      */
-    public function deleteExercise(ExerciseRepositoryInterface $exerciseRepository, DeleteExerciseRequest $request)
+    public function deleteExercise(Exercise $exercise)
     {
-        $exerciseRepository->deleteExercise($request->exercise_id);
+        $this->authorizeForUser($this->user(), 'delete', $exercise);
+        $exercise->delete();
     }
 }

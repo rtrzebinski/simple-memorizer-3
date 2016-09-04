@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Lesson\LessonRepositoryInterface;
-
 /**
  * @property mixed lesson_id
  */
@@ -12,12 +10,11 @@ class UpdateLessonRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @param LessonRepositoryInterface $lessonRepository
      * @return bool
      */
-    public function authorize(LessonRepositoryInterface $lessonRepository)
+    public function authorize()
     {
-        return $lessonRepository->authorizeUpdateLesson($this->userId(), $this->route('lesson_id'));
+        return $this->gate()->authorize('update', $this->route('lesson'));
     }
 
     /**

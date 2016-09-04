@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Exercise\Exercise;
+use App\Models\Lesson\Lesson;
+use App\Policies\ExercisePolicy;
+use App\Policies\LessonPolicy;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Exercise::class => ExercisePolicy::class,
+        Lesson::class => LessonPolicy::class,
     ];
 
     /**

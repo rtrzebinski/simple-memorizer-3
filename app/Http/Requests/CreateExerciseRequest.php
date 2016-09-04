@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Exercise\ExerciseRepositoryInterface;
-
 /**
  * @property mixed lesson_id
  */
@@ -12,12 +10,11 @@ class CreateExerciseRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @param ExerciseRepositoryInterface $exerciseRepository
      * @return bool
      */
-    public function authorize(ExerciseRepositoryInterface $exerciseRepository)
+    public function authorize()
     {
-        return $exerciseRepository->authorizeCreateExercise($this->userId(), $this->route('lesson_id'));
+        return $this->gate()->authorize('createExercise', $this->route('lesson'));
     }
 
     /**
