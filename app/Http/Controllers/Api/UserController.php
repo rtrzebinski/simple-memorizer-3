@@ -24,7 +24,7 @@ class UserController extends Controller
 
         $user = $userRepository->create($request->all());
 
-        return $this->response($user->makeVisible('api_token'), Response::HTTP_CREATED);
+        return $this->response($user->makeVisible('api_token'));
     }
 
     /**

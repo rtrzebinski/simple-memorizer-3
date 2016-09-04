@@ -19,7 +19,7 @@ class ExerciseControllerTest extends TestCase
 
         $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
 
-        $this->assertResponseStatus(Response::HTTP_CREATED);
+        $this->assertResponseStatus(Response::HTTP_OK);
 
         $this->seeJson([
             'question' => $input['question'],

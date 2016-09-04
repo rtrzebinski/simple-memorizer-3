@@ -8,7 +8,6 @@ use App\Models\Exercise\Exercise;
 use App\Models\Lesson\Lesson;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class ExerciseController extends Controller
 {
@@ -23,7 +22,7 @@ class ExerciseController extends Controller
         $exercise->lesson_id = $lesson->id;
         $exercise->save();
 
-        return $this->response($exercise, Response::HTTP_CREATED);
+        return $this->response($exercise);
     }
 
     /**

@@ -39,7 +39,7 @@ class UserControllerTest extends TestCase
             'password' => $password,
         ]);
 
-        $this->assertResponseStatus(Response::HTTP_CREATED);
+        $this->assertResponseStatus(Response::HTTP_OK);
         $this->seeJson($user->makeVisible('api_token')->toArray());
     }
 

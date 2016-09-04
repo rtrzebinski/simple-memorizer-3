@@ -18,7 +18,7 @@ class LessonControllerTest extends TestCase
 
         $this->callApi('POST', 'lessons', $input, $user);
 
-        $this->assertResponseStatus(Response::HTTP_CREATED);
+        $this->assertResponseStatus(Response::HTTP_OK);
 
         $this->seeJson([
             'visibility' => $input['visibility'],

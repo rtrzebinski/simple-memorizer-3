@@ -6,7 +6,6 @@ use App\Http\Requests\UpdateLessonRequest;
 use App\Models\Lesson\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class LessonController extends Controller
 {
@@ -25,7 +24,7 @@ class LessonController extends Controller
         $lesson->owner_id = $this->user()->id;
         $lesson->save();
 
-        return $this->response($lesson, Response::HTTP_CREATED);
+        return $this->response($lesson);
     }
 
     /**
