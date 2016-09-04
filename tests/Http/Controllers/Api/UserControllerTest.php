@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\User\UserRepositoryInterface;
+use App\Models\User\UserRepository;
 use Illuminate\Http\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
@@ -10,15 +10,15 @@ use TestCase;
 class UserControllerTest extends TestCase
 {
     /**
-     * @var UserRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
      */
     private $userRepositoryMock;
 
     public function setUp()
     {
         parent::setUp();
-        $this->userRepositoryMock = $this->createMock(UserRepositoryInterface::class);
-        $this->app->instance(UserRepositoryInterface::class, $this->userRepositoryMock);
+        $this->userRepositoryMock = $this->createMock(UserRepository::class);
+        $this->app->instance(UserRepository::class, $this->userRepositoryMock);
     }
 
     public function testItShould_signupUser()
@@ -37,9 +37,10 @@ class UserControllerTest extends TestCase
         $this->callApi('POST', '/api/signup', [
             'email' => $email,
             'password' => $password,
-        ])->seeJson($user->makeVisible('api_token')->toArray());
+        ]);
 
         $this->assertResponseStatus(Response::HTTP_CREATED);
+        $this->seeJson($user->makeVisible('api_token')->toArray());
     }
 
     public function testItShould_notSignupUser_invalidInput()
@@ -64,9 +65,10 @@ class UserControllerTest extends TestCase
         $this->callApi('POST', '/api/login', [
             'email' => $email,
             'password' => $password,
-        ])->seeJson($user->makeVisible('api_token')->toArray());
+        ]);
 
-        $this->assertResponseOk();
+        $this->assertResponseStatus(Response::HTTP_OK);
+        $this->seeJson($user->makeVisible('api_token')->toArray());
     }
 
     public function testItShould_notLoginUser_invalidInput()

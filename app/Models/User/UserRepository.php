@@ -4,7 +4,7 @@ namespace App\Models\User;
 
 use Hash;
 
-class UserRepository implements UserRepositoryInterface
+class UserRepository
 {
     /**
      * @param array $attributes
