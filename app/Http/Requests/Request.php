@@ -2,17 +2,33 @@
 
 namespace App\Http\Requests;
 
-use Gate as GateFacade;
-use Illuminate\Auth\Access\Gate as AccessGate;
+use App\Models\User\User;
+use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest
 {
     /**
-     * @return AccessGate
+     * Detect user depending on request type.
+     *
+     * @return User
      */
-    protected function gate() : AccessGate
+    public function detectUser()
     {
-        return GateFacade::forUser($this->user('api'));
+        if ($this->ajax() || $this->wantsJson()) {
+            return $this->user('api');
+        } else {
+            return $this->user('web');
+        }
+    }
+
+    /**
+     * Get a guard instance for the current user.
+     *
+     * @return Gate
+     */
+    public function gate()
+    {
+        return Gate::forUser($this->detectUser());
     }
 }
