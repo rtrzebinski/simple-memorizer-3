@@ -27,7 +27,7 @@ class LessonControllerTest extends TestCase
         ]);
     }
 
-    public function testItShould_notCreateLesson_invalidInput_unauthorized()
+    public function testItShould_notCreateLesson_unauthorized()
     {
         $this->callApi('POST', 'lessons');
 
