@@ -55,11 +55,19 @@ class ExercisePolicy
      */
     public function delete(User $user, Exercise $exercise): bool
     {
-        return User::query()
-            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
-            ->join('exercises', 'exercises.lesson_id', '=', 'lessons.id')
-            ->where('exercises.id', '=', $exercise->id)
-            ->where('users.id', '=', $user->id)
-            ->exists();
+        // if user can update exercise, he also can delete it
+        return $this->update($user, $exercise);
+    }
+
+    /**
+     * Whether user is permitted to answer exercise question.
+     * @param User $user
+     * @param Exercise $exercise
+     * @return bool
+     */
+    public function answerQuestion(User $user, Exercise $exercise) : bool
+    {
+        // if user can fetch exercise, he also can answer question
+        return $this->fetch($user, $exercise);
     }
 }

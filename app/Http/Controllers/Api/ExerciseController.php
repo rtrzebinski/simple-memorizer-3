@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\NotEnoughExercisesException;
 use App\Http\Requests\CreateExerciseRequest;
+use App\Http\Requests\FetchRandomExerciseOfLessonRequest;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise\Exercise;
 use App\Models\Lesson\Lesson;
@@ -64,5 +66,37 @@ class ExerciseController extends Controller
     {
         $this->authorizeForUser($this->user(), 'delete', $exercise);
         $exercise->delete();
+    }
+
+    /**
+     * @param FetchRandomExerciseOfLessonRequest $request
+     * @param Lesson $lesson
+     * @return JsonResponse
+     * @throws NotEnoughExercisesException
+     */
+    public function fetchRandomExerciseOfLesson(
+        FetchRandomExerciseOfLessonRequest $request,
+        Lesson $lesson
+    ) {
+        $exercise = $lesson->fetchRandomExercise($this->user()->id, $request->previous_exercise_id);
+        return $this->response($exercise);
+    }
+
+    /**
+     * @param Exercise $exercise
+     */
+    public function increaseNumberOfGoodAnswersOfUser(Exercise $exercise)
+    {
+        $this->authorizeForUser($this->user(), 'answerQuestion', $exercise);
+        $exercise->increaseNumberOfGoodAnswersOfUser($this->user()->id);
+    }
+
+    /**
+     * @param Exercise $exercise
+     */
+    public function increaseNumberOfBadAnswersOfUser(Exercise $exercise)
+    {
+        $this->authorizeForUser($this->user(), 'answerQuestion', $exercise);
+        $exercise->increaseNumberOfBadAnswersOfUser($this->user()->id);
     }
 }

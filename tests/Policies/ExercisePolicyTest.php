@@ -74,4 +74,29 @@ class ExercisePolicyTest extends TestCase
 
         $this->assertFalse($this->policy->delete($user, $exercise));
     }
+
+    public function testItShould_authorizeAnswerQuestion_userIsLessonOwner()
+    {
+        $exercise = $this->createExercise();
+        $user = $exercise->lesson->owner;
+
+        $this->assertTrue($this->policy->answerQuestion($user, $exercise));
+    }
+
+    public function testItShould_authorizeAnswerQuestion_userSubscribesLesson()
+    {
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
+        $user->subscribedLessons()->attach($exercise->lesson);
+
+        $this->assertTrue($this->policy->answerQuestion($user, $exercise));
+    }
+
+    public function testItShould_notAuthorizeAnswerQuestion_userIsNotLessonOwnerAndDoesNotSubscribeIt()
+    {
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->policy->answerQuestion($user, $exercise));
+    }
 }

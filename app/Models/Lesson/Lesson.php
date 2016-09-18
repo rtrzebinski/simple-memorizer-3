@@ -2,12 +2,9 @@
 
 namespace App\Models\Lesson;
 
-use App\Models\Exercise\Exercise;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Lesson\Lesson
@@ -31,6 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Lesson extends Model
 {
+    use InteractsWithExercises;
+    use InteractsWithSubscribers;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -56,37 +56,5 @@ class Lesson extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function subscribers()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function exercises()
-    {
-        return $this->hasMany(Exercise::class);
-    }
-
-    /**
-     * @param User $user
-     */
-    public function subscribe(User $user)
-    {
-        $this->subscribers()->save($user);
-    }
-
-    /**
-     * @param User $user
-     */
-    public function unsubscribe(User $user)
-    {
-        $this->subscribers()->detach($user);
     }
 }

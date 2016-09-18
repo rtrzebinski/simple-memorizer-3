@@ -23,9 +23,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Exercise\Exercise whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Exercise\Exercise whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExerciseResult\ExerciseResult[] $results
  */
 class Exercise extends Model
 {
+    use InteractsWithExerciseResults;
+
     /**
      * The attributes that are mass assignable.
      * @var array
