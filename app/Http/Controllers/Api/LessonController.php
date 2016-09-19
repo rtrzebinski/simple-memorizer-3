@@ -28,13 +28,11 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function fetchLesson(Lesson $lesson)
+    public function fetchOwnedLessons()
     {
-        $this->authorizeForUser($this->user(), 'fetch', $lesson);
-        return $this->response($lesson);
+        return $this->response($this->user()->ownedLessons);
     }
 
     /**
@@ -56,6 +54,24 @@ class LessonController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function fetchSubscribedLessons()
+    {
+        return $this->response($this->user()->subscribedLessons);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return JsonResponse
+     */
+    public function fetchLesson(Lesson $lesson)
+    {
+        $this->authorizeForUser($this->user(), 'fetch', $lesson);
+        return $this->response($lesson);
+    }
+
+    /**
      * @param UpdateLessonRequest $request
      * @param Lesson $lesson
      * @return JsonResponse
@@ -64,22 +80,6 @@ class LessonController extends Controller
     {
         $lesson->update($request->all());
         return $this->response($lesson);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function fetchOwnedLessons()
-    {
-        return $this->response($this->user()->ownedLessons);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function fetchSubscribedLessons()
-    {
-        return $this->response($this->user()->subscribedLessons);
     }
 
     /**
