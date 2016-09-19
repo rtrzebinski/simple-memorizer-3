@@ -26,6 +26,8 @@ Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
     Route::get('/lessons/subscribed', 'Api\LessonController@fetchSubscribedLessons');
 
+    Route::get('/lessons/{lesson}', 'Api\LessonController@fetchLesson');
+
     Route::patch('/lessons/{lesson}', 'Api\LessonController@updateLesson');
 
     Route::delete('/lessons/{lesson}', 'Api\LessonController@deleteLesson');

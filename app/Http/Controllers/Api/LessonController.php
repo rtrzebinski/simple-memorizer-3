@@ -29,6 +29,16 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
+     * @return JsonResponse
+     */
+    public function fetchLesson(Lesson $lesson)
+    {
+        $this->authorizeForUser($this->user(), 'fetch', $lesson);
+        return $this->response($lesson);
+    }
+
+    /**
+     * @param Lesson $lesson
      */
     public function subscribeLesson(Lesson $lesson)
     {

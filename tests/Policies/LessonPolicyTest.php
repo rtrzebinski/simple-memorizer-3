@@ -20,6 +20,31 @@ class LessonPolicyTest extends TestCase
         $this->policy = new LessonPolicy;
     }
 
+    public function testItShould_authorizeFetchLesson_userIsLessonOwner()
+    {
+        $lesson = $this->createLesson();
+        $user = $lesson->owner;
+
+        $this->assertTrue($this->policy->fetch($user, $lesson));
+    }
+
+    public function testItShould_authorizeFetchLesson_userSubscribesLesson()
+    {
+        $lesson = $this->createLesson();
+        $user = $this->createUser();
+        $user->subscribedLessons()->attach($lesson);
+
+        $this->assertTrue($this->policy->fetch($user, $lesson));
+    }
+
+    public function testItShould_notAuthorizeFetchLesson_userIsNotLessonOwnerAndDoesNotSubscribeIt()
+    {
+        $lesson = $this->createLesson();
+        $user = $this->createUser();
+
+        $this->assertFalse($this->policy->fetch($user, $lesson));
+    }
+
     public function testItShould_authorizeSubscribeLesson_publicAndNotOwnedLesson()
     {
         $user = $this->createUser();

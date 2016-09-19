@@ -11,6 +11,19 @@ class LessonPolicy
 {
     use HandlesAuthorization;
 
+    public function fetch(User $user, Lesson $lesson) : bool
+    {
+        return User::query()
+            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
+            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
+            ->where('lessons.id', '=', $lesson->id)
+            ->where(function (Builder $query) use ($user) {
+                $query->where('users.id', '=', $user->id)
+                    ->orWhere('lesson_user.user_id', '=', $user->id);
+            })
+            ->exists();
+    }
+
     /**
      * Whether user is permitted to subscribe lesson.
      * @param User $user
@@ -92,14 +105,7 @@ class LessonPolicy
      */
     public function fetchExercisesOfLesson(User $user, Lesson $lesson) : bool
     {
-        return User::query()
-            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
-            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->where('lessons.id', '=', $lesson->id)
-            ->where(function (Builder $query) use ($user) {
-                $query->where('users.id', '=', $user->id)
-                    ->orWhere('lesson_user.user_id', '=', $user->id);
-            })
-            ->exists();
+        // user can fetch exercises, if he can fetch lesson
+        return $this->fetch($user, $lesson);
     }
 }

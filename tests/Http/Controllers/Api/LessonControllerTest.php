@@ -43,6 +43,45 @@ class LessonControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
+    public function testItShould_fetchLesson()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson(['owner_id' => $user->id]);
+
+        $this->callApi('GET', 'lessons/' . $lesson->id, $input = [], $user);
+
+        $this->seeJson($lesson->toArray());
+    }
+
+    public function testItShould_notFetchLesson_unauthorized()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson(['owner_id' => $user->id]);
+
+        $this->callApi('GET', 'lessons/' . $lesson->id);
+
+        $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function testItShould_notFetchLesson_forbidden()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+
+        $this->callApi('GET', 'lessons/' . $lesson->id, $input = [], $user);
+
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testItShould_notFetchLesson_notFound()
+    {
+        $user = $this->createUser();
+
+        $this->callApi('GET', 'lessons/-1', $input = [], $user);
+
+        $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
+    }
+
     public function testItShould_subscribeLesson()
     {
         $user = $this->createUser();
@@ -136,7 +175,7 @@ class LessonControllerTest extends TestCase
         $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
-        
+
         $this->seeJson([
             'visibility' => $input['visibility'],
             'name' => $input['name'],
