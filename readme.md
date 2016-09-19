@@ -1,3 +1,3 @@
-A lightweight web application that helps you memorize anything you need.
+Application under development.
 
-[GitHub wiki](https://github.com/rtrzebinski/simple-memorizer-3/wiki/)
+[REST API documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki/REST-API)
