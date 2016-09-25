@@ -34,7 +34,7 @@ class UserControllerTest extends TestCase
                 'password' => $password,
             ])->willReturn($user);
 
-        $this->callApi('POST', '/api/signup', [
+        $this->callApi('POST', '/signup', [
             'email' => $email,
             'password' => $password,
         ]);
@@ -45,7 +45,7 @@ class UserControllerTest extends TestCase
 
     public function testItShould_notSignupUser_invalidInput()
     {
-        $this->callApi('POST', '/api/signup');
+        $this->callApi('POST', '/signup');
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -62,7 +62,7 @@ class UserControllerTest extends TestCase
             ->with($email, $password)
             ->willReturn($user);
 
-        $this->callApi('POST', '/api/login', [
+        $this->callApi('POST', '/login', [
             'email' => $email,
             'password' => $password,
         ]);
@@ -77,7 +77,7 @@ class UserControllerTest extends TestCase
             ->expects($this->never())
             ->method('findByCredentials');
 
-        $this->callApi('POST', '/api/login');
+        $this->callApi('POST', '/login');
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -92,7 +92,7 @@ class UserControllerTest extends TestCase
             ->method('findByCredentials')
             ->with($email, $password);
 
-        $this->callApi('POST', '/api/login', [
+        $this->callApi('POST', '/login', [
             'email' => $email,
             'password' => $password,
         ]);

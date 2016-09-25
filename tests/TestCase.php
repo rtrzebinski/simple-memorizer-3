@@ -44,7 +44,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         if ($user instanceof User) {
             $headers = ['Authorization' => 'Bearer ' . $user->api_token];
         }
-        return parent::json($method, $uri, $data, $headers);
+        return parent::json($method, 'api' . $uri, $data, $headers);
     }
 
     /**

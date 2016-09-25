@@ -9,11 +9,13 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+| All api routes has '/api/' url prefix defined in RouteServiceProvider.
+|
 */
 
-Route::post('/api/signup', 'Api\UserController@signup');
+Route::post('/signup', 'Api\UserController@signup');
 
-Route::post('/api/login', 'Api\UserController@login');
+Route::post('/login', 'Api\UserController@login');
 
 Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
@@ -32,7 +34,6 @@ Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
     Route::patch('/lessons/{lesson}', 'Api\LessonController@updateLesson');
 
     Route::delete('/lessons/{lesson}', 'Api\LessonController@deleteLesson');
-
 
     Route::post('/lessons/{lesson}/exercises', 'Api\ExerciseController@createExercise');
 

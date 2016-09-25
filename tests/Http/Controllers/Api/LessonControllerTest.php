@@ -16,7 +16,7 @@ class LessonControllerTest extends TestCase
             'name' => uniqid(),
         ];
 
-        $this->callApi('POST', 'lessons', $input, $user);
+        $this->callApi('POST', '/lessons', $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
 
@@ -29,7 +29,7 @@ class LessonControllerTest extends TestCase
 
     public function testItShould_notCreateLesson_unauthorized()
     {
-        $this->callApi('POST', 'lessons');
+        $this->callApi('POST', '/lessons');
 
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -38,7 +38,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('POST', 'lessons', $input = [], $user);
+        $this->callApi('POST', '/lessons', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -48,7 +48,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
-        $this->callApi('GET', 'lessons/' . $lesson->id, $input = [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id, $input = [], $user);
 
         $this->seeJson($lesson->toArray());
     }
@@ -58,7 +58,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
-        $this->callApi('GET', 'lessons/' . $lesson->id);
+        $this->callApi('GET', '/lessons/' . $lesson->id);
 
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -68,7 +68,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson();
 
-        $this->callApi('GET', 'lessons/' . $lesson->id, $input = [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
@@ -77,7 +77,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('GET', 'lessons/-1', $input = [], $user);
+        $this->callApi('GET', '/lessons/-1', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
@@ -87,7 +87,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson();
 
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/user', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
         $this->assertEquals($user->id, $lesson->subscribers[0]->id);
@@ -97,7 +97,7 @@ class LessonControllerTest extends TestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user');
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/user');
 
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -107,7 +107,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['visibility' => 'private']);
 
-        $this->callApi('POST', 'lessons/' . $lesson->id . '/user', $input = [], $user);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/user', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
         $this->assertEmpty($lesson->subscribers);
@@ -117,7 +117,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('POST', 'lessons/-1/user', $input = [], $user);
+        $this->callApi('POST', '/lessons/-1/user', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
@@ -128,7 +128,7 @@ class LessonControllerTest extends TestCase
         $lesson = $this->createLesson();
         $lesson->subscribe($user);
 
-        $this->callApi('DELETE', 'lessons/' . $lesson->id . '/user', $input = [], $user);
+        $this->callApi('DELETE', '/lessons/' . $lesson->id . '/user', $input = [], $user);
 
         $this->assertResponseOk();
         $this->assertCount(0, $lesson->subscribers);
@@ -138,7 +138,7 @@ class LessonControllerTest extends TestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('DELETE', 'lessons/' . $lesson->id . '/user');
+        $this->callApi('DELETE', '/lessons/' . $lesson->id . '/user');
 
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -148,7 +148,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson();
 
-        $this->callApi('DELETE', 'lessons/' . $lesson->id . '/user', $input = [], $user);
+        $this->callApi('DELETE', '/lessons/' . $lesson->id . '/user', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
@@ -157,7 +157,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('DELETE', 'lessons/-1/user', $input = [], $user);
+        $this->callApi('DELETE', '/lessons/-1/user', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
@@ -172,7 +172,7 @@ class LessonControllerTest extends TestCase
             'name' => uniqid(),
         ];
 
-        $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
+        $this->callApi('PATCH', '/lessons/' . $lesson->id, $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
 
@@ -186,7 +186,7 @@ class LessonControllerTest extends TestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('PATCH', 'lessons/' . $lesson->id);
+        $this->callApi('PATCH', '/lessons/' . $lesson->id);
 
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -200,7 +200,7 @@ class LessonControllerTest extends TestCase
             'visibility' => uniqid(),
         ];
 
-        $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
+        $this->callApi('PATCH', '/lessons/' . $lesson->id, $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -215,7 +215,7 @@ class LessonControllerTest extends TestCase
             'name' => uniqid(),
         ];
 
-        $this->callApi('PATCH', 'lessons/' . $lesson->id, $input, $user);
+        $this->callApi('PATCH', '/lessons/' . $lesson->id, $input, $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
@@ -224,7 +224,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('PATCH', 'lessons/-1', $input = [], $user);
+        $this->callApi('PATCH', '/lessons/-1', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
@@ -234,7 +234,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
-        $this->callApi('GET', 'lessons/owned', $input = [], $user);
+        $this->callApi('GET', '/lessons/owned', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
         $this->seeJson([$lesson->toArray()]);
@@ -246,7 +246,7 @@ class LessonControllerTest extends TestCase
         $lesson = $this->createLesson();
         $lesson->subscribe($user);
 
-        $this->callApi('GET', 'lessons/subscribed', $input = [], $user);
+        $this->callApi('GET', '/lessons/subscribed', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
         $this->seeJsonSubset([$lesson->toArray()]);
@@ -257,7 +257,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
-        $this->callApi('DELETE', 'lessons/' . $lesson->id, $input = [], $user);
+        $this->callApi('DELETE', '/lessons/' . $lesson->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_OK);
         $this->assertNull($lesson->fresh());
@@ -267,7 +267,7 @@ class LessonControllerTest extends TestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('DELETE', 'lessons/' . $lesson->id);
+        $this->callApi('DELETE', '/lessons/' . $lesson->id);
 
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -277,7 +277,7 @@ class LessonControllerTest extends TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson();
 
-        $this->callApi('DELETE', 'lessons/' . $lesson->id, $input = [], $user);
+        $this->callApi('DELETE', '/lessons/' . $lesson->id, $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
@@ -286,7 +286,7 @@ class LessonControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('DELETE', 'lessons/-1', $input = [], $user);
+        $this->callApi('DELETE', '/lessons/-1', $input = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
