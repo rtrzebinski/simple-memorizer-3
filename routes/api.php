@@ -1,15 +1,15 @@
 <?php
 
 /*
- |--------------------------------------------------------------------------
- | Application Routes
- |--------------------------------------------------------------------------
- |
- | Here is where you can register all of the routes for an application.
- | It's a breeze. Simply tell Laravel the URIs it should respond to
- | and give it the controller to call when that URI is requested.
- |
- */
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
 Route::post('/api/signup', 'Api\UserController@signup');
 
