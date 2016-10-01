@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
+use Illuminate\Http\Response;
+
 class HomeController extends Controller
 {
     /**
@@ -15,7 +17,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
