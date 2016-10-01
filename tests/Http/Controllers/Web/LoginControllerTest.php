@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Http\Controllers\Auth;
+namespace Tests\Http\Controllers\Web;
 
 use App\Models\User\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
 
-class RegisterControllerTest extends TestCase
+class LoginControllerTest extends TestCase
 {
     /**
      * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
@@ -20,39 +20,32 @@ class RegisterControllerTest extends TestCase
         $this->app->instance(UserRepository::class, $this->userRepositoryMock);
     }
 
-    public function testItShould_registerUser()
+    public function testItShould_loginUser()
     {
         $email = $this->randomEmail();
         $password = $this->randomPassword();
-        $user = $this->createUser();
+        $user = $this->createUser([
+            'email' => $email,
+            'password' => bcrypt($password),
+        ]);
 
-        $this->userRepositoryMock
-            ->expects($this->once())
-            ->method('create')->with([
-                'email' => $email,
-                'password' => $password,
-                'password_confirmation' => $password,
-            ])->willReturn($user);
-
-        $this->call('POST', '/register', [
+        $this->call('POST', '/login', [
             'email' => $email,
             'password' => $password,
-            'password_confirmation' => $password,
         ]);
 
         $this->assertEquals($user->id, auth()->user()->id);
         $this->assertRedirectedTo('/home');
     }
 
-    public function testItShould_notRegisterUser_invalidInput()
+    public function testItShould_notLoginUser_invalidCredentials()
     {
         $referer = $this->randomUrl();
 
-        $this->userRepositoryMock
-            ->expects($this->never())
-            ->method('create');
-
-        $this->call('POST', '/register', $parameters = [], $cookies = [], $files = [], ['HTTP_REFERER' => $referer]);
+        $this->call('POST', '/login', [
+            'email' => uniqid(),
+            'password' => uniqid(),
+        ], $cookies = [], $files = [], ['HTTP_REFERER' => $referer]);
 
         $this->assertNull(auth()->user());
         $this->assertRedirectedTo($referer);
