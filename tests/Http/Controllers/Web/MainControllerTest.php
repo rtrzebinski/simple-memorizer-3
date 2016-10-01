@@ -6,16 +6,16 @@ use TestCase;
 
 class MainControllerTest extends TestCase
 {
-    public function testItShould_displayHomePage_authenticatedUser()
+    public function testItShould_displayMainPage_authenticatedUser()
     {
         $this->be($user = $this->createUser());
 
         $this->call('GET', '/');
 
-        $this->assertResponseOk();
+        $this->assertRedirectedTo('/home');
     }
 
-    public function testItShould_displayHomePage_notAuthenticatedUser()
+    public function testItShould_displayMainPage_notAuthenticatedUser()
     {
         $this->call('GET', '/');
 

@@ -11,28 +11,31 @@
 |
 */
 
-Route::get('/', 'Web\MainController@index');
+Route::group(['middleware' => ['guest']], function () {
 
-Route::get('login', 'Web\LoginController@showLoginForm')->name('login');
+    Route::get('/', 'Web\MainController@index');
 
-Route::post('login', 'Web\LoginController@login');
+    Route::get('login', 'Web\LoginController@showLoginForm')->name('login');
 
-Route::get('register', 'Web\RegisterController@showRegistrationForm');
+    Route::post('login', 'Web\LoginController@login');
 
-Route::post('register', 'Web\RegisterController@register');
+    Route::get('register', 'Web\RegisterController@showRegistrationForm');
 
-Route::post('logout', 'Web\LoginController@logout');
+    Route::post('register', 'Web\RegisterController@register');
 
-Route::get('password/reset', 'Web\ForgotPasswordController@showLinkRequestForm');
+    Route::get('password/reset', 'Web\ForgotPasswordController@showLinkRequestForm');
 
-Route::post('password/email', 'Web\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('password/email', 'Web\ForgotPasswordController@sendResetLinkEmail');
 
-Route::get('password/reset/{token}', 'Web\ResetPasswordController@showResetForm');
+    Route::get('password/reset/{token}', 'Web\ResetPasswordController@showResetForm');
 
-Route::post('password/reset', 'Web\ResetPasswordController@reset');
+    Route::post('password/reset', 'Web\ResetPasswordController@reset');
+
+});
 
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', 'Web\HomeController@index');
 
+    Route::post('logout', 'Web\LoginController@logout');
 });
