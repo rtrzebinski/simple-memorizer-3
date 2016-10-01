@@ -11,27 +11,28 @@
 |
 */
 
-// Authentication Routes...
-$this->get('login', 'Web\LoginController@showLoginForm')->name('login');
-
-$this->post('login', 'Web\LoginController@login');
-
-$this->post('logout', 'Web\LoginController@logout');
-
-// Registration Routes...
-$this->get('register', 'Web\RegisterController@showRegistrationForm');
-
-$this->post('register', 'Web\RegisterController@register');
-
-// Password Reset Routes...
-$this->get('password/reset', 'Web\ForgotPasswordController@showLinkRequestForm');
-
-$this->post('password/email', 'Web\ForgotPasswordController@sendResetLinkEmail');
-
-$this->get('password/reset/{token}', 'Web\ResetPasswordController@showResetForm');
-
-$this->post('password/reset', 'Web\ResetPasswordController@reset');
-
 Route::get('/', 'Web\MainController@index');
 
-Route::get('/home', 'Web\HomeController@index');
+Route::get('login', 'Web\LoginController@showLoginForm')->name('login');
+
+Route::post('login', 'Web\LoginController@login');
+
+Route::get('register', 'Web\RegisterController@showRegistrationForm');
+
+Route::post('register', 'Web\RegisterController@register');
+
+Route::post('logout', 'Web\LoginController@logout');
+
+Route::get('password/reset', 'Web\ForgotPasswordController@showLinkRequestForm');
+
+Route::post('password/email', 'Web\ForgotPasswordController@sendResetLinkEmail');
+
+Route::get('password/reset/{token}', 'Web\ResetPasswordController@showResetForm');
+
+Route::post('password/reset', 'Web\ResetPasswordController@reset');
+
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/home', 'Web\HomeController@index');
+
+});
