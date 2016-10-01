@@ -51,4 +51,14 @@ class LoginControllerTest extends TestCase
         $this->assertRedirectedTo($referer);
         $this->assertSessionHasErrors();
     }
+
+    public function testItShould_logoutUser()
+    {
+        $this->be($this->createUser());
+
+        $this->call('POST', '/logout');
+
+        $this->assertNull(auth()->user());
+        $this->assertRedirectedTo('/');
+    }
 }
