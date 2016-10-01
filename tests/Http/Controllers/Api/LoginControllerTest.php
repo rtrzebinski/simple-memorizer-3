@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
 
-class UserControllerTest extends TestCase
+class LoginControllerTest extends TestCase
 {
     /**
      * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
@@ -19,35 +19,6 @@ class UserControllerTest extends TestCase
         parent::setUp();
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
         $this->app->instance(UserRepository::class, $this->userRepositoryMock);
-    }
-
-    public function testItShould_signupUser()
-    {
-        $email = $this->randomEmail();
-        $password = $this->randomPassword();
-        $user = $this->createUser();
-
-        $this->userRepositoryMock
-            ->expects($this->once())
-            ->method('create')->with([
-                'email' => $email,
-                'password' => $password,
-            ])->willReturn($user);
-
-        $this->callApi('POST', '/signup', [
-            'email' => $email,
-            'password' => $password,
-        ]);
-
-        $this->assertResponseStatus(Response::HTTP_OK);
-        $this->seeJson($user->makeVisible('api_token')->toArray());
-    }
-
-    public function testItShould_notSignupUser_invalidInput()
-    {
-        $this->callApi('POST', '/signup');
-
-        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testItShould_loginUser()

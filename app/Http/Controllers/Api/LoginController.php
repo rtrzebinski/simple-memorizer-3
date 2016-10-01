@@ -8,25 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class UserController extends Controller
+class LoginController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param UserRepository $userRepository
-     * @return Response
-     */
-    public function signup(Request $request, UserRepository $userRepository)
-    {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        $user = $userRepository->create($request->all());
-
-        return $this->response($user->makeVisible('api_token'));
-    }
-
     /**
      * @param Request $request
      * @param UserRepository $userRepository

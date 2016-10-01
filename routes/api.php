@@ -13,9 +13,9 @@
 |
 */
 
-Route::post('/signup', 'Api\UserController@signup');
+Route::post('/register', 'Api\RegisterController@register');
 
-Route::post('/login', 'Api\UserController@login');
+Route::post('/login', 'Api\LoginController@login');
 
 Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
