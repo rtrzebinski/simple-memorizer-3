@@ -31,6 +31,23 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
+     * Dump current session and exit.
+     */
+    public function dumpSession()
+    {
+        dd(\Session::all());
+    }
+
+    /**
+     * Random, valid url.
+     * @return string
+     */
+    public function randomUrl() : string
+    {
+        return 'http://' . uniqid() . '.example.com';
+    }
+
+    /**
      * Call api route as guest, or authenticated user.
      * @param $method
      * @param $uri
