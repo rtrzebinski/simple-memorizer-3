@@ -30,10 +30,14 @@ class UserRepositoryTest extends TestCase
         $user = $this->repository->create($input);
 
         $this->assertInstanceOf(User::class, $user);
+        // ensure email was stored
         $this->assertEquals($input['email'], $user->email);
+        // ensure password was hashed
         $this->assertTrue(Hash::check($input['password'], $user->password));
-        // repository should create api_token
-        $this->assertTrue(strlen($user->api_token) > 0);
+        // ensure api_token was created
+        $this->assertTrue(isset($user->api_token));
+        // ensure api_token is valid
+        $this->assertTrue(auth()->guard('api')->validate(['api_token' => $user->api_token]));
     }
 
     public function testItShould_findUserByCredentials()
