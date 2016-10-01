@@ -11,6 +11,13 @@
 |
 */
 
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/home', 'Web\HomeController@index');
+
+    Route::post('logout', 'Web\LoginController@logout');
+});
+
 Route::group(['middleware' => ['guest']], function () {
 
     Route::get('/', 'Web\MainController@index');
@@ -31,11 +38,4 @@ Route::group(['middleware' => ['guest']], function () {
 
     Route::post('password/reset', 'Web\ResetPasswordController@reset');
 
-});
-
-Route::group(['middleware' => ['auth']], function () {
-
-    Route::get('/home', 'Web\HomeController@index');
-
-    Route::post('logout', 'Web\LoginController@logout');
 });
