@@ -17,6 +17,8 @@ Route::post('/register', 'Api\RegisterController@register');
 
 Route::post('/login', 'Api\LoginController@login');
 
+Route::post('/password/email', 'Api\ForgotPasswordController@sendResetLinkEmail');
+
 Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
     Route::post('/lessons', 'Api\LessonController@createLesson');
