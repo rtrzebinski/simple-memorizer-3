@@ -15,18 +15,23 @@ use Illuminate\Notifications\Notifiable;
  * @property string $email
  * @property string $password
  * @property string $api_token
+ * @property string $remember_token
+ * @property string $auth_driver
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $lessons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $subscribedLessons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $ownedLessons
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $unreadNotifications
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereEmail($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User wherePassword($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereApiToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereAuthDriver($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User\User whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $subscribedLessons
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson\Lesson[] $ownedLessons
  */
 class User extends Authenticatable
 {

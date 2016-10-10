@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ExerciseResult\ExerciseResult wherePercentOfGoodAnswers($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ExerciseResult\ExerciseResult whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ExerciseResult\ExerciseResult whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ExerciseResult\ExerciseResult user($userId)
  */
 class ExerciseResult extends Model
 {

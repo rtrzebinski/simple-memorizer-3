@@ -35,4 +35,13 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    /*
+     * Socialite
+     */
+    'facebook' => [
+        'client_id' => env('SOCIALITE_FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('SOCIALITE_FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('SOCIALITE_FACEBOOK_REDIRECT'),
+    ],
+
 ];

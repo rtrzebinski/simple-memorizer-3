@@ -22,6 +22,10 @@ Route::group(['middleware' => ['guest']], function () {
 
     Route::get('/', 'Web\MainController@index');
 
+    Route::get('login/{driver}', 'Web\SocialiteController@redirectToProvider');
+
+    Route::get('login/callback/{driver}', 'Web\SocialiteController@handleProviderCallback');
+
     Route::get('login', 'Web\LoginController@showLoginForm')->name('login');
 
     Route::post('login', 'Web\LoginController@login');

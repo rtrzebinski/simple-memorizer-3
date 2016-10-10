@@ -59,6 +59,9 @@
                                 </a>
                             </div>
                         </div>
+
+                        <a href="{{ url('/login/facebook') }}">login with facebook</a>
+
                     </form>
                 </div>
             </div>
