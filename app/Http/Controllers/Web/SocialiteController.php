@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Exceptions\UserCreatedWithAnotherDriverException;
 use App\Models\User\UserRepository;
 use Auth;
+use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Laravel\Socialite\Two\User;
 use Socialite;
@@ -16,20 +18,13 @@ use Socialite;
  * Twitter, Google, LinkedIn, GitHub and Bitbucket.
  * It handles almost all of the boilerplate social authentication code you are dreading writing.
  *
- * Tested drivers: facebook
+ * Tested drivers: facebook, google
  *
  * @see https://github.com/laravel/socialite
  * @package App\Http\Controllers\Web
  */
 class SocialiteController extends Controller
 {
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
     /**
      * @param string $authDriver
      * @return RedirectResponse
@@ -49,10 +44,25 @@ class SocialiteController extends Controller
         /** @var User $socialiteUser */
         $socialiteUser = Socialite::driver($authDriver)->user();
 
-        $user = $userRepository->handleSocialiteUser($socialiteUser, $authDriver);
+        try {
+
+            $user = $userRepository->handleSocialiteUser($socialiteUser, $authDriver);
+
+        } catch (UserCreatedWithAnotherDriverException $e) {
+
+            $message = sprintf("User with email '%s' exists, but was not created with %s.", $socialiteUser->email,
+                $authDriver);
+            if ($e->user->auth_driver) {
+                $message .= sprintf(' Try to login with %s.', $e->user->auth_driver);
+            } else {
+                $message .= ' Try to login using email and password.';
+            }
+
+            return redirect('/login')->with('errors', new MessageBag([$message]));
+        }
 
         Auth::login($user);
 
-        return redirect($this->redirectTo);
+        return redirect('/home');
     }
 }

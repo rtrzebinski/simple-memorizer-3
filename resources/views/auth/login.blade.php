@@ -61,6 +61,8 @@
                         </div>
 
                         <a href="{{ url('/login/facebook') }}">login with facebook</a>
+                        |
+                        <a href="{{ url('/login/google') }}">login with google</a>
 
                     </form>
                 </div>

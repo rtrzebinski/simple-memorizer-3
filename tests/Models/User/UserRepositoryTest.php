@@ -2,6 +2,7 @@
 
 namespace Tests\Models\Users;
 
+use App\Exceptions\UserCreatedWithAnotherDriverException;
 use App\Models\User\UserRepository;
 use App\Models\User\User;
 use Hash;
@@ -86,7 +87,7 @@ class UserRepositoryTest extends TestCase
         $this->assertNull($this->repository->findByCredentials($this->createUser()->email, uniqid()));
     }
 
-    public function testItShould_handleSocialiteUser_userExists()
+    public function testItShould_handleSocialiteUser_userExists_sameDriver()
     {
         $driver = uniqid();
         $socialiteUser = $this->createSocialiteUser();
@@ -99,6 +100,25 @@ class UserRepositoryTest extends TestCase
 
         $this->assertInstanceOf(User::class, $result);
         $this->assertEquals($user->id, $result->id);
+    }
+
+    public function testItShould_handleSocialiteUser_userExists_differentDriver()
+    {
+        $driver = uniqid();
+        $socialiteUser = $this->createSocialiteUser();
+        $user = $this->createUser([
+            'email' => $socialiteUser->email,
+            'auth_driver' => $oldDriver = uniqid(),
+        ])->fresh();
+
+        try {
+            $this->repository->handleSocialiteUser($socialiteUser, $driver);
+        } catch (UserCreatedWithAnotherDriverException $e) {
+            $this->assertEquals($e->user, $user);
+            return;
+        }
+
+        $this->fail('Exception was not thrown.');
     }
 
     public function testItShould_handleSocialiteUser_userDoesNotExist()

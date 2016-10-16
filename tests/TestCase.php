@@ -40,6 +40,19 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
+     * @param string $message
+     */
+    protected function assertErrorMessage(string $message)
+    {
+        $sessionMessages = session()->get('errors')->messages();
+        if (isset($sessionMessages[0][0])) {
+            $this->assertEquals($message, $sessionMessages[0][0]);
+        } else {
+            $this->fail('No error messages in session.');
+        }
+    }
+
+    /**
      * Random, valid url.
      * @return string
      */

@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Exceptions\UserCreatedWithAnotherDriverException;
 use Hash;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
@@ -47,24 +48,32 @@ class UserRepository
     }
 
     /**
-     * Check if matching user exists in our database. Return it or create new.
+     * Check if matching user exists. Return it or create new.
      *
      * @param SocialiteUser $socialiteUser
      * @param string $authDriver
      * @return User
+     * @throws UserCreatedWithAnotherDriverException
      */
     public function handleSocialiteUser(SocialiteUser $socialiteUser, string $authDriver) : User
     {
-        $user = User::whereEmail($socialiteUser->email)
-            ->whereAuthDriver($authDriver)
-            ->first();
+        $user = User::whereEmail($socialiteUser->email)->first();
 
-        if ($user) {
+        // user does not exist - create and return user
+        if (!$user) {
+            return $this->create([
+                'email' => $socialiteUser->email,
+            ], $authDriver);
+        }
+
+        // user exists, and was created with the same driver - return user
+        if ($user->auth_driver == $authDriver) {
             return $user;
         }
 
-        return $this->create([
-            'email' => $socialiteUser->email,
-        ], $authDriver);
+        // user exists, but was not created with the same driver - error
+        if ($user->auth_driver != $authDriver) {
+            throw new UserCreatedWithAnotherDriverException($user);
+        }
     }
 }
