@@ -60,11 +60,17 @@
                             </div>
                         </div>
 
-                        <a href="{{ url('/login/facebook') }}">login with facebook</a>
-                        |
-                        <a href="{{ url('/login/google') }}">login with google</a>
-                        |
-                        <a href="{{ url('/login/github') }}">login with github</a>
+                        <a href="{{ url('/login/facebook') }}" class="btn btn-block btn-social btn-facebook">
+                            <span class="fa fa-facebook"></span> Login with Facebook
+                        </a>
+
+                        <a href="{{ url('/login/google') }}" class="btn btn-block btn-social btn-google">
+                            <span class="fa fa-google"></span> Login with Google
+                        </a>
+
+                        <a href="{{ url('/login/github') }}" class="btn btn-block btn-social btn-github">
+                            <span class="fa fa-github"></span> Login with Github
+                        </a>
 
                     </form>
                 </div>
