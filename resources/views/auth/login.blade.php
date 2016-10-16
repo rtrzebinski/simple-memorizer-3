@@ -63,6 +63,8 @@
                         <a href="{{ url('/login/facebook') }}">login with facebook</a>
                         |
                         <a href="{{ url('/login/google') }}">login with google</a>
+                        |
+                        <a href="{{ url('/login/github') }}">login with github</a>
 
                     </form>
                 </div>

@@ -18,7 +18,7 @@ use Socialite;
  * Twitter, Google, LinkedIn, GitHub and Bitbucket.
  * It handles almost all of the boilerplate social authentication code you are dreading writing.
  *
- * Tested drivers: facebook, google
+ * Tested drivers: facebook, google, github
  *
  * @see https://github.com/laravel/socialite
  * @package App\Http\Controllers\Web
