@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="/css/app.css" rel="stylesheet">
+    <link href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -77,6 +77,7 @@
         </div>
     </nav>
 
+    <!-- Errors -->
     @if (count($errors) > 0)
         <div class="alert alert-danger">
             <ul>
@@ -91,5 +92,6 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </body>
 </html>
