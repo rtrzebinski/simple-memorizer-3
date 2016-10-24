@@ -21,9 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
         return view('lessons.learn');
     });
 
-    Route::get('/lessons/view', function () {
-        return view('lessons.view');
-    });
+    Route::get('/lessons/{lesson}/view', 'Web\LessonController@view');
 
     Route::get('/lessons/create', function () {
         return view('lessons.create');

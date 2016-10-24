@@ -23,22 +23,22 @@ $factory->define(User::class, function () {
     ];
 });
 
-$factory->define(Exercise::class, function () {
+$factory->define(Exercise::class, function (Faker\Generator $faker) {
     return [
         'lesson_id' => function () {
             return factory(Lesson::class)->create()->id;
         },
-        'question' => uniqid(),
-        'answer' => uniqid(),
+        'question' => $faker->words(8, true),
+        'answer' => $faker->words(2, true),
     ];
 });
 
-$factory->define(Lesson::class, function () {
+$factory->define(Lesson::class, function (Faker\Generator $faker) {
     return [
         'owner_id' => function () {
             return factory(User::class)->create()->id;
         },
-        'name' => uniqid(),
+        'name' => $faker->words(5, true),
         'visibility' => 'public',
     ];
 });

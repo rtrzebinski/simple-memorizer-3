@@ -132,4 +132,34 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         return factory(Lesson::class)->create($data);
     }
+
+    /**
+     * @param User|null $user
+     * @return Lesson
+     */
+    protected function createPublicLesson(User $user = null) : Lesson
+    {
+        $attributes = ['visibility' => 'public'];
+
+        if ($user) {
+            $attributes['owner_id'] = $user->id;
+        }
+
+        return $this->createLesson($attributes);
+    }
+
+    /**
+     * @param User|null $user
+     * @return Lesson
+     */
+    protected function createPrivateLesson(User $user = null) : Lesson
+    {
+        $attributes = ['visibility' => 'private'];
+
+        if ($user) {
+            $attributes['owner_id'] = $user->id;
+        }
+
+        return $this->createLesson($attributes);
+    }
 }

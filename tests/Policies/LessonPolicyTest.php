@@ -193,26 +193,4 @@ class LessonPolicyTest extends TestCase
 
         $this->assertFalse($this->policy->fetchExercisesOfLesson($user, $lesson));
     }
-
-    protected function createPublicLesson(User $user = null) : Lesson
-    {
-        $attributes = ['visibility' => 'public'];
-
-        if ($user) {
-            $attributes['owner_id'] = $user->id;
-        }
-
-        return $this->createLesson($attributes);
-    }
-
-    protected function createPrivateLesson(User $user = null) : Lesson
-    {
-        $attributes = ['visibility' => 'private'];
-
-        if ($user) {
-            $attributes['owner_id'] = $user->id;
-        }
-
-        return $this->createLesson($attributes);
-    }
 }

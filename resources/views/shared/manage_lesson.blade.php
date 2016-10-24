@@ -4,12 +4,12 @@
         <div class="col-md-6 no-padding">
             <h4>
                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                Lesson name
+                {{ $lesson->name }}
             </h4>
             <p>
                 Number of exercises: 40 </br>
                 Number of subscribers: 3 </br>
-                Visibility: public </br>
+                Visibility: {{ $lesson->visibility }} </br>
                                 <span class="help-block">
                                     Public lessons can be subscribed by other users, but only you can modify them. </br>
                                     Private lessons are only visible for you.

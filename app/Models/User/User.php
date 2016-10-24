@@ -2,9 +2,6 @@
 
 namespace App\Models\User;
 
-use App\Models\Lesson\Lesson;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -36,6 +33,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use InteractsWithLessons;
 
     /**
      * The attributes that are mass assignable.
@@ -53,20 +51,4 @@ class User extends Authenticatable
         'password',
         'api_token',
     ];
-
-    /**
-     * @return BelongsToMany
-     */
-    public function subscribedLessons()
-    {
-        return $this->belongsToMany(Lesson::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function ownedLessons()
-    {
-        return $this->hasMany(Lesson::class, 'owner_id');
-    }
 }

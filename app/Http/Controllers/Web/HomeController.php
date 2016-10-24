@@ -7,12 +7,15 @@ use Illuminate\Http\Response;
 class HomeController extends Controller
 {
     /**
-     * Show the application dashboard.
+     * Show the application home page.
      *
      * @return Response
      */
     public function index()
     {
-        return view('home');
+        $ownedLessons = $this->user()->ownedLessons;
+        $subscribedLessons = $this->user()->subscribedLessons;
+        $availableLessons = $this->user()->availableLessons();
+        return view('home', compact('ownedLessons', 'subscribedLessons', 'availableLessons'));
     }
 }
