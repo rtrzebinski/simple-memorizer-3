@@ -16,6 +16,30 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'Web\HomeController@index');
 
     Route::post('logout', 'Web\LoginController@logout');
+
+    Route::get('/lessons/learn', function () {
+        return view('lessons.learn');
+    });
+
+    Route::get('/lessons/view', function () {
+        return view('lessons.view');
+    });
+
+    Route::get('/lessons/create', function () {
+        return view('lessons.create');
+    });
+
+    Route::get('/lessons/edit', function () {
+        return view('lessons.edit');
+    });
+
+    Route::get('/exercises/create', function () {
+        return view('exercises.create');
+    });
+
+    Route::get('/exercises/edit', function () {
+        return view('exercises.edit');
+    });
 });
 
 Route::group(['middleware' => ['guest']], function () {
