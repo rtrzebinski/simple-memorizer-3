@@ -2,9 +2,7 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use TestCase;
-
-class HomeControllerTest extends TestCase
+class HomeControllerTest extends BaseTestCase
 {
     public function testItShould_displayHomePage()
     {
@@ -16,12 +14,13 @@ class HomeControllerTest extends TestCase
         $this->assertViewHas('ownedLessons', $user->ownedLessons);
         $this->assertViewHas('subscribedLessons', $user->subscribedLessons);
         $this->assertViewHas('availableLessons', $user->availableLessons());
+        $this->assertViewHas('userHasOwnedOrSubscribedLessons', $user->hasOwnedOrSubscribedLessons());
     }
 
-    public function testItShould_notDisplayHomePage_notAuthenticatedUser()
+    public function testItShould_notDisplayHomePage_unauthorized()
     {
         $this->call('GET', '/home');
 
-        $this->assertRedirectedTo('/login');
+        $this->assertUnauthorized();
     }
 }

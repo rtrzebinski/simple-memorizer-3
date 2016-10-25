@@ -16,6 +16,9 @@ class HomeController extends Controller
         $ownedLessons = $this->user()->ownedLessons;
         $subscribedLessons = $this->user()->subscribedLessons;
         $availableLessons = $this->user()->availableLessons();
-        return view('home', compact('ownedLessons', 'subscribedLessons', 'availableLessons'));
+        $userHasOwnedOrSubscribedLessons = $this->user()->hasOwnedOrSubscribedLessons();
+
+        return view('home',
+            compact('ownedLessons', 'subscribedLessons', 'availableLessons', 'userHasOwnedOrSubscribedLessons'));
     }
 }

@@ -44,4 +44,12 @@ trait InteractsWithLessons
             })
             ->get();
     }
+
+    /**
+     * @return bool
+     */
+    public function hasOwnedOrSubscribedLessons() : bool
+    {
+        return (bool)($this->ownedLessons->count() + $this->subscribedLessons->count());
+    }
 }

@@ -4,40 +4,68 @@ namespace Tests\Models\Users;
 
 use TestCase;
 
-/**
- * @property \App\Models\User\User user
- * @property \App\Models\Lesson\Lesson ownedLesson
- * @property \App\Models\Lesson\Lesson subscribedLesson
- * @property \App\Models\Lesson\Lesson availableLesson
- */
 class InteractsWithLessonsTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-        $this->user = $this->createUser();
-        $this->ownedLesson = $this->createPublicLesson($this->user);
-        $this->subscribedLesson = $this->createPublicLesson();
-        $this->subscribedLesson->subscribers()->save($this->user);
-        $this->availableLesson = $this->createPublicLesson();
-        $this->createPrivateLesson(); // not available
-    }
-
     public function testItShould_fetchSubscribedLessons()
     {
-        $this->assertCount(1, $this->user->ownedLessons);
-        $this->assertEquals($this->ownedLesson->id, $this->user->ownedLessons[0]->id);
+        $user = $this->createUser();
+        $ownedLesson = $this->createPublicLesson($user);
+        $subscribedLesson = $this->createPublicLesson();
+        $subscribedLesson->subscribers()->save($user);
+        $this->createPublicLesson();
+        $this->createPrivateLesson(); // not available
+
+        $this->assertCount(1, $user->ownedLessons);
+        $this->assertEquals($ownedLesson->id, $user->ownedLessons[0]->id);
     }
 
     public function testItShould_fetchOwnedLessons()
     {
-        $this->assertCount(1, $this->user->subscribedLessons);
-        $this->assertEquals($this->subscribedLesson->id, $this->user->subscribedLessons[0]->id);
+        $user = $this->createUser();
+        $this->createPublicLesson($user);
+        $subscribedLesson = $this->createPublicLesson();
+        $subscribedLesson->subscribers()->save($user);
+        $this->createPublicLesson();
+        $this->createPrivateLesson(); // not available
+
+        $this->assertCount(1, $user->subscribedLessons);
+        $this->assertEquals($subscribedLesson->id, $user->subscribedLessons[0]->id);
     }
 
     public function testItShould_fetchAvailableLessons()
     {
-        $this->assertCount(1, $this->user->availableLessons());
-        $this->assertEquals($this->availableLesson->id, $this->user->availableLessons()[0]->id);
+        $user = $this->createUser();
+        $this->createPublicLesson($user);
+        $subscribedLesson = $this->createPublicLesson();
+        $subscribedLesson->subscribers()->save($user);
+        $availableLesson = $this->createPublicLesson();
+        $this->createPrivateLesson(); // not available
+
+        $this->assertCount(1, $user->availableLessons());
+        $this->assertEquals($availableLesson->id, $user->availableLessons()[0]->id);
     }
+
+    public function testIt_hasOwnedOrSubscribedLessons_ownedLesson()
+    {
+        $user = $this->createUser();
+        $this->createPublicLesson($user);
+
+        $this->assertTrue($user->hasOwnedOrSubscribedLessons());
+    }
+
+    public function testIt_hasOwnedOrSubscribedLessons_subscribedLesson()
+    {
+        $user = $this->createUser();
+        $this->createPublicLesson()->subscribers()->save($user);
+
+        $this->assertTrue($user->hasOwnedOrSubscribedLessons());
+    }
+
+    public function testIt_hasNoOwnedOrSubscribedLessons()
+    {
+        $user = $this->createUser();
+
+        $this->assertFalse($user->hasOwnedOrSubscribedLessons());
+    }
+
 }
