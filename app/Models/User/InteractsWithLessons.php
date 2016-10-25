@@ -28,21 +28,19 @@ trait InteractsWithLessons
     }
 
     /**
-     * Lessons user does not own, and does not subscribe.
+     * Public lessons user does not own, and does not subscribe.
      * @return EloquentCollection
      */
     public function availableLessons() : EloquentCollection
     {
-        return Lesson::query()
+        $lessons = Lesson::query()
             ->where('lessons.owner_id', '!=', $this->id)
             ->where('lessons.visibility', '=', 'public')
-            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->where(function ($query) {
-                $query
-                    ->where('lesson_user.user_id', '!=', $this->id)
-                    ->orWhereNull('lesson_user.user_id');
-            })
             ->get();
+
+        $lessons = $lessons->diff($this->subscribedLessons);
+
+        return $lessons;
     }
 
     /**

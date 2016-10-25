@@ -45,6 +45,25 @@ class InteractsWithLessonsTest extends TestCase
         $this->assertEquals($availableLesson->id, $user->availableLessons()[0]->id);
     }
 
+    public function testItShould_notFetchAvailableLessons_lessonSubscribedByMeAndOtherUser()
+    {
+        $user = $this->createUser();
+        $subscribedLesson = $this->createPublicLesson();
+        $subscribedLesson->subscribers()->save($user);
+        $subscribedLesson->subscribers()->save($this->createUser());
+
+        $this->assertCount(0, $user->availableLessons());
+    }
+
+    public function testItShould_fetchAvailableLessons_lessonSubscribedByOtherUserOnly()
+    {
+        $user = $this->createUser();
+        $subscribedLesson = $this->createPublicLesson();
+        $subscribedLesson->subscribers()->save($this->createUser());
+
+        $this->assertCount(1, $user->availableLessons());
+    }
+
     public function testIt_hasOwnedOrSubscribedLessons_ownedLesson()
     {
         $user = $this->createUser();
