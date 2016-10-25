@@ -69,6 +69,16 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->subscribe($user, $lesson));
     }
 
+    public function testItShould_authorizeLessonSubscribe_lessonWasSubscribedByAnotherUser()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createPublicLesson($user);
+
+        $this->createUser()->subscribedLessons()->save($lesson);
+
+        $this->assertTrue($this->policy->subscribe($user, $lesson));
+    }
+
     public function testItShould_notAuthorizeLessonSubscribe_privateAndNotOwnedLesson()
     {
         $user = $this->createUser();

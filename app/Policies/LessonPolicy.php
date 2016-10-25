@@ -60,7 +60,10 @@ class LessonPolicy
                     ->orWhere('owner_id', '=', $user->id);
             })
             ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->whereNull('lesson_user.user_id')
+            ->where(function (Builder $query) use ($user) {
+                $query->whereNull('lesson_user.user_id')
+                    ->orWhere('lesson_user.user_id', '!=', $user->id);
+            })
             ->exists();
     }
 
