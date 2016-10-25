@@ -15,13 +15,13 @@
                                     <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
                                     {{ $lesson->name }}
                                 </h4>
-                                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
-                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                    Manage lesson
-                                </a>
                                 <a href="/home" class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                                     Browse lessons
+                                </a>
+                                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
+                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                                    Manage lesson
                                 </a>
                                 <button class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>

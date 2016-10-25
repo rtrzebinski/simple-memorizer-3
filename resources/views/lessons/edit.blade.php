@@ -5,16 +5,13 @@
         <div class="row">
             <div class="col-md-12">
 
+                @include('shared.manage_lesson')
+
                 <div class="panel panel-default">
-                    <div class="panel-heading">Edit existing lesson</div>
+                    <div class="panel-heading">Edit lesson</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default" role="button">
-                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                    Manage lesson
-                                </a>
-                                <hr>
                                 <form>
                                     <div class="form-group">
                                         <label>Name</label>
