@@ -14,7 +14,7 @@ class UpdateExerciseRequest extends Request
      */
     public function authorize()
     {
-        return $this->gate()->authorize('update', $this->route('exercise'));
+        return $this->gate()->authorize('modify', $this->route('exercise'));
     }
 
     /**

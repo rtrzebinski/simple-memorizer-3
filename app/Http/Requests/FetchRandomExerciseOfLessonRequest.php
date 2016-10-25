@@ -14,7 +14,7 @@ class FetchRandomExerciseOfLessonRequest extends Request
      */
     public function authorize()
     {
-        return $this->gate()->authorize('fetchExercisesOfLesson', $this->route('lesson'));
+        return $this->gate()->authorize('access', $this->route('lesson'));
     }
 
     /**

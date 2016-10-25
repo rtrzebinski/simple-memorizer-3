@@ -67,7 +67,7 @@ class LessonController extends Controller
      */
     public function fetchLesson(Lesson $lesson)
     {
-        $this->authorizeForUser($this->user(), 'fetch', $lesson);
+        $this->authorizeForUser($this->user(), 'access', $lesson);
         return $this->response($lesson);
     }
 
@@ -87,7 +87,7 @@ class LessonController extends Controller
      */
     public function deleteLesson(Lesson $lesson)
     {
-        $this->authorizeForUser($this->user(), 'delete', $lesson);
+        $this->authorizeForUser($this->user(), 'modify', $lesson);
         $lesson->delete();
     }
 }

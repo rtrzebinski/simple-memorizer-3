@@ -14,7 +14,7 @@ class ExerciseController extends Controller
      */
     public function create(Lesson $lesson) : View
     {
-        $this->authorizeForUser($this->user(), 'createExercise', $lesson);
+        $this->authorizeForUser($this->user(), 'modify', $lesson);
         return view('exercises.create', compact('lesson'));
     }
 
@@ -24,7 +24,7 @@ class ExerciseController extends Controller
      */
     public function edit(Exercise $exercise) : View
     {
-        $this->authorizeForUser($this->user(), 'update', $exercise);
+        $this->authorizeForUser($this->user(), 'modify', $exercise);
         return view('exercises.edit', [
             'exercise' => $exercise,
             'lesson' => $exercise->lesson,

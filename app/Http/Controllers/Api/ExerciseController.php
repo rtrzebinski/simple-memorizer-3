@@ -33,7 +33,7 @@ class ExerciseController extends Controller
      */
     public function fetchExercise(Exercise $exercise)
     {
-        $this->authorizeForUser($this->user(), 'fetch', $exercise);
+        $this->authorizeForUser($this->user(), 'access', $exercise);
         return $this->response($exercise);
     }
 
@@ -43,7 +43,7 @@ class ExerciseController extends Controller
      */
     public function fetchExercisesOfLesson(Lesson $lesson)
     {
-        $this->authorizeForUser($this->user(), 'fetchExercisesOfLesson', $lesson);
+        $this->authorizeForUser($this->user(), 'access', $lesson);
         return $this->response($lesson->exercises);
     }
 
@@ -64,7 +64,7 @@ class ExerciseController extends Controller
      */
     public function deleteExercise(Exercise $exercise)
     {
-        $this->authorizeForUser($this->user(), 'delete', $exercise);
+        $this->authorizeForUser($this->user(), 'modify', $exercise);
         $exercise->delete();
     }
 
@@ -87,7 +87,7 @@ class ExerciseController extends Controller
      */
     public function increaseNumberOfGoodAnswersOfUser(Exercise $exercise)
     {
-        $this->authorizeForUser($this->user(), 'answerQuestion', $exercise);
+        $this->authorizeForUser($this->user(), 'access', $exercise);
         $exercise->increaseNumberOfGoodAnswersOfUser($this->user()->id);
     }
 
@@ -96,7 +96,7 @@ class ExerciseController extends Controller
      */
     public function increaseNumberOfBadAnswersOfUser(Exercise $exercise)
     {
-        $this->authorizeForUser($this->user(), 'answerQuestion', $exercise);
+        $this->authorizeForUser($this->user(), 'access', $exercise);
         $exercise->increaseNumberOfBadAnswersOfUser($this->user()->id);
     }
 }

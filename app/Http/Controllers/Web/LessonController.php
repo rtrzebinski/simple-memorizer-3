@@ -13,7 +13,7 @@ class LessonController extends Controller
      */
     public function view(Lesson $lesson) : View
     {
-        $this->authorizeForUser($this->user(), 'fetch', $lesson);
+        $this->authorizeForUser($this->user(), 'access', $lesson);
         return view('lessons.view', compact('lesson'));
     }
 
@@ -23,7 +23,7 @@ class LessonController extends Controller
      */
     public function learn(Lesson $lesson) : View
     {
-        $this->authorizeForUser($this->user(), 'fetch', $lesson);
+        $this->authorizeForUser($this->user(), 'access', $lesson);
         return view('lessons.learn', compact('lesson'));
     }
 
@@ -41,7 +41,7 @@ class LessonController extends Controller
      */
     public function edit(Lesson $lesson) : View
     {
-        $this->authorizeForUser($this->user(), 'update', $lesson);
+        $this->authorizeForUser($this->user(), 'modify', $lesson);
         return view('lessons.edit', compact('lesson'));
     }
 }

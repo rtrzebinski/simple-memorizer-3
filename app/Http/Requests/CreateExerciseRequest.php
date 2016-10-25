@@ -14,7 +14,7 @@ class CreateExerciseRequest extends Request
      */
     public function authorize()
     {
-        return $this->gate()->authorize('createExercise', $this->route('lesson'));
+        return $this->gate()->authorize('modify', $this->route('lesson'));
     }
 
     /**

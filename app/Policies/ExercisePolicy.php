@@ -12,12 +12,13 @@ class ExercisePolicy
     use HandlesAuthorization;
 
     /**
-     * Whether user is permitted to fetch exercise.
+     * User must be the owner of the lesson exercise belongs to or must subscribe lesson.
+     *
      * @param User $user
      * @param Exercise $exercise
      * @return bool
      */
-    public function fetch(User $user, Exercise $exercise) : bool
+    public function access(User $user, Exercise $exercise) : bool
     {
         return User::query()
             ->join('lessons', 'lessons.owner_id', '=', 'users.id')
@@ -32,12 +33,13 @@ class ExercisePolicy
     }
 
     /**
-     * Whether user is permitted to update exercise.
+     * User must be the owner of lesson exercise belongs to.
+     *
      * @param User $user
      * @param Exercise $exercise
      * @return bool
      */
-    public function update(User $user, Exercise $exercise): bool
+    public function modify(User $user, Exercise $exercise): bool
     {
         return User::query()
             ->join('lessons', 'lessons.owner_id', '=', 'users.id')
@@ -45,29 +47,5 @@ class ExercisePolicy
             ->where('exercises.id', '=', $exercise->id)
             ->where('users.id', '=', $user->id)
             ->exists();
-    }
-
-    /**
-     * Whether user is permitted to delete exercise.
-     * @param User $user
-     * @param Exercise $exercise
-     * @return bool
-     */
-    public function delete(User $user, Exercise $exercise): bool
-    {
-        // if user can update exercise, he also can delete it
-        return $this->update($user, $exercise);
-    }
-
-    /**
-     * Whether user is permitted to answer exercise question.
-     * @param User $user
-     * @param Exercise $exercise
-     * @return bool
-     */
-    public function answerQuestion(User $user, Exercise $exercise) : bool
-    {
-        // if user can fetch exercise, he also can answer question
-        return $this->fetch($user, $exercise);
     }
 }

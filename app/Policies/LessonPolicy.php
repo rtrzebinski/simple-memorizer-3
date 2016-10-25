@@ -11,7 +11,14 @@ class LessonPolicy
 {
     use HandlesAuthorization;
 
-    public function fetch(User $user, Lesson $lesson) : bool
+    /**
+     * User must be the owner of lesson, or must subscribe lesson.
+     *
+     * @param User $user
+     * @param Lesson $lesson
+     * @return bool
+     */
+    public function access(User $user, Lesson $lesson) : bool
     {
         return User::query()
             ->join('lessons', 'lessons.owner_id', '=', 'users.id')
@@ -25,7 +32,22 @@ class LessonPolicy
     }
 
     /**
-     * Whether user is permitted to subscribe lesson.
+     * User must be the owner of lesson.
+     *
+     * @param User $user
+     * @param Lesson $lesson
+     * @return bool
+     */
+    public function modify(User $user, Lesson $lesson) : bool
+    {
+        return Lesson::whereId($lesson->id)
+            ->whereOwnerId($user->id)
+            ->exists();
+    }
+
+    /**
+     * User must not subscribe lesson.
+     *
      * @param User $user
      * @param Lesson $lesson
      * @return bool
@@ -43,7 +65,8 @@ class LessonPolicy
     }
 
     /**
-     * Whether user is permitted to unsubscribe lesson.
+     * User must subscribe lesson.
+     *
      * @param User $user
      * @param Lesson $lesson
      * @return bool
@@ -54,58 +77,5 @@ class LessonPolicy
             ->join('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
             ->where('lesson_user.user_id', '=', $user->id)
             ->exists();
-    }
-
-    /**
-     *  Whether user is permitted to update lesson.
-     * @param User $user
-     * @param Lesson $lesson
-     * @return bool
-     */
-    public function update(User $user, Lesson $lesson) : bool
-    {
-        return Lesson::whereId($lesson->id)
-            ->whereOwnerId($user->id)
-            ->exists();
-    }
-
-    /**
-     * Whether user is permitted to delete lesson.
-     * @param User $user
-     * @param Lesson $lesson
-     * @return bool
-     */
-    public function delete(User $user, Lesson $lesson) : bool
-    {
-        return Lesson::whereId($lesson->id)
-            ->whereOwnerId($user->id)
-            ->exists();
-    }
-
-    /**
-     * Whether user is permitted to create exercise of lesson.
-     * @param User $user
-     * @param Lesson $lesson
-     * @return bool
-     */
-    public function createExercise(User $user, Lesson $lesson) : bool
-    {
-        return User::query()
-            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
-            ->where('lessons.id', '=', $lesson->id)
-            ->where('users.id', '=', $user->id)
-            ->exists();
-    }
-
-    /**
-     * Whether user is permitted to fetch exercises of lesson.
-     * @param User $user
-     * @param Lesson $lesson
-     * @return bool
-     */
-    public function fetchExercisesOfLesson(User $user, Lesson $lesson) : bool
-    {
-        // user can fetch exercises, if he can fetch lesson
-        return $this->fetch($user, $lesson);
     }
 }

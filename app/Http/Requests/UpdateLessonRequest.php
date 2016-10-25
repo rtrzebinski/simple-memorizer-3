@@ -14,7 +14,7 @@ class UpdateLessonRequest extends Request
      */
     public function authorize()
     {
-        return $this->gate()->authorize('update', $this->route('lesson'));
+        return $this->gate()->authorize('modify', $this->route('lesson'));
     }
 
     /**
