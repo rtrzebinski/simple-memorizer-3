@@ -57,9 +57,11 @@
                     <li><a href="{{ url('/register') }}">Register</a></li>
                 @else
                     <li>
+                    </li>
+                    <li>
                         <a href="{{ url('/logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
+                            Logout ({{ auth()->user()->email }})
                         </a>
                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
