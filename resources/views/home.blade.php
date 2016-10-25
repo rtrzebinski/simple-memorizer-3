@@ -212,7 +212,7 @@
                                         <p>
                                             <button type="submit" form="subscribe-{{ $row->id }}"
                                                     class="btn btn-primary">
-                                                    <span class="glyphicon glyphicon-remove-sign"
+                                                    <span class="glyphicon glyphicon-ok-sign"
                                                           aria-hidden="true"></span>
                                                 Subscribe
                                             </button>
