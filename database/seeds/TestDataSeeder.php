@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Exercise\Exercise;
 use App\Models\User\User;
 use Illuminate\Database\Seeder;
 use App\Models\Lesson\Lesson;
@@ -51,5 +52,13 @@ class TestDataSeeder extends Seeder
         factory(Lesson::class, 3)->create([
             'visibility' => 'private',
         ]);
+
+        /*
+         * Create exercises for each lesson
+         */
+        $lessons = Lesson::all();
+        foreach ($lessons as $lesson) {
+            factory(Exercise::class, 40)->create(['lesson_id' => $lesson->id]);
+        }
     }
 }

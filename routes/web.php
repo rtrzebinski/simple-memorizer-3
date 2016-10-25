@@ -17,27 +17,17 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('logout', 'Web\LoginController@logout');
 
-    Route::get('/lessons/learn', function () {
-        return view('lessons.learn');
-    });
+    Route::get('/lessons/create', 'Web\LessonController@create');
 
-    Route::get('/lessons/{lesson}/view', 'Web\LessonController@view');
+    Route::get('/lessons/{lesson}/learn', 'Web\LessonController@learn');
 
-    Route::get('/lessons/create', function () {
-        return view('lessons.create');
-    });
+    Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
-    Route::get('/lessons/edit', function () {
-        return view('lessons.edit');
-    });
+    Route::get('/lessons/{lesson}', 'Web\LessonController@view');
 
-    Route::get('/exercises/create', function () {
-        return view('exercises.create');
-    });
+    Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');
 
-    Route::get('/exercises/edit', function () {
-        return view('exercises.edit');
-    });
+    Route::get('/exercises/{exercise}/edit', 'Web\ExerciseController@edit');
 });
 
 Route::group(['middleware' => ['guest']], function () {

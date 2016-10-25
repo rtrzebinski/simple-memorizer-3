@@ -19,11 +19,11 @@
         </div>
         <div class="col-md-6 no-padding">
             <p>
-                <a href="/lessons/learn" class="btn btn-primary margin-bottom" role="button">
+                <a href="/lessons/{{ $lesson->id }}/learn" class="btn btn-primary margin-bottom" role="button">
                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                     Start learning
                 </a>
-                <a href="/lessons/edit" class="btn btn-info margin-bottom" role="button">
+                <a href="/lessons/{{ $lesson->id }}/edit" class="btn btn-info margin-bottom" role="button">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     Edit lesson
                 </a>

@@ -13,8 +13,8 @@
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
                                 <form>
-                                    <a href="/lessons/view" class="btn btn-default margin-bottom">
-                                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                                    <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
+                                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                         Browse exercises
                                     </a>
                                     <hr>

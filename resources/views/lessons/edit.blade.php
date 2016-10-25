@@ -10,7 +10,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <a href="/lessons/view" class="btn btn-default" role="button">
+                                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default" role="button">
                                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                     Manage lesson
                                 </a>

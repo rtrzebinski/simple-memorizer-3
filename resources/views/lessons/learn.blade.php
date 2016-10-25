@@ -13,9 +13,9 @@
                             <div class="col-md-8 col-md-offset-2">
                                 <h4>
                                     <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                    Lesson name
+                                    {{ $lesson->name }}
                                 </h4>
-                                <a href="/lessons/view" class="btn btn-default margin-bottom">
+                                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                     Manage lesson
                                 </a>

@@ -104,11 +104,11 @@
                                             Number of subscribers: 3 </br>
                                         </p>
                                         <p>
-                                            <a href="/lessons/learn" class="btn btn-primary" role="button">
+                                            <a href="/lessons/{{ $row->id }}/learn" class="btn btn-primary" role="button">
                                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                 Start learning
                                             </a>
-                                            <a href="/lessons/{{ $row->id }}/view" class="btn btn-default"
+                                            <a href="/lessons/{{ $row->id }}" class="btn btn-default"
                                                role="button">
                                                 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                                 Manage
@@ -134,7 +134,7 @@
                                             Number of subscribers: 3 </br>
                                         </p>
                                         <p>
-                                            <a href="/lessons/learn" class="btn btn-primary" role="button">
+                                            <a href="/lessons/{{ $row->id }}/learn" class="btn btn-primary" role="button">
                                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                 Start learning
                                             </a>

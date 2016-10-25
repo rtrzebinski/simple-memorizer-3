@@ -12,7 +12,7 @@
                     <div class="panel-body">
                         <div class="col-md-8 no-padding">
                             <p>
-                                <a href="/exercises/create" class="btn btn-success margin-bottom" role="button">
+                                <a href="/lessons/{{ $lesson->id }}/exercises/create" class="btn btn-success margin-bottom" role="button">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                     Create new exercise
                                 </a>
@@ -44,17 +44,17 @@
                                 <th>Delete</th>
                                 </thead>
                                 <tbody>
-                                @for ($i = 0; $i < 10; $i++)
+                                @foreach($lesson->exercises as $row)
                                     <tr>
                                         <td><input type="checkbox" class="checkthis"/></td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua
-                                        </td>
-                                        <td> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                            aliquip ex ea commodo consequat.
+                                        <td>
+                                            {{ $row->question }}
                                         </td>
                                         <td>
-                                            <a href="/exercises/edit" class="btn btn-info btn-xs">
+                                            {{ $row->answer }}
+                                        </td>
+                                        <td>
+                                            <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
                                                 <span class="glyphicon glyphicon-pencil"></span>
                                             </a>
                                         </td>
@@ -65,7 +65,7 @@
                                             </button>
                                         </td>
                                     </tr>
-                                @endfor
+                                @endforeach
                                 </tbody>
                             </table>
                             <div class="clearfix"></div>
