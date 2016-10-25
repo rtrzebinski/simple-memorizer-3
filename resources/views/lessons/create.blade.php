@@ -15,10 +15,11 @@
                                     Browse lessons
                                 </a>
                                 <hr>
-                                <form>
-                                    <div class="form-group">
+                                <form method="POST" content="" action="/lessons">
+                                    {{ csrf_field() }}
+                                    <div class="form-group {{ $errors->has('name') ? 'has-error' : false }}">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="">
+                                        <input name="name" type="text" class="form-control" placeholder="">
                                         <span class="help-block">
                                             Descriptive name of the lesson.
                                         </span>

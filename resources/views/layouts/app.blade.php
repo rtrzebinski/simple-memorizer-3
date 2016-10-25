@@ -74,20 +74,26 @@
 </nav>
 
 <!-- Errors -->
-@if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="container">
+    @if (count($errors) > 0)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
     @endif
+</div>
 
-    @yield('content')
+@yield('content')
 
-            <!-- Scripts -->
-    <script src="/jquery/jquery-1.12.4.min.js"></script>
-    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <!-- Scripts -->
+<script src="/jquery/jquery-1.12.4.min.js"></script>
+<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@ trait InteractsWithLessons
     }
 
     /**
-     * Public lessons user does not own, and does not subscribe.
+     * Public lessons user does not own and does not subscribe.
      * @return EloquentCollection
      */
     public function availableLessons() : EloquentCollection
@@ -36,9 +36,8 @@ trait InteractsWithLessons
         $lessons = Lesson::query()
             ->where('lessons.owner_id', '!=', $this->id)
             ->where('lessons.visibility', '=', 'public')
+            ->whereNotIn('lessons.id', $this->subscribedLessons()->pluck('id'))
             ->get();
-
-        $lessons = $lessons->diff($this->subscribedLessons);
 
         return $lessons;
     }

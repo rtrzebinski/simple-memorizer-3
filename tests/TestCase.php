@@ -3,6 +3,7 @@
 use App\Models\Exercise\Exercise;
 use App\Models\Lesson\Lesson;
 use App\Models\User\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
@@ -94,6 +95,16 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function randomPassword() : string
     {
         return uniqid();
+    }
+
+    /**
+     * Last created instance of the class.
+     * @param $class
+     * @return mixed
+     */
+    protected function last($class) : Model
+    {
+        return app($class)->orderBy('id', 'desc')->first();
     }
 
     /**

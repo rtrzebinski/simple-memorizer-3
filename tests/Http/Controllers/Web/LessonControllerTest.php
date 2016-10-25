@@ -2,6 +2,8 @@
 
 namespace Tests\Http\Controllers\Web;
 
+use App\Models\Lesson\Lesson;
+
 class LessonControllerTest extends BaseTestCase
 {
     public function testItShould_showLessonViewPage()
@@ -212,5 +214,45 @@ class LessonControllerTest extends BaseTestCase
         $this->call('POST', '/lessons/-1/unsubscribe');
 
         $this->assertNotFound();
+    }
+
+    public function testItShould_storeLesson()
+    {
+        $this->be($user = $this->createUser());
+
+        $input = [
+            'visibility' => 'public',
+            'name' => uniqid(),
+        ];
+
+        $this->call('POST', '/lessons', $input);
+
+        /** @var Lesson $lesson */
+        $lesson = $this->last(Lesson::class);
+
+        $this->assertEquals($input['name'], $lesson->name);
+        $this->assertEquals($input['visibility'], $lesson->visibility);
+        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+    }
+
+    public function testItShould_notStoreLesson_unauthorized()
+    {
+        $input = [
+            'visibility' => 'public',
+            'name' => uniqid(),
+        ];
+
+        $this->call('POST', '/lessons', $input);
+
+        $this->assertUnauthorized();
+    }
+
+    public function testItShould_notStoreLesson_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('POST', '/lessons');
+
+        $this->assertInvalidInput();
     }
 }

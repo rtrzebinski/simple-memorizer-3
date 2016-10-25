@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Models\Lesson\Lesson;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LessonController extends Controller
@@ -34,6 +35,24 @@ class LessonController extends Controller
     public function create() : View
     {
         return view('lessons.create');
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request) : RedirectResponse
+    {
+        $this->validate($request, [
+            'visibility' => 'required|in:public,private',
+            'name' => 'required|string',
+        ]);
+
+        $lesson = new Lesson($request->all());
+        $lesson->owner_id = $this->user()->id;
+        $lesson->save();
+
+        return redirect('/lessons/' . $lesson->id);
     }
 
     /**

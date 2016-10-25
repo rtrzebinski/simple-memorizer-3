@@ -19,12 +19,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/lessons/create', 'Web\LessonController@create');
 
+    Route::post('/lessons', 'Web\LessonController@store');
+
     Route::get('/lessons/{lesson}/learn', 'Web\LessonController@learn');
 
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
     Route::post('/lessons/{lesson}/subscribe', 'Web\LessonController@subscribe');
-    
+
     Route::post('/lessons/{lesson}/unsubscribe', 'Web\LessonController@unsubscribe');
 
     Route::get('/lessons/{lesson}', 'Web\LessonController@view');
