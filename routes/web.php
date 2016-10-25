@@ -23,6 +23,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
+    Route::post('/lessons/{lesson}/subscribe', 'Web\LessonController@subscribe');
+    
+    Route::post('/lessons/{lesson}/unsubscribe', 'Web\LessonController@unsubscribe');
+
     Route::get('/lessons/{lesson}', 'Web\LessonController@view');
 
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');

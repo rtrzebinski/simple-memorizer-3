@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\Lesson\Lesson;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class LessonController extends Controller
@@ -43,5 +44,27 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
         return view('lessons.edit', compact('lesson'));
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return RedirectResponse
+     */
+    public function subscribe(Lesson $lesson) : RedirectResponse
+    {
+        $this->authorizeForUser($this->user(), 'subscribe', $lesson);
+        $lesson->subscribe($this->user());
+        return redirect('/home');
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return RedirectResponse
+     */
+    public function unsubscribe(Lesson $lesson) : RedirectResponse
+    {
+        $this->authorizeForUser($this->user(), 'unsubscribe', $lesson);
+        $lesson->unsubscribe($this->user());
+        return redirect('/home');
     }
 }

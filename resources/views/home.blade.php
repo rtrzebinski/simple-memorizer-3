@@ -141,11 +141,17 @@
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                     Start learning
                                                 </a>
-                                                <a href="#" class="btn btn-danger" role="button">
+                                                <button type="submit" form="unsubscribe-{{ $row->id }}"
+                                                        class="btn btn-danger">
                                                     <span class="glyphicon glyphicon-remove-sign"
                                                           aria-hidden="true"></span>
                                                     Unsubscribe
-                                                </a>
+                                                </button>
+                                            <form id="unsubscribe-{{ $row->id }}"
+                                                  action="/lessons/{{ $row->id }}/unsubscribe"
+                                                  method="POST">
+                                                {{ csrf_field() }}
+                                            </form>
                                             </p>
                                         </div>
                                     </div>
@@ -204,10 +210,17 @@
                                             Number of subscribers: 3 </br>
                                         </p>
                                         <p>
-                                            <a href="#" class="btn btn-primary" role="button">
-                                                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                                            <button type="submit" form="subscribe-{{ $row->id }}"
+                                                    class="btn btn-primary">
+                                                    <span class="glyphicon glyphicon-remove-sign"
+                                                          aria-hidden="true"></span>
                                                 Subscribe
-                                            </a>
+                                            </button>
+                                        <form id="subscribe-{{ $row->id }}"
+                                              action="/lessons/{{ $row->id }}/subscribe"
+                                              method="POST">
+                                            {{ csrf_field() }}
+                                        </form>
                                         </p>
                                     </div>
                                 </div>

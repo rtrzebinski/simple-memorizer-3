@@ -136,4 +136,81 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertNotFound();
     }
+
+    public function testItShould_subscribeLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson();
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/subscribe');
+
+        $this->assertRedirectedTo('/home');
+    }
+
+    public function testItShould_notSubscribeLesson_unauthorized()
+    {
+        $lesson = $this->createPublicLesson();
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/subscribe');
+
+        $this->assertUnauthorized();
+    }
+
+    public function testItShould_notSubscribeLesson_forbidden()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson();
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/subscribe');
+
+        $this->assertForbidden();
+    }
+
+    public function testItShould_notSubscribeLesson_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('POST', '/lessons/-1/subscribe');
+
+        $this->assertNotFound();
+    }
+
+    public function testItShould_unsubscribeLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson();
+        $user->subscribedLessons()->save($lesson);
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/unsubscribe');
+
+        $this->assertRedirectedTo('/home');
+    }
+
+    public function testItShould_notUnsubscribeLesson_unauthorized()
+    {
+        $lesson = $this->createPublicLesson();
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/unsubscribe');
+
+        $this->assertUnauthorized();
+    }
+
+    public function testItShould_notUnsubscribeLesson_forbidden()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson();
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/unsubscribe');
+
+        $this->assertForbidden();
+    }
+
+    public function testItShould_notUnsubscribeLesson_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('POST', '/lessons/-1/unsubscribe');
+
+        $this->assertNotFound();
+    }
 }
