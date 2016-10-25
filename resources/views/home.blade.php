@@ -98,7 +98,7 @@
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                                {{ str_limit($row->name, 30) }}
+                                                {{ str_limit($row->name, 28) }}
                                             </h4>
                                             <p>
                                                 Number of exercises: 40 </br>
@@ -129,7 +129,7 @@
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                                {{ str_limit($row->name, 30) }}
+                                                {{ str_limit($row->name, 28) }}
                                             </h4>
                                             <p>
                                                 Number of exercises: 40 </br>
@@ -203,7 +203,7 @@
                                     <div class="caption">
                                         <h4>
                                             <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                            {{ str_limit($row->name, 30) }}
+                                            {{ str_limit($row->name, 28) }}
                                         </h4>
                                         <p>
                                             Number of exercises: 40 </br>
