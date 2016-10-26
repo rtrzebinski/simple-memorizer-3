@@ -24,7 +24,13 @@ class BaseTestCase extends \TestCase
 
     protected function assertInvalidInput()
     {
-        $this->assertRedirectedTo('http://localhost');
+        $this->assertRedirectedBack();
         $this->assertSessionHasErrors();
+    }
+
+    protected function assertRedirectedBack()
+    {
+        $this->assertResponseStatus(302);
+        $this->assertRedirectedTo('http://localhost');
     }
 }

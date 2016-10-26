@@ -8,7 +8,7 @@
                 @include('shared.manage_lesson')
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Manage exercises</div>
+                    <div class="panel-heading">Exercises</div>
                     <div class="panel-body">
                         <div class="col-md-8 no-padding">
                             @can('modify', $lesson)

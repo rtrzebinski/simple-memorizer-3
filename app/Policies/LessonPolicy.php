@@ -12,7 +12,7 @@ class LessonPolicy
     use HandlesAuthorization;
 
     /**
-     * User must be the owner of lesson, or must subscribe lesson.
+     * User must be the owner of lesson or lesson must be public.
      *
      * @param User $user
      * @param Lesson $lesson
@@ -20,13 +20,10 @@ class LessonPolicy
      */
     public function access(User $user, Lesson $lesson) : bool
     {
-        return User::query()
-            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
-            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->where('lessons.id', '=', $lesson->id)
+        return Lesson::whereId($lesson->id)
             ->where(function (Builder $query) use ($user) {
-                $query->where('users.id', '=', $user->id)
-                    ->orWhere('lesson_user.user_id', '=', $user->id);
+                $query->where('visibility', '=', 'public')
+                    ->orWhere('owner_id', '=', $user->id);
             })
             ->exists();
     }
@@ -46,7 +43,7 @@ class LessonPolicy
     }
 
     /**
-     * User must not subscribe lesson.
+     * User must not subscribe lesson and not be the owner.
      *
      * @param User $user
      * @param Lesson $lesson
@@ -55,15 +52,9 @@ class LessonPolicy
     public function subscribe(User $user, Lesson $lesson) : bool
     {
         return Lesson::whereId($lesson->id)
-            ->where(function (Builder $query) use ($user) {
-                $query->where('visibility', '=', 'public')
-                    ->orWhere('owner_id', '=', $user->id);
-            })
-            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->where(function (Builder $query) use ($user) {
-                $query->whereNull('lesson_user.user_id')
-                    ->orWhere('lesson_user.user_id', '!=', $user->id);
-            })
+            ->where('lessons.owner_id', '!=', $user->id)
+            ->where('lessons.visibility', '=', 'public')
+            ->whereNotIn('lessons.id', $user->subscribedLessons()->pluck('id'))
             ->exists();
     }
 

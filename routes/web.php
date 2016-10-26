@@ -17,12 +17,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('logout', 'Web\LoginController@logout');
 
+    // lessons
+
     Route::get('/lessons/create', 'Web\LessonController@create');
 
     Route::post('/lessons', 'Web\LessonController@store');
 
-    Route::get('/lessons/{lesson}/learn', 'Web\LessonController@learn');
-
+    Route::get('/lessons/{lesson}', 'Web\LessonController@view');
+    
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
     Route::put('/lessons/{lesson}', 'Web\LessonController@update');
@@ -33,7 +35,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/{lesson}/unsubscribe', 'Web\LessonController@unsubscribe');
 
-    Route::get('/lessons/{lesson}', 'Web\LessonController@view');
+    Route::post('/lessons/{lesson}/subscribe-and-learn', 'Web\LessonController@subscribeAndLearn');
+
+    Route::get('/lessons/{lesson}/learn', 'Web\LessonController@learn');
+
+    // exercises
 
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');
 

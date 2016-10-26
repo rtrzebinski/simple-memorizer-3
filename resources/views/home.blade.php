@@ -97,7 +97,8 @@
                                     <div class="thumbnail">
                                         <div class="caption">
                                             <h4>
-                                                <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-chevron-right"
+                                                      aria-hidden="true"></span>
                                                 {{ str_limit($row->name, 28) }}
                                             </h4>
                                             <p>
@@ -108,12 +109,13 @@
                                                 <a href="/lessons/{{ $row->id }}/learn" class="btn btn-primary"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                                    Start learning
+                                                    Start
                                                 </a>
-                                                <a href="/lessons/{{ $row->id }}" class="btn btn-default"
+                                                <a href="/lessons/{{ $row->id }}" class="btn btn-info"
                                                    role="button">
-                                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                                    Manage
+                                                    <span class="glyphicon glyphicon-education"
+                                                          aria-hidden="true"></span>
+                                                    Lesson
                                                 </a>
                                             </p>
                                         </div>
@@ -128,7 +130,8 @@
                                     <div class="thumbnail">
                                         <div class="caption">
                                             <h4>
-                                                <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-chevron-right"
+                                                      aria-hidden="true"></span>
                                                 {{ str_limit($row->name, 28) }}
                                             </h4>
                                             <p>
@@ -139,12 +142,18 @@
                                                 <a href="/lessons/{{ $row->id }}/learn" class="btn btn-primary"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                                    Start learning
+                                                    Start
+                                                </a>
+                                                <a href="/lessons/{{ $row->id }}" class="btn btn-info"
+                                                   role="button">
+                                                    <span class="glyphicon glyphicon-education"
+                                                          aria-hidden="true"></span>
+                                                    Lesson
                                                 </a>
                                                 <button type="submit" form="unsubscribe-{{ $row->id }}"
                                                         class="btn btn-danger">
-                                                    <span class="glyphicon glyphicon-remove-sign"
-                                                          aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove-sign"
+                                                      aria-hidden="true"></span>
                                                     Unsubscribe
                                                 </button>
                                             <form id="unsubscribe-{{ $row->id }}"
@@ -166,8 +175,7 @@
                     <div class="panel-body">
                         <div class="col-md-8 no-padding">
                             <p class="lead">
-                                Browse and subscribe lessons created by others users. </br>
-                                You can start learning a lesson right after you subscribe it.
+                                Browse lessons created by others users.
                             </p>
                             <p>
                                 @if(!$userHasOwnedOrSubscribedLessons)
@@ -178,7 +186,7 @@
                                 @endif
                                 <a href="#" class="btn btn-default" role="button">
                                     <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                                    Browse all available lessons
+                                    All available lessons
                                 </a>
                             </p>
                         </div>
@@ -202,7 +210,7 @@
                                 <div class="thumbnail">
                                     <div class="caption">
                                         <h4>
-                                            <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                                             {{ str_limit($row->name, 28) }}
                                         </h4>
                                         <p>
@@ -210,14 +218,31 @@
                                             Number of subscribers: 3 </br>
                                         </p>
                                         <p>
+                                            <button type="submit" form="subscribe-and-learn-{{ $row->id }}"
+                                                    class="btn btn-primary margin-bottom">
+                                                    <span class="glyphicon glyphicon-play"
+                                                          aria-hidden="true"></span>
+                                                Subscribe and start
+                                            </button>
+                                            <a href="/lessons/{{ $row->id }}" class="btn btn-info margin-bottom"
+                                               role="button">
+                                                    <span class="glyphicon glyphicon-education"
+                                                          aria-hidden="true"></span>
+                                                Lesson
+                                            </a>
                                             <button type="submit" form="subscribe-{{ $row->id }}"
-                                                    class="btn btn-primary">
-                                                    <span class="glyphicon glyphicon-ok-sign"
+                                                    class="btn btn-warning margin-bottom">
+                                                    <span class="glyphicon glyphicon-ok"
                                                           aria-hidden="true"></span>
                                                 Subscribe
                                             </button>
                                         <form id="subscribe-{{ $row->id }}"
                                               action="/lessons/{{ $row->id }}/subscribe"
+                                              method="POST">
+                                            {{ csrf_field() }}
+                                        </form>
+                                        <form id="subscribe-and-learn-{{ $row->id }}"
+                                              action="/lessons/{{ $row->id }}/subscribe-and-learn"
                                               method="POST">
                                             {{ csrf_field() }}
                                         </form>

@@ -2,8 +2,6 @@
 
 namespace Tests\Policies;
 
-use App\Models\Lesson\Lesson;
-use App\Models\User\User;
 use App\Policies\LessonPolicy;
 use TestCase;
 
@@ -19,7 +17,7 @@ class LessonPolicyTest extends TestCase
         parent::setUp();
         $this->policy = new LessonPolicy;
     }
-
+    
     public function testItShould_authorizeLessonAccess_userIsLessonOwner()
     {
         $lesson = $this->createLesson();
@@ -28,19 +26,18 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->access($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonAccess_userSubscribesLesson()
+    public function testItShould_authorizeLessonAccess_lessonIsPublic()
     {
-        $lesson = $this->createLesson();
         $user = $this->createUser();
-        $user->subscribedLessons()->attach($lesson);
+        $lesson = $this->createPublicLesson();
 
         $this->assertTrue($this->policy->access($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonAccess_userIsNotLessonOwnerAndDoesNotSubscribeIt()
+    public function testItShould_notAuthorizeLessonAccess_lessonIsPrivate()
     {
-        $lesson = $this->createLesson();
         $user = $this->createUser();
+        $lesson = $this->createPrivateLesson();
 
         $this->assertFalse($this->policy->access($user, $lesson));
     }
@@ -53,26 +50,26 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonSubscribe_publicAndOwnedLesson()
+    public function testItShould_notAuthorizeLessonSubscribe_publicAndOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
 
-        $this->assertTrue($this->policy->subscribe($user, $lesson));
+        $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonSubscribe_privateAndOwnedLesson()
+    public function testItShould_notAuthorizeLessonSubscribe_privateAndOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson($user);
 
-        $this->assertTrue($this->policy->subscribe($user, $lesson));
+        $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
     public function testItShould_authorizeLessonSubscribe_lessonWasSubscribedByAnotherUser()
     {
         $user = $this->createUser();
-        $lesson = $this->createPublicLesson($user);
+        $lesson = $this->createPublicLesson();
 
         $this->createUser()->subscribedLessons()->save($lesson);
 

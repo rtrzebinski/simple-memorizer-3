@@ -33,13 +33,11 @@ trait InteractsWithLessons
      */
     public function availableLessons() : EloquentCollection
     {
-        $lessons = Lesson::query()
+        return Lesson::query()
             ->where('lessons.owner_id', '!=', $this->id)
             ->where('lessons.visibility', '=', 'public')
             ->whereNotIn('lessons.id', $this->subscribedLessons()->pluck('id'))
             ->get();
-
-        return $lessons;
     }
 
     /**

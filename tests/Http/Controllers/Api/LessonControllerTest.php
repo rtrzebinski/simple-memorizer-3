@@ -46,7 +46,7 @@ class LessonControllerTest extends TestCase
     public function testItShould_fetchLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id]);
+        $lesson = $this->createPublicLesson();
 
         $this->callApi('GET', '/lessons/' . $lesson->id, $input = [], $user);
 
@@ -66,7 +66,7 @@ class LessonControllerTest extends TestCase
     public function testItShould_notFetchLesson_forbidden()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson();
+        $lesson = $this->createPrivateLesson();
 
         $this->callApi('GET', '/lessons/' . $lesson->id, $input = [], $user);
 

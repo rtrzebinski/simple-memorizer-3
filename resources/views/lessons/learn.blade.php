@@ -6,13 +6,13 @@
             <div class="col-md-12">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Learning a lesson</div>
+                    <div class="panel-heading">Learning</div>
                     <div class="panel-body">
 
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
                                 <h4>
-                                    <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                                     {{ $lesson->name }}
                                 </h4>
                                 <a href="/home" class="btn btn-default margin-bottom">
@@ -20,8 +20,8 @@
                                     Browse lessons
                                 </a>
                                 <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
-                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                    Manage lesson
+                                    <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                                    Lesson
                                 </a>
                                 <button class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>

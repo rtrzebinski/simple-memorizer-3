@@ -3,32 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\Lesson\Lesson;
+use Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LessonController extends Controller
 {
-    /**
-     * @param Lesson $lesson
-     * @return mixed
-     */
-    public function view(Lesson $lesson) : View
-    {
-        $this->authorizeForUser($this->user(), 'access', $lesson);
-        return view('lessons.view', compact('lesson'));
-    }
-
-    /**
-     * @param Lesson $lesson
-     * @return View
-     */
-    public function learn(Lesson $lesson) : View
-    {
-        $this->authorizeForUser($this->user(), 'access', $lesson);
-        return view('lessons.learn', compact('lesson'));
-    }
-
     /**
      * @return View
      */
@@ -53,6 +34,16 @@ class LessonController extends Controller
         $lesson->save();
 
         return redirect('/lessons/' . $lesson->id);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return mixed
+     */
+    public function view(Lesson $lesson) : View
+    {
+        $this->authorizeForUser($this->user(), 'access', $lesson);
+        return view('lessons.view', compact('lesson'));
     }
 
     /**
@@ -83,7 +74,12 @@ class LessonController extends Controller
         return redirect('/lessons/' . $lesson->id);
     }
 
-    public function delete(Lesson $lesson)
+    /**
+     * @param Lesson $lesson
+     * @return RedirectResponse
+     * @throws \Exception
+     */
+    public function delete(Lesson $lesson) : RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
         $lesson->delete();
@@ -96,9 +92,10 @@ class LessonController extends Controller
      */
     public function subscribe(Lesson $lesson) : RedirectResponse
     {
-        $this->authorizeForUser($this->user(), 'subscribe', $lesson);
-        $lesson->subscribe($this->user());
-        return redirect('/home');
+        if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
+            $lesson->subscribe($this->user());
+        }
+        return back();
     }
 
     /**
@@ -107,8 +104,31 @@ class LessonController extends Controller
      */
     public function unsubscribe(Lesson $lesson) : RedirectResponse
     {
-        $this->authorizeForUser($this->user(), 'unsubscribe', $lesson);
-        $lesson->unsubscribe($this->user());
-        return redirect('/home');
+        if (Gate::forUser($this->user())->allows('unsubscribe', $lesson)) {
+            $lesson->unsubscribe($this->user());
+        }
+        return back();
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return RedirectResponse
+     */
+    public function subscribeAndLearn(Lesson $lesson) :  RedirectResponse
+    {
+        if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
+            $lesson->subscribe($this->user());
+        }
+        return redirect('/lessons/' . $lesson->id . '/learn');
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return View
+     */
+    public function learn(Lesson $lesson) : View
+    {
+        $this->authorizeForUser($this->user(), 'access', $lesson);
+        return view('lessons.learn', compact('lesson'));
     }
 }

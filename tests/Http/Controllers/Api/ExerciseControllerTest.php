@@ -135,7 +135,7 @@ class ExerciseControllerTest extends TestCase
     public function testItShould_notFetchExercisesOfLesson_forbidden()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson();
+        $lesson = $this->createPrivateLesson();
 
         $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
 
@@ -297,7 +297,7 @@ class ExerciseControllerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('GET', '/lessons/' . $this->createLesson()->id . '/exercises/random', $data = [], $user);
+        $this->callApi('GET', '/lessons/' . $this->createPrivateLesson()->id . '/exercises/random', $data = [], $user);
 
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
