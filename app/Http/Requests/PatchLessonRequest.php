@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 /**
  * @property mixed lesson_id
  */
-class UpdateLessonRequest extends Request
+class PatchLessonRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -326,4 +326,43 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertInvalidInput();
     }
+
+    public function testItShould_deleteLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('DELETE', '/lessons/' . $lesson->id);
+
+        $this->assertRedirectedTo('/home');
+        $this->assertNull($lesson->fresh());
+    }
+
+    public function testItShould_notDeleteLesson_unauthorized()
+    {
+        $lesson = $this->createLesson();
+
+        $this->call('DELETE', '/lessons/' . $lesson->id);
+
+        $this->assertUnauthorized();
+    }
+
+    public function testItShould_notDeleteLesson_forbidden()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createLesson();
+
+        $this->call('DELETE', '/lessons/' . $lesson->id);
+
+        $this->assertForbidden();
+    }
+
+    public function testItShould_notDeleteLesson_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('DELETE', '/lessons/-1');
+
+        $this->assertNotFound();
+    }
 }

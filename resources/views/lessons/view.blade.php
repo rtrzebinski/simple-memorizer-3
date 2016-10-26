@@ -11,8 +11,10 @@
                     <div class="panel-heading">Manage exercises</div>
                     <div class="panel-body">
                         <div class="col-md-8 no-padding">
+                            @can('modify', $lesson)
                             <p>
-                                <a href="/lessons/{{ $lesson->id }}/exercises/create" class="btn btn-success margin-bottom" role="button">
+                                <a href="/lessons/{{ $lesson->id }}/exercises/create"
+                                   class="btn btn-success margin-bottom" role="button">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                     Create new exercise
                                 </a>
@@ -22,6 +24,7 @@
                                     Delete selected exercises
                                 </button>
                             </p>
+                            @endcan
                         </div>
                         <div class="col-md-4 no-padding margin-bottom">
                             <div class="input-group">
@@ -37,22 +40,31 @@
                         <div class="table-responsive">
                             <table class="table table-bordred table-striped">
                                 <thead>
+                                @can('modify', $lesson)
                                 <th><input type="checkbox" id="checkall"/></th>
+                                @endcan
                                 <th>Question</th>
                                 <th>Answer</th>
+                                @can('modify', $lesson)
                                 <th>Edit</th>
                                 <th>Delete</th>
+                                @endcan
                                 </thead>
                                 <tbody>
                                 @foreach($lesson->exercises as $row)
                                     <tr>
-                                        <td><input type="checkbox" class="checkthis"/></td>
+                                        @can('modify', $lesson)
+                                        <td>
+                                            <input type="checkbox" class="checkthis"/>
+                                        </td>
+                                        @endcan
                                         <td>
                                             {{ $row->question }}
                                         </td>
                                         <td>
                                             {{ $row->answer }}
                                         </td>
+                                        @can('modify', $lesson)
                                         <td>
                                             <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
                                                 <span class="glyphicon glyphicon-pencil"></span>
@@ -64,6 +76,7 @@
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                                         </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>

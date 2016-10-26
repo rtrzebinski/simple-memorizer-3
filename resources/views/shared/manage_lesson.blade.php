@@ -23,6 +23,7 @@
                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                     Start learning
                 </a>
+                @can('modify', $lesson)
                 <a href="/lessons/{{ $lesson->id }}/edit" class="btn btn-info margin-bottom" role="button">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     Edit lesson
@@ -32,6 +33,7 @@
                     <span class="glyphicon glyphicon-trash"></span>
                     Delete lesson
                 </button>
+                @endcan
                 <a href="/lessons/create" class="btn btn-success margin-bottom" role="button">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     Create new lesson
@@ -62,7 +64,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">
+                <button type="submit" form="delete-lesson" type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok-sign"></span> Yes
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -71,4 +73,8 @@
             </div>
         </div>
     </div>
+    <form id="delete-lesson" action="/lessons/{{ $lesson->id }}" method="POST">
+        <input name="_method" type="hidden" value="DELETE">
+        {{ csrf_field() }}
+    </form>
 </div>

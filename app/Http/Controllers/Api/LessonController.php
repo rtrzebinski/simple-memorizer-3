@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\UpdateLessonRequest;
+use App\Http\Requests\PatchLessonRequest;
 use App\Models\Lesson\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -72,11 +72,11 @@ class LessonController extends Controller
     }
 
     /**
-     * @param UpdateLessonRequest $request
+     * @param PatchLessonRequest $request
      * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function updateLesson(UpdateLessonRequest $request, Lesson $lesson)
+    public function updateLesson(PatchLessonRequest $request, Lesson $lesson)
     {
         $lesson->update($request->all());
         return $this->response($lesson);

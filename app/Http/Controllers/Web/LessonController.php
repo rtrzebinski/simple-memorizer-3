@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Requests\UpdateLessonRequest;
 use App\Models\Lesson\Lesson;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -82,6 +81,13 @@ class LessonController extends Controller
 
         $lesson->update($request->all());
         return redirect('/lessons/' . $lesson->id);
+    }
+
+    public function delete(Lesson $lesson)
+    {
+        $this->authorizeForUser($this->user(), 'modify', $lesson);
+        $lesson->delete();
+        return redirect('/home');
     }
 
     /**
