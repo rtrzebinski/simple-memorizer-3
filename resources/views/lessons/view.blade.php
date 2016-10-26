@@ -18,8 +18,8 @@
                                 </a>
                                 <button class="btn btn-danger margin-bottom" data-title="Delete"
                                         data-toggle="modal" data-target="#delete">
-                                    Delete selected exercises
                                     <span class="glyphicon glyphicon-trash"></span>
+                                    Delete selected exercises
                                 </button>
                             </p>
                         </div>

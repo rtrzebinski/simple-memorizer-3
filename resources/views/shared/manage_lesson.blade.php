@@ -29,8 +29,8 @@
                 </a>
                 <button class="btn btn-danger margin-bottom" data-title="Delete"
                         data-toggle="modal" data-target="#delete_lesson">
-                    Delete lesson
                     <span class="glyphicon glyphicon-trash"></span>
+                    Delete lesson
                 </button>
                 <a href="/lessons/create" class="btn btn-success margin-bottom" role="button">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>

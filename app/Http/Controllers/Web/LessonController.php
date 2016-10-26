@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Requests\UpdateLessonRequest;
 use App\Models\Lesson\Lesson;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,6 +64,24 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
         return view('lessons.edit', compact('lesson'));
+    }
+
+    /**
+     * @param Request $request
+     * @param Lesson $lesson
+     * @return RedirectResponse
+     */
+    public function update(Request $request, Lesson $lesson) : RedirectResponse
+    {
+        $this->authorizeForUser($this->user(), 'modify', $lesson);
+
+        $this->validate($request, [
+            'visibility' => 'required|in:public,private',
+            'name' => 'required|string',
+        ]);
+
+        $lesson->update($request->all());
+        return redirect('/lessons/' . $lesson->id);
     }
 
     /**

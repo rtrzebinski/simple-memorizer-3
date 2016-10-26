@@ -12,10 +12,12 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <form>
+                                <form method="POST" content="" action="/lessons/{{ $lesson->id }}">
+                                    {{ csrf_field() }}
+                                    <input name="_method" type="hidden" value="PUT">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="">
+                                        <input name="name" type="text" class="form-control" value="{{ $lesson->name }}">
                                         <span class="help-block">
                                             Descriptive name of the lesson.
                                         </span>
@@ -23,8 +25,8 @@
                                     <div class="form-group">
                                         <label>Visibility</label>
                                         <select name="visibility" class="form-control">
-                                            <option value="public">Public</option>
-                                            <option value="private">Private</option>
+                                            <option @if($lesson->visibility == 'public') selected @endif value="public">Public</option>
+                                            <option @if($lesson->visibility == 'private') selected @endif value="private">Private</option>
                                         </select>
                                         <span class="help-block">
                                             Public lessons can be subscribed by other users, but only you can modify them. </br>

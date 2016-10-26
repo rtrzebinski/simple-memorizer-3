@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
+    Route::put('/lessons/{lesson}', 'Web\LessonController@update');
+
     Route::post('/lessons/{lesson}/subscribe', 'Web\LessonController@subscribe');
 
     Route::post('/lessons/{lesson}/unsubscribe', 'Web\LessonController@unsubscribe');

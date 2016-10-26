@@ -139,6 +139,77 @@ class LessonControllerTest extends BaseTestCase
         $this->assertNotFound();
     }
 
+    public function testItShould_updateLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $input = [
+            'visibility' => 'private',
+            'name' => uniqid(),
+        ];
+
+        $this->call('PUT', '/lessons/' . $lesson->id, $input);
+
+        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $lesson = $lesson->fresh();
+        $this->assertEquals($input['visibility'], $lesson->visibility);
+        $this->assertEquals($input['name'], $lesson->name);
+    }
+
+    public function testItShould_notUpdateLesson_unauthorized()
+    {
+        $lesson = $this->createLesson();
+
+        $input = [
+            'visibility' => 'private',
+            'name' => uniqid(),
+        ];
+
+        $this->call('PUT', '/lessons/' . $lesson->id, $input);
+
+        $this->assertUnauthorized();
+    }
+
+    public function testItShould_notUpdateLesson_forbidden()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createLesson();
+
+        $input = [
+            'visibility' => 'private',
+            'name' => uniqid(),
+        ];
+
+        $this->call('PUT', '/lessons/' . $lesson->id, $input);
+
+        $this->assertForbidden();
+    }
+
+    public function testItShould_notUpdateLesson_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $input = [
+            'visibility' => 'private',
+            'name' => uniqid(),
+        ];
+
+        $this->call('PUT', '/lessons/-1', $input);
+
+        $this->assertNotFound();
+    }
+
+    public function testItShould_notUpdateLesson_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('PUT', '/lessons/' . $lesson->id);
+
+        $this->assertInvalidInput();
+    }
+
     public function testItShould_subscribeLesson()
     {
         $this->be($user = $this->createUser());
