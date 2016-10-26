@@ -72,12 +72,46 @@
                                         </td>
                                         <td>
                                             <button class="btn btn-danger btn-xs" data-title="Delete"
-                                                    data-toggle="modal" data-target="#delete">
+                                                    data-toggle="modal" data-target="#delete-exercise-{{ $row->id }}">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                                         </td>
                                         @endcan
                                     </tr>
+                                    <div class="modal fade" id="delete-exercise-{{ $row->id }}" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="delete" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">
+                                                        <span class="glyphicon glyphicon-remove"
+                                                              aria-hidden="true"></span>
+                                                    </button>
+                                                    <h4 class="modal-title custom_align">Delete</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="alert alert-danger">
+                                                        <span class="glyphicon glyphicon-warning-sign"></span>
+                                                        Are you sure you want to delete?
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" form="delete-exercise-form-{{ $row->id }}" class="btn btn-success">
+                                                        <span class="glyphicon glyphicon-ok-sign"></span> Yes
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        <span class="glyphicon glyphicon-remove"></span> No
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <form id="delete-exercise-form-{{ $row->id }}" action="/exercises/{{ $row->id }}" method="POST">
+                                            <input name="_method" type="hidden" value="DELETE">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </div>
                                 @endforeach
                                 </tbody>
                             </table>
@@ -106,33 +140,5 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    </button>
-                    <h4 class="modal-title custom_align">Delete</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger">
-                        <span class="glyphicon glyphicon-warning-sign"></span>
-                        Are you sure you want to delete?
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success">
-                        <span class="glyphicon glyphicon-ok-sign"></span> Yes
-                    </button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <span class="glyphicon glyphicon-remove"></span> No
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
 @endsection

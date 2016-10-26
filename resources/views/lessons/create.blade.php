@@ -15,7 +15,7 @@
                                     Browse lessons
                                 </a>
                                 <hr>
-                                <form method="POST" content="" action="/lessons">
+                                <form method="POST" action="/lessons">
                                     {{ csrf_field() }}
                                     <div class="form-group {{ $errors->has('name') ? 'has-error' : false }}">
                                         <label>Name</label>
