@@ -24,7 +24,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/lessons', 'Web\LessonController@store');
 
     Route::get('/lessons/{lesson}', 'Web\LessonController@view');
-    
+
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
     Route::put('/lessons/{lesson}', 'Web\LessonController@update');
@@ -43,7 +43,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');
 
+    Route::post('/lessons/{lesson}/exercises', 'Web\ExerciseController@store');
+
     Route::get('/exercises/{exercise}/edit', 'Web\ExerciseController@edit');
+
+    Route::put('/exercises/{exercise}', 'Web\ExerciseController@update');
+
+    Route::delete('/exercises/{exercise}', 'Web\ExerciseController@delete');
 });
 
 Route::group(['middleware' => ['guest']], function () {
