@@ -19,46 +19,81 @@ class TestDataSeeder extends Seeder
             'password' => bcrypt('admin'),
         ]);
 
-        /*
-         * Public and private owned lessons
-         */
+        // private
         factory(Lesson::class)->create([
-            'visibility' => 'public',
-            'owner_id' => $user->id,
-        ]);
-        factory(Lesson::class)->create([
+            'name' => 'Test private lesson',
             'visibility' => 'private',
             'owner_id' => $user->id,
         ]);
 
-        /*
-         * Subscribed lesson
-         */
-        $subscribedLesson = factory(Lesson::class)->create([
-            'visibility' => 'public',
+        // owned
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Multiplication table 1-100',
+            'owner_id' => $user->id,
         ]);
-        $user->subscribedLessons()->save($subscribedLesson);
+        for ($i = 1; $i <= 10; $i++) {
+            for ($j = 1; $j <= 10; $j++) {
+                factory(Exercise::class)->create([
+                    'lesson_id' => $lesson->id,
+                    'question' => $i . ' x ' . $j,
+                    'answer' => $i * $j,
+                ]);
+            }
+        }
 
-        /*
-         * Available lessons
-         */
-        factory(Lesson::class, 6)->create([
-            'visibility' => 'public',
+        // subscribed
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Multiplication table 100-400',
         ]);
+        for ($i = 10; $i <= 20; $i++) {
+            for ($j = 10; $j <= 20; $j++) {
+                factory(Exercise::class)->create([
+                    'lesson_id' => $lesson->id,
+                    'question' => $i . ' x ' . $j,
+                    'answer' => $i * $j,
+                ]);
+            }
+        }
+        $lesson->subscribers()->save($user);
 
-        /*
-         * Not available lessons
-         */
-        factory(Lesson::class, 3)->create([
-            'visibility' => 'private',
+
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Multiplication table 400-900',
         ]);
+        for ($i = 20; $i <= 30; $i++) {
+            for ($j = 20; $j <= 30; $j++) {
+                factory(Exercise::class)->create([
+                    'lesson_id' => $lesson->id,
+                    'question' => $i . ' x ' . $j,
+                    'answer' => $i * $j,
+                ]);
+            }
+        }
 
-        /*
-         * Create exercises for each lesson
-         */
-        $lessons = Lesson::all();
-        foreach ($lessons as $lesson) {
-            factory(Exercise::class, 40)->create(['lesson_id' => $lesson->id]);
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Adding integer numbers',
+        ]);
+        for ($i = 1; $i <= 100; $i++) {
+            $a = rand(100, 10000);
+            $b = rand(100, 10000);
+            factory(Exercise::class)->create([
+                'lesson_id' => $lesson->id,
+                'question' => $a . ' + ' . $b,
+                'answer' => $a + $b,
+            ]);
+        }
+
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Subtracting integer numbers',
+        ]);
+        for ($i = 1; $i <= 100; $i++) {
+            $a = rand(100, 10000);
+            $b = rand(100, 10000);
+            factory(Exercise::class)->create([
+                'lesson_id' => $lesson->id,
+                'question' => $a . ' - ' . $b,
+                'answer' => $a - $b,
+            ]);
         }
     }
 }
