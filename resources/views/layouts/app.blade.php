@@ -95,5 +95,6 @@
         <!-- Scripts -->
 <script src="/jquery/jquery-1.12.4.min.js"></script>
 <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+@stack('scripts')
 </body>
 </html>

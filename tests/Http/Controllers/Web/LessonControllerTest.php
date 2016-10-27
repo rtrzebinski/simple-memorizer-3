@@ -359,7 +359,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertCount(1, $user->subscribedLessons);
         $this->assertEquals($lesson->id, $user->subscribedLessons[0]->id);
-        $this->assertRedirectedTo('/lessons/' . $lesson->id . '/learn');
+        $this->assertRedirectedTo('/learn/lessons/' . $lesson->id);
     }
 
     public function testItShould_notSubscribeAndLearn_unauthorized()
@@ -379,7 +379,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
         $this->assertCount(0, $user->subscribedLessons);
-        $this->assertRedirectedTo('/lessons/' . $lesson->id . '/learn');
+        $this->assertRedirectedTo('/learn/lessons/' . $lesson->id);
     }
 
     public function testItShould_notSubscribeAndLearn_lessonNotFound()

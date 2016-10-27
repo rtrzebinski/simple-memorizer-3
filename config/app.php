@@ -3,6 +3,11 @@
 return [
 
     /*
+     * Minimum number of exercises lesson must have, to allow user to start learning it.
+     */
+    'min_exercises_to_learn_lesson' => 2,
+
+    /*
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------

@@ -17,7 +17,7 @@ class LessonPolicyTest extends TestCase
         parent::setUp();
         $this->policy = new LessonPolicy;
     }
-    
+
     public function testItShould_authorizeLessonAccess_userIsLessonOwner()
     {
         $lesson = $this->createLesson();
@@ -142,5 +142,31 @@ class LessonPolicyTest extends TestCase
         $lesson = $this->createPrivateLesson();
 
         $this->assertFalse($this->policy->modify($user, $lesson));
+    }
+
+    public function testItShould_authorizeLessonLearn()
+    {
+        $lesson = $this->createLesson();
+        $user = $lesson->owner;
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->assertTrue($this->policy->learn($user, $lesson));
+    }
+
+    public function testItShould_notAuthorizeLessonLearn_noAccess()
+    {
+        $lesson = $this->createPrivateLesson();
+        $user = $this->createUser();
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->assertFalse($this->policy->learn($user, $lesson));
+    }
+
+    public function testItShould_notAuthorizeLessonLearn_notEnoughExercises()
+    {
+        $lesson = $this->createLesson();
+        $user = $lesson->owner;
+
+        $this->assertFalse($this->policy->learn($user, $lesson));
     }
 }

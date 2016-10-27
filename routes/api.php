@@ -49,10 +49,8 @@ Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
     Route::get('/lessons/{lesson}/exercises/random', 'Api\ExerciseController@fetchRandomExerciseOfLesson');
 
-    Route::post('/exercises/{exercise}/increase-number-of-good-answers-of-user',
-        'Api\ExerciseController@increaseNumberOfGoodAnswersOfUser');
+    Route::post('/exercises/{exercise}/handle-good-answer', 'Api\ExerciseController@handleGoodAnswer');
 
-    Route::post('/exercises/{exercise}/increase-number-of-bad-answers-of-user',
-        'Api\ExerciseController@increaseNumberOfBadAnswersOfUser');
+    Route::post('/exercises/{exercise}/handle-bad-answer', 'Api\ExerciseController@handleBadAnswer');
 
 });

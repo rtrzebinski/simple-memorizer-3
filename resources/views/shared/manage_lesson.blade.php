@@ -30,10 +30,12 @@
                 </button>
                 @endcan
                 @cannot('subscribe', $lesson)
-                <a href="/lessons/{{ $lesson->id }}/learn" class="btn btn-primary margin-bottom" role="button">
+                @can('learn', $lesson)
+                <a href="/learn/lessons/{{ $lesson->id }}" class="btn btn-primary margin-bottom" role="button">
                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                     Start
                 </a>
+                @endcan
                 @endcannot
                 @can('unsubscribe', $lesson)
                 <button type="submit" form="unsubscribe" class="btn btn-danger margin-bottom">

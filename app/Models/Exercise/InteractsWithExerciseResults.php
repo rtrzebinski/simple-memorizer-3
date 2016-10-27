@@ -16,13 +16,20 @@ trait InteractsWithExerciseResults
     }
 
     /**
+     * @return ExerciseRepository
+     */
+    protected function exerciseRepository() : ExerciseRepository
+    {
+        return app(ExerciseRepository::class);
+    }
+
+    /**
      * @param int $userId
      * @return int
      */
     public function numberOfGoodAnswersOfUser(int $userId) : int
     {
-        $exerciseResult = $this->results()->user($userId)->first();
-        return $exerciseResult ? $exerciseResult->number_of_good_answers : 0;
+        return $this->exerciseRepository()->numberOfGoodAnswersOfUser($this->id, $userId);
     }
 
     /**
@@ -31,54 +38,31 @@ trait InteractsWithExerciseResults
      */
     public function numberOfBadAnswersOfUser(int $userId) : int
     {
-        $exerciseResult = $this->results()->user($userId)->first();
-        return $exerciseResult ? $exerciseResult->number_of_bad_answers : 0;
+        return $this->exerciseRepository()->numberOfBadAnswersOfUser($this->id, $userId);
     }
 
     /**
      * @param int $userId
      * @return int
      */
-    public function percentOfGoodAnswersOfUser(int $userId) :int
+    public function percentOfGoodAnswersOfUser(int $userId) : int
     {
-        $exerciseResult = $this->results()->user($userId)->first();
-        return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;
+        return $this->exerciseRepository()->percentOfGoodAnswersOfUser($this->id, $userId);
     }
 
     /**
      * @param int $userId
      */
-    public function increaseNumberOfGoodAnswersOfUser(int $userId)
+    public function handleGoodAnswer(int $userId)
     {
-        $this->increaseNumberOfAnswersOfUser($userId, 'number_of_good_answers');
+        $this->exerciseRepository()->handleGoodAnswer($this->id, $userId);
     }
 
     /**
      * @param int $userId
      */
-    public function increaseNumberOfBadAnswersOfUser(int $userId)
+    public function handleBadAnswer(int $userId)
     {
-        $this->increaseNumberOfAnswersOfUser($userId, 'number_of_bad_answers');
-    }
-
-    /**
-     * @param int $userId
-     * @param string $field
-     */
-    private function increaseNumberOfAnswersOfUser(int $userId, string $field)
-    {
-        $exerciseResult = $this->results()->user($userId)->first();
-
-        if (is_null($exerciseResult)) {
-            $exerciseResult = new ExerciseResult();
-            $exerciseResult->user_id = $userId;
-            $exerciseResult->exercise_id = $this->id;
-            $exerciseResult->{$field} = 1;
-            $exerciseResult->save();
-        } else {
-            $exerciseResult->update([$field => \DB::raw($field . " + 1")]);
-        }
-
-        $exerciseResult->updatePercentOfGoodAnswers();
+        $this->exerciseRepository()->handleBadAnswer($this->id, $userId);
     }
 }

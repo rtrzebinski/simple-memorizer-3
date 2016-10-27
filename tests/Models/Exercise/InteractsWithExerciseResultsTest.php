@@ -2,37 +2,73 @@
 
 namespace Tests\Models\Exercise;
 
+use App\Models\Exercise\Exercise;
+use App\Models\Exercise\ExerciseRepository;
+use App\Models\User\User;
+use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
 
 class InteractsWithExerciseResultsTest extends TestCase
 {
-    public function testItShould_defaultNumberOfAnswersToZero()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
+    /**
+     * @var User
+     */
+    private $user;
 
-        $this->assertEquals(0, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->numberOfBadAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
+    /**
+     * @var Exercise
+     */
+    private $exercise;
+
+    /**
+     * @var ExerciseRepository|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $exerciseRepository;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user = $this->createUser();
+        $this->exercise = $this->createExercise();
+        $this->exerciseRepository = $this->createMock(ExerciseRepository::class);
+        $this->app->instance(ExerciseRepository::class, $this->exerciseRepository);
     }
 
-    public function testItShould_increaseNumberOfGoodAnswersOfUser()
+    public function test_numberOfGoodAnswersOfUser()
     {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $exercise->increaseNumberOfGoodAnswersOfUser($user->id);
-        $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $result = rand(1, 100);
+        $this->exerciseRepository->method('numberOfGoodAnswersOfUser')->with($this->exercise->id,
+            $this->user->id)->willReturn($result);
+        $this->assertEquals($result, $this->exercise->numberOfGoodAnswersOfUser($this->user->id));
     }
 
-    public function testItShould_increaseNumberOfBadAnswersOfUser()
+    public function test_numberOfBadAnswersOfUser()
     {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
+        $result = rand(1, 100);
+        $this->exerciseRepository->method('numberOfBadAnswersOfUser')->with($this->exercise->id,
+            $this->user->id)->willReturn($result);
+        $this->assertEquals($result, $this->exercise->numberOfBadAnswersOfUser($this->user->id));
+    }
 
-        $exercise->increaseNumberOfBadAnswersOfUser($user->id);
-        $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
+    public function test_percentOfGoodAnswersOfUser()
+    {
+        $result = rand(1, 100);
+        $this->exerciseRepository->method('percentOfGoodAnswersOfUser')->with($this->exercise->id,
+            $this->user->id)->willReturn($result);
+        $this->assertEquals($result, $this->exercise->percentOfGoodAnswersOfUser($this->user->id));
+    }
+
+    public function test_handleGoodAnswer()
+    {
+        $this->exerciseRepository->expects($this->once())->method('handleGoodAnswer')
+            ->with($this->exercise->id, $this->user->id);
+        $this->exercise->handleGoodAnswer($this->user->id);
+    }
+
+    public function test_handleBadAnswer()
+    {
+        $this->exerciseRepository->expects($this->once())->method('handleBadAnswer')
+            ->with($this->exercise->id, $this->user->id);
+        $this->exercise->handleBadAnswer($this->user->id);
     }
 }

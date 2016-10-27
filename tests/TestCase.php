@@ -108,6 +108,17 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
+     * @param int $lessonId
+     */
+    protected function createExercisesRequiredToLearnLesson(int $lessonId)
+    {
+        $minExercisesToLearnLesson = config('app.min_exercises_to_learn_lesson');
+        for ($i = $minExercisesToLearnLesson; $i > 0; $i--) {
+            $this->createExercise(['lesson_id' => $lessonId]);
+        }
+    }
+
+    /**
      * @param array $data
      * @return User
      */

@@ -2,92 +2,47 @@
 
 namespace Tests\Models\Lesson;
 
+use App\Models\Exercise\ExerciseRepository;
+use App\Models\User\User;
+use PHPUnit_Framework_MockObject_MockObject;
 use TestCase;
-use App\Exceptions\NotEnoughExercisesException;
-use App\Models\Exercise\Exercise;
 use App\Models\Lesson\Lesson;
 
 class InteractsWithExercisesTest extends TestCase
 {
-    public function testItShould_returnRandomExercise_noPossibleExercises()
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var Lesson
+     */
+    private $lesson;
+
+    /**
+     * @var ExerciseRepository|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $exerciseRepository;
+
+    public function setUp()
     {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-
-        $this->expectException(NotEnoughExercisesException::class);
-
-        $lesson->fetchRandomExercise($user->id);
+        parent::setUp();
+        $this->user = $this->createUser();
+        $this->lesson = $this->createLesson();
+        $this->exerciseRepository = $this->createMock(ExerciseRepository::class);
+        $this->app->instance(ExerciseRepository::class, $this->exerciseRepository);
     }
 
-    public function testItShould_returnRandomExercise_noPossibleExercises_withPrevious()
+    public function testItShould_fetchRandomExercise()
     {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-        $previousExercise = $this->createExercise();
+        $previousExerciseId = rand(1, 100);
+        $exercise = $this->createExercise();
 
-        $this->expectException(NotEnoughExercisesException::class);
+        $this->exerciseRepository->method('fetchRandomExerciseOfLesson')
+            ->with($this->lesson->id, $this->user->id, $previousExerciseId)
+            ->willReturn($exercise);
 
-        $lesson->fetchRandomExercise($user->id, $previousExercise->id);
-    }
-
-    public function testItShould_returnRandomExercise_onePossibleExercise()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-
-        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $previousExercise = $this->createExercise();
-
-        $this->assertExerciseCanWin($lesson, $user->id, $exercise->id, $previousExercise->id);
-    }
-
-    public function testItShould_returnRandomExercise_onePossibleExercise_withPrevious()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-
-        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-
-        $this->assertExerciseCanWin($lesson, $user->id, $exercise->id);
-    }
-
-    public function testItShould_returnRandomExercise_twoPossibleExercises()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-
-        $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseWithAnswer->increaseNumberOfGoodAnswersOfUser($user->id);
-        $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
-
-        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id);
-        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id);
-    }
-
-    public function testItShould_returnRandomExercise_twoPossibleExercises_withPrevious()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-
-        $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseWithAnswer->increaseNumberOfGoodAnswersOfUser($user->id);
-        $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
-        $previousExercise = $this->createExercise();
-
-        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id, $previousExercise->id);
-        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id, $previousExercise->id);
-    }
-
-    private function assertExerciseCanWin(Lesson $lesson, int $userId, int $exerciseId, int $previousId = null)
-    {
-        // 1000 retries is more then enough
-        $counter = 1000;
-        do {
-            if (!$counter--) {
-                $this->fail('Unable to fetch random exercise.');
-            }
-            $result = $lesson->fetchRandomExercise($userId, $previousId);
-            $this->assertInstanceOf(Exercise::class, $result);
-        } while ($result->id != $exerciseId && $result->id && $previousId);
+        $this->assertEquals($exercise, $this->lesson->fetchRandomExercise($this->user->id, $previousExerciseId));
     }
 }

@@ -85,18 +85,18 @@ class ExerciseController extends Controller
     /**
      * @param Exercise $exercise
      */
-    public function increaseNumberOfGoodAnswersOfUser(Exercise $exercise)
+    public function handleGoodAnswer(Exercise $exercise)
     {
         $this->authorizeForUser($this->user(), 'access', $exercise);
-        $exercise->increaseNumberOfGoodAnswersOfUser($this->user()->id);
+        $exercise->handleGoodAnswer($this->user()->id);
     }
 
     /**
      * @param Exercise $exercise
      */
-    public function increaseNumberOfBadAnswersOfUser(Exercise $exercise)
+    public function handleBadAnswer(Exercise $exercise)
     {
         $this->authorizeForUser($this->user(), 'access', $exercise);
-        $exercise->increaseNumberOfBadAnswersOfUser($this->user()->id);
+        $exercise->handleBadAnswer($this->user()->id);
     }
 }

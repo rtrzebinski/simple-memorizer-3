@@ -106,11 +106,21 @@
                                                 Number of subscribers: 3 </br>
                                             </p>
                                             <p>
-                                                <a href="/lessons/{{ $row->id }}/learn" class="btn btn-primary"
+                                                @can('learn', $row)
+                                                <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                     Start
                                                 </a>
+                                                @endcan
+                                                @cannot('learn', $row)
+                                                <a href="/lessons/{{ $row->id }}/exercises/create"
+                                                   class="btn btn-success"
+                                                   role="button">
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                    Add exercise
+                                                </a>
+                                                @endcannot
                                                 <a href="/lessons/{{ $row->id }}" class="btn btn-info"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-education"
@@ -139,7 +149,7 @@
                                                 Number of subscribers: 3 </br>
                                             </p>
                                             <p>
-                                                <a href="/lessons/{{ $row->id }}/learn" class="btn btn-primary"
+                                                <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                     Start

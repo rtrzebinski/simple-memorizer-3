@@ -72,4 +72,17 @@ class LessonPolicy
             ->where('lesson_user.user_id', '=', $user->id)
             ->exists();
     }
+
+    /**
+     * Lesson must have certain number of exercises, and user must have access.
+     *
+     * @param User $user
+     * @param Lesson $lesson
+     * @return bool
+     */
+    public function learn(User $user, Lesson $lesson)
+    {
+        return ($lesson->exercises()->count() >= config('app.min_exercises_to_learn_lesson')) &&
+        $this->access($user, $lesson);
+    }
 }

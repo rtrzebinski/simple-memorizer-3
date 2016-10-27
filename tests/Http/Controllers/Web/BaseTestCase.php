@@ -33,4 +33,9 @@ class BaseTestCase extends \TestCase
         $this->assertResponseStatus(302);
         $this->assertRedirectedTo('http://localhost');
     }
+
+    protected function view()
+    {
+        return $this->response->original;
+    }
 }

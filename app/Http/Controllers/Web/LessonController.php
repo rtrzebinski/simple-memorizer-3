@@ -119,6 +119,6 @@ class LessonController extends Controller
         if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
             $lesson->subscribe($this->user());
         }
-        return redirect('/lessons/' . $lesson->id . '/learn');
+        return redirect('/learn/lessons/' . $lesson->id);
     }
 }
