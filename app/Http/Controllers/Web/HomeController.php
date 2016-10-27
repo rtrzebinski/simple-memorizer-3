@@ -13,8 +13,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $ownedLessons = $this->user()->ownedLessons;
-        $subscribedLessons = $this->user()->subscribedLessons;
+        $ownedLessons = $this->user()->ownedLessons()->with('exercises', 'subscribers')->get();
+        $subscribedLessons = $this->user()->subscribedLessons()->with('exercises', 'subscribers')->get();
         $availableLessons = $this->user()->availableLessons();
         $userHasOwnedOrSubscribedLessons = $this->user()->hasOwnedOrSubscribedLessons();
 

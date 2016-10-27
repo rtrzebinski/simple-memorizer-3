@@ -102,8 +102,8 @@
                                                 {{ str_limit($row->name, 28) }}
                                             </h4>
                                             <p>
-                                                Number of exercises: 40 </br>
-                                                Number of subscribers: 3 </br>
+                                                Number of exercises: {{ $row->exercises->count() }} </br>
+                                                Number of subscribers: {{ $row->subscribers->count() }} </br>
                                             </p>
                                             <p>
                                                 @can('learn', $row)
@@ -145,8 +145,8 @@
                                                 {{ str_limit($row->name, 28) }}
                                             </h4>
                                             <p>
-                                                Number of exercises: 40 </br>
-                                                Number of subscribers: 3 </br>
+                                                Number of exercises: {{ $row->exercises->count() }} </br>
+                                                Number of subscribers: {{ $row->subscribers->count() }} </br>
                                             </p>
                                             <p>
                                                 <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary"
@@ -224,8 +224,8 @@
                                             {{ str_limit($row->name, 28) }}
                                         </h4>
                                         <p>
-                                            Number of exercises: 40 </br>
-                                            Number of subscribers: 3 </br>
+                                            Number of exercises: {{ $row->exercises->count() }} </br>
+                                            Number of subscribers: {{ $row->subscribers->count() }} </br>
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->id }}"

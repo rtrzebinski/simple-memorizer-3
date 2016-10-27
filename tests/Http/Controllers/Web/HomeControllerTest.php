@@ -11,8 +11,8 @@ class HomeControllerTest extends BaseTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertViewHas('ownedLessons', $user->ownedLessons);
-        $this->assertViewHas('subscribedLessons', $user->subscribedLessons);
+        $this->assertViewHas('ownedLessons', $user->ownedLessons()->with('exercises', 'subscribers')->get());
+        $this->assertViewHas('subscribedLessons', $user->subscribedLessons()->with('exercises', 'subscribers')->get());
         $this->assertViewHas('availableLessons', $user->availableLessons());
         $this->assertViewHas('userHasOwnedOrSubscribedLessons', $user->hasOwnedOrSubscribedLessons());
     }

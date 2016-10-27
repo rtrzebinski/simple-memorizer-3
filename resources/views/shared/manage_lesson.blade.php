@@ -7,8 +7,8 @@
                 {{ $lesson->name }}
             </h4>
             <p>
-                Number of exercises: 40 </br>
-                Number of subscribers: 3 </br>
+                Number of exercises: {{ $lesson->exercises->count() }} </br>
+                Number of subscribers: {{ $lesson->subscribers->count() }} </br>
                 Visibility: {{ $lesson->visibility }} </br>
                                 <span class="help-block">
                                     Public lessons can be subscribed by other users, but only you can modify them. </br>

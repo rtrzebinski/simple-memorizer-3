@@ -37,6 +37,7 @@ trait InteractsWithLessons
             ->where('lessons.owner_id', '!=', $this->id)
             ->where('lessons.visibility', '=', 'public')
             ->whereNotIn('lessons.id', $this->subscribedLessons()->pluck('id'))
+            ->with('exercises', 'subscribers')
             ->get();
     }
 
