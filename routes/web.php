@@ -37,8 +37,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/{lesson}/subscribe-and-learn', 'Web\LessonController@subscribeAndLearn');
 
-    Route::get('/lessons/{lesson}/learn', 'Web\LessonController@learn');
-
     // exercises
 
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');
@@ -50,6 +48,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/exercises/{exercise}', 'Web\ExerciseController@update');
 
     Route::delete('/exercises/{exercise}', 'Web\ExerciseController@delete');
+
+    // learn
+
+    Route::get('/lessons/{lesson}/learn', 'Web\LearnController@learn');
 });
 
 Route::group(['middleware' => ['guest']], function () {

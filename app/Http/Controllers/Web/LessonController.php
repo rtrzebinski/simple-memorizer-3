@@ -121,14 +121,4 @@ class LessonController extends Controller
         }
         return redirect('/lessons/' . $lesson->id . '/learn');
     }
-
-    /**
-     * @param Lesson $lesson
-     * @return View
-     */
-    public function learn(Lesson $lesson) : View
-    {
-        $this->authorizeForUser($this->user(), 'access', $lesson);
-        return view('lessons.learn', compact('lesson'));
-    }
 }
