@@ -19,16 +19,32 @@ class TestDataSeeder extends Seeder
             'password' => bcrypt('admin'),
         ]);
 
-        // private
+        // private lessons
         factory(Lesson::class)->create([
-            'name' => 'Test private lesson',
+            'name' => 'Private lesson with no exercises',
             'visibility' => 'private',
             'owner_id' => $user->id,
         ]);
-
-        // owned
         $lesson = factory(Lesson::class)->create([
-            'name' => 'Multiplication table 1-100',
+            'name' => 'Private lesson with one exercise',
+            'visibility' => 'private',
+            'owner_id' => $user->id,
+        ]);
+        factory(Exercise::class)->create([
+            'lesson_id' => $lesson->id,
+        ]);
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Private lesson with two exercises',
+            'visibility' => 'private',
+            'owner_id' => $user->id,
+        ]);
+        factory(Exercise::class, 2)->create([
+            'lesson_id' => $lesson->id,
+        ]);
+
+        // owned lesson
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Math: multiplication table 1-100',
             'owner_id' => $user->id,
         ]);
         for ($i = 1; $i <= 10; $i++) {
@@ -41,9 +57,9 @@ class TestDataSeeder extends Seeder
             }
         }
 
-        // subscribed
+        // subscribed lesson
         $lesson = factory(Lesson::class)->create([
-            'name' => 'Multiplication table 100-400',
+            'name' => 'Math: multiplication table 100-400',
         ]);
         for ($i = 10; $i <= 20; $i++) {
             for ($j = 10; $j <= 20; $j++) {
@@ -56,9 +72,10 @@ class TestDataSeeder extends Seeder
         }
         $lesson->subscribers()->save($user);
 
+        // other lessons
 
         $lesson = factory(Lesson::class)->create([
-            'name' => 'Multiplication table 400-900',
+            'name' => 'Math: multiplication table 400-900',
         ]);
         for ($i = 20; $i <= 30; $i++) {
             for ($j = 20; $j <= 30; $j++) {
@@ -71,7 +88,7 @@ class TestDataSeeder extends Seeder
         }
 
         $lesson = factory(Lesson::class)->create([
-            'name' => 'Adding integer numbers',
+            'name' => 'Math: adding integer numbers',
         ]);
         for ($i = 1; $i <= 100; $i++) {
             $a = rand(100, 10000);
@@ -84,7 +101,7 @@ class TestDataSeeder extends Seeder
         }
 
         $lesson = factory(Lesson::class)->create([
-            'name' => 'Subtracting integer numbers',
+            'name' => 'Math: subtracting integer numbers',
         ]);
         for ($i = 1; $i <= 100; $i++) {
             $a = rand(100, 10000);

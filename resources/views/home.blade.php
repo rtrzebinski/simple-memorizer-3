@@ -93,13 +93,13 @@
                     <div class="row">
                         @if(isset($ownedLessons) && !empty($ownedLessons))
                             @foreach($ownedLessons as $row)
-                                <div class="col-sm-6 col-md-4">
+                                <div class="col-sm-6 col-md-6">
                                     <div class="thumbnail">
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-chevron-right"
                                                       aria-hidden="true"></span>
-                                                {{ str_limit($row->name, 28) }}
+                                                {{ str_limit($row->name, 50) }}
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ $row->exercises->count() }} </br>
@@ -136,32 +136,33 @@
 
                         @if(isset($subscribedLessons) && !empty($subscribedLessons))
                             @foreach($subscribedLessons as $row)
-                                <div class="col-sm-6 col-md-4">
+                                <div class="col-sm-6 col-md-6">
                                     <div class="thumbnail">
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-chevron-right"
                                                       aria-hidden="true"></span>
-                                                {{ str_limit($row->name, 28) }}
+                                                {{ str_limit($row->name, 50) }}
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ $row->exercises->count() }} </br>
                                                 Number of subscribers: {{ $row->subscribers->count() }} </br>
                                             </p>
                                             <p>
-                                                <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary"
+                                                <a href="/learn/lessons/{{ $row->id }}"
+                                                   class="btn btn-primary margin-bottom"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                     Start
                                                 </a>
-                                                <a href="/lessons/{{ $row->id }}" class="btn btn-info"
+                                                <a href="/lessons/{{ $row->id }}" class="btn btn-info margin-bottom"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-education"
                                                           aria-hidden="true"></span>
                                                     Lesson
                                                 </a>
                                                 <button type="submit" form="unsubscribe-{{ $row->id }}"
-                                                        class="btn btn-danger">
+                                                        class="btn btn-danger margin-bottom">
                                                 <span class="glyphicon glyphicon-remove-sign"
                                                       aria-hidden="true"></span>
                                                     Unsubscribe
@@ -216,12 +217,12 @@
                 <div class="row">
                     @if(isset($availableLessons) && !empty($availableLessons))
                         @foreach($availableLessons as $row)
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-6 col-md-6">
                                 <div class="thumbnail">
                                     <div class="caption">
                                         <h4>
                                             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                            {{ str_limit($row->name, 28) }}
+                                            {{ str_limit($row->name, 50) }}
                                         </h4>
                                         <p>
                                             Number of exercises: {{ $row->exercises->count() }} </br>

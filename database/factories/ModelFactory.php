@@ -38,7 +38,7 @@ $factory->define(Lesson::class, function (Faker\Generator $faker) {
         'owner_id' => function () {
             return factory(User::class)->create()->id;
         },
-        'name' => $faker->words(5, true),
+        'name' => $faker->words(10, true),
         'visibility' => 'public',
     ];
 });
