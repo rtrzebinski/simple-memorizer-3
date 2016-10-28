@@ -184,4 +184,18 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $this->createLesson($attributes);
     }
+
+    protected function tearDown()
+    {
+        /*
+         * Clean up to speed up tests execution
+         */
+        $reflection = new ReflectionObject($this);
+        foreach ($reflection->getProperties() as $prop) {
+            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $prop->setAccessible(true);
+                $prop->setValue($this, null);
+            }
+        }
+    }
 }
