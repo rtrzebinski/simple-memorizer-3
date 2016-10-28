@@ -73,8 +73,7 @@
                                     <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                                     I know the answer
                                 </button>
-                                <button type="submit" form="handle-bad-answer-form" id="bad-answer-button"
-                                        class="btn btn-default btn-danger btn-lg margin-bottom">
+                                <button id="bad-answer-button" class="btn btn-default btn-danger btn-lg margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                                     I don't know the answer
                                 </button>
@@ -106,8 +105,24 @@
 @push('scripts')
 <script type="text/javascript" language="JavaScript">
     $(document).ready(function () {
-        $("#show_answer_button").click(function (event) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#bad-answer-button").click(function (event) {
             event.preventDefault();
+            $.post("/learn/handle-bad-answer/exercises/{{ $exercise->id }}", function (data) {
+                $("#answer_input").removeClass("hidden");
+                $("#good-answer-button").hide();
+                $("#bad-answer-button").hide();
+                $("#show_answer_button").hide();
+                $("#next-button").addClass('btn-primary');
+            });
+        });
+
+        $("#show_answer_button").click(function (event) {
             $("#answer_input").removeClass("hidden");
             $("#show_answer_button").hide();
         });

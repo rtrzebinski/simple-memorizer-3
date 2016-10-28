@@ -9,6 +9,7 @@ use App\Models\Lesson\Lesson;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LearnController extends Controller
 {
@@ -49,15 +50,12 @@ class LearnController extends Controller
 
     /**
      * @param Exercise $exercise
-     * @return RedirectResponse
      */
-    public function handleBadAnswer(Exercise $exercise) : RedirectResponse
+    public function handleBadAnswer(Exercise $exercise)
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
         $exercise->handleBadAnswer($this->user()->id);
-
-        return redirect('/learn/lessons/' . $exercise->lesson_id . '?previous_exercise_id=' . $exercise->id);
     }
 
     /**

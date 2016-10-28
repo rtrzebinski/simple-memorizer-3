@@ -194,7 +194,7 @@ class LearnControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/' . $exercise->id);
 
-        $this->assertRedirectedTo('/learn/lessons/' . $exercise->lesson_id . '?previous_exercise_id=' . $exercise->id);
+        $this->assertResponseOk();
     }
 
     public function testItShould_notHandleBadAnswer_unauthorized()
