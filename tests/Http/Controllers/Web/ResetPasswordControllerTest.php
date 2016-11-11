@@ -4,9 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 use Carbon\Carbon;
 use DB;
-use TestCase;
 
-class ResetPasswordControllerTest extends TestCase
+class ResetPasswordControllerTest extends BaseTestCase
 {
     public function testItShould_showResetForm()
     {
@@ -56,7 +55,7 @@ class ResetPasswordControllerTest extends TestCase
 
         $this->call('POST', 'password/reset', $parameters);
 
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 
     public function testItShould_notResetPassword_invalidPassword()
@@ -73,6 +72,6 @@ class ResetPasswordControllerTest extends TestCase
 
         $this->call('POST', 'password/reset', $parameters);
 
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 }

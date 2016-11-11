@@ -8,9 +8,8 @@ use Auth;
 use Laravel\Socialite\Two\AbstractProvider;
 use Socialite;
 use Illuminate\Http\RedirectResponse;
-use TestCase;
 
-class SocialiteControllerTest extends TestCase
+class SocialiteControllerTest extends BaseTestCase
 {
     public function testItShould_redirectToProvider()
     {

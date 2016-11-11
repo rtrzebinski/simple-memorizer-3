@@ -4,9 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 use App\Models\User\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
-use TestCase;
 
-class LoginControllerTest extends TestCase
+class LoginControllerTest extends BaseTestCase
 {
     /**
      * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
@@ -40,16 +39,13 @@ class LoginControllerTest extends TestCase
 
     public function testItShould_notLoginUser_invalidCredentials()
     {
-        $referer = $this->randomUrl();
-
         $this->call('POST', '/login', [
             'email' => uniqid(),
             'password' => uniqid(),
-        ], $cookies = [], $files = [], ['HTTP_REFERER' => $referer]);
+        ]);
 
         $this->assertNull(auth()->user());
-        $this->assertRedirectedTo($referer);
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 
     public function testItShould_logoutUser()

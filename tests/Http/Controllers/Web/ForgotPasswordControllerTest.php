@@ -4,9 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Notification;
-use TestCase;
 
-class ForgotPasswordControllerTest extends TestCase
+class ForgotPasswordControllerTest extends BaseTestCase
 {
     public function testItShould_showLinkRequestForm()
     {
@@ -33,34 +32,22 @@ class ForgotPasswordControllerTest extends TestCase
 
     public function testItShould_notSendResetLinkEmail_missingEmail()
     {
-        $referer = $this->randomUrl();
+        $this->call('POST', 'password/email');
 
-        $this->call('POST', 'password/email', $parameters = [], $cookies = [], $files = [],
-            ['HTTP_REFERER' => $referer]);
-
-        $this->assertRedirectedTo($referer);
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_invalidEmail()
     {
-        $referer = $this->randomUrl();
+        $this->call('POST', 'password/email', ['email' => uniqid()]);
 
-        $this->call('POST', 'password/email', ['email' => uniqid()], $cookies = [], $files = [],
-            ['HTTP_REFERER' => $referer]);
-
-        $this->assertRedirectedTo($referer);
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()
     {
-        $referer = $this->randomUrl();
+        $this->call('POST', 'password/email', ['email' => $this->randomEmail()]);
 
-        $this->call('POST', 'password/email', ['email' => $this->randomEmail()], $cookies = [], $files = [],
-            ['HTTP_REFERER' => $referer]);
-
-        $this->assertRedirectedTo($referer);
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 }

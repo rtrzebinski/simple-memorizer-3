@@ -4,9 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 use App\Models\User\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
-use TestCase;
 
-class RegisterControllerTest extends TestCase
+class RegisterControllerTest extends BaseTestCase
 {
     /**
      * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
@@ -46,16 +45,13 @@ class RegisterControllerTest extends TestCase
 
     public function testItShould_notRegisterUser_invalidInput()
     {
-        $referer = $this->randomUrl();
-
         $this->userRepositoryMock
             ->expects($this->never())
             ->method('create');
 
-        $this->call('POST', '/register', $parameters = [], $cookies = [], $files = [], ['HTTP_REFERER' => $referer]);
+        $this->call('POST', '/register');
 
         $this->assertNull(auth()->user());
-        $this->assertRedirectedTo($referer);
-        $this->assertSessionHasErrors();
+        $this->assertInvalidInput();
     }
 }
