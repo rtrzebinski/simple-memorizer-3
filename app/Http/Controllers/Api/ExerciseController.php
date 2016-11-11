@@ -72,15 +72,18 @@ class ExerciseController extends Controller
      * @param FetchRandomExerciseOfLessonRequest $request
      * @param Lesson $lesson
      * @return JsonResponse
-     * @throws NotEnoughExercisesException
      */
     public function fetchRandomExerciseOfLesson(
         FetchRandomExerciseOfLessonRequest $request,
         Lesson $lesson
     ) : JsonResponse
     {
-        $exercise = $lesson->fetchRandomExercise($this->user()->id, $request->previous_exercise_id);
-        return $this->response($exercise);
+        try {
+            $exercise = $lesson->fetchRandomExercise($this->user()->id, $request->previous_exercise_id);
+            return $this->response($exercise);
+        } catch (NotEnoughExercisesException $e) {
+            return $this->response('', NotEnoughExercisesException::HTTP_RESPONSE_CODE);
+        }
     }
 
     /**

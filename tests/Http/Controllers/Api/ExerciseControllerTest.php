@@ -2,6 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
+use App\Exceptions\NotEnoughExercisesException;
 use App\Models\Exercise\Exercise;
 use App\Models\Exercise\ExerciseRepository;
 
@@ -334,6 +335,23 @@ class ExerciseControllerTest extends BaseTestCase
             ['previous_exercise_id' => -1], $user);
 
         $this->assertInvalidInput();
+    }
+
+    public function testItShould_notFetchRandomExerciseOfLesson_notEnoughExercises()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson(['owner_id' => $user->id]);
+
+        $exerciseRepository = $this->createMock(ExerciseRepository::class);
+        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+
+        $exerciseRepository->method('fetchRandomExerciseOfLesson')
+            ->with($lesson->id, $user->id)
+            ->willThrowException(new NotEnoughExercisesException());
+
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', [], $user);
+
+        $this->assertResponseStatus(NotEnoughExercisesException::HTTP_RESPONSE_CODE);
     }
 
     // handleGoodAnswer
