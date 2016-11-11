@@ -4,6 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 class HomeControllerTest extends BaseTestCase
 {
+    // index
+
     public function testItShould_displayHomePage()
     {
         $this->be($user = $this->createUser());

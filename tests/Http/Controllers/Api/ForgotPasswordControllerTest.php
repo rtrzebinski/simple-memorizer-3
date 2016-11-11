@@ -3,12 +3,12 @@
 namespace Tests\Http\Controllers\Api;
 
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Http\Response;
 use Notification;
-use TestCase;
 
-class ForgotPasswordControllerTest extends TestCase
+class ForgotPasswordControllerTest extends BaseTestCase
 {
+    // sendResetLinkEmail
+
     public function testItShould_sendResetLinkEmail()
     {
         $user = $this->createUser()->fresh();
@@ -27,20 +27,20 @@ class ForgotPasswordControllerTest extends TestCase
     {
         $this->callApi('POST', '/password/email');
 
-        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_invalidEmail()
     {
         $this->callApi('POST', '/password/email', ['email' => uniqid()]);
 
-        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()
     {
         $this->callApi('POST', '/password/email', ['email' => $this->randomEmail()]);
 
-        $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->assertInternalServerError();
     }
 }

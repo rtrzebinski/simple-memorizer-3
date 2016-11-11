@@ -39,8 +39,6 @@ class LessonControllerTest extends BaseTestCase
 
         /** @var Lesson $lesson */
         $lesson = $this->last(Lesson::class);
-
-        $this->assertInstanceOf(Lesson::class, $lesson);
         $this->assertEquals($input['name'], $lesson->name);
         $this->assertEquals($input['visibility'], $lesson->visibility);
         $this->assertRedirectedTo('/lessons/' . $lesson->id);
@@ -77,7 +75,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/' . $lesson->id);
 
         $this->assertResponseOk();
-        $this->assertViewHas('lesson');
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
     public function testItShould_notShowLessonViewPage_unauthorized()
@@ -118,7 +116,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/' . $lesson->id . '/edit');
 
         $this->assertResponseOk();
-        $this->assertViewHas('lesson');
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
     public function testItShould_notShowLessonEditPage_unauthorized()
@@ -163,10 +161,11 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('PUT', '/lessons/' . $lesson->id, $input);
 
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        /** @var Lesson $lesson */
         $lesson = $lesson->fresh();
         $this->assertEquals($input['visibility'], $lesson->visibility);
         $this->assertEquals($input['name'], $lesson->name);
+        $this->assertRedirectedTo('/lessons/' . $lesson->id);
     }
 
     public function testItShould_notUpdateLesson_unauthorized()

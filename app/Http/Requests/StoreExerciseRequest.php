@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 /**
  * @property mixed lesson_id
  */
-class CreateExerciseRequest extends Request
+class StoreExerciseRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

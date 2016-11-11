@@ -16,7 +16,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
 
         $this->assertResponseOk();
-        $this->assertViewHas('lesson');
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
     public function testItShould_notShowExerciseCreatePage_unauthorized()
@@ -63,8 +63,6 @@ class ExerciseControllerTest extends BaseTestCase
 
         /** @var Exercise $exercise */
         $exercise = $this->last(Exercise::class);
-
-        $this->assertInstanceOf(Exercise::class, $exercise);
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
         $this->assertRedirectedTo('/lessons/' . $lesson->id);
@@ -134,7 +132,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->call('GET', '/exercises/' . $exercise->id . '/edit');
 
         $this->assertResponseOk();
-        $this->assertViewHas('exercise');
+        $this->assertEquals($exercise->id, $this->view()->exercise->id);
     }
 
     public function testItShould_notShowExerciseEditPage_unauthorized()
@@ -182,6 +180,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
 
+        /** @var Exercise $exercise */
         $exercise = $exercise->fresh();
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);

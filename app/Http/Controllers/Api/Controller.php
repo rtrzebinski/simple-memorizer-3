@@ -21,7 +21,7 @@ class Controller extends BaseController
      * @param array $headers
      * @return JsonResponse
      */
-    protected function response($data = null, int $statusCode = 200, array $headers = [])
+    protected function response($data = null, int $statusCode = 200, array $headers = []) : JsonResponse
     {
         return JsonResponse::create($data, $statusCode, $headers);
     }
@@ -30,7 +30,7 @@ class Controller extends BaseController
      * User authenticated with API token.
      * @return User
      */
-    protected function user()
+    protected function user() : User
     {
         return Auth::guard('api')->user();
     }

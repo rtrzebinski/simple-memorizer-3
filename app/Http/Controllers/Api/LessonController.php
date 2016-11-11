@@ -13,7 +13,7 @@ class LessonController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function createLesson(Request $request)
+    public function storeLesson(Request $request) : JsonResponse
     {
         $this->validate($request, [
             'visibility' => 'required|in:public,private',
@@ -25,14 +25,6 @@ class LessonController extends Controller
         $lesson->save();
 
         return $this->response($lesson);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function fetchOwnedLessons()
-    {
-        return $this->response($this->user()->ownedLessons);
     }
 
     /**
@@ -54,21 +46,29 @@ class LessonController extends Controller
     }
 
     /**
-     * @return JsonResponse
-     */
-    public function fetchSubscribedLessons()
-    {
-        return $this->response($this->user()->subscribedLessons);
-    }
-
-    /**
      * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function fetchLesson(Lesson $lesson)
+    public function fetchLesson(Lesson $lesson) : JsonResponse
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
         return $this->response($lesson);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function fetchOwnedLessons() : JsonResponse
+    {
+        return $this->response($this->user()->ownedLessons);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function fetchSubscribedLessons() : JsonResponse
+    {
+        return $this->response($this->user()->subscribedLessons);
     }
 
     /**
@@ -76,7 +76,7 @@ class LessonController extends Controller
      * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function updateLesson(PatchLessonRequest $request, Lesson $lesson)
+    public function updateLesson(PatchLessonRequest $request, Lesson $lesson) : JsonResponse
     {
         $lesson->update($request->all());
         return $this->response($lesson);

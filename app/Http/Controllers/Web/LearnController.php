@@ -9,7 +9,6 @@ use App\Models\Lesson\Lesson;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LearnController extends Controller
 {

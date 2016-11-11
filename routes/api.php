@@ -21,7 +21,7 @@ Route::post('/password/email', 'Api\ForgotPasswordController@sendResetLinkEmail'
 
 Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
-    Route::post('/lessons', 'Api\LessonController@createLesson');
+    Route::post('/lessons', 'Api\LessonController@storeLesson');
 
     Route::get('/lessons/owned', 'Api\LessonController@fetchOwnedLessons');
 
@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
     Route::delete('/lessons/{lesson}', 'Api\LessonController@deleteLesson');
 
-    Route::post('/lessons/{lesson}/exercises', 'Api\ExerciseController@createExercise');
+    Route::post('/lessons/{lesson}/exercises', 'Api\ExerciseController@storeExercise');
 
     Route::get('/exercises/{exercise}', 'Api\ExerciseController@fetchExercise');
 

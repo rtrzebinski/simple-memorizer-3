@@ -13,7 +13,7 @@ class BaseTestCase extends \TestCase
     protected function assertForbidden()
     {
         $this->assertResponseStatus(403);
-        $this->see('This action is unauthorized.');
+        $this->see('This action is unauthorized');
     }
 
     protected function assertNotFound()

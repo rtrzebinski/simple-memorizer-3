@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Requests\CreateExerciseRequest;
+use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise\Exercise;
 use App\Models\Lesson\Lesson;
@@ -23,10 +23,10 @@ class ExerciseController extends Controller
 
     /**
      * @param Lesson $lesson
-     * @param CreateExerciseRequest $request
+     * @param StoreExerciseRequest $request
      * @return RedirectResponse
      */
-    public function store(Lesson $lesson, CreateExerciseRequest $request) : RedirectResponse
+    public function store(Lesson $lesson, StoreExerciseRequest $request) : RedirectResponse
     {
         $exercise = new Exercise($request->all());
         $exercise->lesson_id = $lesson->id;

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Password;
 
 class ForgotPasswordController extends Controller
 {
     /**
-     * Send a reset link to the given user.
-     *
-     * @param  Request $request
-     * @return RedirectResponse
+     * @param Request $request
+     * @return JsonResponse|null
      */
     public function sendResetLinkEmail(Request $request)
     {

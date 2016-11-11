@@ -3,11 +3,9 @@
 namespace Tests\Http\Controllers\Api;
 
 use App\Models\User\UserRepository;
-use Illuminate\Http\Response;
 use PHPUnit_Framework_MockObject_MockObject;
-use TestCase;
 
-class LoginControllerTest extends TestCase
+class LoginControllerTest extends BaseTestCase
 {
     /**
      * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
@@ -20,6 +18,8 @@ class LoginControllerTest extends TestCase
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
         $this->app->instance(UserRepository::class, $this->userRepositoryMock);
     }
+
+    // login
 
     public function testItShould_loginUser()
     {
@@ -38,7 +38,7 @@ class LoginControllerTest extends TestCase
             'password' => $password,
         ]);
 
-        $this->assertResponseStatus(Response::HTTP_OK);
+        $this->assertResponseOk();
         $this->seeJson($user->makeVisible('api_token')->toArray());
     }
 
@@ -50,7 +50,7 @@ class LoginControllerTest extends TestCase
 
         $this->callApi('POST', '/login');
 
-        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertInvalidInput();
     }
 
     public function testItShould_notLoginUser_incorrectCredentials()
@@ -68,6 +68,6 @@ class LoginControllerTest extends TestCase
             'password' => $password,
         ]);
 
-        $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
+        $this->assertUnauthorised();
     }
 }

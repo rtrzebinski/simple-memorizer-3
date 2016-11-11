@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\NotEnoughExercisesException;
-use App\Http\Requests\CreateExerciseRequest;
+use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\FetchRandomExerciseOfLessonRequest;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise\Exercise;
@@ -14,11 +14,11 @@ use Illuminate\Http\JsonResponse;
 class ExerciseController extends Controller
 {
     /**
-     * @param CreateExerciseRequest $request
+     * @param StoreExerciseRequest $request
      * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function createExercise(CreateExerciseRequest $request, Lesson $lesson)
+    public function storeExercise(StoreExerciseRequest $request, Lesson $lesson) : JsonResponse
     {
         $exercise = new Exercise($request->all());
         $exercise->lesson_id = $lesson->id;
@@ -31,7 +31,7 @@ class ExerciseController extends Controller
      * @param Exercise $exercise
      * @return JsonResponse
      */
-    public function fetchExercise(Exercise $exercise)
+    public function fetchExercise(Exercise $exercise) : JsonResponse
     {
         $this->authorizeForUser($this->user(), 'access', $exercise);
         return $this->response($exercise);
@@ -41,7 +41,7 @@ class ExerciseController extends Controller
      * @param Lesson $lesson
      * @return JsonResponse
      */
-    public function fetchExercisesOfLesson(Lesson $lesson)
+    public function fetchExercisesOfLesson(Lesson $lesson) : JsonResponse
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
         return $this->response($lesson->exercises);
@@ -52,7 +52,7 @@ class ExerciseController extends Controller
      * @param Exercise $exercise
      * @return JsonResponse
      */
-    public function updateExercise(UpdateExerciseRequest $request, Exercise $exercise)
+    public function updateExercise(UpdateExerciseRequest $request, Exercise $exercise) : JsonResponse
     {
         $exercise->update($request->all());
         return $this->response($exercise);
@@ -77,7 +77,8 @@ class ExerciseController extends Controller
     public function fetchRandomExerciseOfLesson(
         FetchRandomExerciseOfLessonRequest $request,
         Lesson $lesson
-    ) {
+    ) : JsonResponse
+    {
         $exercise = $lesson->fetchRandomExercise($this->user()->id, $request->previous_exercise_id);
         return $this->response($exercise);
     }
