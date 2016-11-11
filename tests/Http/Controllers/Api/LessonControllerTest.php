@@ -189,6 +189,13 @@ class LessonControllerTest extends BaseTestCase
         $this->seeJson([$lesson->toArray()]);
     }
 
+    public function testItShould_notFetchOwnedLessons_unauthorized()
+    {
+        $this->callApi('GET', '/lessons/owned');
+
+        $this->assertUnauthorised();
+    }
+
     // fetchSubscribedLessons
 
     public function testItShould_fetchSubscribedLessons()
@@ -201,6 +208,13 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertResponseOk();
         $this->seeJsonSubset([$lesson->toArray()]);
+    }
+
+    public function testItShould_notFetchSubscribedLessons_unauthorized()
+    {
+        $this->callApi('GET', '/lessons/subscribed');
+
+        $this->assertUnauthorised();
     }
 
     // updateLesson
