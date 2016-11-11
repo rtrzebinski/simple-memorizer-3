@@ -26,9 +26,4 @@ class BaseTestCase extends TestCase
     {
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
-
-    protected function assertInternalServerError()
-    {
-        $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
-    }
 }

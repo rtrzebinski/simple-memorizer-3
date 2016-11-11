@@ -21,7 +21,7 @@ class ForgotPasswordController extends Controller
         );
 
         if ($response !== Password::RESET_LINK_SENT) {
-            return $this->response('Unable to send reset link email.', 500);
+            return $this->response('Unable to send reset link email.', 450);
         }
     }
 }

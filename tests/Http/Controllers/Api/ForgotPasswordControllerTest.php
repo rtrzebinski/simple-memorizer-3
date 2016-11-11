@@ -41,6 +41,6 @@ class ForgotPasswordControllerTest extends BaseTestCase
     {
         $this->callApi('POST', '/password/email', ['email' => $this->randomEmail()]);
 
-        $this->assertInternalServerError();
+        $this->assertResponseStatus(450);
     }
 }
