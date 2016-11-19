@@ -389,4 +389,48 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertNotFound();
     }
+
+    // exportCsv
+
+    public function testItShould_exportCsv()
+    {
+        $user = $this->createUser();
+        $this->be($user);
+        $lesson = $this->createPrivateLesson($user);
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $result = $this->createExerciseResult([
+            'user_id' => $user->id,
+            'exercise_id' => $exercise->id,
+            'number_of_good_answers' => 3,
+            'number_of_bad_answers' => 1,
+            'percent_of_good_answers' => 75,
+        ]);
+
+        $this->call('GET', '/lessons/' . $lesson->id . '/csv');
+
+        $this->assertEquals('application/force-download', $this->response->headers->get('content-type'));
+        $this->assertEquals('attachment; filename="' . $lesson->name . '.csv"',
+            $this->response->headers->get('content-Disposition'));
+
+        $content = $this->response->content();
+        $lines = explode(PHP_EOL, $content);
+
+        $header = str_getcsv($lines[0]);
+        $this->assertEquals([
+            'question',
+            'answer',
+            'number_of_good_answers',
+            'number_of_bad_answers',
+            'percent_of_good_answers',
+        ], $header);
+
+        $first = str_getcsv($lines[1]);
+        $this->assertEquals([
+            $exercise->question,
+            $exercise->answer,
+            $result->number_of_good_answers,
+            $result->number_of_bad_answers,
+            $result->percent_of_good_answers,
+        ], $first);
+    }
 }

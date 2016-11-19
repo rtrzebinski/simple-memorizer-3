@@ -12,6 +12,7 @@
 */
 
 use App\Models\Exercise\Exercise;
+use App\Models\ExerciseResult\ExerciseResult;
 use App\Models\Lesson\Lesson;
 use App\Models\User\User;
 
@@ -40,5 +41,12 @@ $factory->define(Lesson::class, function (Faker\Generator $faker) {
         },
         'name' => $faker->words(10, true),
         'visibility' => 'public',
+    ];
+});
+
+$factory->define(ExerciseResult::class, function () {
+    return [
+        'user_id' => factory(User::class)->create()->id,
+        'exercise_id' => factory(Exercise::class)->create()->id,
     ];
 });

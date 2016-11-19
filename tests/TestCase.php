@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Exercise\Exercise;
+use App\Models\ExerciseResult\ExerciseResult;
 use App\Models\Lesson\Lesson;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
@@ -156,6 +157,15 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
+     * @param array $data
+     * @return ExerciseResult
+     */
+    protected function createExerciseResult(array $data = [])
+    {
+        return factory(ExerciseResult::class)->create($data);
+    }
+
+    /**
      * @param User|null $user
      * @return Lesson
      */
@@ -183,19 +193,5 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
 
         return $this->createLesson($attributes);
-    }
-
-    protected function tearDown()
-    {
-        /*
-         * Clean up to speed up tests execution
-         */
-        $reflection = new ReflectionObject($this);
-        foreach ($reflection->getProperties() as $prop) {
-            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
-                $prop->setAccessible(true);
-                $prop->setValue($this, null);
-            }
-        }
     }
 }

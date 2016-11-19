@@ -16,6 +16,15 @@ trait InteractsWithExerciseResults
     }
 
     /**
+     * @param int $userId
+     * @return ExerciseResult|null
+     */
+    public function result(int $userId)
+    {
+        return $this->results()->where('exercise_results.user_id', $userId)->first();
+    }
+
+    /**
      * @return ExerciseRepository
      */
     protected function exerciseRepository() : ExerciseRepository

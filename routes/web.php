@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/{lesson}/subscribe-and-learn', 'Web\LessonController@subscribeAndLearn');
 
+    Route::get('/lessons/{lesson}/csv', 'Web\LessonController@exportCsv');
+
     // exercises
 
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');

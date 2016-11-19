@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\ExerciseResult\ExerciseResult;
 use App\Models\Lesson\Lesson;
+use Carbon\Carbon;
 use Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
+use League\Csv\Writer;
+use SplTempFileObject;
 
 class LessonController extends Controller
 {
@@ -120,5 +125,52 @@ class LessonController extends Controller
             $lesson->subscribe($this->user());
         }
         return redirect('/learn/lessons/' . $lesson->id);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return Response
+     */
+    public function exportCsv(Lesson $lesson) : Response
+    {
+        $writer = $this->createCsvWriter();
+
+        $writer->insertOne([
+            "question",
+            "answer",
+            "number_of_good_answers",
+            "number_of_bad_answers",
+            "percent_of_good_answers"
+        ]);
+
+        foreach ($lesson->exercises as $exercise) {
+            /** @var ExerciseResult $exerciseResult */
+            $exerciseResult = $exercise->result($this->user()->id);
+
+            $writer->insertOne([
+                'question' => $exercise->question,
+                'answer' => $exercise->answer,
+                'number_of_good_answers' => $exerciseResult->number_of_good_answers ?? 0,
+                'number_of_bad_answers' => $exerciseResult->number_of_bad_answers ?? 0,
+                'percent_of_good_answers' => $exerciseResult->percent_of_good_answers ?? 0,
+            ]);
+        }
+
+        $filename = $lesson->name . '.csv';
+
+        return response((string)$writer, 200)
+            ->header('Content-type', 'application/force-download')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
+
+    /**
+     * @return Writer
+     */
+    protected function createCsvWriter() : Writer
+    {
+        $writer = Writer::createFromFileObject(new SplTempFileObject); //the CSV file will be created using a temporary File
+        $writer->setDelimiter(","); //the delimiter will be the tab character
+        $writer->setNewline("\r\n"); //use windows line endings for compatibility with some csv libraries
+        return $writer;
     }
 }
