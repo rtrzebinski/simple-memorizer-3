@@ -438,12 +438,21 @@ class LessonControllerTest extends BaseTestCase
 
     public function testItShould_notExportCsv_unauthorised()
     {
-        // todo
+        $lesson = $this->createPrivateLesson();
+
+        $this->call('GET', '/lessons/' . $lesson->id . '/csv');
+
+        $this->assertUnauthorized();
     }
 
     public function testItShould_notExportCsv_lessonNotFound()
     {
-        // todo
+        $user = $this->createUser();
+        $this->be($user);
+
+        $this->call('GET', '/lessons/-1/csv');
+
+        $this->assertNotFound();
     }
 
     // importCsv
