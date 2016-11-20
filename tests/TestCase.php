@@ -6,7 +6,6 @@ use App\Models\Lesson\Lesson;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\UploadedFile;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
@@ -35,42 +34,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * @param string $message
-     */
-    protected function assertErrorMessage(string $message)
-    {
-        $sessionMessages = session()->get('errors')->messages();
-        if (isset($sessionMessages[0][0])) {
-            $this->assertEquals($message, $sessionMessages[0][0]);
-        } else {
-            $this->fail('No error messages in session.');
-        }
-    }
-
-    /**
      * Random, valid url.
      * @return string
      */
     public function randomUrl() : string
     {
         return 'http://' . uniqid() . '.example.com';
-    }
-
-    /**
-     * Call api route as guest, or authenticated user.
-     * @param $method
-     * @param $uri
-     * @param array $data
-     * @param User $user
-     * @return $this
-     */
-    protected function callApi($method, $uri, array $data = [], User $user = null)
-    {
-        $headers = [];
-        if ($user instanceof User) {
-            $headers = ['Authorization' => 'Bearer ' . $user->api_token];
-        }
-        return parent::json($method, 'api' . $uri, $data, $headers);
     }
 
     /**
@@ -99,19 +68,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function last($class) : Model
     {
         return app($class)->orderBy('id', 'desc')->first();
-    }
-
-    /**
-     * @param $extension
-     * @return PHPUnit_Framework_MockObject_MockObject|UploadedFile
-     */
-    protected function createUploadedFileMock(string $extension)
-    {
-        $file = $this->createMock(UploadedFile::class);
-        $file->method('getPath')->willReturn(uniqid());
-        $file->method('isValid')->willReturn(true);
-        $file->method('guessExtension')->willReturn($extension);
-        return $file;
     }
 
     /**
