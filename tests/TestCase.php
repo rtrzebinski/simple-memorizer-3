@@ -6,6 +6,7 @@ use App\Models\Lesson\Lesson;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Http\UploadedFile;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
@@ -31,14 +32,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
         return $app;
-    }
-
-    /**
-     * Dump current session and exit.
-     */
-    public function dumpSession()
-    {
-        dd(\Session::all());
     }
 
     /**
@@ -106,6 +99,19 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function last($class) : Model
     {
         return app($class)->orderBy('id', 'desc')->first();
+    }
+
+    /**
+     * @param $extension
+     * @return PHPUnit_Framework_MockObject_MockObject|UploadedFile
+     */
+    protected function createUploadedFileMock(string $extension)
+    {
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('getPath')->willReturn(uniqid());
+        $file->method('isValid')->willReturn(true);
+        $file->method('guessExtension')->willReturn($extension);
+        return $file;
     }
 
     /**

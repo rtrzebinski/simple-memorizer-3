@@ -38,4 +38,12 @@ class BaseTestCase extends \TestCase
     {
         return $this->response->original;
     }
+
+    /**
+     * Dump current session and exit.
+     */
+    public function dumpSession()
+    {
+        dd(\Session::all());
+    }
 }

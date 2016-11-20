@@ -3,6 +3,8 @@
 namespace Tests\Http\Controllers\Web;
 
 use App\Models\Lesson\Lesson;
+use Illuminate\Http\UploadedFile;
+use League\Csv\Writer;
 
 class LessonControllerTest extends BaseTestCase
 {
@@ -432,5 +434,175 @@ class LessonControllerTest extends BaseTestCase
             $result->number_of_bad_answers,
             $result->percent_of_good_answers,
         ], $first);
+    }
+
+    public function testItShould_notExportCsv_unauthorised()
+    {
+        // todo
+    }
+
+    public function testItShould_notExportCsv_lessonNotFound()
+    {
+        // todo
+    }
+
+    // importCsv
+
+    public function testItShould_importCsv()
+    {
+        $user = $this->createUser();
+        $this->be($user);
+        $lesson = $this->createPrivateLesson($user);
+
+        $path = tempnam(sys_get_temp_dir(), uniqid());
+
+        $file = $this->createUploadedFileMock('csv');
+        $file->method('getRealPath')->willReturn($path);
+
+        /** @var Writer $writer */
+        $writer = Writer::createFromPath($path);
+
+        $writer->insertOne([
+            'question',
+            'answer',
+            'number_of_good_answers',
+            'number_of_bad_answers',
+            'percent_of_good_answers',
+        ]);
+
+        $writer->insertOne($data = [
+            $question = uniqid(),
+            $answer = uniqid(),
+            $numberOfGoodAnswers = 2,
+            $numberOfBadAnswers = 8,
+            $percentOfGoodAnswers = 80,
+        ]);
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+
+        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertCount(1, $lesson->exercises);
+        $this->assertEquals($data[0], $lesson->exercises->first()->question);
+        $this->assertEquals($data[1], $lesson->exercises->first()->answer);
+        $this->assertEquals($lesson->id, $lesson->exercises->first()->lesson_id);
+        $this->assertEquals(2, $lesson->exercises->first()->result($user->id)->number_of_good_answers);
+        $this->assertEquals(8, $lesson->exercises->first()->result($user->id)->number_of_bad_answers);
+        $this->assertEquals(80, $lesson->exercises->first()->result($user->id)->percent_of_good_answers);
+    }
+
+    public function testItShould_notImportCsv_unauthorized()
+    {
+        $lesson = $this->createLesson();
+
+        /** @var string $path */
+        $path = tempnam(sys_get_temp_dir(), uniqid());
+
+        /** @var UploadedFile $file */
+        $file = new UploadedFile($path, uniqid());
+
+        /** @var Writer $writer */
+        $writer = Writer::createFromPath($path);
+
+        $writer->insertOne([
+            'question',
+            'answer',
+            'number_of_good_answers',
+            'number_of_bad_answers',
+            'percent_of_good_answers',
+        ]);
+
+        $writer->insertOne($data = [
+            $question = uniqid(),
+            $answer = uniqid(),
+            $numberOfGoodAnswers = 2,
+            $numberOfBadAnswers = 8,
+            $percentOfGoodAnswers = 80,
+        ]);
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+
+        $this->assertUnauthorized();
+    }
+
+    public function testItShould_notImportCsv_forbidden()
+    {
+        $user = $this->createUser();
+        $this->be($user);
+        $lesson = $this->createPrivateLesson();
+
+        /** @var string $path */
+        $path = tempnam(sys_get_temp_dir(), uniqid());
+
+        /** @var UploadedFile $file */
+        $file = new UploadedFile($path, uniqid());
+
+        /** @var Writer $writer */
+        $writer = Writer::createFromPath($path);
+
+        $writer->insertOne([
+            'question',
+            'answer',
+            'number_of_good_answers',
+            'number_of_bad_answers',
+            'percent_of_good_answers',
+        ]);
+
+        $writer->insertOne($data = [
+            $question = uniqid(),
+            $answer = uniqid(),
+            $numberOfGoodAnswers = 2,
+            $numberOfBadAnswers = 8,
+            $percentOfGoodAnswers = 80,
+        ]);
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+
+        $this->assertForbidden();
+    }
+
+    public function testItShould_notImportCsv_lessonNotFound()
+    {
+        $user = $this->createUser();
+        $this->be($user);
+
+        /** @var string $path */
+        $path = tempnam(sys_get_temp_dir(), uniqid());
+
+        /** @var UploadedFile $file */
+        $file = new UploadedFile($path, uniqid());
+
+        /** @var Writer $writer */
+        $writer = Writer::createFromPath($path);
+
+        $writer->insertOne([
+            'question',
+            'answer',
+            'number_of_good_answers',
+            'number_of_bad_answers',
+            'percent_of_good_answers',
+        ]);
+
+        $writer->insertOne($data = [
+            $question = uniqid(),
+            $answer = uniqid(),
+            $numberOfGoodAnswers = 2,
+            $numberOfBadAnswers = 8,
+            $percentOfGoodAnswers = 80,
+        ]);
+
+        $this->call('POST', '/lessons/-1/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+
+        $this->assertNotFound();
+    }
+
+    public function testItShould_notImportCsv_invalidInput()
+    {
+        $user = $this->createUser();
+        $this->be($user);
+        $lesson = $this->createPrivateLesson($user);
+
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv');
+
+        $this->assertInvalidInput();
     }
 }
