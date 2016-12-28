@@ -4,6 +4,8 @@ Application consists of web interface, and REST API which allows intergation wit
 
 [REST API documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki/REST-API)
 
+[Application live demo](http://peaceful-chamber-70920.herokuapp.com/home)
+
 ### How does it work
 
 - User can subscribe and learn one of lessons created by other users, or create own lesson. Lessons created by user might be public (these might be used by other users) or private (these are visible for lesson creator only).
