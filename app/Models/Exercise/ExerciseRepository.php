@@ -43,20 +43,21 @@ class ExerciseRepository
 
         $tmp = [];
         foreach ($exercises as $exercise) {
-            if ($exercise->results->isEmpty()) {
+            // Using already eager loaded 'results' relation (so no extra db call is required)
+            $results = $exercise->results->filter(function ($item) use ($userId) {
+                return $item->user_id == $userId;
+            });
+
+            if ($results->isEmpty()) {
                 /*
-                 * If results relation is not loaded, that means user has no answers for this exercises yet,
-                 * so we know that percent of good answers is 0
+                 * User has no answers for this exercise, so we know that percent of good answers is 0
                  */
                 $percentOfGoodAnswers = 0;
             } else {
                 /*
-                 * Using already loaded relation (so no extra db call is required) check percent of good answers
-                 * of a user
+                 * Check percent of good answers of a user
                  */
-                $percentOfGoodAnswers = $exercise->results->filter(function ($item) use ($userId) {
-                    return $item->user_id == $userId;
-                })->first()->percent_of_good_answers;
+                $percentOfGoodAnswers = $results->first()->percent_of_good_answers;
             }
 
             /*
@@ -119,7 +120,7 @@ class ExerciseRepository
         }
         throw new Exception('$percentOfGoodAnswers must be a value between 0 and 100');
     }
-    
+
     /**
      * @param int $exerciseId
      * @param int $userId

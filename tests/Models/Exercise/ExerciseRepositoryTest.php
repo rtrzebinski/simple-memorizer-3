@@ -9,6 +9,19 @@ use App\Models\Lesson\Lesson;
 
 class ExerciseRepositoryTest extends TestCase
 {
+    public function testItShould_returnRandomExercise_exerciseOnlyHasAnswersOfAnotherUser()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+
+        $exercise1 = $this->createExercise(['lesson_id' => $lesson->id]);
+        $exercise2 = $this->createExercise(['lesson_id' => $lesson->id]);
+        $exercise2->handleGoodAnswer($this->createUser()->id);
+
+        $this->assertExerciseCanWin($lesson, $user->id, $exercise1->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exercise2->id);
+    }
+
     public function testItShould_returnRandomExercise_noPossibleExercises()
     {
         $user = $this->createUser();
