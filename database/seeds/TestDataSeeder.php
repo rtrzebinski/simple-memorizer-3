@@ -121,7 +121,7 @@ class TestDataSeeder extends Seeder
 
         $user = factory(User::class)->create([
             'email' => 'admin@example.com',
-            'password' => bcrypt('admin'),
+            'password' => '$2y$12$/WfobkrcnlmQRIAAWcyw5OU6c9cj13SxGJNYtLSiTVhn8c0jQr1Au', // password: admin@example.com
         ]);
 
         // private lessons
