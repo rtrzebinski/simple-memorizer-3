@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.1",
+        "php": "~7.2",
         "laravel/framework": "5.3.*",
         "laravel/socialite": "^2.0",
         "league/csv": "^8.1"
