@@ -5,7 +5,7 @@ namespace Tests\Http\Controllers\Web;
 use App\Models\Lesson;
 use App\Services\LearningService;
 
-class LearnControllerTest extends BaseTestCase
+class LearningControllerTest extends BaseTestCase
 {
     // learn
 

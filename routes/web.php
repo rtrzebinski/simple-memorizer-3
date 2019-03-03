@@ -55,13 +55,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     // learn
 
-    Route::get('/learn/lessons/{lesson}', 'Web\LearnController@learnLesson');
+    Route::get('/learn/lessons/{lesson}', 'Web\LearningController@learnLesson');
 
-    Route::post('/learn/handle-good-answer/exercises/{exercise}/{lesson}', 'Web\LearnController@handleGoodAnswer');
+    Route::post('/learn/handle-good-answer/exercises/{exercise}/{lesson}', 'Web\LearningController@handleGoodAnswer');
 
-    Route::post('/learn/handle-bad-answer/exercises/{exercise}', 'Web\LearnController@handleBadAnswer');
+    Route::post('/learn/handle-bad-answer/exercises/{exercise}', 'Web\LearningController@handleBadAnswer');
 
-    Route::put('/learn/exercises/{exercise}/{lesson}', 'Web\LearnController@updateExercise');
+    Route::put('/learn/exercises/{exercise}/{lesson}', 'Web\LearningController@updateExercise');
 });
 
 Route::group(['middleware' => ['guest']], function () {

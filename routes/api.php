@@ -47,10 +47,10 @@ Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
     Route::delete('/exercises/{exercise}', 'Api\ExerciseController@deleteExercise');
 
-    Route::get('/lessons/{lesson}/exercises/random', 'Api\ExerciseController@fetchRandomExerciseOfLesson');
+    Route::get('/lessons/{lesson}/exercises/random', 'Api\LearningController@fetchRandomExerciseOfLesson');
 
-    Route::post('/exercises/{exercise}/handle-good-answer', 'Api\ExerciseController@handleGoodAnswer');
+    Route::post('/exercises/{exercise}/handle-good-answer', 'Api\LearningController@handleGoodAnswer');
 
-    Route::post('/exercises/{exercise}/handle-bad-answer', 'Api\ExerciseController@handleBadAnswer');
+    Route::post('/exercises/{exercise}/handle-bad-answer', 'Api\LearningController@handleBadAnswer');
 
 });

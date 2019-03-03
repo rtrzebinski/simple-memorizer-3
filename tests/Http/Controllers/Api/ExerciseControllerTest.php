@@ -2,10 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Exceptions\NotEnoughExercisesException;
 use App\Models\Exercise;
-use App\Models\Lesson;
-use App\Services\LearningService;
 
 class ExerciseControllerTest extends BaseTestCase
 {
@@ -21,7 +18,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
+        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input, $user);
 
         $this->assertResponseOk();
 
@@ -42,7 +39,7 @@ class ExerciseControllerTest extends BaseTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises');
+        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertUnauthorised();
     }
@@ -52,7 +49,7 @@ class ExerciseControllerTest extends BaseTestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
-        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
+        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
 
         $this->assertInvalidInput();
     }
@@ -67,7 +64,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
+        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input, $user);
 
         $this->assertForbidden();
     }
@@ -89,7 +86,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $user);
+        $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
         $this->seeJson($exercise->toArray());
@@ -99,7 +96,7 @@ class ExerciseControllerTest extends BaseTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('GET', '/exercises/' . $exercise->id);
+        $this->callApi('GET', '/exercises/'.$exercise->id);
 
         $this->assertUnauthorised();
     }
@@ -109,7 +106,7 @@ class ExerciseControllerTest extends BaseTestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $user);
+        $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
 
         $this->assertForbidden();
     }
@@ -131,7 +128,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
+        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
 
         $this->assertResponseOk();
         $this->seeJson([$exercise->toArray()]);
@@ -141,7 +138,7 @@ class ExerciseControllerTest extends BaseTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises');
+        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertUnauthorised();
     }
@@ -151,7 +148,7 @@ class ExerciseControllerTest extends BaseTestCase
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson();
 
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
+        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
 
         $this->assertForbidden();
     }
@@ -178,7 +175,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
+        $this->callApi('PATCH', '/exercises/'.$exercise->id, $input, $user);
 
         $this->assertResponseOk();
 
@@ -197,7 +194,7 @@ class ExerciseControllerTest extends BaseTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id);
+        $this->callApi('PATCH', '/exercises/'.$exercise->id);
 
         $this->assertUnauthorised();
     }
@@ -208,7 +205,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input = [], $user);
+        $this->callApi('PATCH', '/exercises/'.$exercise->id, $input = [], $user);
 
         $this->assertInvalidInput();
     }
@@ -223,7 +220,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
+        $this->callApi('PATCH', '/exercises/'.$exercise->id, $input, $user);
 
         $this->assertForbidden();
     }
@@ -245,7 +242,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
+        $this->callApi('DELETE', '/exercises/'.$exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
         $this->assertNull($exercise->fresh());
@@ -255,7 +252,7 @@ class ExerciseControllerTest extends BaseTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('DELETE', '/exercises/' . $exercise->id);
+        $this->callApi('DELETE', '/exercises/'.$exercise->id);
 
         $this->assertUnauthorised();
     }
@@ -265,7 +262,7 @@ class ExerciseControllerTest extends BaseTestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
+        $this->callApi('DELETE', '/exercises/'.$exercise->id, $input = [], $user);
 
         $this->assertForbidden();
     }
@@ -275,186 +272,6 @@ class ExerciseControllerTest extends BaseTestCase
         $user = $this->createUser();
 
         $this->callApi('DELETE', '/exercises/-1', $input = [], $user);
-
-        $this->assertNotFound();
-    }
-
-    // fetchRandomExerciseOfLesson
-
-    public function testItShould_fetchRandomExerciseOfLesson()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id]);
-        $previous = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exercise = $this->createExercise();
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(Lesson::class), $user->id, $previous->id)
-            ->willReturn($exercise);
-
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random',
-            ['previous_exercise_id' => $previous->id], $user);
-
-        $this->assertResponseOk();
-        $this->seeJson($exercise->toArray());
-    }
-
-    public function testItShould_notFetchRandomExerciseOfLesson_unauthorized()
-    {
-        $this->callApi('GET', '/lessons/' . $this->createLesson()->id . '/exercises/random', $data = []);
-
-        $this->assertUnauthorised();
-    }
-
-    public function testItShould_notFetchRandomExerciseOfLesson_forbidden()
-    {
-        $user = $this->createUser();
-
-        $this->callApi('GET', '/lessons/' . $this->createPrivateLesson()->id . '/exercises/random', $data = [], $user);
-
-        $this->assertForbidden();
-    }
-
-    public function testItShould_notFetchRandomExerciseOfLesson_notFound()
-    {
-        $user = $this->createUser();
-
-        $this->callApi('GET', '/lessons/-1/exercises/random', $data = [], $user);
-
-        $this->assertNotFound();
-    }
-
-    public function testItShould_notFetchRandomExerciseOfLesson_invalidPreviousExerciseId()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
-
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random',
-            ['previous_exercise_id' => -1], $user);
-
-        $this->assertInvalidInput();
-    }
-
-    public function testItShould_notFetchRandomExerciseOfLesson_notEnoughExercises()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id]);
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(Lesson::class), $user->id)
-            ->willThrowException(new NotEnoughExercisesException());
-
-        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', [], $user);
-
-        $this->assertResponseStatus(NotEnoughExercisesException::HTTP_RESPONSE_CODE);
-    }
-
-    // handleGoodAnswer
-
-    public function testItShould_handleGoodAnswer()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
-        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->once())->method('handleGoodAnswer')
-            ->with($exercise->id, $user->id);
-
-        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-good-answer', $data =
-            [], $user);
-
-        $this->assertResponseOk();
-    }
-
-    public function testItShould_notHandleGoodAnswer_unauthorized()
-    {
-        $exercise = $this->createExercise();
-
-        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-good-answer');
-
-        $this->assertUnauthorised();
-    }
-
-    public function testItShould_notHandleGoodAnswer_forbidden()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-good-answer', $data =
-            [], $user);
-
-        $this->assertForbidden();
-    }
-
-    public function testItShould_notHandleGoodAnswer_notFound()
-    {
-        $user = $this->createUser();
-
-        $this->callApi('POST', '/exercises/-1/handle-good-answer', $data =
-            [], $user);
-
-        $this->assertNotFound();
-    }
-
-    // handleBadAnswer
-
-    public function testItShould_handleBadAnswer()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
-        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->once())->method('handleBadAnswer')
-            ->with($exercise->id, $user->id);
-
-        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-bad-answer', $data =
-            [], $user);
-
-        $this->assertResponseOk();
-    }
-
-    public function testItShould_notHandleBadAnswer_unauthorized()
-    {
-        $exercise = $this->createExercise();
-
-        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-bad-answer');
-
-        $this->assertUnauthorised();
-    }
-
-    public function testItShould_notHandleBadAnswer_forbidden()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-bad-answer', $data =
-            [], $user);
-
-        $this->assertForbidden();
-    }
-
-    public function testItShould_notHandleBadAnswer_notFound()
-    {
-        $user = $this->createUser();
-
-        $this->callApi('POST', '/exercises/-1/handle-bad-answer', $data =
-            [], $user);
 
         $this->assertNotFound();
     }

@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class LearnController extends Controller
+class LearningController extends Controller
 {
     /**
      * @param Lesson          $lesson
