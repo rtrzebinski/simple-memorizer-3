@@ -51,7 +51,7 @@
                                 @endcan
                                 </thead>
                                 <tbody>
-                                @foreach($lesson->exercises as $row)
+                                @foreach($lesson->all_exercises as $row)
                                     <tr>
                                         @can('modify', $lesson)
                                         <td>

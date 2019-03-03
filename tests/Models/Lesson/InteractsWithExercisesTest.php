@@ -40,7 +40,7 @@ class InteractsWithExercisesTest extends TestCase
         $exercise = $this->createExercise();
 
         $this->exerciseRepository->method('fetchRandomExerciseOfLesson')
-            ->with($this->lesson->id, $this->user->id, $previousExerciseId)
+            ->with($this->lesson, $this->user->id, $previousExerciseId)
             ->willReturn($exercise);
 
         $this->assertEquals($exercise, $this->lesson->fetchRandomExercise($this->user->id, $previousExerciseId));

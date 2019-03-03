@@ -3,7 +3,8 @@
 namespace App\Models\Exercise;
 
 use App\Models\ExerciseResult\ExerciseResult;
-use DB;
+use App\Models\Lesson\Lesson;
+use Illuminate\Support\Facades\DB;
 use App\Exceptions\NotEnoughExercisesException;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,22 +17,21 @@ class ExerciseRepository
      * Exercise that user knows less have more chance to be returned.
      * Exercise that user knows more have less chance to be returned.
      *
-     * @param int $lessonId
-     * @param int $userId
+     * @param Lesson   $lesson
+     * @param int      $userId
      * @param int|null $previousExerciseId
      * @return Exercise
      * @throws Exception
      * @throws NotEnoughExercisesException
      */
-    public function fetchRandomExerciseOfLesson(int $lessonId, int $userId, int $previousExerciseId = null) : Exercise
+    public function fetchRandomExerciseOfLesson(Lesson $lesson, int $userId, int $previousExerciseId = null): Exercise
     {
         /** @var Exercise[]|Collection $exercises */
-        $exercises = Exercise::select('exercises.*')
-            ->with('results')
-            ->join('lessons', 'lessons.id', '=', 'exercises.lesson_id')
-            ->where('lessons.id', '=', $lessonId)
-            ->where('exercises.id', '!=', $previousExerciseId)
-            ->get();
+        $exercises = $lesson->all_exercises
+            ->filter(function (Exercise $exercise) use ($previousExerciseId) {
+                // filter out previously served exercise
+                return $exercise->id != $previousExerciseId;
+            });
 
         if ($exercises->count() == 1) {
             return $exercises->first();
@@ -41,9 +41,11 @@ class ExerciseRepository
             throw new NotEnoughExercisesException;
         }
 
+        // eager loading alleviates the N + 1 query problem
+        $exercises->load('results');
+
         $tmp = [];
         foreach ($exercises as $exercise) {
-            // Using already eager loaded 'results' relation (so no extra db call is required)
             $results = $exercise->results->filter(function ($item) use ($userId) {
                 return $item->user_id == $userId;
             });
@@ -86,7 +88,7 @@ class ExerciseRepository
      * @return int
      * @throws Exception
      */
-    public function calculateNumberOfPoints(int $percentOfGoodAnswers) : int
+    public function calculateNumberOfPoints(int $percentOfGoodAnswers): int
     {
         if ($percentOfGoodAnswers <= 100 && $percentOfGoodAnswers > 90) {
             return 1;
@@ -126,7 +128,7 @@ class ExerciseRepository
      * @param int $userId
      * @return int
      */
-    public function numberOfGoodAnswersOfUser(int $exerciseId, int $userId) : int
+    public function numberOfGoodAnswersOfUser(int $exerciseId, int $userId): int
     {
         $exerciseResult = $this->exerciseResult($exerciseId, $userId);
         return $exerciseResult ? $exerciseResult->number_of_good_answers : 0;
@@ -137,7 +139,7 @@ class ExerciseRepository
      * @param int $userId
      * @return int
      */
-    public function numberOfBadAnswersOfUser(int $exerciseId, int $userId) : int
+    public function numberOfBadAnswersOfUser(int $exerciseId, int $userId): int
     {
         $exerciseResult = $this->exerciseResult($exerciseId, $userId);
         return $exerciseResult ? $exerciseResult->number_of_bad_answers : 0;
@@ -148,7 +150,7 @@ class ExerciseRepository
      * @param int $userId
      * @return int
      */
-    public function percentOfGoodAnswersOfUser(int $exerciseId, int $userId) :int
+    public function percentOfGoodAnswersOfUser(int $exerciseId, int $userId): int
     {
         $exerciseResult = $this->exerciseResult($exerciseId, $userId);
         return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;
@@ -183,8 +185,8 @@ class ExerciseRepository
     }
 
     /**
-     * @param int $exerciseId
-     * @param int $userId
+     * @param int    $exerciseId
+     * @param int    $userId
      * @param string $field
      */
     private function increaseNumberOfAnswersOfUser(int $exerciseId, int $userId, string $field)
@@ -200,7 +202,7 @@ class ExerciseRepository
         } else {
             // raw db call to avoid MassAssignmentException
             DB::table('exercise_results')->where('id', '=', $exerciseResult->id)
-                ->update([$field => DB::raw($field . " + 1")]);
+                ->update([$field => DB::raw($field." + 1")]);
         }
 
         $exerciseResult->updatePercentOfGoodAnswers();

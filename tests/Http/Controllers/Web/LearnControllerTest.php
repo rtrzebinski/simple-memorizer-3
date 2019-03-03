@@ -3,6 +3,7 @@
 namespace Tests\Http\Controllers\Web;
 
 use App\Models\Exercise\ExerciseRepository;
+use App\Models\Lesson\Lesson;
 
 class LearnControllerTest extends BaseTestCase
 {
@@ -19,7 +20,7 @@ class LearnControllerTest extends BaseTestCase
         $this->app->instance(ExerciseRepository::class, $exerciseRepository);
 
         $exerciseRepository->method('fetchRandomExerciseOfLesson')
-            ->with($lesson->id, $user->id)
+            ->with($this->isInstanceOf(Lesson::class), $user->id)
             ->willReturn($exercise);
 
         $this->call('GET', '/learn/lessons/' . $lesson->id);
@@ -41,7 +42,7 @@ class LearnControllerTest extends BaseTestCase
         $this->app->instance(ExerciseRepository::class, $exerciseRepository);
 
         $exerciseRepository->method('fetchRandomExerciseOfLesson')
-            ->with($lesson->id, $user->id, $previous->id)
+            ->with($this->isInstanceOf(Lesson::class), $user->id, $previous->id)
             ->willReturn($exercise);
 
         $this->call('GET', '/learn/lessons/' . $lesson->id . '?previous_exercise_id=' . $previous->id);
