@@ -11,10 +11,10 @@
 |
 */
 
-use App\Models\Exercise\Exercise;
-use App\Models\ExerciseResult\ExerciseResult;
-use App\Models\Lesson\Lesson;
-use App\Models\User\User;
+use App\Models\Exercise;
+use App\Models\ExerciseResult;
+use App\Models\Lesson;
+use App\Models\User;
 
 $factory->define(User::class, function () {
     return [

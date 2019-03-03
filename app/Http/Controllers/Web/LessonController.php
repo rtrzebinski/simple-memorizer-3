@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Requests\LessonImportCsvRequest;
-use App\Models\Exercise\Exercise;
-use App\Models\ExerciseResult\ExerciseResult;
-use App\Models\Lesson\Lesson;
+use App\Models\Exercise;
+use App\Models\ExerciseResult;
+use App\Models\Lesson;
 use Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -145,7 +145,7 @@ class LessonController extends Controller
 
         foreach ($lesson->exercises as $exercise) {
             /** @var ExerciseResult $exerciseResult */
-            $exerciseResult = $exercise->result($this->user()->id);
+            $exerciseResult = $exercise->resultOfUser($this->user()->id);
 
             $writer->insertOne([
                 'question' => $exercise->question,

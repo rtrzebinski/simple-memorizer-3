@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\User\User;
-use App\Models\User\UserRepository;
+use App\Models\User;
+use App\Repositories\UserRepository;
 use Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 

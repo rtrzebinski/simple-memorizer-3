@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Models\Exercise;
+namespace App\Services;
 
-use App\Models\ExerciseResult\ExerciseResult;
-use App\Models\Lesson\Lesson;
-use Illuminate\Support\Facades\DB;
+use App\Models\Exercise;
+use App\Models\Lesson;
 use App\Exceptions\NotEnoughExercisesException;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\ExerciseResult;
+use Illuminate\Support\Facades\DB;
 
-class ExerciseRepository
+class LearningService
 {
     /**
      * Fetch random exercise of lesson
@@ -79,6 +80,24 @@ class ExerciseRepository
     }
 
     /**
+     * @param int $exerciseId
+     * @param int $userId
+     */
+    public function handleGoodAnswer(int $exerciseId, int $userId)
+    {
+        $this->increaseNumberOfAnswersOfUser($exerciseId, $userId, 'number_of_good_answers');
+    }
+
+    /**
+     * @param int $exerciseId
+     * @param int $userId
+     */
+    public function handleBadAnswer(int $exerciseId, int $userId)
+    {
+        $this->increaseNumberOfAnswersOfUser($exerciseId, $userId, 'number_of_bad_answers');
+    }
+
+    /**
      * Calculate number of points
      *
      * 1 means highest familiarity with the answer.
@@ -86,9 +105,9 @@ class ExerciseRepository
      *
      * @param int $percentOfGoodAnswers
      * @return int
-     * @throws Exception
+     * @throws \Exception
      */
-    public function calculateNumberOfPoints(int $percentOfGoodAnswers): int
+    private function calculateNumberOfPoints(int $percentOfGoodAnswers): int
     {
         if ($percentOfGoodAnswers <= 100 && $percentOfGoodAnswers > 90) {
             return 1;
@@ -124,83 +143,23 @@ class ExerciseRepository
     }
 
     /**
-     * @param int $exerciseId
-     * @param int $userId
-     * @return int
-     */
-    public function numberOfGoodAnswersOfUser(int $exerciseId, int $userId): int
-    {
-        $exerciseResult = $this->exerciseResult($exerciseId, $userId);
-        return $exerciseResult ? $exerciseResult->number_of_good_answers : 0;
-    }
-
-    /**
-     * @param int $exerciseId
-     * @param int $userId
-     * @return int
-     */
-    public function numberOfBadAnswersOfUser(int $exerciseId, int $userId): int
-    {
-        $exerciseResult = $this->exerciseResult($exerciseId, $userId);
-        return $exerciseResult ? $exerciseResult->number_of_bad_answers : 0;
-    }
-
-    /**
-     * @param int $exerciseId
-     * @param int $userId
-     * @return int
-     */
-    public function percentOfGoodAnswersOfUser(int $exerciseId, int $userId): int
-    {
-        $exerciseResult = $this->exerciseResult($exerciseId, $userId);
-        return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;
-    }
-
-    /**
-     * @param int $exerciseId
-     * @param int $userId
-     */
-    public function handleGoodAnswer(int $exerciseId, int $userId)
-    {
-        $this->increaseNumberOfAnswersOfUser($exerciseId, $userId, 'number_of_good_answers');
-    }
-
-    /**
-     * @param int $exerciseId
-     * @param int $userId
-     */
-    public function handleBadAnswer(int $exerciseId, int $userId)
-    {
-        $this->increaseNumberOfAnswersOfUser($exerciseId, $userId, 'number_of_bad_answers');
-    }
-
-    /**
-     * @param int $exerciseId
-     * @param int $userId
-     * @return array|\Illuminate\Database\Eloquent\Model|null|\stdClass|static
-     */
-    private function exerciseResult(int $exerciseId, int $userId)
-    {
-        return ExerciseResult::whereExerciseId($exerciseId)->whereUserId($userId)->first();
-    }
-
-    /**
      * @param int    $exerciseId
      * @param int    $userId
      * @param string $field
      */
     private function increaseNumberOfAnswersOfUser(int $exerciseId, int $userId, string $field)
     {
-        $exerciseResult = $this->exerciseResult($exerciseId, $userId);
+        $exerciseResult = ExerciseResult::whereExerciseId($exerciseId)->whereUserId($userId)->first();
 
         if (is_null($exerciseResult)) {
+            // create new exercise result
             $exerciseResult = new ExerciseResult();
             $exerciseResult->user_id = $userId;
             $exerciseResult->exercise_id = $exerciseId;
             $exerciseResult->{$field} = 1;
             $exerciseResult->save();
         } else {
-            // raw db call to avoid MassAssignmentException
+            // increase number of answers for existing exercise result
             DB::table('exercise_results')->where('id', '=', $exerciseResult->id)
                 ->update([$field => DB::raw($field." + 1")]);
         }

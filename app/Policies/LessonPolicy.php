@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Lesson\Lesson;
-use App\Models\User\User;
+use App\Models\Lesson;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Builder;
 

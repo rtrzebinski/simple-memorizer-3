@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\PatchLessonRequest;
-use App\Models\Lesson\Lesson;
+use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -29,6 +29,7 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function subscribeLesson(Lesson $lesson)
     {
@@ -38,6 +39,7 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function unsubscribeLesson(Lesson $lesson)
     {
@@ -48,6 +50,7 @@ class LessonController extends Controller
     /**
      * @param Lesson $lesson
      * @return JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function fetchLesson(Lesson $lesson) : JsonResponse
     {
@@ -84,6 +87,7 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function deleteLesson(Lesson $lesson)
     {

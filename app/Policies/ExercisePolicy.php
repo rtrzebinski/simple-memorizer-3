@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Exercise\Exercise;
+use App\Models\Exercise;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use App\Models\User\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class ExercisePolicy

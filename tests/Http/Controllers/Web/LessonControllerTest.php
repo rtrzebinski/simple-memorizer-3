@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use App\Models\Lesson\Lesson;
+use App\Models\Lesson;
 use Illuminate\Http\UploadedFile;
 use League\Csv\Writer;
 
@@ -494,9 +494,9 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($data[0], $lesson->exercises->first()->question);
         $this->assertEquals($data[1], $lesson->exercises->first()->answer);
         $this->assertEquals($lesson->id, $lesson->exercises->first()->lesson_id);
-        $this->assertEquals(2, $lesson->exercises->first()->result($user->id)->number_of_good_answers);
-        $this->assertEquals(8, $lesson->exercises->first()->result($user->id)->number_of_bad_answers);
-        $this->assertEquals(80, $lesson->exercises->first()->result($user->id)->percent_of_good_answers);
+        $this->assertEquals(2, $lesson->exercises->first()->resultOfUser($user->id)->number_of_good_answers);
+        $this->assertEquals(8, $lesson->exercises->first()->resultOfUser($user->id)->number_of_bad_answers);
+        $this->assertEquals(80, $lesson->exercises->first()->resultOfUser($user->id)->percent_of_good_answers);
     }
 
     public function testItShould_notImportCsv_unauthorized()

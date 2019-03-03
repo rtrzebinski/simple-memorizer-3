@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Repositories;
 
 use App\Exceptions\UserCreatedWithAnotherDriverException;
+use App\Models\User;
 use Hash;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
 class UserRepository
 {
     /**
-     * @param array $attributes
+     * @param array  $attributes
      * @param string $authDriver
      * @return User
      */
-    public function create(array $attributes, string $authDriver = null) : User
+    public function create(array $attributes, string $authDriver = null): User
     {
         $user = new User($attributes);
 
@@ -40,6 +41,7 @@ class UserRepository
      */
     public function findByCredentials(string $email, string $password)
     {
+        /** @var User $user */
         $user = User::whereEmail($email)->first();
 
         if ($user && Hash::check($password, $user->password)) {
@@ -51,11 +53,11 @@ class UserRepository
      * Check if matching user exists. Return it or create new.
      *
      * @param SocialiteUser $socialiteUser
-     * @param string $authDriver
+     * @param string        $authDriver
      * @return User
      * @throws UserCreatedWithAnotherDriverException
      */
-    public function handleSocialiteUser(SocialiteUser $socialiteUser, string $authDriver) : User
+    public function handleSocialiteUser(SocialiteUser $socialiteUser, string $authDriver): User
     {
         $user = User::whereEmail($socialiteUser->email)->first();
 

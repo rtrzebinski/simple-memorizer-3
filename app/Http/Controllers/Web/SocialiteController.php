@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Exceptions\UserCreatedWithAnotherDriverException;
-use App\Models\User\UserRepository;
+use App\Repositories\UserRepository;
 use Auth;
 use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;

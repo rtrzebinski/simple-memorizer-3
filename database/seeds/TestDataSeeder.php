@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Exercise\Exercise;
-use App\Models\User\User;
+use App\Models\Exercise;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\Lesson\Lesson;
+use App\Models\Lesson;
 
 class TestDataSeeder extends Seeder
 {

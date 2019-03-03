@@ -1,11 +1,10 @@
 <?php
 
-namespace Tests\Models\ExerciseResult;
+namespace Tests\Models;
 
-use App\Models\ExerciseResult\ExerciseResult;
-use TestCase;
+use App\Models\ExerciseResult;
 
-class ExerciseResultTest extends TestCase
+class ExerciseResultTest extends \TestCase
 {
     public function answersProvider()
     {

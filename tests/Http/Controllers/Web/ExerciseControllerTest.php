@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use App\Models\Exercise\Exercise;
+use App\Models\Exercise;
 
 class ExerciseControllerTest extends BaseTestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Models\Users;
+namespace Tests\Models\Repositories;
 
 use App\Exceptions\UserCreatedWithAnotherDriverException;
-use App\Models\User\UserRepository;
-use App\Models\User\User;
+use App\Models\User;
+use App\Repositories\UserRepository;
 use Hash;
 use TestCase;
 

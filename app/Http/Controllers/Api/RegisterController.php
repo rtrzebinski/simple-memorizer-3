@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User\UserRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class RegisterController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request        $request
      * @param UserRepository $userRepository
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request, UserRepository $userRepository)
     {

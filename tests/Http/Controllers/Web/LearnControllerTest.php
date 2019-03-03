@@ -2,8 +2,8 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use App\Models\Exercise\ExerciseRepository;
-use App\Models\Lesson\Lesson;
+use App\Models\Lesson;
+use App\Services\LearningService;
 
 class LearnControllerTest extends BaseTestCase
 {
@@ -16,10 +16,11 @@ class LearnControllerTest extends BaseTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $this->createExercise();
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->method('fetchRandomExerciseOfLesson')
+        $learningService->method('fetchRandomExerciseOfLesson')
             ->with($this->isInstanceOf(Lesson::class), $user->id)
             ->willReturn($exercise);
 
@@ -38,10 +39,11 @@ class LearnControllerTest extends BaseTestCase
         $previous = $lesson->exercises[0];
         $exercise = $this->createExercise();
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->method('fetchRandomExerciseOfLesson')
+        $learningService->method('fetchRandomExerciseOfLesson')
             ->with($this->isInstanceOf(Lesson::class), $user->id, $previous->id)
             ->willReturn($exercise);
 
@@ -116,10 +118,11 @@ class LearnControllerTest extends BaseTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises[0];
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->once())
+        $learningService->expects($this->once())
             ->method('handleGoodAnswer')
             ->with($exercise->id, $user->id);
 
@@ -134,10 +137,11 @@ class LearnControllerTest extends BaseTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises[0];
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->never())
+        $learningService->expects($this->never())
             ->method('handleGoodAnswer');
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
@@ -151,10 +155,11 @@ class LearnControllerTest extends BaseTestCase
         $lesson = $this->createExercise()->lesson;
         $exercise = $lesson->exercises[0];
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->never())
+        $learningService->expects($this->never())
             ->method('handleGoodAnswer');
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
@@ -166,10 +171,11 @@ class LearnControllerTest extends BaseTestCase
     {
         $this->be($user = $this->createUser());
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->never())
+        $learningService->expects($this->never())
             ->method('handleGoodAnswer');
 
         $this->call('POST', '/learn/handle-good-answer/exercises/-1/1');
@@ -187,10 +193,11 @@ class LearnControllerTest extends BaseTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises[0];
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->once())
+        $learningService->expects($this->once())
             ->method('handleBadAnswer')
             ->with($exercise->id, $user->id);
 
@@ -205,10 +212,11 @@ class LearnControllerTest extends BaseTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises[0];
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->never())
+        $learningService->expects($this->never())
             ->method('handleBadAnswer');
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
@@ -221,10 +229,11 @@ class LearnControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $exercise = $this->createExercise();
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->never())
+        $learningService->expects($this->never())
             ->method('handleBadAnswer');
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
@@ -236,10 +245,11 @@ class LearnControllerTest extends BaseTestCase
     {
         $this->be($user = $this->createUser());
 
-        $exerciseRepository = $this->createMock(ExerciseRepository::class);
-        $this->app->instance(ExerciseRepository::class, $exerciseRepository);
+        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
 
-        $exerciseRepository->expects($this->never())
+        $learningService->expects($this->never())
             ->method('handleBadAnswer');
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/-1');

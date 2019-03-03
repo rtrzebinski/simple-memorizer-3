@@ -3,7 +3,7 @@
 namespace Tests\Http\Controllers\Web;
 
 use App\Exceptions\UserCreatedWithAnotherDriverException;
-use App\Models\User\UserRepository;
+use App\Repositories\UserRepository;
 use Auth;
 use Laravel\Socialite\Two\AbstractProvider;
 use Socialite;

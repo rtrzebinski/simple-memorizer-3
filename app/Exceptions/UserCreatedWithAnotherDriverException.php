@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Models\User\User;
+use App\Models\User;
 use Exception;
 
 class UserCreatedWithAnotherDriverException extends Exception

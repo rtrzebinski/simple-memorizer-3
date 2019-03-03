@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\User\UserRepository;
+use App\Repositories\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class LoginControllerTest extends BaseTestCase

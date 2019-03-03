@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Models\Lesson;
+namespace Tests\Models;
 
 class LessonTest extends \TestCase
 {

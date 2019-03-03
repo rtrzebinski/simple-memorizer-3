@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Exercise\Exercise;
-use App\Models\Lesson\Lesson;
+use App\Models\Exercise;
+use App\Models\Lesson;
 use App\Policies\ExercisePolicy;
 use App\Policies\LessonPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User\User;
-use App\Models\User\UserRepository;
+use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -11,9 +11,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class LoginController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request        $request
      * @param UserRepository $userRepository
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request, UserRepository $userRepository)
     {

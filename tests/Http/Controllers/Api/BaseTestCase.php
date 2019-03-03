@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\User\User;
+use App\Models\User;
 use TestCase;
 use Illuminate\Http\Response;
 

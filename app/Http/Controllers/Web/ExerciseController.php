@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\UpdateExerciseRequest;
-use App\Models\Exercise\Exercise;
-use App\Models\Lesson\Lesson;
+use App\Models\Exercise;
+use App\Models\Lesson;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -14,6 +14,7 @@ class ExerciseController extends Controller
     /**
      * @param Lesson $lesson
      * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(Lesson $lesson) : View
     {
@@ -38,6 +39,7 @@ class ExerciseController extends Controller
     /**
      * @param Exercise $exercise
      * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(Exercise $exercise) : View
     {

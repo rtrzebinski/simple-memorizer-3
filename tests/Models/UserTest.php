@@ -1,10 +1,8 @@
 <?php
 
-namespace Tests\Models\Users;
+namespace Tests\Models;
 
-use TestCase;
-
-class InteractsWithLessonsTest extends TestCase
+class UserTest extends \TestCase
 {
     public function testItShould_fetchSubscribedLessons()
     {
@@ -86,5 +84,4 @@ class InteractsWithLessonsTest extends TestCase
 
         $this->assertFalse($user->hasOwnedOrSubscribedLessons());
     }
-
 }

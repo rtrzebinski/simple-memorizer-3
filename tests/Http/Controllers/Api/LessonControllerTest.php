@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\Lesson\Lesson;
+use App\Models\Lesson;
 
 class LessonControllerTest extends BaseTestCase
 {

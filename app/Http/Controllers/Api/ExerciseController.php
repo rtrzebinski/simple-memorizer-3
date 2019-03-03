@@ -6,8 +6,9 @@ use App\Exceptions\NotEnoughExercisesException;
 use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\FetchRandomExerciseOfLessonRequest;
 use App\Http\Requests\UpdateExerciseRequest;
-use App\Models\Exercise\Exercise;
-use App\Models\Lesson\Lesson;
+use App\Models\Exercise;
+use App\Models\Lesson;
+use App\Services\LearningService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -15,10 +16,10 @@ class ExerciseController extends Controller
 {
     /**
      * @param StoreExerciseRequest $request
-     * @param Lesson $lesson
+     * @param Lesson               $lesson
      * @return JsonResponse
      */
-    public function storeExercise(StoreExerciseRequest $request, Lesson $lesson) : JsonResponse
+    public function storeExercise(StoreExerciseRequest $request, Lesson $lesson): JsonResponse
     {
         $exercise = new Exercise($request->all());
         $exercise->lesson_id = $lesson->id;
@@ -30,8 +31,9 @@ class ExerciseController extends Controller
     /**
      * @param Exercise $exercise
      * @return JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function fetchExercise(Exercise $exercise) : JsonResponse
+    public function fetchExercise(Exercise $exercise): JsonResponse
     {
         $this->authorizeForUser($this->user(), 'access', $exercise);
         return $this->response($exercise);
@@ -40,8 +42,9 @@ class ExerciseController extends Controller
     /**
      * @param Lesson $lesson
      * @return JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function fetchExercisesOfLesson(Lesson $lesson) : JsonResponse
+    public function fetchExercisesOfLesson(Lesson $lesson): JsonResponse
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
         return $this->response($lesson->exercises);
@@ -49,10 +52,10 @@ class ExerciseController extends Controller
 
     /**
      * @param UpdateExerciseRequest $request
-     * @param Exercise $exercise
+     * @param Exercise              $exercise
      * @return JsonResponse
      */
-    public function updateExercise(UpdateExerciseRequest $request, Exercise $exercise) : JsonResponse
+    public function updateExercise(UpdateExerciseRequest $request, Exercise $exercise): JsonResponse
     {
         $exercise->update($request->all());
         return $this->response($exercise);
@@ -70,16 +73,18 @@ class ExerciseController extends Controller
 
     /**
      * @param FetchRandomExerciseOfLessonRequest $request
-     * @param Lesson $lesson
+     * @param LearningService                    $learningService
+     * @param Lesson                             $lesson
      * @return JsonResponse
+     * @throws Exception
      */
     public function fetchRandomExerciseOfLesson(
         FetchRandomExerciseOfLessonRequest $request,
+        LearningService $learningService,
         Lesson $lesson
-    ) : JsonResponse
-    {
+    ): JsonResponse {
         try {
-            $exercise = $lesson->fetchRandomExercise($this->user()->id, $request->previous_exercise_id);
+            $exercise = $learningService->fetchRandomExerciseOfLesson($lesson, $this->user()->id, $request->previous_exercise_id);
             return $this->response($exercise);
         } catch (NotEnoughExercisesException $e) {
             return $this->response('', NotEnoughExercisesException::HTTP_RESPONSE_CODE);
@@ -87,20 +92,24 @@ class ExerciseController extends Controller
     }
 
     /**
-     * @param Exercise $exercise
+     * @param Exercise        $exercise
+     * @param LearningService $learningService
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function handleGoodAnswer(Exercise $exercise)
+    public function handleGoodAnswer(Exercise $exercise, LearningService $learningService)
     {
         $this->authorizeForUser($this->user(), 'access', $exercise);
-        $exercise->handleGoodAnswer($this->user()->id);
+        $learningService->handleGoodAnswer($exercise->id, $this->user()->id);
     }
 
     /**
-     * @param Exercise $exercise
+     * @param Exercise        $exercise
+     * @param LearningService $learningService
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function handleBadAnswer(Exercise $exercise)
+    public function handleBadAnswer(Exercise $exercise, LearningService $learningService)
     {
         $this->authorizeForUser($this->user(), 'access', $exercise);
-        $exercise->handleBadAnswer($this->user()->id);
+        $learningService->handleBadAnswer($exercise->id, $this->user()->id);
     }
 }
