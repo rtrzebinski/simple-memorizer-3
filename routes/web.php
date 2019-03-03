@@ -57,11 +57,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/learn/lessons/{lesson}', 'Web\LearnController@learnLesson');
 
-    Route::post('/learn/handle-good-answer/exercises/{exercise}', 'Web\LearnController@handleGoodAnswer');
+    Route::post('/learn/handle-good-answer/exercises/{exercise}/{lesson}', 'Web\LearnController@handleGoodAnswer');
 
     Route::post('/learn/handle-bad-answer/exercises/{exercise}', 'Web\LearnController@handleBadAnswer');
 
-    Route::put('/learn/exercises/{exercise}', 'Web\LearnController@updateExercise');
+    Route::put('/learn/exercises/{exercise}/{lesson}', 'Web\LearnController@updateExercise');
 });
 
 Route::group(['middleware' => ['guest']], function () {

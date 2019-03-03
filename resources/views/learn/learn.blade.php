@@ -40,7 +40,7 @@
                         </br>
 
                         <div class="row">
-                            <form method="POST" id="update-exercise-form" action="/learn/exercises/{{ $exercise->id }}">
+                            <form method="POST" id="update-exercise-form" action="/learn/exercises/{{ $exercise->id }}/{{ $lesson->id }}">
                                 {{ csrf_field() }}
                                 <input name="_method" type="hidden" value="PUT">
                                 <div class="col-md-8 col-md-offset-2 margin-bottom">
@@ -85,7 +85,7 @@
                                 </a>
                             </div>
                             <form id="handle-good-answer-form"
-                                  action="/learn/handle-good-answer/exercises/{{ $exercise->id }}"
+                                  action="/learn/handle-good-answer/exercises/{{ $exercise->id }}/{{ $lesson->id }}"
                                   method="POST">
                                 {{ csrf_field() }}
                             </form>

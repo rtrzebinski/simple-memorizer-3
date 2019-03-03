@@ -13,10 +13,11 @@ use Illuminate\View\View;
 class LearnController extends Controller
 {
     /**
-     * @param Lesson $lesson
+     * @param Lesson  $lesson
      * @param Request $request
-     * @return RedirectResponse|View
+     * @return \Illuminate\Contracts\View\Factory|View
      * @throws NotEnoughExercisesException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function learnLesson(Lesson $lesson, Request $request)
     {
@@ -36,19 +37,22 @@ class LearnController extends Controller
 
     /**
      * @param Exercise $exercise
+     * @param int      $lessonId
      * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function handleGoodAnswer(Exercise $exercise) : RedirectResponse
+    public function handleGoodAnswer(Exercise $exercise, int $lessonId): RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
         $exercise->handleGoodAnswer($this->user()->id);
 
-        return redirect('/learn/lessons/' . $exercise->lesson_id . '?previous_exercise_id=' . $exercise->id);
+        return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
     }
 
     /**
      * @param Exercise $exercise
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function handleBadAnswer(Exercise $exercise)
     {
@@ -58,16 +62,18 @@ class LearnController extends Controller
     }
 
     /**
-     * @param Exercise $exercise
+     * @param Exercise              $exercise
+     * @param int                   $lessonId
      * @param UpdateExerciseRequest $request
      * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function updateExercise(Exercise $exercise, UpdateExerciseRequest $request) : RedirectResponse
+    public function updateExercise(Exercise $exercise, int $lessonId, UpdateExerciseRequest $request): RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 
         $exercise->update($request->all());
 
-        return redirect('/learn/lessons/' . $exercise->lesson_id . '?requested_exercise_id=' . $exercise->id);
+        return redirect('/learn/lessons/'.$lessonId.'?requested_exercise_id='.$exercise->id);
     }
 }
