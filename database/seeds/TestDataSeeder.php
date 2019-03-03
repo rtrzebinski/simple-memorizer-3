@@ -147,36 +147,44 @@ class TestDataSeeder extends Seeder
             'lesson_id' => $lesson->id,
         ]);
 
-        // owned lesson
-        $lesson = factory(Lesson::class)->create([
+        // owned lessons
+        $ownedMathLesson1 = factory(Lesson::class)->create([
             'name' => 'Math: multiplication table 1-100',
             'owner_id' => $user->id,
         ]);
         for ($i = 1; $i <= 10; $i++) {
             for ($j = 1; $j <= 10; $j++) {
                 factory(Exercise::class)->create([
-                    'lesson_id' => $lesson->id,
-                    'question' => $i . ' x ' . $j,
+                    'lesson_id' => $ownedMathLesson1->id,
+                    'question' => $i.' x '.$j,
                     'answer' => $i * $j,
                 ]);
             }
         }
 
-        // subscribed lesson
-        $lesson = factory(Lesson::class)->create([
+        $ownedMathLesson2 = factory(Lesson::class)->create([
             'name' => 'Math: multiplication table 100-400',
+            'owner_id' => $user->id,
         ]);
         for ($i = 10; $i <= 20; $i++) {
             for ($j = 10; $j <= 20; $j++) {
                 factory(Exercise::class)->create([
-                    'lesson_id' => $lesson->id,
-                    'question' => $i . ' x ' . $j,
+                    'lesson_id' => $ownedMathLesson2->id,
+                    'question' => $i.' x '.$j,
                     'answer' => $i * $j,
                 ]);
             }
         }
-        $lesson->subscribers()->save($user);
 
+        // owned aggregate lesson
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'All my math lessons aggregated',
+            'owner_id' => $user->id,
+        ]);
+        $lesson->lessonAggregate()->attach($ownedMathLesson1);
+        $lesson->lessonAggregate()->attach($ownedMathLesson2);
+
+        // subscribed lesson
         $lesson = factory(Lesson::class)->create([
             'name' => 'Math: multiplication table 400-900',
         ]);
@@ -184,12 +192,14 @@ class TestDataSeeder extends Seeder
             for ($j = 20; $j <= 30; $j++) {
                 factory(Exercise::class)->create([
                     'lesson_id' => $lesson->id,
-                    'question' => $i . ' x ' . $j,
+                    'question' => $i.' x '.$j,
                     'answer' => $i * $j,
                 ]);
             }
         }
+        $lesson->subscribers()->save($user);
 
+        // other lessons
         $lesson = factory(Lesson::class)->create([
             'name' => 'Math: adding integer numbers',
         ]);
@@ -198,7 +208,7 @@ class TestDataSeeder extends Seeder
             $b = rand(100, 10000);
             factory(Exercise::class)->create([
                 'lesson_id' => $lesson->id,
-                'question' => $a . ' + ' . $b,
+                'question' => $a.' + '.$b,
                 'answer' => $a + $b,
             ]);
         }
@@ -211,7 +221,7 @@ class TestDataSeeder extends Seeder
             $b = rand(100, 10000);
             factory(Exercise::class)->create([
                 'lesson_id' => $lesson->id,
-                'question' => $a . ' - ' . $b,
+                'question' => $a.' - '.$b,
                 'answer' => $a - $b,
             ]);
         }
@@ -219,10 +229,10 @@ class TestDataSeeder extends Seeder
 
     /**
      * @param string $name
-     * @param array $exercises
+     * @param array  $exercises
      * @return Lesson
      */
-    private function lesson(string $name, array $exercises = []) : Lesson
+    private function lesson(string $name, array $exercises = []): Lesson
     {
         $lesson = factory(Lesson::class)->create([
             'name' => $name,

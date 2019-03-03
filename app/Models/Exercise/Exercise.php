@@ -3,6 +3,7 @@
 namespace App\Models\Exercise;
 
 use App\Models\Lesson\Lesson;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Exercise\Exercise whereLessonId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Exercise\Exercise whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Exercise\Exercise whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExerciseResult\ExerciseResult[] $results
  */
 class Exercise extends Model

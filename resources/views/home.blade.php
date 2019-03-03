@@ -102,7 +102,7 @@
                                                 {{ str_limit($row->name, 50) }}
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->exercises->count() }} </br>
+                                                Number of exercises: {{ $row->all_exercises->count() }} </br>
                                                 Number of subscribers: {{ $row->subscribers->count() }} </br>
                                             </p>
                                             <p>
@@ -145,7 +145,7 @@
                                                 {{ str_limit($row->name, 50) }}
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->exercises->count() }} </br>
+                                                Number of exercises: {{ $row->all_exercises->count() }} </br>
                                                 Number of subscribers: {{ $row->subscribers->count() }} </br>
                                             </p>
                                             <p>
@@ -225,7 +225,7 @@
                                             {{ str_limit($row->name, 50) }}
                                         </h4>
                                         <p>
-                                            Number of exercises: {{ $row->exercises->count() }} </br>
+                                            Number of exercises: {{ $row->all_exercises->count() }} </br>
                                             Number of subscribers: {{ $row->subscribers->count() }} </br>
                                         </p>
                                         <p>

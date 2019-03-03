@@ -7,7 +7,7 @@
                 {{ $lesson->name }}
             </h4>
             <p>
-                Number of exercises: {{ $lesson->exercises->count() }} </br>
+                Number of exercises: {{ $lesson->all_exercises->count() }} </br>
                 Number of subscribers: {{ $lesson->subscribers->count() }} </br>
                 Visibility: {{ $lesson->visibility }} </br>
                                 <span class="help-block">

@@ -5,6 +5,7 @@ namespace Tests\Http\Controllers\Api;
 use App\Exceptions\NotEnoughExercisesException;
 use App\Models\Exercise\Exercise;
 use App\Models\Exercise\ExerciseRepository;
+use App\Models\Lesson\Lesson;
 
 class ExerciseControllerTest extends BaseTestCase
 {
@@ -291,7 +292,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->app->instance(ExerciseRepository::class, $exerciseRepository);
 
         $exerciseRepository->method('fetchRandomExerciseOfLesson')
-            ->with($lesson->id, $user->id, $previous->id)
+            ->with($this->isInstanceOf(Lesson::class), $user->id, $previous->id)
             ->willReturn($exercise);
 
         $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random',
@@ -346,7 +347,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->app->instance(ExerciseRepository::class, $exerciseRepository);
 
         $exerciseRepository->method('fetchRandomExerciseOfLesson')
-            ->with($lesson->id, $user->id)
+            ->with($this->isInstanceOf(Lesson::class), $user->id)
             ->willThrowException(new NotEnoughExercisesException());
 
         $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', [], $user);

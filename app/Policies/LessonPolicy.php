@@ -82,7 +82,7 @@ class LessonPolicy
      */
     public function learn(User $user, Lesson $lesson)
     {
-        return ($lesson->exercises()->count() >= config('app.min_exercises_to_learn_lesson')) &&
+        return ($lesson->all_exercises->count() >= config('app.min_exercises_to_learn_lesson')) &&
         $this->access($user, $lesson);
     }
 }

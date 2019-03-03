@@ -2,6 +2,7 @@
 
 namespace Tests\Models\Exercise;
 
+use App\Models\Exercise\ExerciseRepository;
 use TestCase;
 use App\Exceptions\NotEnoughExercisesException;
 use App\Models\Exercise\Exercise;
@@ -93,7 +94,7 @@ class ExerciseRepositoryTest extends TestCase
 
     private function assertExerciseCanWin(Lesson $lesson, int $userId, int $exerciseId, int $previousId = null)
     {
-        // 1000 retries is more then enough
+        // 1000 retries is more than enough
         $counter = 1000;
         do {
             if (!$counter--) {
