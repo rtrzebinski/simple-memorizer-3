@@ -43,10 +43,17 @@ class LearningService
         }
 
         // eager loading alleviates the N + 1 query problem
-        $exercises->load('results');
+        $exercises->load([
+            'results' => function ($relation) use ($userId) {
+                // only load exercise results of given user
+                $relation->where('exercise_results.user_id', $userId);
+            }
+        ]);
 
         $tmp = [];
         foreach ($exercises as $exercise) {
+            // fetch exercise results of given user only
+            // this is just in case as eager loading above should had already filtered this
             $results = $exercise->results->filter(function ($item) use ($userId) {
                 return $item->user_id == $userId;
             });
