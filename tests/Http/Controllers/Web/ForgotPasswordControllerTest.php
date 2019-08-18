@@ -27,27 +27,27 @@ class ForgotPasswordControllerTest extends BaseTestCase
 
         Notification::assertSentTo($user, ResetPassword::class);
         $this->assertSessionHas('status', 'We have e-mailed your password reset link!');
-        $this->assertRedirectedTo('/');
+        $this->assertResponseRedirectedTo('/');
     }
 
     public function testItShould_notSendResetLinkEmail_missingEmail()
     {
         $this->call('POST', 'password/email');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_invalidEmail()
     {
         $this->call('POST', 'password/email', ['email' => uniqid()]);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()
     {
         $this->call('POST', 'password/email', ['email' => $this->randomEmail()]);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 }

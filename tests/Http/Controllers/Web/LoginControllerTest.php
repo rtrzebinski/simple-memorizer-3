@@ -34,7 +34,7 @@ class LoginControllerTest extends BaseTestCase
         ]);
 
         $this->assertEquals($user->id, auth()->user()->id);
-        $this->assertRedirectedTo('/home');
+        $this->assertResponseRedirectedTo('/home');
     }
 
     public function testItShould_notLoginUser_invalidCredentials()
@@ -45,7 +45,7 @@ class LoginControllerTest extends BaseTestCase
         ]);
 
         $this->assertNull(auth()->user());
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_logoutUser()
@@ -55,6 +55,6 @@ class LoginControllerTest extends BaseTestCase
         $this->call('POST', '/logout');
 
         $this->assertNull(auth()->user());
-        $this->assertRedirectedTo('/');
+        $this->assertResponseRedirectedTo('/');
     }
 }

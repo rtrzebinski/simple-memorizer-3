@@ -25,7 +25,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notShowExerciseCreatePage_forbidden()
@@ -35,7 +35,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notShowExerciseCreatePage_lessonNotFound()
@@ -44,7 +44,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1/exercises/create');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // store
@@ -65,7 +65,7 @@ class ExerciseControllerTest extends BaseTestCase
         $exercise = $this->last(Exercise::class);
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
     }
 
     public function testItShould_notStoreExercise_unauthorized()
@@ -79,7 +79,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/exercises', $parameters);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notStoreExercise_forbidden()
@@ -94,7 +94,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/exercises', $parameters);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notStoreExercise_lessonNotFound()
@@ -108,7 +108,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/-1/exercises', $parameters);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     public function testItShould_notStoreExercise_invalidInput()
@@ -118,7 +118,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/exercises');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     // edit
@@ -142,7 +142,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/exercises/' . $exercise->id . '/edit');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notShowExerciseEditPage_forbidden()
@@ -153,7 +153,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/exercises/' . $exercise->id . '/edit');
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notShowExerciseEditPage_exerciseNotFound()
@@ -162,7 +162,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/exercises/-1/edit');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // update
@@ -184,7 +184,7 @@ class ExerciseControllerTest extends BaseTestCase
         $exercise = $exercise->fresh();
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
     }
 
     public function testItShould_notUpdateExercise_unauthorized()
@@ -199,7 +199,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notUpdateExercise_forbidden()
@@ -215,7 +215,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notUpdateExercise_exerciseNotFound()
@@ -229,7 +229,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('PUT', '/exercises/-1', $parameters);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     public function testItShould_notUpdateExercise_invalidInput()
@@ -240,7 +240,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('PUT', '/exercises/' . $exercise->id);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     // delete
@@ -254,7 +254,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->call('DELETE', '/exercises/' . $exercise->id);
 
         $this->assertNull($exercise->fresh());
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
     }
 
     public function testItShould_notDeleteExercise_unauthorized()
@@ -264,7 +264,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/exercises/' . $exercise->id);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notDeleteExercise_forbidden()
@@ -275,7 +275,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/exercises/' . $exercise->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notDeleteExercise_exerciseNotFound()
@@ -284,6 +284,6 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/exercises/-1');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 }

@@ -23,7 +23,7 @@ class LessonControllerTest extends BaseTestCase
     {
         $this->call('GET', '/lessons/create');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     // store
@@ -43,7 +43,7 @@ class LessonControllerTest extends BaseTestCase
         $lesson = $this->last(Lesson::class);
         $this->assertEquals($input['name'], $lesson->name);
         $this->assertEquals($input['visibility'], $lesson->visibility);
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
     }
 
     public function testItShould_notStoreLesson_unauthorized()
@@ -55,7 +55,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons', $input);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notStoreLesson_invalidInput()
@@ -64,7 +64,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     // view
@@ -86,7 +86,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notShowLessonViewPage_forbidden()
@@ -96,7 +96,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notShowLessonViewPage_lessonNotFound()
@@ -105,7 +105,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // edit
@@ -127,7 +127,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id . '/edit');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notShowLessonEditPage_forbidden()
@@ -137,7 +137,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id . '/edit');
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notShowLessonEditPage_lessonNotFound()
@@ -146,7 +146,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1/edit');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // update
@@ -167,7 +167,7 @@ class LessonControllerTest extends BaseTestCase
         $lesson = $lesson->fresh();
         $this->assertEquals($input['visibility'], $lesson->visibility);
         $this->assertEquals($input['name'], $lesson->name);
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
     }
 
     public function testItShould_notUpdateLesson_unauthorized()
@@ -181,7 +181,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('PUT', '/lessons/' . $lesson->id, $input);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notUpdateLesson_forbidden()
@@ -196,7 +196,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('PUT', '/lessons/' . $lesson->id, $input);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notUpdateLesson_lessonNotFound()
@@ -210,7 +210,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('PUT', '/lessons/-1', $input);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     public function testItShould_notUpdateLesson_invalidInput()
@@ -220,7 +220,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('PUT', '/lessons/' . $lesson->id);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     // delete
@@ -232,7 +232,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/lessons/' . $lesson->id);
 
-        $this->assertRedirectedTo('/home');
+        $this->assertResponseRedirectedTo('/home');
         $this->assertNull($lesson->fresh());
     }
 
@@ -242,7 +242,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/lessons/' . $lesson->id);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notDeleteLesson_forbidden()
@@ -252,7 +252,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/lessons/' . $lesson->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notDeleteLesson_lessonNotFound()
@@ -261,7 +261,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('DELETE', '/lessons/-1');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // subscribe
@@ -275,7 +275,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertCount(1, $user->subscribedLessons);
         $this->assertEquals($lesson->id, $user->subscribedLessons[0]->id);
-        $this->assertRedirectedBack();
+        $this->assertResponseRedirectedBack();
     }
 
     public function testItShould_notSubscribeLesson_unauthorized()
@@ -284,7 +284,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/subscribe');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notSubscribeLesson_forbidden()
@@ -295,7 +295,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('POST', '/lessons/' . $lesson->id . '/subscribe');
 
         $this->assertCount(0, $user->subscribedLessons);
-        $this->assertRedirectedBack();
+        $this->assertResponseRedirectedBack();
     }
 
     public function testItShould_notSubscribeLesson_lessonNotFound()
@@ -304,7 +304,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/-1/subscribe');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // unsubscribe
@@ -318,7 +318,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('POST', '/lessons/' . $lesson->id . '/unsubscribe');
 
         $this->assertCount(0, $user->subscribedLessons);
-        $this->assertRedirectedBack();
+        $this->assertResponseRedirectedBack();
     }
 
     public function testItShould_notUnsubscribeLesson_unauthorized()
@@ -327,7 +327,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/unsubscribe');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notUnsubscribeLesson_forbidden()
@@ -337,7 +337,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/unsubscribe');
 
-        $this->assertRedirectedBack();
+        $this->assertResponseRedirectedBack();
     }
 
     public function testItShould_notUnsubscribeLesson_lessonNotFound()
@@ -346,7 +346,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/-1/unsubscribe');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // subscribeAndLearn
@@ -360,7 +360,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertCount(1, $user->subscribedLessons);
         $this->assertEquals($lesson->id, $user->subscribedLessons[0]->id);
-        $this->assertRedirectedTo('/learn/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/learn/lessons/' . $lesson->id);
     }
 
     public function testItShould_notSubscribeAndLearn_unauthorized()
@@ -369,7 +369,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notSubscribeAndLearn_forbidden()
@@ -380,7 +380,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
         $this->assertCount(0, $user->subscribedLessons);
-        $this->assertRedirectedTo('/learn/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/learn/lessons/' . $lesson->id);
     }
 
     public function testItShould_notSubscribeAndLearn_lessonNotFound()
@@ -389,7 +389,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/-1/subscribe-and-learn');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // exportCsv
@@ -442,7 +442,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/' . $lesson->id . '/csv');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notExportCsv_lessonNotFound()
@@ -452,7 +452,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1/csv');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // importCsv
@@ -489,7 +489,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
-        $this->assertRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
         $this->assertCount(1, $lesson->exercises);
         $this->assertEquals($data[0], $lesson->exercises->first()->question);
         $this->assertEquals($data[1], $lesson->exercises->first()->answer);
@@ -530,7 +530,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notImportCsv_forbidden()
@@ -566,7 +566,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notImportCsv_lessonNotFound()
@@ -601,7 +601,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/-1/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     public function testItShould_notImportCsv_invalidInput()
@@ -612,6 +612,6 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('POST', '/lessons/' . $lesson->id . '/csv');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 }

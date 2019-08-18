@@ -2,9 +2,7 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use TestCase;
-
-class MainControllerTest extends TestCase
+class MainControllerTest extends BaseTestCase
 {
     public function testItShould_displayMainPage_authenticatedUser()
     {
@@ -12,7 +10,7 @@ class MainControllerTest extends TestCase
 
         $this->call('GET', '/');
 
-        $this->assertRedirectedTo('/home');
+        $this->assertResponseRedirectedTo('/home');
     }
 
     public function testItShould_displayMainPage_notAuthenticatedUser()

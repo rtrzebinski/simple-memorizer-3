@@ -21,7 +21,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertResponseOk();
 
-        $this->seeJson([
+        $this->seeJsonFragment([
             'visibility' => $input['visibility'],
             'name' => $input['name'],
             'owner_id' => $user->id,
@@ -38,7 +38,7 @@ class LessonControllerTest extends BaseTestCase
     {
         $this->callApi('POST', '/lessons');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notStoreLesson_invalidInput()
@@ -47,7 +47,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons', $input = [], $user);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     // subscribeLesson
@@ -69,7 +69,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/' . $lesson->id . '/user');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notSubscribeLesson_forbidden()
@@ -79,7 +79,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/' . $lesson->id . '/user', $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
         $this->assertEmpty($lesson->subscribers);
     }
 
@@ -89,7 +89,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/-1/user', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // unsubscribeLesson
@@ -112,7 +112,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/lessons/' . $lesson->id . '/user');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notUnsubscribeLesson_forbidden()
@@ -122,7 +122,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/lessons/' . $lesson->id . '/user', $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notUnsubscribeLesson_notFound()
@@ -131,7 +131,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/lessons/-1/user', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // fetchLesson
@@ -144,7 +144,7 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('GET', '/lessons/' . $lesson->id, $input = [], $user);
 
         $this->assertResponseOk();
-        $this->seeJson($lesson->toArray());
+        $this->seeJsonFragment($lesson->toArray());
     }
 
     public function testItShould_notFetchLesson_unauthorized()
@@ -154,7 +154,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/' . $lesson->id);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notFetchLesson_forbidden()
@@ -164,7 +164,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/' . $lesson->id, $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notFetchLesson_notFound()
@@ -173,7 +173,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/-1', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // fetchOwnedLessons
@@ -186,14 +186,14 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('GET', '/lessons/owned', $input = [], $user);
 
         $this->assertResponseOk();
-        $this->seeJson([$lesson->toArray()]);
+        $this->seeJsonFragment([$lesson->toArray()]);
     }
 
     public function testItShould_notFetchOwnedLessons_unauthorized()
     {
         $this->callApi('GET', '/lessons/owned');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     // fetchSubscribedLessons
@@ -207,14 +207,14 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('GET', '/lessons/subscribed', $input = [], $user);
 
         $this->assertResponseOk();
-        $this->seeJsonSubset([$lesson->toArray()]);
+        $this->seeJson([$lesson->toArray()]);
     }
 
     public function testItShould_notFetchSubscribedLessons_unauthorized()
     {
         $this->callApi('GET', '/lessons/subscribed');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     // updateLesson
@@ -233,7 +233,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->assertResponseOk();
 
-        $this->seeJson([
+        $this->seeJsonFragment([
             'visibility' => $input['visibility'],
             'name' => $input['name'],
         ]);
@@ -250,7 +250,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/lessons/' . $lesson->id);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notUpdateLesson_invalidInput()
@@ -264,7 +264,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/lessons/' . $lesson->id, $input, $user);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notUpdateLesson_forbidden()
@@ -279,7 +279,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/lessons/' . $lesson->id, $input, $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notUpdateLesson_notFound()
@@ -288,7 +288,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/lessons/-1', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // deleteLesson
@@ -310,7 +310,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/lessons/' . $lesson->id);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notDeleteLesson_forbidden()
@@ -320,7 +320,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/lessons/' . $lesson->id, $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notDeleteLesson_notFound()
@@ -329,6 +329,6 @@ class LessonControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/lessons/-1', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 }

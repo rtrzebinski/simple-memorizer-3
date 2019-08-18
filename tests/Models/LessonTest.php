@@ -16,7 +16,7 @@ class LessonTest extends \TestCase
 
         $this->assertCount(1, $parentLesson->lessonAggregate);
 
-        $this->seeInDatabase('lesson_aggregate', [
+        $this->assertDatabaseHas('lesson_aggregate', [
             'parent_lesson_id' => $parentLesson->id,
             'child_lesson_id' => $childLesson->id,
         ]);

@@ -23,6 +23,6 @@ class HomeControllerTest extends BaseTestCase
     {
         $this->call('GET', '/home');
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 }

@@ -42,13 +42,13 @@ class RegisterControllerTest extends BaseTestCase
         ]);
 
         $this->assertResponseOk();
-        $this->seeJson($user->makeVisible('api_token')->toArray());
+        $this->seeJsonFragment($user->makeVisible('api_token')->toArray());
     }
 
     public function testItShould_notRegisterUser_invalidInput()
     {
         $this->callApi('POST', '/register');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 }

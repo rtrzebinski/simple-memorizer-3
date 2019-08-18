@@ -74,7 +74,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('GET', '/learn/lessons/'.$lesson->id);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notShowLessonLearnPage_forbiddenToLearnLesson()
@@ -84,7 +84,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('GET', '/learn/lessons/'.$lesson->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
@@ -96,7 +96,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('GET', '/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$requested->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notShowLessonLearnPage_lessonNotFound()
@@ -105,7 +105,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('GET', '/learn/lessons/-1');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // handleGoodAnswer
@@ -128,7 +128,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
-        $this->assertRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
+        $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
     }
 
     public function testItShould_notHandleGoodAnswer_unauthorized()
@@ -146,7 +146,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notHandleGoodAnswer_forbidden()
@@ -164,7 +164,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notHandleGoodAnswer_exerciseNotFound()
@@ -180,7 +180,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-good-answer/exercises/-1/1');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // handleBadAnswer
@@ -221,7 +221,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notHandleBadAnswer_forbidden()
@@ -238,7 +238,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notHandleBadAnswer_exerciseNotFound()
@@ -254,7 +254,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/-1');
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // updateExercise
@@ -275,7 +275,7 @@ class LearningControllerTest extends BaseTestCase
         $exercise = $exercise->fresh();
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertRedirectedTo('/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$exercise->id);
+        $this->assertResponseRedirectedTo('/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$exercise->id);
     }
 
     public function testItShould_notUpdateExercise_unauthorized()
@@ -290,7 +290,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('PUT', '/learn/exercises/'.$exercise->id.'/'.$lesson->id, $parameters);
 
-        $this->assertUnauthorized();
+        $this->assertResponseUnauthorized();
     }
 
     public function testItShould_notUpdateExercise_forbidden()
@@ -306,7 +306,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('PUT', '/learn/exercises/'.$exercise->id.'/'.$lesson->id, $parameters);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notUpdateExercise_exerciseNotFound()
@@ -320,7 +320,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('PUT', '/learn/exercises/-1/1', $parameters);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     public function testItShould_notUpdateExercise_invalidInput()
@@ -331,6 +331,6 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('PUT', '/learn/exercises/'.$exercise->id.'/'.$lesson->id);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 }

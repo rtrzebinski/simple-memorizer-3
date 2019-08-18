@@ -39,7 +39,7 @@ class LoginControllerTest extends BaseTestCase
         ]);
 
         $this->assertResponseOk();
-        $this->seeJson($user->makeVisible('api_token')->toArray());
+        $this->seeJsonFragment($user->makeVisible('api_token')->toArray());
     }
 
     public function testItShould_notLoginUser_invalidInput()
@@ -50,7 +50,7 @@ class LoginControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/login');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notLoginUser_incorrectCredentials()
@@ -68,6 +68,6 @@ class LoginControllerTest extends BaseTestCase
             'password' => $password,
         ]);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 }
