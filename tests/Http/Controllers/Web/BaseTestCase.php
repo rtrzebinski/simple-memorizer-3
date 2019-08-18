@@ -2,12 +2,109 @@
 
 namespace Tests\Http\Controllers\Web;
 
+use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class BaseTestCase extends \TestCase
 {
+    /**
+     * @var TestResponse
+     */
+    protected $response;
+
+    /**
+     * Call the given URI.
+     *
+     * @param string $method
+     * @param string $uri
+     * @param array  $parameters
+     * @param array  $cookies
+     * @param array  $files
+     * @param array  $server
+     * @param string $content
+     */
+    public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+    {
+        $this->response = parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
+    }
+
+    /**
+     * @param int $status
+     */
+    protected function assertResponseStatus(int $status)
+    {
+        $this->assertEquals($status, $this->response->status());
+    }
+
+    protected function assertResponseOk()
+    {
+        $this->assertResponseStatus(Response::HTTP_OK);
+    }
+
+    protected function assertResponseUnauthorized()
+    {
+        $this->assertResponseStatus(Response::HTTP_FOUND);
+        $this->assertResponseRedirectedTo('/login');
+    }
+
+    protected function assertResponseForbidden()
+    {
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->see('This action is unauthorized');
+    }
+
+    protected function assertResponseNotFound()
+    {
+        $this->see('No query results for model');
+        $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    protected function assertResponseInvalidInput()
+    {
+        $this->assertResponseRedirectedBack();
+        $this->response->assertSessionHasErrors();
+    }
+
+    protected function assertResponseRedirectedBack()
+    {
+        $this->assertResponseStatus(Response::HTTP_FOUND);
+        $this->assertResponseRedirectedTo('http://localhost');
+    }
+
+    /**
+     * @param string $uri
+     */
+    protected function assertResponseRedirectedTo(string $uri)
+    {
+        $this->response->assertRedirect($uri);
+    }
+
+    /**
+     * Assert that the session has a given value.
+     * @param      $key
+     * @param null $value
+     */
+    protected function assertSessionHas($key, $value = null)
+    {
+        $this->response->assertSessionHas($key, $value);
+    }
+
+    /**
+     * @param string $message
+     */
+    protected function assertSessionErrorMessage(string $message)
+    {
+        $sessionMessages = session()->get('errors')->messages();
+        if (isset($sessionMessages[0][0])) {
+            $this->assertEquals($message, $sessionMessages[0][0]);
+        } else {
+            $this->fail('No error messages in session.');
+        }
+    }
+
     /**
      * @param $extension
      * @return PHPUnit_Framework_MockObject_MockObject|UploadedFile
@@ -24,59 +121,26 @@ class BaseTestCase extends \TestCase
     /**
      * @return View
      */
-    protected function view() : View
+    protected function view(): View
     {
         return $this->response->original;
     }
 
     /**
-     * Dump current session and exit.
+     * Assert that the response view has a given piece of bound data.
+     * @param      $key
+     * @param null $value
      */
-    public function dumpSession()
+    protected function assertViewHas($key, $value = null)
     {
-        dd(\Session::all());
+        $this->response->assertViewHas($key, $value);
     }
 
     /**
-     * @param string $message
+     * @param string $contents
      */
-    protected function assertErrorMessage(string $message)
+    protected function see(string $contents)
     {
-        $sessionMessages = session()->get('errors')->messages();
-        if (isset($sessionMessages[0][0])) {
-            $this->assertEquals($message, $sessionMessages[0][0]);
-        } else {
-            $this->fail('No error messages in session.');
-        }
-    }
-
-    protected function assertUnauthorized()
-    {
-        $this->assertResponseStatus(302);
-        $this->assertRedirectedTo('/login');
-    }
-
-    protected function assertForbidden()
-    {
-        $this->assertResponseStatus(403);
-        $this->see('This action is unauthorized');
-    }
-
-    protected function assertNotFound()
-    {
-        $this->see('No query results for model');
-        $this->assertResponseStatus(404);
-    }
-
-    protected function assertInvalidInput()
-    {
-        $this->assertRedirectedBack();
-        $this->assertSessionHasErrors();
-    }
-
-    protected function assertRedirectedBack()
-    {
-        $this->assertResponseStatus(302);
-        $this->assertRedirectedTo('http://localhost');
+        $this->response->assertSee($contents);
     }
 }

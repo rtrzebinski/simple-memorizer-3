@@ -40,7 +40,7 @@ class RegisterControllerTest extends BaseTestCase
         ]);
 
         $this->assertEquals($user->id, auth()->user()->id);
-        $this->assertRedirectedTo('/home');
+        $this->assertResponseRedirectedTo('/home');
     }
 
     public function testItShould_notRegisterUser_invalidInput()
@@ -52,6 +52,6 @@ class RegisterControllerTest extends BaseTestCase
         $this->call('POST', '/register');
 
         $this->assertNull(auth()->user());
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 }

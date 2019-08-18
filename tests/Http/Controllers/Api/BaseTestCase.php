@@ -9,39 +9,72 @@ use Illuminate\Http\Response;
 class BaseTestCase extends TestCase
 {
     /**
+     * @var \Illuminate\Foundation\Testing\TestResponse
+     */
+    private $response;
+
+    /**
      * Call api route as guest, or authenticated user.
-     * @param string $method
-     * @param string $uri
-     * @param array $data
+     * @param string    $method
+     * @param string    $uri
+     * @param array     $data
      * @param User|null $user
-     * @return $this
      */
     protected function callApi(string $method, string $uri, array $data = [], User $user = null)
     {
         $headers = [];
         if ($user instanceof User) {
-            $headers = ['Authorization' => 'Bearer ' . $user->api_token];
+            $headers = ['Authorization' => 'Bearer '.$user->api_token];
         }
-        return parent::json($method, 'api' . $uri, $data, $headers);
+        $this->response = parent::json($method, 'api'.$uri, $data, $headers);
     }
 
-    protected function assertUnauthorised()
+    /**
+     * @param int $status
+     */
+    protected function assertResponseStatus(int $status)
+    {
+        $this->assertEquals($status, $this->response->status());
+    }
+
+    protected function assertResponseOk()
+    {
+        $this->assertResponseStatus(Response::HTTP_OK);
+    }
+
+    protected function assertResponseUnauthorised()
     {
         $this->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-    protected function assertInvalidInput()
+    protected function assertResponseInvalidInput()
     {
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    protected function assertForbidden()
+    protected function assertResponseForbidden()
     {
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 
-    protected function assertNotFound()
+    protected function assertResponseNotFound()
     {
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @param array $json
+     */
+    protected function seeJsonFragment(array $json)
+    {
+        $this->response->assertJsonFragment($json);
+    }
+
+    /**
+     * @param array $json
+     */
+    protected function seeJson(array $json)
+    {
+        $this->response->assertJson($json);
     }
 }

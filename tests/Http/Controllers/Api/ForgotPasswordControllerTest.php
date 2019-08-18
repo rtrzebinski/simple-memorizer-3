@@ -27,14 +27,14 @@ class ForgotPasswordControllerTest extends BaseTestCase
     {
         $this->callApi('POST', '/password/email');
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_invalidEmail()
     {
         $this->callApi('POST', '/password/email', ['email' => uniqid()]);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()

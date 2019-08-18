@@ -30,14 +30,14 @@ class LearningControllerTest extends BaseTestCase
             ['previous_exercise_id' => $previous->id], $user);
 
         $this->assertResponseOk();
-        $this->seeJson($exercise->toArray());
+        $this->seeJsonFragment($exercise->toArray());
     }
 
     public function testItShould_notFetchRandomExerciseOfLesson_unauthorized()
     {
         $this->callApi('GET', '/lessons/'.$this->createLesson()->id.'/exercises/random', $data = []);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notFetchRandomExerciseOfLesson_forbidden()
@@ -46,7 +46,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/'.$this->createPrivateLesson()->id.'/exercises/random', $data = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notFetchRandomExerciseOfLesson_notFound()
@@ -55,7 +55,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/-1/exercises/random', $data = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     public function testItShould_notFetchRandomExerciseOfLesson_invalidPreviousExerciseId()
@@ -66,7 +66,7 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
             ['previous_exercise_id' => -1], $user);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notFetchRandomExerciseOfLesson_notEnoughExercises()
@@ -114,7 +114,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notHandleGoodAnswer_forbidden()
@@ -125,7 +125,7 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer', $data =
             [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notHandleGoodAnswer_notFound()
@@ -135,7 +135,7 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('POST', '/exercises/-1/handle-good-answer', $data =
             [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // handleBadAnswer
@@ -165,7 +165,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notHandleBadAnswer_forbidden()
@@ -176,7 +176,7 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer', $data =
             [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notHandleBadAnswer_notFound()
@@ -186,6 +186,6 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('POST', '/exercises/-1/handle-bad-answer', $data =
             [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 }

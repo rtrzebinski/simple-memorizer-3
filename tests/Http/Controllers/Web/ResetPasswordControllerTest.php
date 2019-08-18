@@ -23,7 +23,7 @@ class ResetPasswordControllerTest extends BaseTestCase
 
         DB::table('password_resets')->insert([
             'email' => $user->email,
-            'token' => $token,
+            'token' => bcrypt($token),
             'created_at' => Carbon::now(),
         ]);
 
@@ -37,7 +37,7 @@ class ResetPasswordControllerTest extends BaseTestCase
         $this->call('POST', 'password/reset', $parameters);
 
         $this->assertSessionHas('status', 'Your password has been reset!');
-        $this->assertRedirectedTo('/home');
+        $this->assertResponseRedirectedTo('/home');
     }
 
     public function testItShould_notResetPassword_invalidToken()
@@ -55,7 +55,7 @@ class ResetPasswordControllerTest extends BaseTestCase
 
         $this->call('POST', 'password/reset', $parameters);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notResetPassword_invalidPassword()
@@ -72,6 +72,6 @@ class ResetPasswordControllerTest extends BaseTestCase
 
         $this->call('POST', 'password/reset', $parameters);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 }

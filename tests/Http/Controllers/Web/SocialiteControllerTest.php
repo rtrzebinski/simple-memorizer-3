@@ -26,7 +26,7 @@ class SocialiteControllerTest extends BaseTestCase
 
         $this->call('GET', '/login/' . $driver);
 
-        $this->assertRedirectedTo($redirectUrl);
+        $this->assertResponseRedirectedTo($redirectUrl);
     }
 
     public function testItShould_handleProviderCallback()
@@ -52,7 +52,7 @@ class SocialiteControllerTest extends BaseTestCase
         $this->call('GET', '/login/callback/' . $driver);
 
         $this->assertEquals($user, Auth::user());
-        $this->assertRedirectedTo('/home');
+        $this->assertResponseRedirectedTo('/home');
     }
 
     public function testItShould_handleProviderCallback_regularUserAlreadyExists()
@@ -78,9 +78,9 @@ class SocialiteControllerTest extends BaseTestCase
         $this->call('GET', '/login/callback/' . $driver);
 
         $this->assertNull(Auth::user());
-        $this->assertRedirectedTo('/login');
+        $this->assertResponseRedirectedTo('/login');
         $message = "User with email '%s' exists, but was not created with %s. Try to login using email and password.";
-        $this->assertErrorMessage(sprintf($message, $socialiteUser->email, $driver));
+        $this->assertSessionErrorMessage(sprintf($message, $socialiteUser->email, $driver));
     }
 
     public function testItShould_handleProviderCallback_oauthUserAlreadyExists()
@@ -106,8 +106,8 @@ class SocialiteControllerTest extends BaseTestCase
         $this->call('GET', '/login/callback/' . $driver);
 
         $this->assertNull(Auth::user());
-        $this->assertRedirectedTo('/login');
+        $this->assertResponseRedirectedTo('/login');
         $message = "User with email '%s' exists, but was not created with %s. Try to login with %s.";
-        $this->assertErrorMessage(sprintf($message, $socialiteUser->email, $driver, $oldAuthDriver));
+        $this->assertSessionErrorMessage(sprintf($message, $socialiteUser->email, $driver, $oldAuthDriver));
     }
 }

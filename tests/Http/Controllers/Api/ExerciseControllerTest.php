@@ -22,7 +22,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->assertResponseOk();
 
-        $this->seeJson([
+        $this->seeJsonFragment([
             'question' => $input['question'],
             'answer' => $input['answer'],
             'lesson_id' => $lesson->id,
@@ -41,7 +41,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notStoreExercise_invalidInput()
@@ -51,7 +51,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notStoreExercise_forbidden()
@@ -66,7 +66,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input, $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notStoreExercise_notFound()
@@ -75,7 +75,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/lessons/-1/exercises', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // fetchExercise
@@ -89,7 +89,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
-        $this->seeJson($exercise->toArray());
+        $this->seeJsonFragment($exercise->toArray());
     }
 
     public function testItShould_notFetchExercise_unauthorized()
@@ -98,7 +98,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/exercises/'.$exercise->id);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notFetchExercise_forbidden()
@@ -108,7 +108,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notFetchExercise_notFound()
@@ -117,7 +117,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/exercises/-1', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // fetchExercisesOfLesson
@@ -131,7 +131,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
 
         $this->assertResponseOk();
-        $this->seeJson([$exercise->toArray()]);
+        $this->seeJsonFragment([$exercise->toArray()]);
     }
 
     public function testItShould_notFetchExercisesOfLesson_unauthorised()
@@ -140,7 +140,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises');
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notFetchExercisesOfLesson_forbidden()
@@ -150,7 +150,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notFetchExercisesOfLesson_notFound()
@@ -159,7 +159,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('GET', '/lessons/-1/exercises', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // updateExercise
@@ -179,7 +179,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->assertResponseOk();
 
-        $this->seeJson([
+        $this->seeJsonFragment([
             'question' => $input['question'],
             'answer' => $input['answer'],
         ]);
@@ -196,7 +196,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/exercises/'.$exercise->id);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notUpdateExercise_invalidInput()
@@ -207,7 +207,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/exercises/'.$exercise->id, $input = [], $user);
 
-        $this->assertInvalidInput();
+        $this->assertResponseInvalidInput();
     }
 
     public function testItShould_notUpdateExercise_forbidden()
@@ -222,7 +222,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/exercises/'.$exercise->id, $input, $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notUpdateExercise_notFound()
@@ -231,7 +231,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('PATCH', '/exercises/-1', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 
     // deleteExercise
@@ -254,7 +254,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/exercises/'.$exercise->id);
 
-        $this->assertUnauthorised();
+        $this->assertResponseUnauthorised();
     }
 
     public function testItShould_notDeleteExercise_forbidden()
@@ -264,7 +264,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/exercises/'.$exercise->id, $input = [], $user);
 
-        $this->assertForbidden();
+        $this->assertResponseForbidden();
     }
 
     public function testItShould_notDeleteExercise_notFound()
@@ -273,6 +273,6 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->callApi('DELETE', '/exercises/-1', $input = [], $user);
 
-        $this->assertNotFound();
+        $this->assertResponseNotFound();
     }
 }
