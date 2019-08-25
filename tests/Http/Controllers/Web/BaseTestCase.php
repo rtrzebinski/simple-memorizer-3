@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class BaseTestCase extends \TestCase
 {
@@ -107,7 +107,7 @@ class BaseTestCase extends \TestCase
 
     /**
      * @param $extension
-     * @return PHPUnit_Framework_MockObject_MockObject|UploadedFile
+     * @return MockObject|UploadedFile
      */
     protected function createUploadedFileMock(string $extension)
     {

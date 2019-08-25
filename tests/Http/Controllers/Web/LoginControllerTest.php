@@ -3,12 +3,12 @@
 namespace Tests\Http\Controllers\Web;
 
 use App\Repositories\UserRepository;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class LoginControllerTest extends BaseTestCase
 {
     /**
-     * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var UserRepository|MockObject
      */
     private $userRepositoryMock;
 
