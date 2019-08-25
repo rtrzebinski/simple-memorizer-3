@@ -12,7 +12,7 @@ class ExercisePolicyTest extends TestCase
      */
     private $policy;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->policy = new ExercisePolicy();

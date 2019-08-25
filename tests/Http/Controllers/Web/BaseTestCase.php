@@ -59,7 +59,7 @@ class BaseTestCase extends \TestCase
     protected function assertResponseNotFound()
     {
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
-        $this->see('Sorry, the page you are looking for could not be found.');
+        $this->see('Not Found');
     }
 
     protected function assertResponseInvalidInput()

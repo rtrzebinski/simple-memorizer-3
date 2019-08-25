@@ -15,7 +15,7 @@ class LearningServiceTest extends TestCase
      */
     private $learningService;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->learningService = new LearningService();

@@ -12,7 +12,7 @@ class RegisterControllerTest extends BaseTestCase
      */
     private $userRepositoryMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->userRepositoryMock = $this->createMock(UserRepository::class);

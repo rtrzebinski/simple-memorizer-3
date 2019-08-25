@@ -12,7 +12,7 @@ class LessonPolicyTest extends TestCase
      */
     private $policy;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->policy = new LessonPolicy;
