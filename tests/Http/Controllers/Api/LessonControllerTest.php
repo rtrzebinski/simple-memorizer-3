@@ -186,7 +186,7 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('GET', '/lessons/owned', $input = [], $user);
 
         $this->assertResponseOk();
-        $this->seeJsonFragment([$lesson->toArray()]);
+        $this->seeJson([$lesson->toArray()]);
     }
 
     public function testItShould_notFetchOwnedLessons_unauthorized()

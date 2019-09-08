@@ -37,7 +37,7 @@ class TestDataSeeder extends Seeder
             '28-29 May 1982' => 'Goose Green (Falklands War)',
             '17 July -12 September 2006' => 'Musa Qala (War in Afghanistan)',
         ];
-        $this->lesson('History: The greatest battles in British history', $exercises);
+        $this->lesson('History: The greatest battles in British history', $exercises, $bidirectional = true);
 
         // http://speakspeak.com/resources/vocabulary-elementary-pre-intermediate/70-common-irregular-verbs
         $exercises = [
@@ -70,7 +70,7 @@ class TestDataSeeder extends Seeder
             'go' => 'went, gone',
             'grow' => 'grew, grown',
         ];
-        $this->lesson('English: Common irregular verbs 1 (a-g)', $exercises);
+        $this->lesson('English: Common irregular verbs 1 (a-g)', $exercises, $bidirectional = true);
 
         // http://speakspeak.com/resources/vocabulary-elementary-pre-intermediate/70-common-irregular-verbs
         $exercises = [
@@ -117,7 +117,7 @@ class TestDataSeeder extends Seeder
             'win' => 'won, won',
             'write' => 'wrote, written',
         ];
-        $this->lesson('English: Common irregular verbs 2 (h-z)', $exercises);
+        $this->lesson('English: Common irregular verbs 2 (h-z)', $exercises, $bidirectional = true);
 
         $user = factory(User::class)->create([
             'email' => 'admin@example.com',
@@ -230,12 +230,14 @@ class TestDataSeeder extends Seeder
     /**
      * @param string $name
      * @param array  $exercises
+     * @param bool   $bidirectional
      * @return Lesson
      */
-    private function lesson(string $name, array $exercises = []): Lesson
+    private function lesson(string $name, array $exercises, bool $bidirectional): Lesson
     {
         $lesson = factory(Lesson::class)->create([
             'name' => $name,
+            'bidirectional' => $bidirectional,
         ]);
 
         foreach ($exercises as $k => $v) {

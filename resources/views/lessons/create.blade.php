@@ -35,6 +35,16 @@
                                             Private lessons are only visible for you.
                                         </span>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Bidirectional</label>
+                                        <select name="bidirectional" class="form-control">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                        <span class="help-block">
+                                            Bidirectional lesson will serve exercises in 2 versions -> regular + with question and answer reversed.
+                                        </span>
+                                    </div>
                                     <button type="submit" class="btn btn-default">Submit</button>
                                 </form>
                             </div>

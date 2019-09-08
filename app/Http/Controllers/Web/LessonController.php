@@ -32,6 +32,7 @@ class LessonController extends Controller
         $this->validate($request, [
             'visibility' => 'required|in:public,private',
             'name' => 'required|string',
+            'bidirectional' => 'required|boolean',
         ]);
 
         $lesson = new Lesson($request->all());
@@ -73,6 +74,7 @@ class LessonController extends Controller
         $this->validate($request, [
             'visibility' => 'required|in:public,private',
             'name' => 'required|string',
+            'bidirectional' => 'required|boolean',
         ]);
 
         $lesson->update($request->all());

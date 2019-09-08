@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult whereUserId($value)
  * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult query()
  */
 class ExerciseResult extends Model
 {

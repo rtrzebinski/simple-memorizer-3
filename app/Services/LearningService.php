@@ -50,6 +50,18 @@ class LearningService
             }
         ]);
 
+        // if lesson is bidirectional
+        // clone each exercise with reversed question and answer
+        // so both variants are in the collection
+        if ($lesson->bidirectional) {
+            foreach ($exercises as $exercise) {
+                $clonedExercise = clone $exercise;
+                $clonedExercise->question = $exercise->answer;
+                $clonedExercise->answer = $exercise->question;
+                $exercises->add($clonedExercise);
+            }
+        }
+
         $tmp = [];
         foreach ($exercises as $exercise) {
             // fetch exercise results of given user only

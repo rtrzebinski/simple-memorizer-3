@@ -30,6 +30,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
  * @mixin Eloquent
+ * @property int $bidirectional
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereBidirectional($value)
  */
 class Lesson extends Model
 {
@@ -41,6 +46,7 @@ class Lesson extends Model
     protected $fillable = [
         'visibility',
         'name',
+        'bidirectional',
     ];
 
     /**
@@ -50,6 +56,7 @@ class Lesson extends Model
      */
     protected $casts = [
         'owner_id' => 'int',
+        'bidirectional' => 'bool',
     ];
 
     /**

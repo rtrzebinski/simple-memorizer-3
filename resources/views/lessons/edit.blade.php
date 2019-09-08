@@ -15,6 +15,7 @@
                                 <form method="POST" content="" action="/lessons/{{ $lesson->id }}">
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="PUT">
+
                                     <div class="form-group">
                                         <label>Name</label>
                                         <input name="name" type="text" class="form-control" value="{{ $lesson->name }}">
@@ -22,6 +23,7 @@
                                             Descriptive name of the lesson.
                                         </span>
                                     </div>
+
                                     <div class="form-group">
                                         <label>Visibility</label>
                                         <select name="visibility" class="form-control">
@@ -33,6 +35,18 @@
                                             Private lessons are only visible for you.
                                         </span>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label>Bidirectional</label>
+                                        <select name="bidirectional" class="form-control">
+                                            <option @if($lesson->bidirectional) selected @endif value="1">Yes</option>
+                                            <option @if(!$lesson->bidirectional) selected @endif value="0">No</option>
+                                        </select>
+                                        <span class="help-block">
+                                            Bidirectional lesson will serve exercises in 2 versions -> regular + with question and answer reversed.
+                                        </span>
+                                    </div>
+
                                     <button type="submit" class="btn btn-default">Submit</button>
                                 </form>
                             </div>

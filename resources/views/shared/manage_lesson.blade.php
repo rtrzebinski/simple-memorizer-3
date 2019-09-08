@@ -9,6 +9,7 @@
             <p>
                 Number of exercises: {{ $lesson->all_exercises->count() }} </br>
                 Number of subscribers: {{ $lesson->subscribers->count() }} </br>
+                Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
                 Visibility: {{ $lesson->visibility }} </br>
                                 <span class="help-block">
                                     Public lessons can be subscribed by other users, but only you can modify them. </br>

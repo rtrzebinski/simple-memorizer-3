@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereQuestion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereUpdatedAt($value)
  * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise query()
  */
 class Exercise extends Model
 {
