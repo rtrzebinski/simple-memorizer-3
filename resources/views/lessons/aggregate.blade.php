@@ -4,32 +4,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                @include('shared.manage_lesson')
+
                 <div class="panel panel-default">
                     <div class="panel-heading">Aggregate</div>
                     <div class="panel-body">
                         <div class="table-responsive">
-
-                            <div class="col-md-6 no-padding">
-                                <h4>
-                                    <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                    {{ $parentLesson->name }}
-                                </h4>
-                                <p>
-                                    Number of exercises: {{ $parentLesson->all_exercises->count() }}
-                                </p>
-                            </div>
-                            <div class="col-md-6 no-padding">
-                                <p>
-                                    <a href="/learn/lessons/{{ $parentLesson->id }}" class="btn btn-primary margin-bottom" role="button">
-                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                        Start
-                                    </a>
-                                    <a href="/lessons/{{ $parentLesson->id }}" class="btn btn-default margin-bottom">
-                                        <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                        Lesson
-                                    </a>
-                                </p>
-                            </div>
 
                             <form action="" method="POST">
                                 <table class="table table-bordred table-striped">

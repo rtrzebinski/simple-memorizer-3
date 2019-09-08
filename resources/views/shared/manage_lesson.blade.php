@@ -11,10 +11,6 @@
                 Number of subscribers: {{ $lesson->subscribers->count() }} </br>
                 Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
                 Visibility: {{ $lesson->visibility }} </br>
-                                <span class="help-block">
-                                    Public lessons can be subscribed by other users, but only you can modify them. </br>
-                                    Private lessons are only visible for you.
-                                </span>
             </p>
 
         </div>
@@ -57,6 +53,10 @@
                 <a href="" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
                     Import exercises from CSV file
+                </a>
+                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
+                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                    Exercises
                 </a>
                 <a href="/lessons/aggregate/{{ $lesson->id }}" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>

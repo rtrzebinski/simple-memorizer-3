@@ -22,7 +22,7 @@ class LessonAggregateControllerTest extends BaseTestCase
 
         $viewData = $this->view()->getData();
 
-        $this->assertEquals($parentLesson->id, $viewData['parentLesson']->id);
+        $this->assertEquals($parentLesson->id, $viewData['lesson']->id);
 
         $this->assertEquals([
             [

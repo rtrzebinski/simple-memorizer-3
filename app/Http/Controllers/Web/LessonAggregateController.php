@@ -47,7 +47,7 @@ class LessonAggregateController extends Controller
         }
 
         return view('lessons.aggregate', [
-            'parentLesson' => $parentLesson,
+            'lesson' => $parentLesson,
             'lessons' => $lessons,
         ]);
     }
