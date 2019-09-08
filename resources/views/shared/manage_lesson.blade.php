@@ -7,10 +7,11 @@
                 {{ $lesson->name }}
             </h4>
             <p>
-                Number of exercises: {{ $lesson->all_exercises->count() }} </br>
-                Number of subscribers: {{ $lesson->subscribers->count() }} </br>
-                Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
                 Visibility: {{ $lesson->visibility }} </br>
+                Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
+                Number of exercises: {{ $lesson->all_exercises->count() }} </br>
+                Number of aggregates: {{ $lesson->lessonAggregate->count() }} </br>
+                Number of subscribers: {{ $lesson->subscribers->count() }} </br>
             </p>
 
         </div>
