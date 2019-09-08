@@ -164,7 +164,7 @@ class LessonControllerTest extends BaseTestCase
         $lesson = $lesson->fresh();
         $this->assertEquals($input['visibility'], $lesson->visibility);
         $this->assertEquals($input['name'], $lesson->name);
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/edit');
     }
 
     public function testItShould_notUpdateLesson_unauthorized()

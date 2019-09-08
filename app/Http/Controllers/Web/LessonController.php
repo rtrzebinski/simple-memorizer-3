@@ -78,7 +78,7 @@ class LessonController extends Controller
         ]);
 
         $lesson->update($request->all());
-        return redirect('/lessons/' . $lesson->id);
+        return redirect('/lessons/' . $lesson->id . '/edit');
     }
 
     /**
