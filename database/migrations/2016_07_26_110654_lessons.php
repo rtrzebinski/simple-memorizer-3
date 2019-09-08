@@ -38,7 +38,7 @@ class Lessons extends Migration
      */
     public function down()
     {
-        Schema::drop('lessons');
         Schema::drop('lesson_user');
+        Schema::drop('lessons');
     }
 }
