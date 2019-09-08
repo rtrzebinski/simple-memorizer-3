@@ -36,9 +36,8 @@
                                     </tbody>
                                 </table>
                                 {{ csrf_field() }}
-                                <button type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-edit"></span> Save
-                                </button>
+
+                                <button type="submit" class="btn btn-default">Submit</button>
 
                             </form>
                         </div>
