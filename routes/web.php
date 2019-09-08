@@ -41,6 +41,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/{lesson}/csv', 'Web\LessonController@importCsv');
 
+    Route::get('/lessons/aggregate/{parentLesson}', 'Web\LessonAggregateController@index');
+
+    Route::post('/lessons/aggregate/{parentLesson}', 'Web\LessonAggregateController@sync');
+
     // exercises
 
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');

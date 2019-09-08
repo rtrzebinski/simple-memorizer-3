@@ -57,11 +57,11 @@
                     <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
                     Import exercises from CSV file
                 </a>
-                @endcan
-                <a href="/home" class="btn btn-default margin-bottom">
+                <a href="/lessons/aggregate/{{ $lesson->id }}" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                    Browse lessons
+                    Aggregate
                 </a>
+                @endcan
                 <a href="/lessons/{{ $lesson->id }}/csv" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                     Export exercises to CSV file

@@ -15,10 +15,6 @@
                                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                                     {{ $lesson->name }}
                                 </h4>
-                                <a href="/home" class="btn btn-default margin-bottom">
-                                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                    Browse lessons
-                                </a>
                                 <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
                                     Lesson
