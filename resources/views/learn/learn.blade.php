@@ -65,11 +65,11 @@
                                 <button type="submit" form="handle-good-answer-form" id="good-answer-button"
                                         class="btn btn-default btn-success margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                    Less
+                                    Ask less
                                 </button>
                                 <button id="bad-answer-button" class="btn btn-default btn-danger margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                    More
+                                    Ask more
                                 </button>
                                 <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $exercise->id }}">
                                     <button class="btn btn-default margin-bottom" id="next-button">
@@ -140,6 +140,17 @@
             if (ev.which == 39) {
                 // right arrow: 39
                 $("#next-button").click();
+            }
+            // quick learning - use space bar to show answer / skip to next question
+            if (ev.which == 32) {
+                // space: 32
+                if ($("#answer_input").is(':hidden')) {
+                    // space bar when answer is not shown - show answer
+                    $("#show_answer_button").click();
+                } else {
+                    // space bar when answer is shown - next
+                    $("#next-button").click();
+                }
             }
         });
     });
