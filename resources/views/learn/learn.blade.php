@@ -12,13 +12,9 @@
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
                                 <h4>
-                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                    {{ $lesson->name }}
-                                </h4>
-                                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                    Lesson
-                                </a>
+                                    <a href="/lessons/{{ $lesson->id }}" style="text-decoration:none;">{{ $lesson->name }}</a>
+                                </h4>
                                 @can('modify', $exercise)
                                     <button type="submit" form="update-exercise-form"
                                             class="btn btn-default margin-bottom">
