@@ -30,6 +30,12 @@
                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                     Show answer
                                 </button>
+                                <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $exercise->id }}">
+                                    <button class="btn btn-default margin-bottom" id="next-button">
+                                        <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                                        Next
+                                    </button>
+                                </a>
                             </div>
                         </div>
 
@@ -70,12 +76,6 @@
                                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                                     Ask more
                                 </button>
-                                <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $exercise->id }}">
-                                    <button class="btn btn-default margin-bottom" id="next-button">
-                                        <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                                        Next
-                                    </button>
-                                </a>
                             </div>
                             <form id="handle-good-answer-form"
                                   action="/learn/handle-good-answer/exercises/{{ $exercise->id }}/{{ $lesson->id }}"
