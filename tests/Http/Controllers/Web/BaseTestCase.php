@@ -143,4 +143,9 @@ class BaseTestCase extends \TestCase
     {
         $this->response->assertSee($contents);
     }
+
+    protected function dump()
+    {
+        dd($this->response->content());
+    }
 }

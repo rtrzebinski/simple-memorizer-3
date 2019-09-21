@@ -78,14 +78,16 @@
                                 </p>
                             </div>
                             <div class="col-md-4 no-padding">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search your lessons...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                    </button>
-                                </span>
-                                </div>
+                                <form action="/exercises/search" method="GET">
+                                    <div class="input-group">
+                                        <input id="search-phrase-input" name="phrase" type="text" class="form-control" placeholder="search.." value="{{ $phrase ?? '' }}">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">
+                                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -107,19 +109,19 @@
                                             </p>
                                             <p>
                                                 @can('learn', $row)
-                                                <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary"
-                                                   role="button">
-                                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                                    Start
-                                                </a>
+                                                    <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary"
+                                                       role="button">
+                                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                                        Start
+                                                    </a>
                                                 @endcan
                                                 @cannot('learn', $row)
-                                                <a href="/lessons/{{ $row->id }}/exercises/create"
-                                                   class="btn btn-success"
-                                                   role="button">
-                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                    Add exercise
-                                                </a>
+                                                    <a href="/lessons/{{ $row->id }}/exercises/create"
+                                                       class="btn btn-success"
+                                                       role="button">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                        Add exercise
+                                                    </a>
                                                 @endcannot
                                                 <a href="/lessons/{{ $row->id }}" class="btn btn-info"
                                                    role="button">

@@ -57,6 +57,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::delete('/exercises/{exercise}', 'Web\ExerciseController@delete');
 
+    Route::get('/exercises/search', 'Web\ExerciseSearchController@searchForExercises');
+
     // learn
 
     Route::get('/learn/lessons/{lesson}', 'Web\LearningController@learnLesson');

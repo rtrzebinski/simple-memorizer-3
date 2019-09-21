@@ -4,69 +4,41 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
-                @include('shared.manage_lesson')
-
                 <div class="panel panel-default">
-                    <div class="panel-heading">Exercises</div>
+                    <div class="panel-heading">Search for exercises</div>
                     <div class="panel-body">
-                        <div class="col-md-8 no-padding">
-                            @can('modify', $lesson)
-                            <p>
-                                <a href="/lessons/{{ $lesson->id }}/exercises/create"
-                                   class="btn btn-success margin-bottom" role="button">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                    Create new exercise
-                                </a>
-                                <button class="btn btn-danger margin-bottom" data-title="Delete"
-                                        data-toggle="modal" data-target="#delete">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                    Delete selected exercises
-                                </button>
-                            </p>
-                            @endcan
+                        <div class="col-md-4 no-padding margin-bottom">
+                            <form action="/exercises/search" method="GET">
+                                <div class="input-group">
+                                    <input id="search-phrase-input" name="phrase" type="text" class="form-control" placeholder="search.." value="{{ $phrase }}">
+                                    <span class="input-group-btn">
+                                    <button id="search-phrase-input-button" class="btn btn-default" type="submit">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                                </div>
+                            </form>
                         </div>
                         <div class="clearfix"></div>
                         <div class="table-responsive">
                             <table class="table table-bordred table-striped">
                                 <thead>
-                                @can('modify', $lesson)
-                                <th><input type="checkbox" id="checkall"/></th>
-                                @endcan
                                 <th>Question</th>
                                 <th>Answer</th>
-                                @can('modify', $lesson)
-                                <th>Edit</th>
-                                <th>Delete</th>
-                                @endcan
+                                <th>Lesson</th>
                                 </thead>
                                 <tbody>
-                                @foreach($lesson->all_exercises as $row)
+                                @foreach($exercises as $row)
                                     <tr>
-                                        @can('modify', $lesson)
-                                        <td>
-                                            <input type="checkbox" class="checkthis"/>
-                                        </td>
-                                        @endcan
                                         <td>
                                             {{ $row->question }}
                                         </td>
                                         <td>
                                             {{ $row->answer }}
                                         </td>
-                                        @can('modify', $lesson)
                                         <td>
-                                            <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </a>
+                                            <a href="/lessons/{{ $row->lesson->id }}">{{ $row->lesson->name }}</a>
                                         </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-xs" data-title="Delete"
-                                                    data-toggle="modal" data-target="#delete-exercise-{{ $row->id }}">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </td>
-                                        @endcan
                                     </tr>
                                     <div class="modal fade" id="delete-exercise-{{ $row->id }}" tabindex="-1"
                                          role="dialog"
@@ -114,3 +86,10 @@
     </div>
 
 @endsection
+@push('scripts')
+    <script type="text/javascript" language="JavaScript">
+        $(document).ready(function () {
+            $("#search-phrase-input").focus();
+        });
+    </script>
+@endpush
