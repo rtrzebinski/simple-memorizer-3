@@ -63,7 +63,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/learn/handle-good-answer/exercises/{exercise}/{lesson}', 'Web\LearningController@handleGoodAnswer');
 
-    Route::post('/learn/handle-bad-answer/exercises/{exercise}', 'Web\LearningController@handleBadAnswer');
+    Route::post('/learn/handle-bad-answer/exercises/{exercise}/{lesson}', 'Web\LearningController@handleBadAnswer');
 
     Route::put('/learn/exercises/{exercise}/{lesson}', 'Web\LearningController@updateExercise');
 });

@@ -62,12 +62,11 @@
 
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <button type="submit" form="handle-good-answer-form" id="good-answer-button"
-                                        class="btn btn-default btn-success margin-bottom">
+                                <button type="submit" form="handle-good-answer-form" id="good-answer-button" class="btn btn-default btn-success margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                                     Ask less
                                 </button>
-                                <button id="bad-answer-button" class="btn btn-default btn-danger margin-bottom">
+                                <button type="submit" form="handle-bad-answer-form" id="bad-answer-button" class="btn btn-default btn-danger margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                                     Ask more
                                 </button>
@@ -84,7 +83,7 @@
                                 {{ csrf_field() }}
                             </form>
                             <form id="handle-bad-answer-form"
-                                  action="/learn/handle-bad-answer/exercises/{{ $exercise->id }}"
+                                  action="/learn/handle-bad-answer/exercises/{{ $exercise->id }}/{{ $lesson->id }}"
                                   method="POST">
                                 {{ csrf_field() }}
                             </form>
@@ -103,17 +102,6 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        });
-
-        $("#bad-answer-button").click(function (event) {
-            event.preventDefault();
-            $.post("/learn/handle-bad-answer/exercises/{{ $exercise->id }}", function (data) {
-                $("#answer_input").removeClass("hidden");
-                $("#good-answer-button").hide();
-                $("#bad-answer-button").hide();
-                $("#show_answer_button").hide();
-                $("#next-button").addClass('btn-primary');
-            });
         });
 
         $("#show_answer_button").click(function (event) {

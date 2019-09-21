@@ -201,9 +201,9 @@ class LearningControllerTest extends BaseTestCase
             ->method('handleBadAnswer')
             ->with($exercise->id, $user->id);
 
-        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
+        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
-        $this->assertResponseOk();
+        $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
     }
 
     public function testItShould_notHandleBadAnswer_unauthorized()
@@ -219,7 +219,7 @@ class LearningControllerTest extends BaseTestCase
         $learningService->expects($this->never())
             ->method('handleBadAnswer');
 
-        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
+        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -236,7 +236,7 @@ class LearningControllerTest extends BaseTestCase
         $learningService->expects($this->never())
             ->method('handleBadAnswer');
 
-        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id);
+        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$exercise->lesson_id);
 
         $this->assertResponseForbidden();
     }

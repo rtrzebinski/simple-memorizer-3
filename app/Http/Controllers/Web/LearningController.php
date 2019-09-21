@@ -55,14 +55,18 @@ class LearningController extends Controller
 
     /**
      * @param Exercise        $exercise
+     * @param int             $lessonId
      * @param LearningService $learningService
+     * @return RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function handleBadAnswer(Exercise $exercise, LearningService $learningService)
+    public function handleBadAnswer(Exercise $exercise, int $lessonId, LearningService $learningService)
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
         $learningService->handleBadAnswer($exercise->id, $this->user()->id);
+
+        return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
     }
 
     /**
