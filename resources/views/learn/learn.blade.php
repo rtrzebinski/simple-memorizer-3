@@ -65,13 +65,13 @@
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
                                 <button type="submit" form="handle-good-answer-form" id="good-answer-button"
-                                        class="btn btn-default btn-success btn-lg margin-bottom">
+                                        class="btn btn-default btn-success margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                    I know the answer
+                                    Less
                                 </button>
-                                <button id="bad-answer-button" class="btn btn-default btn-danger btn-lg margin-bottom">
+                                <button id="bad-answer-button" class="btn btn-default btn-danger margin-bottom">
                                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                    I don't know the answer
+                                    More
                                 </button>
                                 <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $exercise->id }}">
                                     <button class="btn btn-default margin-bottom" id="next-button">
