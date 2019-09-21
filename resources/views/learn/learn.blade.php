@@ -20,11 +20,11 @@
                                     Lesson
                                 </a>
                                 @can('modify', $exercise)
-                                <button type="submit" form="update-exercise-form"
-                                        class="btn btn-default margin-bottom">
-                                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                                    Save changes
-                                </button>
+                                    <button type="submit" form="update-exercise-form"
+                                            class="btn btn-default margin-bottom">
+                                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                                        Save changes
+                                    </button>
                                 @endcan
                                 <button id="show_answer_button" class="btn btn-default margin-bottom">
                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
@@ -44,8 +44,7 @@
                                         <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                                         Question
                                     </label>
-                                    <textarea name="question" class="form-control"
-                                              rows="4">{{ $exercise->question }}</textarea>
+                                    <textarea name="question" class="form-control" rows="{{ substr_count( $exercise->question, "\n" ) + 1 }}">{{ $exercise->question }}</textarea>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div id="answer_input" class="col-md-8 col-md-offset-2 margin-bottom hidden">
@@ -54,8 +53,7 @@
                                         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                                         Correct answer
                                     </label>
-                                    <textarea name="answer" class="form-control"
-                                              rows="4">{{ $exercise->answer }}</textarea>
+                                    <textarea name="answer" class="form-control" rows="{{ substr_count( $exercise->answer, "\n" ) + 1 }}">{{ $exercise->answer }}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -99,7 +97,7 @@
     </div>
 @endsection
 @push('scripts')
-<script type="text/javascript" language="JavaScript">
+    <script type="text/javascript" language="JavaScript">
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -145,5 +143,6 @@
             }
         });
     });
-</script>
+
+    </script>
 @endpush
