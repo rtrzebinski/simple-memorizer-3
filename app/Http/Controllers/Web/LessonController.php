@@ -50,6 +50,17 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
+        return view('lessons.view', ['lesson' => $lesson]);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return mixed
+     */
+    public function exercises(Lesson $lesson) : View
+    {
+        $this->authorizeForUser($this->user(), 'access', $lesson);
+
         $exercises = $lesson->all_exercises
             ->each(function (Exercise $exercise) {
                 // for each load percent_if_good_answers property
@@ -61,7 +72,7 @@ class LessonController extends Controller
             'exercises' => $exercises,
         ];
 
-        return view('lessons.view', $data);
+        return view('lessons.exercises', $data);
     }
 
     /**

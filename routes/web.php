@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/lessons/{lesson}', 'Web\LessonController@view');
 
+    Route::get('/lessons/{lesson}/exercises', 'Web\LessonController@exercises');
+
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
     Route::put('/lessons/{lesson}', 'Web\LessonController@update');

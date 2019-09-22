@@ -55,7 +55,7 @@
                     <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
                     Import exercises from CSV file
                 </a>
-                <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
+                <a href="/lessons/{{ $lesson->id }}/exercises" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                     Exercises
                 </a>
