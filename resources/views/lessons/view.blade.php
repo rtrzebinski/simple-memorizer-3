@@ -12,18 +12,18 @@
                     <div class="panel-body">
                         <div class="col-md-8 no-padding">
                             @can('modify', $lesson)
-                            <p>
-                                <a href="/lessons/{{ $lesson->id }}/exercises/create"
-                                   class="btn btn-success margin-bottom" role="button">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                    Create new exercise
-                                </a>
-                                <button class="btn btn-danger margin-bottom" data-title="Delete"
-                                        data-toggle="modal" data-target="#delete">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                    Delete selected exercises
-                                </button>
-                            </p>
+                                <p>
+                                    <a href="/lessons/{{ $lesson->id }}/exercises/create"
+                                       class="btn btn-success margin-bottom" role="button">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        Create new exercise
+                                    </a>
+                                    <button class="btn btn-danger margin-bottom" data-title="Delete"
+                                            data-toggle="modal" data-target="#delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        Delete selected exercises
+                                    </button>
+                                </p>
                             @endcan
                         </div>
                         <div class="clearfix"></div>
@@ -31,22 +31,23 @@
                             <table class="table table-bordred table-striped">
                                 <thead>
                                 @can('modify', $lesson)
-                                <th><input type="checkbox" id="checkall"/></th>
+                                    <th><input type="checkbox" id="checkall"/></th>
                                 @endcan
                                 <th>Question</th>
                                 <th>Answer</th>
+                                <th><span class="glyphicon glyphicon-education" aria-hidden="true"></span> %</th>
                                 @can('modify', $lesson)
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
                                 @endcan
                                 </thead>
                                 <tbody>
-                                @foreach($lesson->all_exercises as $row)
+                                @foreach($exercises as $row)
                                     <tr>
                                         @can('modify', $lesson)
-                                        <td>
-                                            <input type="checkbox" class="checkthis"/>
-                                        </td>
+                                            <td>
+                                                <input type="checkbox" class="checkthis"/>
+                                            </td>
                                         @endcan
                                         <td>
                                             {{ $row->question }}
@@ -54,18 +55,21 @@
                                         <td>
                                             {{ $row->answer }}
                                         </td>
+                                        <td>
+                                            {{ $row->percent_of_good_answers }}
+                                        </td>
                                         @can('modify', $lesson)
-                                        <td>
-                                            <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-xs" data-title="Delete"
-                                                    data-toggle="modal" data-target="#delete-exercise-{{ $row->id }}">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </td>
+                                            <td>
+                                                <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger btn-xs" data-title="Delete"
+                                                        data-toggle="modal" data-target="#delete-exercise-{{ $row->id }}">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
                                         @endcan
                                     </tr>
                                     <div class="modal fade" id="delete-exercise-{{ $row->id }}" tabindex="-1"

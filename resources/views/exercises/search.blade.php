@@ -25,6 +25,7 @@
                                 <thead>
                                 <th>Question</th>
                                 <th>Answer</th>
+                                <th><span class="glyphicon glyphicon-education" aria-hidden="true"></span> %</th>
                                 <th>Lesson</th>
                                 </thead>
                                 <tbody>
@@ -35,6 +36,9 @@
                                         </td>
                                         <td>
                                             {{ $row->answer }}
+                                        </td>
+                                        <td>
+                                            {{ $row->percent_of_good_answers }}
                                         </td>
                                         <td>
                                             <a href="/lessons/{{ $row->lesson->id }}">{{ $row->lesson->name }}</a>

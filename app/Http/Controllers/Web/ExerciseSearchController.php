@@ -18,6 +18,7 @@ class ExerciseSearchController extends Controller
         $phrase = $request->get('phrase');
 
         $exercises = Exercise::query()
+            ->select('exercises.*')
             ->join('lessons', function (JoinClause $join) {
                 $join->on('lessons.id', '=', 'exercises.lesson_id')
                     ->where('lessons.owner_id', '=', $this->user()->id);
@@ -26,11 +27,16 @@ class ExerciseSearchController extends Controller
                 $builder->where('question', 'like', '%'.$phrase.'%')
                     ->orWhere('answer', 'like', '%'.$phrase.'%');
             })
-            ->get();
+            ->with('results') // eager loading
+            ->get()
+            ->each(function (Exercise $exercise) {
+                // for each load percent_if_good_answers property
+                $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswersOfUser($this->user()->id);
+            });
 
         $data = [
             'exercises' => $exercises,
-            'phrase' => $phrase
+            'phrase' => $phrase,
         ];
 
         return view('exercises.search', $data);

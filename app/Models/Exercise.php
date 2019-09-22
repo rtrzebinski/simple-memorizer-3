@@ -67,7 +67,7 @@ class Exercise extends Model
 
     /**
      * @param int $userId
-     * @return ExerciseResult|null
+     * @return ExerciseResult|Model|null
      */
     public function resultOfUser(int $userId)
     {
@@ -80,7 +80,7 @@ class Exercise extends Model
      */
     public function numberOfGoodAnswersOfUser(int $userId): int
     {
-        $exerciseResult = ExerciseResult::whereExerciseId($this->id)->whereUserId($userId)->first();
+        $exerciseResult = $this->resultOfUser($userId);
         return $exerciseResult ? $exerciseResult->number_of_good_answers : 0;
     }
 
@@ -90,7 +90,7 @@ class Exercise extends Model
      */
     public function numberOfBadAnswersOfUser(int $userId): int
     {
-        $exerciseResult = ExerciseResult::whereExerciseId($this->id)->whereUserId($userId)->first();
+        $exerciseResult = $this->resultOfUser($userId);
         return $exerciseResult ? $exerciseResult->number_of_bad_answers : 0;
     }
 
@@ -100,7 +100,7 @@ class Exercise extends Model
      */
     public function percentOfGoodAnswersOfUser(int $userId): int
     {
-        $exerciseResult = ExerciseResult::whereExerciseId($this->id)->whereUserId($userId)->first();
+        $exerciseResult = $this->resultOfUser($userId);
         return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;
     }
 }

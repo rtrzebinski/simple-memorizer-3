@@ -76,6 +76,43 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
+    public function testItShould_showLessonViewPage_exerciseWithoutAnswers()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson();
+        $this->createExercise([
+            'lesson_id' => $lesson->id,
+        ]);
+
+        $this->call('GET', '/lessons/'.$lesson->id);
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
+        $this->assertEquals(0, $this->view()->exercises[0]->percent_of_good_answers);
+    }
+
+    public function testItShould_showLessonViewPage_exerciseWithGoodAnswer()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson();
+        $exercise = $this->createExercise([
+            'lesson_id' => $lesson->id,
+        ]);
+        $this->createExerciseResult([
+            'exercise_id' => $exercise->id,
+            'user_id' => $user->id,
+            'percent_of_good_answers' => 66,
+        ]);
+
+        $this->call('GET', '/lessons/'.$lesson->id);
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
+        $this->assertEquals(66, $this->view()->exercises[0]->percent_of_good_answers);
+    }
+
     public function testItShould_notShowLessonViewPage_unauthorized()
     {
         $lesson = $this->createLesson();

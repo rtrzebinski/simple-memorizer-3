@@ -20,6 +20,32 @@ class ExerciseSearchControllerTest extends BaseTestCase
         $viewData = $this->view()->getData();
 
         $this->assertEquals($viewData['exercises'][0]->id, $exercise->id);
+        $this->assertEquals(0, $viewData['exercises'][0]->percent_of_good_answers);
+        $this->assertEquals($viewData['phrase'], $phrase);
+    }
+
+    /** @test */
+    public function itShould_searchForExercises_searchPhraseSameAsQuestion_checkPercentOfGoodAnswers()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson($user);
+
+        $phrase = uniqid();
+
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
+        $this->createExerciseResult([
+            'exercise_id' => $exercise->id,
+            'user_id' => $user->id,
+            'percent_of_good_answers' => 66,
+        ]);
+
+        $this->call('GET', '/exercises/search?phrase='.$phrase);
+
+        $this->assertResponseOk();
+        $viewData = $this->view()->getData();
+
+        $this->assertEquals($viewData['exercises'][0]->id, $exercise->id);
+        $this->assertEquals(66, $viewData['exercises'][0]->percent_of_good_answers);
         $this->assertEquals($viewData['phrase'], $phrase);
     }
 
@@ -41,6 +67,7 @@ class ExerciseSearchControllerTest extends BaseTestCase
         $viewData = $this->view()->getData();
 
         $this->assertEquals($viewData['exercises'][0]->id, $exercise->id);
+        $this->assertEquals(0, $viewData['exercises'][0]->percent_of_good_answers);
         $this->assertEquals($viewData['phrase'], $phrase);
     }
 
@@ -60,6 +87,7 @@ class ExerciseSearchControllerTest extends BaseTestCase
         $viewData = $this->view()->getData();
 
         $this->assertEquals($viewData['exercises'][0]->id, $exercise->id);
+        $this->assertEquals(0, $viewData['exercises'][0]->percent_of_good_answers);
         $this->assertEquals($viewData['phrase'], $phrase);
     }
 
@@ -81,6 +109,7 @@ class ExerciseSearchControllerTest extends BaseTestCase
         $viewData = $this->view()->getData();
 
         $this->assertEquals($viewData['exercises'][0]->id, $exercise->id);
+        $this->assertEquals(0, $viewData['exercises'][0]->percent_of_good_answers);
         $this->assertEquals($viewData['phrase'], $phrase);
     }
 
