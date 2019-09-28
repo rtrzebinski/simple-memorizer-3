@@ -58,9 +58,9 @@ class ExerciseController extends Controller
      */
     public function update(Exercise $exercise, UpdateExerciseRequest $request) : RedirectResponse
     {
-        $exercise->update($request->all());
+        $exercise->update($request->only(['question', 'answer']));
 
-        return redirect('/lessons/' . $exercise->lesson_id);
+        return redirect($request->redirect_to);
     }
 
     /**
@@ -74,6 +74,6 @@ class ExerciseController extends Controller
 
         $exercise->delete();
 
-        return redirect('/lessons/' . $exercise->lesson_id);
+        return redirect(url()->previous());
     }
 }

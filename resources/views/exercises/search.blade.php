@@ -27,6 +27,8 @@
                                 <th>Answer</th>
                                 <th><span class="glyphicon glyphicon-education" aria-hidden="true"></span> %</th>
                                 <th>Lesson</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                                 </thead>
                                 <tbody>
                                 @foreach($exercises as $row)
@@ -42,6 +44,17 @@
                                         </td>
                                         <td>
                                             <a href="/lessons/{{ $row->lesson->id }}">{{ $row->lesson->name }}</a>
+                                        </td>
+                                        <td>
+                                            <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-xs" data-title="Delete"
+                                                    data-toggle="modal" data-target="#delete-exercise-{{ $row->id }}">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
                                         </td>
                                     </tr>
                                     <div class="modal fade" id="delete-exercise-{{ $row->id }}" tabindex="-1"

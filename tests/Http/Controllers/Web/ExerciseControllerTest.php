@@ -172,10 +172,12 @@ class ExerciseControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $redirectTo = $this->randomUrl();
 
         $parameters = [
             'question' => uniqid(),
             'answer' => uniqid(),
+            'redirect_to' => $redirectTo,
         ];
 
         $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
@@ -184,7 +186,7 @@ class ExerciseControllerTest extends BaseTestCase
         $exercise = $exercise->fresh();
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo($redirectTo);
     }
 
     public function testItShould_notUpdateExercise_unauthorized()
@@ -250,11 +252,14 @@ class ExerciseControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $redirectTo = $this->randomUrl();
 
-        $this->call('DELETE', '/exercises/' . $exercise->id);
+        $this->call('DELETE', '/exercises/' . $exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
+            'HTTP_REFERER' => $redirectTo,
+        ]);
 
         $this->assertNull($exercise->fresh());
-        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo($redirectTo);
     }
 
     public function testItShould_notDeleteExercise_unauthorized()

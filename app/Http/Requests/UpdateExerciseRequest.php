@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 /**
- * @property mixed exercise_id
+ * @property string redirect_to
  */
 class UpdateExerciseRequest extends Request
 {
@@ -25,8 +25,9 @@ class UpdateExerciseRequest extends Request
     public function rules()
     {
         return [
-            'question' => 'required',
-            'answer' => 'required',
+            'question' => 'required|string',
+            'answer' => 'required|string',
+            'redirect_to' => 'string',
         ];
     }
 }
