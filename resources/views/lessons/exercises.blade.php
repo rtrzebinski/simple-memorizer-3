@@ -16,13 +16,26 @@
                                     <a href="/lessons/{{ $lesson->id }}/exercises/create"
                                        class="btn btn-success margin-bottom" role="button">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                        Create new exercise
+                                        Add exercise
                                     </a>
                                     <button class="btn btn-danger margin-bottom" data-title="Delete"
                                             data-toggle="modal" data-target="#delete">
                                         <span class="glyphicon glyphicon-trash"></span>
-                                        Delete selected exercises
+                                        Delete selected
                                     </button>
+
+                                    @can('modify', $lesson)
+                                        <a href="" class="btn btn-default margin-bottom">
+                                            <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
+                                            Import from CSV
+                                        </a>
+                                    @endcan
+
+                                    <a href="/lessons/{{ $lesson->id }}/csv" class="btn btn-default margin-bottom">
+                                        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                                        Export to CSV
+                                    </a>
+
                                 </p>
                             @endcan
                         </div>

@@ -8,3 +8,8 @@
 .margin-bottom {
     margin-bottom: 5px;
 }
+
+a, a:hover {
+    color: #000;
+    text-decoration: none;
+}

@@ -65,7 +65,7 @@ class ExerciseControllerTest extends BaseTestCase
         $exercise = $this->last(Exercise::class);
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id . '/exercises');
     }
 
     public function testItShould_notStoreExercise_unauthorized()

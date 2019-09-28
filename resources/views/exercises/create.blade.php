@@ -14,11 +14,6 @@
                             <div class="col-md-8 margin-bottom">
                                 <form method="POST" action="/lessons/{{ $lesson->id }}/exercises">
                                     {{ csrf_field() }}
-                                    <a href="/lessons/{{ $lesson->id }}" class="btn btn-default margin-bottom">
-                                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                        Browse exercises
-                                    </a>
-                                    <hr>
                                     <div class="form-group {{ $errors->has('question') ? 'has-error' : false }}">
                                         <label>Question</label>
                                         <textarea name="question" class="form-control" rows="4"></textarea>

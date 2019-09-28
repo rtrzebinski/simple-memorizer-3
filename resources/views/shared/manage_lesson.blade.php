@@ -4,7 +4,7 @@
         <div class="col-md-6 no-padding">
             <h4>
                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                {{ $lesson->name }}
+                <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
             </h4>
             <p>
                 Visibility: {{ $lesson->visibility }} </br>
@@ -18,56 +18,67 @@
         <div class="col-md-6 no-padding">
             <p>
                 @can('subscribe', $lesson)
-                <button type="submit" form="subscribe-and-learn" class="btn btn-primary margin-bottom">
-                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                    Subscribe and start
-                </button>
-                <button type="submit" form="subscribe" class="btn btn-warning margin-bottom">
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    Subscribe
-                </button>
+                    <button type="submit" form="subscribe-and-learn" class="btn btn-primary margin-bottom">
+                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                        Subscribe and start
+                    </button>
+                    <button type="submit" form="subscribe" class="btn btn-warning margin-bottom">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Subscribe
+                    </button>
                 @endcan
+
                 @cannot('subscribe', $lesson)
-                @can('learn', $lesson)
-                <a href="/learn/lessons/{{ $lesson->id }}" class="btn btn-primary margin-bottom" role="button">
-                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                    Start
-                </a>
-                @endcan
+                    @can('learn', $lesson)
+                        <a href="/learn/lessons/{{ $lesson->id }}" class="btn btn-primary margin-bottom" role="button">
+                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                            Start
+                        </a>
+                    @endcan
                 @endcannot
+
                 @can('unsubscribe', $lesson)
-                <button type="submit" form="unsubscribe" class="btn btn-danger margin-bottom">
-                    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
-                    Unsubscribe
-                </button>
+                    <button type="submit" form="unsubscribe" class="btn btn-danger margin-bottom">
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                        Unsubscribe
+                    </button>
                 @endcan
+
                 @can('modify', $lesson)
-                <a href="/lessons/{{ $lesson->id }}/edit" class="btn btn-info margin-bottom" role="button">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    Edit
-                </a>
-                <button class="btn btn-danger margin-bottom" data-title="Delete"
-                        data-toggle="modal" data-target="#delete_lesson">
-                    <span class="glyphicon glyphicon-trash"></span>
-                    Delete
-                </button>
-                <a href="" class="btn btn-default margin-bottom">
-                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
-                    Import exercises from CSV file
-                </a>
+                    <a href="/lessons/{{ $lesson->id }}/edit" class="btn btn-info margin-bottom" role="button">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        Edit
+                    </a>
+                @endcan
+
+                @can('modify', $lesson)
+                    <button class="btn btn-danger margin-bottom" data-title="Delete"
+                            data-toggle="modal" data-target="#delete_lesson">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Delete
+                    </button>
+                @endcan
+
+                @can('modify', $lesson)
+                    <a href="/lessons/{{ $lesson->id }}/exercises/create"
+                       class="btn btn-success margin-bottom" role="button">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        Add exercise
+                    </a>
+                @endcan
+
                 <a href="/lessons/{{ $lesson->id }}/exercises" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                     Exercises
                 </a>
-                <a href="/lessons/aggregate/{{ $lesson->id }}" class="btn btn-default margin-bottom">
-                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                    Aggregate
-                </a>
+
+                @can('modify', $lesson)
+                    <a href="/lessons/aggregate/{{ $lesson->id }}" class="btn btn-default margin-bottom">
+                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                        Aggregate
+                    </a>
                 @endcan
-                <a href="/lessons/{{ $lesson->id }}/csv" class="btn btn-default margin-bottom">
-                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                    Export exercises to CSV file
-                </a>
+
             </p>
         </div>
     </div>

@@ -33,7 +33,7 @@ class ExerciseController extends Controller
         $exercise->lesson_id = $lesson->id;
         $exercise->save();
 
-        return redirect('/lessons/' . $lesson->id);
+        return redirect('/lessons/' . $lesson->id . '/exercises');
     }
 
     /**

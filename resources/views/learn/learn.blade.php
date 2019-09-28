@@ -13,7 +13,7 @@
                             <div class="col-md-8 col-md-offset-2">
                                 <h4>
                                     <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                    <a href="/lessons/{{ $lesson->id }}" style="text-decoration:none;">{{ $lesson->name }}</a>
+                                    <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
                                 </h4>
                                 @can('modify', $exercise)
                                     <button type="submit" form="update-exercise-form"
