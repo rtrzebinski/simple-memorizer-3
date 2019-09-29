@@ -182,13 +182,14 @@ class TestDataSeeder extends Seeder
         }
 
         // owned aggregate lesson
+        /** @var Lesson $lesson */
         $lesson = factory(Lesson::class)->create([
             'name' => 'All my math lessons aggregated',
             'owner_id' => $user->id,
         ]);
         $lesson->subscribe($user);
-        $lesson->lessonAggregate()->attach($ownedMathLesson1);
-        $lesson->lessonAggregate()->attach($ownedMathLesson2);
+        $lesson->childLessons()->attach($ownedMathLesson1);
+        $lesson->childLessons()->attach($ownedMathLesson2);
 
         // subscribed lesson
         $lesson = factory(Lesson::class)->create([

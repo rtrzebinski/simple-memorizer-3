@@ -10,7 +10,7 @@
                 Visibility: {{ $lesson->visibility }} </br>
                 Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
                 Number of exercises: {{ $lesson->all_exercises->count() }} </br>
-                Number of aggregates: {{ $lesson->lessonAggregate->count() }} </br>
+                Number of aggregates: {{ $lesson->childLessons()->count() }} </br>
                 Number of subscribers: {{ $lesson->subscribersWithOwnerExcluded()->count() }} </br>
                 @cannot('subscribe', $lesson)
                     Percent of good answers: {{ $lesson->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>

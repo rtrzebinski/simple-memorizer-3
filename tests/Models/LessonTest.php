@@ -4,17 +4,17 @@ namespace Tests\Models;
 
 class LessonTest extends \TestCase
 {
-    // lessonAggregate()
+    // childLessons()
 
     /** @test */
-    public function itShould_aggregateLessons()
+    public function itShould_aggregateChildLessons()
     {
         $parentLesson = $this->createLesson();
         $childLesson = $this->createLesson();
 
-        $parentLesson->lessonAggregate()->attach($childLesson);
+        $parentLesson->childLessons()->attach($childLesson);
 
-        $this->assertCount(1, $parentLesson->lessonAggregate);
+        $this->assertCount(1, $parentLesson->childLessons);
 
         $this->assertDatabaseHas('lesson_aggregate', [
             'parent_lesson_id' => $parentLesson->id,
@@ -23,7 +23,7 @@ class LessonTest extends \TestCase
     }
 
     /** @test */
-    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLesson()
+    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLessons()
     {
         $parentLesson = $this->createLesson();
         $this->createExercise(['lesson_id' => $parentLesson->id]);
@@ -32,9 +32,40 @@ class LessonTest extends \TestCase
         $this->createExercise(['lesson_id' => $childLesson->id]);
         $this->createExercise(['lesson_id' => $childLesson->id]);
 
-        $parentLesson->lessonAggregate()->attach($childLesson);
+        $parentLesson->childLessons()->attach($childLesson);
 
         $this->assertCount(4, $parentLesson->all_exercises);
+    }
+
+    // parentLessons()
+
+    /** @test */
+    public function itShould_aggregateParentLessons()
+    {
+        $parentLesson = $this->createLesson();
+        $childLesson = $this->createLesson();
+
+        $childLesson->parentLessons()->attach($parentLesson);
+
+        $this->assertCount(1, $childLesson->parentLessons);
+
+        $this->assertDatabaseHas('lesson_aggregate', [
+            'parent_lesson_id' => $parentLesson->id,
+            'child_lesson_id' => $childLesson->id,
+        ]);
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_dontIncludeExercisesFromParentLessons()
+    {
+        $parentLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $parentLesson->id]);
+
+        $childLesson = $this->createLesson();
+
+        $childLesson->parentLessons()->attach($parentLesson);
+
+        $this->assertCount(0, $childLesson->all_exercises);
     }
 
     // subscribers()

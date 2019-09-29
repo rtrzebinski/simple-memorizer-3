@@ -19,7 +19,7 @@ class LessonAggregateController extends Controller
         $ownedLessons = $this->user()->ownedLessons;
 
         // lessons aggregated to current lesson
-        $lessonAggregate = $parentLesson->lessonAggregate;
+        $childLessons = $parentLesson->childLessons;
 
         $lessons = [];
 
@@ -37,7 +37,7 @@ class LessonAggregateController extends Controller
             $row['name'] = $ownedLesson->name;
             $row['is_aggregated'] = false;
 
-            foreach ($lessonAggregate as $la) {
+            foreach ($childLessons as $la) {
                 if ($ownedLesson->id == $la->id) {
                     $row['is_aggregated'] = true;
                 }
@@ -59,7 +59,7 @@ class LessonAggregateController extends Controller
      */
     public function sync(Lesson $parentLesson, SyncLessonAggregateRequest $request)
     {
-        $parentLesson->lessonAggregate()->sync($request->aggregates);
+        $parentLesson->childLessons()->sync($request->aggregates);
 
         return redirect('/lessons/aggregate/'.$parentLesson->id);
     }

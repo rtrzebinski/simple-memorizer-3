@@ -21,7 +21,7 @@ use Illuminate\Database\Query\JoinClause;
  * @property \Carbon\Carbon|null                                                  $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exercise[] $exercises
  * @property-read Collection                                                      $all_exercises
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $lessonAggregate
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $childLessons
  * @property-read \App\Models\User                                                $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribers
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereCreatedAt($value)
@@ -37,6 +37,7 @@ use Illuminate\Database\Query\JoinClause;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereBidirectional($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $subscribersWithOwnerExcluded
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[] $parentLessons
  */
 class Lesson extends Model
 {
@@ -72,9 +73,17 @@ class Lesson extends Model
     /**
      * @return BelongsToMany|Lesson[]
      */
-    public function lessonAggregate()
+    public function childLessons()
     {
         return $this->belongsToMany(Lesson::class, 'lesson_aggregate', 'parent_lesson_id', 'child_lesson_id');
+    }
+
+    /**
+     * @return BelongsToMany|Lesson[]
+     */
+    public function parentLessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_aggregate', 'child_lesson_id', 'parent_lesson_id');
     }
 
     /**
@@ -90,10 +99,9 @@ class Lesson extends Model
      */
     public function getAllExercisesAttribute()
     {
-        /** @var Collection $allExercises */
         $allExercises = $this->exercises;
 
-        foreach ($this->lessonAggregate as $lesson) {
+        foreach ($this->childLessons as $lesson) {
             $allExercises = $allExercises->merge($lesson->exercises);
         }
 

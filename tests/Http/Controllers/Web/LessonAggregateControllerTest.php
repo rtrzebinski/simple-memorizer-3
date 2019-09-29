@@ -14,7 +14,7 @@ class LessonAggregateControllerTest extends BaseTestCase
 
         $parentLesson = $this->createPrivateLesson($user);
         $childLesson = $this->createPrivateLesson($user);
-        $parentLesson->lessonAggregate()->attach($childLesson);
+        $parentLesson->childLessons()->attach($childLesson);
         $anotherLesson = $this->createPrivateLesson($user);
 
         $this->call('GET', '/lessons/aggregate/'.$parentLesson->id);
@@ -58,7 +58,7 @@ class LessonAggregateControllerTest extends BaseTestCase
 
         $parentLesson = $this->createPrivateLesson($user);
         $childLesson = $this->createPrivateLesson($user);
-        $parentLesson->lessonAggregate()->attach($childLesson);
+        $parentLesson->childLessons()->attach($childLesson);
         $anotherLesson = $this->createPrivateLesson($user);
 
         $data = [
@@ -69,8 +69,8 @@ class LessonAggregateControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/lessons/aggregate/'.$parentLesson->id);
 
         $parentLesson = $parentLesson->fresh();
-        $this->assertCount(1, $parentLesson->lessonAggregate);
-        $this->assertEquals($anotherLesson->id, $parentLesson->lessonAggregate[0]->id);
+        $this->assertCount(1, $parentLesson->childLessons);
+        $this->assertEquals($anotherLesson->id, $parentLesson->childLessons[0]->id);
     }
 
     /** @test */
