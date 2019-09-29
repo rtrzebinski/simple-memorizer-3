@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
+use App\Events\BadAnswer;
+use App\Events\GoodAnswer;
+use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
+use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
+use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
+use App\Listeners\UpdatePercentOfGoodAnswersOfLesson;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -13,8 +18,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        GoodAnswer::class => [
+            UpdateNumberOfGoodAnswersOfExercise::class,
+            UpdatePercentOfGoodAnswersOfExercise::class,
+            UpdatePercentOfGoodAnswersOfLesson::class,
+        ],
+        BadAnswer::class => [
+            UpdateNumberOfBadAnswersOfExercise::class,
+            UpdatePercentOfGoodAnswersOfExercise::class,
+            UpdatePercentOfGoodAnswersOfLesson::class,
         ],
     ];
 

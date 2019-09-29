@@ -92,18 +92,15 @@ class LearningControllerTest extends BaseTestCase
     public function testItShould_handleGoodAnswer()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
-        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $lesson->exercises->first();
 
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
+        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer', $data = [], $user);
 
-        $learningService->expects($this->once())->method('handleGoodAnswer')
-            ->with($exercise->id, $user->id);
-
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer', $data =
-            [], $user);
+        $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(50, $lesson->percentOfGoodAnswersOfUser($user->id));
 
         $this->assertResponseOk();
     }
@@ -143,18 +140,15 @@ class LearningControllerTest extends BaseTestCase
     public function testItShould_handleBadAnswer()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
-        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $lesson->exercises->first();
 
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
+        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer', $data = [], $user);
 
-        $learningService->expects($this->once())->method('handleBadAnswer')
-            ->with($exercise->id, $user->id);
-
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer', $data =
-            [], $user);
+        $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));
+        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
 
         $this->assertResponseOk();
     }

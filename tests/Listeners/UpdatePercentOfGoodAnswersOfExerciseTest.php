@@ -1,10 +1,12 @@
 <?php
 
-namespace Tests\Models;
+namespace Tests\Listeners;
 
+use App\Events\GoodAnswer;
+use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
 use App\Models\ExerciseResult;
 
-class ExerciseResultTest extends \TestCase
+class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
 {
     public function answersProvider()
     {
@@ -39,18 +41,25 @@ class ExerciseResultTest extends \TestCase
      * @param $numberOfBadAnswers
      * @param $percentOfGoodAnswers
      */
-    public function testItShould_updatePercentOfGoodAnswers(
+    public function testItShould_updatePercentOfGoodAnswersOfExercise(
         $numberOfGoodAnswers,
         $numberOfBadAnswers,
         $percentOfGoodAnswers
     ) {
-        $exerciseResult = new ExerciseResult();
+        $exercise = $this->createExercise();
+        $user = $this->createUser();
 
-        $exerciseResult->number_of_good_answers = $numberOfGoodAnswers;
-        $exerciseResult->number_of_bad_answers = $numberOfBadAnswers;
+        $exerciseResult = $this->createExerciseResult([
+            'exercise_id' => $exercise->id,
+            'user_id' => $user->id,
+            'number_of_good_answers' => $numberOfGoodAnswers,
+            'number_of_bad_answers' => $numberOfBadAnswers,
+        ]);
 
-        $exerciseResult->updatePercentOfGoodAnswers();
+        $listener = new UpdatePercentOfGoodAnswersOfExercise();
+        $event = new GoodAnswer($exercise, $user->id);
+        $listener->handle($event);
 
-        $this->assertEquals($percentOfGoodAnswers, $exerciseResult->percent_of_good_answers);
+        $this->assertEquals($percentOfGoodAnswers, $exerciseResult->fresh()->percent_of_good_answers);
     }
 }

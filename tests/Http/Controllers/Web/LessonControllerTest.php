@@ -45,6 +45,16 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($input['name'], $lesson->name);
         $this->assertEquals($input['visibility'], $lesson->visibility);
         $this->assertResponseRedirectedTo('/lessons/'.$lesson->id);
+
+        // ensure user and a lesson have a row in pivot table,
+        // but it should not be considered a regular subscriber
+        $this->assertDatabaseHas('lesson_user', [
+            'user_id' => $user->id,
+            'lesson_id' => $lesson->id,
+            'percent_of_good_answers' => 0,
+        ]);
+        $this->assertCount(1, $lesson->subscribers);
+        $this->assertCount(0, $lesson->subscribersWithOwnerExcluded);
     }
 
     public function testItShould_notStoreLesson_unauthorized()

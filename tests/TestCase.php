@@ -26,7 +26,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__ . '/../bootstrap/app.php';
+        $app = require __DIR__.'/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
@@ -37,25 +37,25 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      * Random, valid url.
      * @return string
      */
-    public function randomUrl() : string
+    public function randomUrl(): string
     {
-        return 'http://' . uniqid() . '.example.com';
+        return 'http://'.uniqid().'.example.com';
     }
 
     /**
      * Random valid email address.
      * @return string
      */
-    protected function randomEmail() : string
+    protected function randomEmail(): string
     {
-        return uniqid() . '@example.com';
+        return uniqid().'@example.com';
     }
 
     /**
      * Random valid password.
      * @return string
      */
-    protected function randomPassword() : string
+    protected function randomPassword(): string
     {
         return uniqid();
     }
@@ -65,7 +65,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      * @param $class
      * @return mixed
      */
-    protected function last($class) : Model
+    protected function last($class): Model
     {
         return app($class)->orderBy('id', 'desc')->first();
     }
@@ -93,7 +93,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     /**
      * @return SocialiteUser
      */
-    protected function createSocialiteUser() : SocialiteUser
+    protected function createSocialiteUser(): SocialiteUser
     {
         $user = new SocialiteUser();
         $user->email = $this->randomEmail();
@@ -131,7 +131,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      * @param User|null $user
      * @return Lesson
      */
-    protected function createPublicLesson(User $user = null) : Lesson
+    protected function createPublicLesson(User $user = null): Lesson
     {
         $attributes = ['visibility' => 'public'];
 
@@ -139,14 +139,22 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             $attributes['owner_id'] = $user->id;
         }
 
-        return $this->createLesson($attributes);
+        $lesson = $this->createLesson($attributes);
+
+        if ($user) {
+            // when lesson is created by user it's also subscribed
+            // so let's replicate this here to make tests more reliable
+            $lesson->subscribe($user);
+        }
+
+        return $lesson;
     }
 
     /**
      * @param User|null $user
      * @return Lesson
      */
-    protected function createPrivateLesson(User $user = null) : Lesson
+    protected function createPrivateLesson(User $user = null): Lesson
     {
         $attributes = ['visibility' => 'private'];
 
@@ -154,6 +162,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             $attributes['owner_id'] = $user->id;
         }
 
-        return $this->createLesson($attributes);
+        $lesson = $this->createLesson($attributes);
+
+        if ($user) {
+            // when lesson is created by user it's also subscribed
+            // so let's replicate this here to make tests more reliable
+            $lesson->subscribe($user);
+        }
+
+        return $lesson;
     }
 }

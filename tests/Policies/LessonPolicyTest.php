@@ -87,8 +87,8 @@ class LessonPolicyTest extends TestCase
     public function testItShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPublicAndOwnedLesson()
     {
         $user = $this->createUser();
+        // will also subscribe owner to the lesson
         $lesson = $this->createPublicLesson($user);
-        $user->subscribedLessons()->save($lesson);
 
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
@@ -105,8 +105,8 @@ class LessonPolicyTest extends TestCase
     public function testItShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPrivateAndOwnedLesson()
     {
         $user = $this->createUser();
+        // will also subscribe owner to the lesson
         $lesson = $this->createPrivateLesson($user);
-        $user->subscribedLessons()->save($lesson);
 
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
@@ -124,6 +124,14 @@ class LessonPolicyTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
+
+        $this->assertFalse($this->policy->unsubscribe($user, $lesson));
+    }
+
+    public function testItShould_notAuthorizeLessonUnsubscribe_userOwnsLesson()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createPublicLesson($user);
 
         $this->assertFalse($this->policy->unsubscribe($user, $lesson));
     }

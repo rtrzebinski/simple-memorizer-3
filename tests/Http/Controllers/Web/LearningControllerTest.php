@@ -113,20 +113,15 @@ class LearningControllerTest extends BaseTestCase
     public function testItShould_handleGoodAnswer()
     {
         $this->be($user = $this->createUser());
-
-        $lesson = $this->createExercise()->lesson;
+        $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
-        $exercise = $lesson->exercises[0];
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->once())
-            ->method('handleGoodAnswer')
-            ->with($exercise->id, $user->id);
+        $exercise = $lesson->exercises->first();
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
+
+        $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(50, $lesson->percentOfGoodAnswersOfUser($user->id));
 
         $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
     }
@@ -136,13 +131,6 @@ class LearningControllerTest extends BaseTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises[0];
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->never())
-            ->method('handleGoodAnswer');
 
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
@@ -155,13 +143,6 @@ class LearningControllerTest extends BaseTestCase
         $lesson = $this->createExercise()->lesson;
         $exercise = $lesson->exercises[0];
 
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->never())
-            ->method('handleGoodAnswer');
-
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
         $this->assertResponseForbidden();
@@ -170,13 +151,6 @@ class LearningControllerTest extends BaseTestCase
     public function testItShould_notHandleGoodAnswer_exerciseNotFound()
     {
         $this->be($user = $this->createUser());
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->never())
-            ->method('handleGoodAnswer');
 
         $this->call('POST', '/learn/handle-good-answer/exercises/-1/1');
 
@@ -188,20 +162,15 @@ class LearningControllerTest extends BaseTestCase
     public function testItShould_handleBadAnswer()
     {
         $this->be($user = $this->createUser());
-
-        $lesson = $this->createExercise()->lesson;
+        $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
-        $exercise = $lesson->exercises[0];
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->once())
-            ->method('handleBadAnswer')
-            ->with($exercise->id, $user->id);
+        $exercise = $lesson->exercises->first();
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$lesson->id);
+
+        $this->assertEquals(0, $exercise->numberOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
 
         $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
     }
@@ -211,13 +180,6 @@ class LearningControllerTest extends BaseTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises[0];
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->never())
-            ->method('handleBadAnswer');
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
@@ -229,13 +191,6 @@ class LearningControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $exercise = $this->createExercise();
 
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->never())
-            ->method('handleBadAnswer');
-
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$exercise->lesson_id);
 
         $this->assertResponseForbidden();
@@ -244,13 +199,6 @@ class LearningControllerTest extends BaseTestCase
     public function testItShould_notHandleBadAnswer_exerciseNotFound()
     {
         $this->be($user = $this->createUser());
-
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
-        $learningService = $this->createMock(LearningService::class);
-        $this->instance(LearningService::class, $learningService);
-
-        $learningService->expects($this->never())
-            ->method('handleBadAnswer');
 
         $this->call('POST', '/learn/handle-bad-answer/exercises/-1');
 

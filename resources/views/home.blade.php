@@ -47,7 +47,8 @@
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ $row->all_exercises->count() }} </br>
-                                                Number of subscribers: {{ $row->subscribers->count() }} </br>
+                                                Number of subscribers: {{ $row->subscribersWithOwnerExcluded()->count() }} </br>
+                                                Percent of good answers: {{ $row->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
                                                 @can('learn', $row)
@@ -83,7 +84,8 @@
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ $row->all_exercises->count() }} </br>
-                                                Number of subscribers: {{ $row->subscribers->count() }} </br>
+                                                Number of subscribers: {{ $row->subscribersWithOwnerExcluded()->count() }} </br>
+                                                Percent of good answers: {{ $row->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
                                                 <a href="/learn/lessons/{{ $row->id }}"
@@ -161,7 +163,7 @@
                                         </h4>
                                         <p>
                                             Number of exercises: {{ $row->all_exercises->count() }} </br>
-                                            Number of subscribers: {{ $row->subscribers->count() }} </br>
+                                            Number of subscribers: {{ $row->subscribersWithOwnerExcluded()->count() }} </br>
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->id }}"

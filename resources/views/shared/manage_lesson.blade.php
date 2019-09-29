@@ -11,7 +11,10 @@
                 Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
                 Number of exercises: {{ $lesson->all_exercises->count() }} </br>
                 Number of aggregates: {{ $lesson->lessonAggregate->count() }} </br>
-                Number of subscribers: {{ $lesson->subscribers->count() }} </br>
+                Number of subscribers: {{ $lesson->subscribersWithOwnerExcluded()->count() }} </br>
+                @cannot('subscribe', $lesson)
+                    Percent of good answers: {{ $lesson->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>
+                @endcannot
             </p>
 
         </div>
@@ -22,7 +25,7 @@
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                         Subscribe and start
                     </button>
-                    <button type="submit" form="subscribe" class="btn btn-warning margin-bottom">
+                    <button type="submit" form="subscribe" class="btn btn-danger margin-bottom">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         Subscribe
                     </button>

@@ -7,8 +7,6 @@ use App\Models\Lesson;
 use App\Exceptions\NotEnoughExercisesException;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use App\Models\ExerciseResult;
-use Illuminate\Support\Facades\DB;
 
 class LearningService
 {
@@ -99,24 +97,6 @@ class LearningService
     }
 
     /**
-     * @param int $exerciseId
-     * @param int $userId
-     */
-    public function handleGoodAnswer(int $exerciseId, int $userId)
-    {
-        $this->increaseNumberOfAnswersOfUser($exerciseId, $userId, 'number_of_good_answers');
-    }
-
-    /**
-     * @param int $exerciseId
-     * @param int $userId
-     */
-    public function handleBadAnswer(int $exerciseId, int $userId)
-    {
-        $this->increaseNumberOfAnswersOfUser($exerciseId, $userId, 'number_of_bad_answers');
-    }
-
-    /**
      * Calculate number of points
      *
      * 1 means highest familiarity with the answer.
@@ -159,30 +139,5 @@ class LearningService
             return 10;
         }
         throw new Exception('$percentOfGoodAnswers must be a value between 0 and 100');
-    }
-
-    /**
-     * @param int    $exerciseId
-     * @param int    $userId
-     * @param string $field
-     */
-    private function increaseNumberOfAnswersOfUser(int $exerciseId, int $userId, string $field)
-    {
-        $exerciseResult = ExerciseResult::whereExerciseId($exerciseId)->whereUserId($userId)->first();
-
-        if (is_null($exerciseResult)) {
-            // create new exercise result
-            $exerciseResult = new ExerciseResult();
-            $exerciseResult->user_id = $userId;
-            $exerciseResult->exercise_id = $exerciseId;
-            $exerciseResult->{$field} = 1;
-            $exerciseResult->save();
-        } else {
-            // increase number of answers for existing exercise result
-            DB::table('exercise_results')->where('id', '=', $exerciseResult->id)
-                ->update([$field => DB::raw($field." + 1")]);
-        }
-
-        $exerciseResult->updatePercentOfGoodAnswers();
     }
 }

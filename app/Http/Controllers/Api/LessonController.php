@@ -24,6 +24,9 @@ class LessonController extends Controller
         $lesson->owner_id = $this->user()->id;
         $lesson->save();
 
+        // always subscribe owned lesson
+        $lesson->subscribe($this->user());
+
         return $this->response($lesson);
     }
 

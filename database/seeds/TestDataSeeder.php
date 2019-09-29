@@ -125,16 +125,18 @@ class TestDataSeeder extends Seeder
         ]);
 
         // private lessons
-        factory(Lesson::class)->create([
+        $lesson = factory(Lesson::class)->create([
             'name' => 'Private lesson with no exercises',
             'visibility' => 'private',
             'owner_id' => $user->id,
         ]);
+        $lesson->subscribe($user);
         $lesson = factory(Lesson::class)->create([
             'name' => 'Private lesson with one exercise',
             'visibility' => 'private',
             'owner_id' => $user->id,
         ]);
+        $lesson->subscribe($user);
         factory(Exercise::class)->create([
             'lesson_id' => $lesson->id,
         ]);
@@ -143,6 +145,7 @@ class TestDataSeeder extends Seeder
             'visibility' => 'private',
             'owner_id' => $user->id,
         ]);
+        $lesson->subscribe($user);
         factory(Exercise::class, 2)->create([
             'lesson_id' => $lesson->id,
         ]);
@@ -152,6 +155,7 @@ class TestDataSeeder extends Seeder
             'name' => 'Math: multiplication table 1-100',
             'owner_id' => $user->id,
         ]);
+        $ownedMathLesson1->subscribe($user);
         for ($i = 1; $i <= 10; $i++) {
             for ($j = 1; $j <= 10; $j++) {
                 factory(Exercise::class)->create([
@@ -166,6 +170,7 @@ class TestDataSeeder extends Seeder
             'name' => 'Math: multiplication table 100-400',
             'owner_id' => $user->id,
         ]);
+        $ownedMathLesson2->subscribe($user);
         for ($i = 10; $i <= 20; $i++) {
             for ($j = 10; $j <= 20; $j++) {
                 factory(Exercise::class)->create([
@@ -181,6 +186,7 @@ class TestDataSeeder extends Seeder
             'name' => 'All my math lessons aggregated',
             'owner_id' => $user->id,
         ]);
+        $lesson->subscribe($user);
         $lesson->lessonAggregate()->attach($ownedMathLesson1);
         $lesson->lessonAggregate()->attach($ownedMathLesson2);
 
@@ -235,10 +241,13 @@ class TestDataSeeder extends Seeder
      */
     private function lesson(string $name, array $exercises, bool $bidirectional): Lesson
     {
+        /** @var Lesson $lesson */
         $lesson = factory(Lesson::class)->create([
             'name' => $name,
             'bidirectional' => $bidirectional,
         ]);
+
+        $lesson->subscribe($lesson->owner);
 
         foreach ($exercises as $k => $v) {
             factory(Exercise::class)->create([

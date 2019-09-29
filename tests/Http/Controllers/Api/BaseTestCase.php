@@ -77,4 +77,9 @@ class BaseTestCase extends TestCase
     {
         $this->response->assertJson($json);
     }
+
+    protected function dump()
+    {
+        $this->response->dump();
+    }
 }

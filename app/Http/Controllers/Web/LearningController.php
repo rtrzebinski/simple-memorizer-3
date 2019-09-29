@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\BadAnswer;
+use App\Events\GoodAnswer;
 use App\Exceptions\NotEnoughExercisesException;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
@@ -40,15 +42,14 @@ class LearningController extends Controller
     /**
      * @param Exercise        $exercise
      * @param int             $lessonId
-     * @param LearningService $learningService
      * @return RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function handleGoodAnswer(Exercise $exercise, int $lessonId, LearningService $learningService): RedirectResponse
+    public function handleGoodAnswer(Exercise $exercise, int $lessonId): RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
-        $learningService->handleGoodAnswer($exercise->id, $this->user()->id);
+        event(new GoodAnswer($exercise, $this->user()->id));
 
         return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
     }
@@ -56,15 +57,14 @@ class LearningController extends Controller
     /**
      * @param Exercise        $exercise
      * @param int             $lessonId
-     * @param LearningService $learningService
      * @return RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function handleBadAnswer(Exercise $exercise, int $lessonId, LearningService $learningService)
+    public function handleBadAnswer(Exercise $exercise, int $lessonId)
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
-        $learningService->handleBadAnswer($exercise->id, $this->user()->id);
+        event(new BadAnswer($exercise, $this->user()->id));
 
         return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
     }

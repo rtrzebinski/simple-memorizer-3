@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\JoinClause;
 
 /**
  * App\Models\Lesson
@@ -30,11 +31,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
  * @mixin Eloquent
- * @property int $bidirectional
+ * @property int                                                                  $bidirectional
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereBidirectional($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $subscribersWithOwnerExcluded
  */
 class Lesson extends Model
 {
@@ -103,7 +105,38 @@ class Lesson extends Model
      */
     public function subscribers()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)
+            // required for percent_of_good_answers to be included in the result
+            ->withPivot(['percent_of_good_answers']);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function subscribersWithOwnerExcluded()
+    {
+        return $this->subscribers()
+            // exclude lesson owner from subscribers
+            ->join('lessons', function (JoinClause $joinClause) {
+                $joinClause->on('lessons.id', '=', 'lesson_user.lesson_id')->on('lessons.owner_id', '!=', 'lesson_user.user_id');
+            });
+    }
+
+    /**
+     * @param int $userId
+     * @return int
+     * @throws \Exception
+     */
+    public function percentOfGoodAnswersOfUser(int $userId): int
+    {
+        // use relation so it can be eager loaded
+        $subscriber = $this->subscribers()->where('lesson_user.user_id', $userId)->first();
+
+        if (!$subscriber) {
+            throw new \Exception('User does not subscribe lesson: '.$this->id);
+        }
+
+        return $subscriber->pivot->percent_of_good_answers;
     }
 
     /**
@@ -116,9 +149,15 @@ class Lesson extends Model
 
     /**
      * @param User $user
+     * @throws \Exception
      */
     public function unsubscribe(User $user)
     {
+        // just in case as policy already prevents this
+        if ($this->owner_id == $user->id) {
+            throw new \Exception('Unable to unsubscribe owned lesson: '.$this->id);
+        }
+
         $this->subscribers()->detach($user);
     }
 }

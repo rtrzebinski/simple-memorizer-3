@@ -48,7 +48,11 @@ class LearningServiceTest extends TestCase
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->learningService->handleBadAnswer($exercise->id, $this->createUser()->id);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exercise->id,
+            'percent_of_good_answers' => 100,
+        ]);
 
         $this->assertExerciseCanWin($lesson, $this->createUser()->id, $exercise->id);
     }
@@ -70,7 +74,11 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->learningService->handleBadAnswer($exerciseWithAnswer->id, $user->id);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer->id,
+            'percent_of_good_answers' => 100,
+        ]);
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
@@ -85,71 +93,17 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->learningService->handleGoodAnswer($exerciseWithAnswer->id, $user->id);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer->id,
+            'percent_of_good_answers' => 100,
+        ]);
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
         $previousExercise = $this->createExercise();
 
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id, $previousExercise->id);
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id, $previousExercise->id);
-    }
-
-
-
-//    public function testItShould_defaultNumberOfAnswersToZero()
-//    {
-//        $user = $this->createUser();
-//        $exercise = $this->createExercise();
-//
-//        $this->assertEquals(0, $exercise->numberOfGoodAnswersOfUser($user->id));
-//        $this->assertEquals(0, $exercise->numberOfBadAnswersOfUser($user->id));
-//        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
-//    }
-
-    public function testItShould_handleGoodAnswer()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->learningService->handleGoodAnswer($exercise->id, $user->id);
-
-        $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
-    }
-
-    public function testItShould_handleGoodAnswer_twice()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->learningService->handleGoodAnswer($exercise->id, $user->id);
-        $this->learningService->handleGoodAnswer($exercise->id, $user->id);
-
-        $this->assertEquals(2, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
-    }
-
-    public function testItShould_handleBadAnswer()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->learningService->handleBadAnswer($exercise->id, $user->id);
-
-        $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
-    }
-
-    public function testItShould_handleBadAnswer_twice()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->learningService->handleBadAnswer($exercise->id, $user->id);
-        $this->learningService->handleBadAnswer($exercise->id, $user->id);
-
-        $this->assertEquals(2, $exercise->numberOfBadAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
     }
 
     private function assertExerciseCanWin(Lesson $lesson, int $userId, int $exerciseId, int $previousId = null)

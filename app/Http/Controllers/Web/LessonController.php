@@ -39,6 +39,9 @@ class LessonController extends Controller
         $lesson->owner_id = $this->user()->id;
         $lesson->save();
 
+        // always subscribe owned lesson
+        $lesson->subscribe($this->user());
+
         return redirect('/lessons/' . $lesson->id);
     }
 
@@ -63,7 +66,7 @@ class LessonController extends Controller
 
         $exercises = $lesson->all_exercises
             ->each(function (Exercise $exercise) {
-                // for each load percent_if_good_answers property
+                // for each load percent_of_good_answers property
                 $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswersOfUser($this->user()->id);
             });
 

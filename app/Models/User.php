@@ -63,7 +63,7 @@ class User extends Authenticatable
      */
     public function subscribedLessons()
     {
-        return $this->belongsToMany(Lesson::class);
+        return $this->belongsToMany(Lesson::class)->where('lessons.owner_id', '!=', $this->id);
     }
 
     /**

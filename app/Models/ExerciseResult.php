@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use DB;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -33,29 +32,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ExerciseResult extends Model
 {
-    /**
-     * Update object state and db row
-     */
-    public function updatePercentOfGoodAnswers()
-    {
-        $this->percent_of_good_answers = $this->calculatePercentOfGoodAnswers();
-        DB::table('exercise_results')->where('id', '=', $this->id)
-            ->update(['percent_of_good_answers' => $this->percent_of_good_answers]);
-    }
-
-    /**
-     * @return int
-     */
-    private function calculatePercentOfGoodAnswers(): int
-    {
-        $totalNumberOfAnswers = $this->number_of_good_answers + $this->number_of_bad_answers;
-        if ($totalNumberOfAnswers) {
-            return round(100 * $this->number_of_good_answers / ($totalNumberOfAnswers));
-        } else {
-            return 0;
-        }
-    }
-
     /**
      * @param $query
      * @param $userId
