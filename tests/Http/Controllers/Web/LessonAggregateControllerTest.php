@@ -2,6 +2,8 @@
 
 namespace Tests\Http\Controllers\Web;
 
+use App\Events\LessonAggregatesUpdated;
+
 class LessonAggregateControllerTest extends BaseTestCase
 {
     // index
@@ -64,6 +66,8 @@ class LessonAggregateControllerTest extends BaseTestCase
         $data = [
             'aggregates' => [$anotherLesson->id]
         ];
+
+        $this->expectsEvents(LessonAggregatesUpdated::class);
 
         $this->call('POST', '/lessons/aggregate/'.$parentLesson->id, $data);
         $this->assertResponseRedirectedTo('/lessons/aggregate/'.$parentLesson->id);

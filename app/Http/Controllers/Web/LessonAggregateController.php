@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\LessonAggregatesUpdated;
 use App\Http\Requests\SyncLessonAggregateRequest;
 use App\Models\Lesson;
 use Illuminate\View\View;
@@ -60,6 +61,8 @@ class LessonAggregateController extends Controller
     public function sync(Lesson $parentLesson, SyncLessonAggregateRequest $request)
     {
         $parentLesson->childLessons()->sync($request->aggregates);
+
+        event(new LessonAggregatesUpdated($parentLesson, $this->user()));
 
         return redirect('/lessons/aggregate/'.$parentLesson->id);
     }

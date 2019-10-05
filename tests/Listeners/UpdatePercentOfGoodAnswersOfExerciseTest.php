@@ -4,7 +4,6 @@ namespace Tests\Listeners;
 
 use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
-use App\Models\ExerciseResult;
 
 class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
 {
