@@ -2,7 +2,7 @@
 
 namespace Tests\Listeners;
 
-use App\Events\GoodAnswer;
+use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
 use App\Models\ExerciseResult;
 
@@ -57,7 +57,7 @@ class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
         ]);
 
         $listener = new UpdatePercentOfGoodAnswersOfExercise();
-        $event = new GoodAnswer($exercise, $user->id);
+        $event = new ExerciseGoodAnswer($exercise, $user);
         $listener->handle($event);
 
         $this->assertEquals($percentOfGoodAnswers, $exerciseResult->fresh()->percent_of_good_answers);

@@ -13,7 +13,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->view()->lesson->id);
@@ -23,7 +23,7 @@ class ExerciseControllerTest extends BaseTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
 
         $this->assertResponseUnauthorized();
     }
@@ -33,7 +33,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
 
         $this->assertResponseForbidden();
     }
@@ -59,13 +59,41 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('POST', '/lessons/' . $lesson->id . '/exercises', $parameters);
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
 
         /** @var Exercise $exercise */
         $exercise = $this->last(Exercise::class);
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id . '/exercises');
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+    }
+
+    public function testItShould_storeExercise_ensurePercentOfGoodAnswersOfLessonIsRecalculated()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        // pre set percent_of_good_answers to some value different than 0,
+        // because 0 should be the result percent_of_good_answers after first exercise is stored
+        $lesson->subscribers[0]->pivot->percent_of_good_answers = 20;
+        $lesson->subscribers[0]->pivot->save();
+        $this->assertEquals(20, $lesson->percentOfGoodAnswersOfUser($user->id));
+
+        $parameters = [
+            'question' => uniqid(),
+            'answer' => uniqid(),
+        ];
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
+
+        /** @var Exercise $exercise */
+        $exercise = $this->last(Exercise::class);
+        $this->assertEquals($parameters['question'], $exercise->question);
+        $this->assertEquals($parameters['answer'], $exercise->answer);
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+
+        // just one exercise without answers = 0% of good answers
+        $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
     }
 
     public function testItShould_notStoreExercise_unauthorized()
@@ -77,7 +105,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('POST', '/lessons/' . $lesson->id . '/exercises', $parameters);
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
 
         $this->assertResponseUnauthorized();
     }
@@ -92,7 +120,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('POST', '/lessons/' . $lesson->id . '/exercises', $parameters);
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
 
         $this->assertResponseForbidden();
     }
@@ -116,7 +144,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('POST', '/lessons/' . $lesson->id . '/exercises');
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseInvalidInput();
     }
@@ -129,7 +157,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('GET', '/exercises/' . $exercise->id . '/edit');
+        $this->call('GET', '/exercises/'.$exercise->id.'/edit');
 
         $this->assertResponseOk();
         $this->assertEquals($exercise->id, $this->view()->exercise->id);
@@ -140,7 +168,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('GET', '/exercises/' . $exercise->id . '/edit');
+        $this->call('GET', '/exercises/'.$exercise->id.'/edit');
 
         $this->assertResponseUnauthorized();
     }
@@ -151,7 +179,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('GET', '/exercises/' . $exercise->id . '/edit');
+        $this->call('GET', '/exercises/'.$exercise->id.'/edit');
 
         $this->assertResponseForbidden();
     }
@@ -180,7 +208,7 @@ class ExerciseControllerTest extends BaseTestCase
             'redirect_to' => $redirectTo,
         ];
 
-        $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
+        $this->call('PUT', '/exercises/'.$exercise->id, $parameters);
 
         /** @var Exercise $exercise */
         $exercise = $exercise->fresh();
@@ -199,7 +227,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
+        $this->call('PUT', '/exercises/'.$exercise->id, $parameters);
 
         $this->assertResponseUnauthorized();
     }
@@ -215,7 +243,7 @@ class ExerciseControllerTest extends BaseTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
+        $this->call('PUT', '/exercises/'.$exercise->id, $parameters);
 
         $this->assertResponseForbidden();
     }
@@ -240,7 +268,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createPrivateLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('PUT', '/exercises/' . $exercise->id);
+        $this->call('PUT', '/exercises/'.$exercise->id);
 
         $this->assertResponseInvalidInput();
     }
@@ -254,7 +282,7 @@ class ExerciseControllerTest extends BaseTestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
         $redirectTo = $this->randomUrl();
 
-        $this->call('DELETE', '/exercises/' . $exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
+        $this->call('DELETE', '/exercises/'.$exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
             'HTTP_REFERER' => $redirectTo,
         ]);
 
@@ -262,12 +290,36 @@ class ExerciseControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo($redirectTo);
     }
 
+    public function testItShould_deleteExercise_ensurePercentOfGoodAnswersOfLessonIsRecalculated()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson($user);
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $redirectTo = $this->randomUrl();
+
+        // pre set percent_of_good_answers to some value different than 0,
+        // because 0 should be the result percent_of_good_answers after only exercise is deleted
+        $lesson->subscribers[0]->pivot->percent_of_good_answers = 20;
+        $lesson->subscribers[0]->pivot->save();
+        $this->assertEquals(20, $lesson->percentOfGoodAnswersOfUser($user->id));
+
+        $this->call('DELETE', '/exercises/'.$exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
+            'HTTP_REFERER' => $redirectTo,
+        ]);
+
+        $this->assertNull($exercise->fresh());
+        $this->assertResponseRedirectedTo($redirectTo);
+
+        // just one exercise without answers = 0% of good answers
+        $this->assertEquals(0, $lesson->fresh()->percentOfGoodAnswersOfUser($user->id));
+    }
+
     public function testItShould_notDeleteExercise_unauthorized()
     {
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('DELETE', '/exercises/' . $exercise->id);
+        $this->call('DELETE', '/exercises/'.$exercise->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -278,7 +330,7 @@ class ExerciseControllerTest extends BaseTestCase
         $lesson = $this->createPrivateLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('DELETE', '/exercises/' . $exercise->id);
+        $this->call('DELETE', '/exercises/'.$exercise->id);
 
         $this->assertResponseForbidden();
     }

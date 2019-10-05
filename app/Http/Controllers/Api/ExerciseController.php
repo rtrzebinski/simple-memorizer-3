@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ExerciseCreated;
+use App\Events\ExerciseDeleted;
 use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
@@ -21,6 +23,8 @@ class ExerciseController extends Controller
         $exercise = new Exercise($request->all());
         $exercise->lesson_id = $lesson->id;
         $exercise->save();
+
+        event(new ExerciseCreated($lesson, $this->user()));
 
         return $this->response($exercise);
     }
@@ -65,6 +69,9 @@ class ExerciseController extends Controller
     public function deleteExercise(Exercise $exercise)
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
+
         $exercise->delete();
+
+        event(new ExerciseDeleted($exercise->lesson, $this->user()));
     }
 }

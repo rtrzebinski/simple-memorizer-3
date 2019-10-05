@@ -2,7 +2,7 @@
 
 namespace Tests\Listeners;
 
-use App\Events\BadAnswer;
+use App\Events\ExerciseBadAnswer;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
 
 class UpdateNumberOfBadAnswersOfExerciseTest extends \TestCase
@@ -17,7 +17,7 @@ class UpdateNumberOfBadAnswersOfExerciseTest extends \TestCase
         $this->assertEquals(0, $exercise->numberOfBadAnswersOfUser($user->id));
 
         $listener = new UpdateNumberOfBadAnswersOfExercise();
-        $event = new BadAnswer($exercise, $user->id);
+        $event = new ExerciseBadAnswer($exercise, $user);
         $listener->handle($event);
 
         $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));

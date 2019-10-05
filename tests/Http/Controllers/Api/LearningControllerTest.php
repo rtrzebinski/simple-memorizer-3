@@ -146,11 +146,11 @@ class LearningControllerTest extends BaseTestCase
 
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer', $data = [], $user);
 
+        $this->assertResponseOk();
+
         $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));
         $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
         $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
-
-        $this->assertResponseOk();
     }
 
     public function testItShould_notHandleBadAnswer_unauthorized()

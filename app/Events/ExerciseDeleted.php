@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class BadAnswer extends AnswerEvent
+class ExerciseDeleted extends LessonEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

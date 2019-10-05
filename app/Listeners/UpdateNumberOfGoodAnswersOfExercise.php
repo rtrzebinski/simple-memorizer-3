@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\GoodAnswer;
+use App\Events\ExerciseGoodAnswer;
 use App\Models\ExerciseResult;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,20 +15,20 @@ class UpdateNumberOfGoodAnswersOfExercise implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param GoodAnswer $event
+     * @param ExerciseGoodAnswer $event
      * @return void
      */
-    public function handle(GoodAnswer $event)
+    public function handle(ExerciseGoodAnswer $event)
     {
-        $exercise = $event->exercise;
-        $userId = $event->userId;
+        $exercise = $event->exercise();
+        $user = $event->user();
 
-        $exerciseResult = ExerciseResult::whereExerciseId($exercise->id)->whereUserId($userId)->first();
+        $exerciseResult = ExerciseResult::whereExerciseId($exercise->id)->whereUserId($user->id)->first();
 
         if (is_null($exerciseResult)) {
             // create new exercise result
             $exerciseResult = new ExerciseResult();
-            $exerciseResult->user_id = $userId;
+            $exerciseResult->user_id = $user->id;
             $exerciseResult->exercise_id = $exercise->id;
             $exerciseResult->number_of_good_answers = 1;
             $exerciseResult->save();

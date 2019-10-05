@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Events\BadAnswer;
-use App\Events\GoodAnswer;
+use App\Events\ExerciseBadAnswer;
+use App\Events\ExerciseGoodAnswer;
 use App\Exceptions\NotEnoughExercisesException;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
@@ -49,7 +49,7 @@ class LearningController extends Controller
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
-        event(new GoodAnswer($exercise, $this->user()->id));
+        event(new ExerciseGoodAnswer($exercise, $this->user()));
 
         return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
     }
@@ -64,7 +64,7 @@ class LearningController extends Controller
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
 
-        event(new BadAnswer($exercise, $this->user()->id));
+        event(new ExerciseBadAnswer($exercise, $this->user()));
 
         return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\BadAnswer;
-use App\Events\GoodAnswer;
+use App\Events\ExerciseBadAnswer;
+use App\Events\ExerciseGoodAnswer;
 use App\Exceptions\NotEnoughExercisesException;
 use App\Http\Requests\FetchRandomExerciseOfLessonRequest;
 use App\Models\Exercise;
@@ -41,7 +41,7 @@ class LearningController extends Controller
     public function handleGoodAnswer(Exercise $exercise)
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
-        event(new GoodAnswer($exercise, $this->user()->id));
+        event(new ExerciseGoodAnswer($exercise, $this->user()));
     }
 
     /**
@@ -51,6 +51,6 @@ class LearningController extends Controller
     public function handleBadAnswer(Exercise $exercise)
     {
         $this->authorizeForUser($this->user(), 'learn', $exercise->lesson);
-        event(new BadAnswer($exercise, $this->user()->id));
+        event(new ExerciseBadAnswer($exercise, $this->user()));
     }
 }

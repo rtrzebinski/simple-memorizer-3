@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
-use App\Events\BadAnswer;
-use App\Events\GoodAnswer;
+use App\Events\ExerciseBadAnswer;
+use App\Events\ExerciseCreated;
+use App\Events\ExerciseDeleted;
+use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
 use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
 use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
 use App\Listeners\UpdatePercentOfGoodAnswersOfLesson;
+use App\Models\Exercise;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -18,14 +21,20 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        GoodAnswer::class => [
+        ExerciseGoodAnswer::class => [
             UpdateNumberOfGoodAnswersOfExercise::class,
             UpdatePercentOfGoodAnswersOfExercise::class,
             UpdatePercentOfGoodAnswersOfLesson::class,
         ],
-        BadAnswer::class => [
+        ExerciseBadAnswer::class => [
             UpdateNumberOfBadAnswersOfExercise::class,
             UpdatePercentOfGoodAnswersOfExercise::class,
+            UpdatePercentOfGoodAnswersOfLesson::class,
+        ],
+        ExerciseCreated::class => [
+            UpdatePercentOfGoodAnswersOfLesson::class,
+        ],
+        ExerciseDeleted::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
         ],
     ];

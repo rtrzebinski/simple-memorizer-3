@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\AnswerEvent;
+use App\Events\ExerciseEvent;
 use App\Models\ExerciseResult;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,15 +14,15 @@ class UpdatePercentOfGoodAnswersOfExercise implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param AnswerEvent $event
+     * @param ExerciseEvent $event
      * @return void
      */
-    public function handle(AnswerEvent $event)
+    public function handle(ExerciseEvent $event)
     {
-        $exercise = $event->exercise;
-        $userId = $event->userId;
+        $exercise = $event->exercise();
+        $user = $event->user();
 
-        $exerciseResult = ExerciseResult::whereExerciseId($exercise->id)->whereUserId($userId)->first();
+        $exerciseResult = ExerciseResult::whereExerciseId($exercise->id)->whereUserId($user->id)->first();
         $exerciseResult->percent_of_good_answers = $this->calculatePercentOfGoodAnswers($exerciseResult);
         $exerciseResult->save();
     }
