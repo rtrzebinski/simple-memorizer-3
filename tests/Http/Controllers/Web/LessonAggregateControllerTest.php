@@ -78,6 +78,25 @@ class LessonAggregateControllerTest extends BaseTestCase
     }
 
     /** @test */
+    public function itShould_syncLessonAggregate_clearAll()
+    {
+        $user = $this->createUser();
+        $this->be($user);
+
+        $parentLesson = $this->createPrivateLesson($user);
+        $childLesson = $this->createPrivateLesson($user);
+        $parentLesson->childLessons()->attach($childLesson);
+
+        $this->expectsEvents(LessonAggregatesUpdated::class);
+
+        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id);
+        $this->assertResponseRedirectedTo('/lessons/aggregate/'.$parentLesson->id);
+
+        $parentLesson = $parentLesson->fresh();
+        $this->assertCount(0, $parentLesson->childLessons);
+    }
+
+    /** @test */
     public function itShould_notSyncLessonAggregate_unauthorized()
     {
         $parentLesson = $this->createLesson();
@@ -95,7 +114,11 @@ class LessonAggregateControllerTest extends BaseTestCase
 
         $parentLesson = $this->createPrivateLesson($user);
 
-        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id);
+        $data = [
+            'aggregates' => uniqid(), // should be an array
+        ];
+
+        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id, $data);
 
         $this->assertResponseInvalidInput();
     }

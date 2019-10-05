@@ -25,7 +25,7 @@ class SyncLessonAggregateRequest extends Request
     public function rules()
     {
         return [
-            'aggregates' => 'required|array',
+            'aggregates' => 'array',
         ];
     }
 }
