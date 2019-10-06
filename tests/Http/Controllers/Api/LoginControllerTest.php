@@ -21,7 +21,8 @@ class LoginControllerTest extends BaseTestCase
 
     // login
 
-    public function testItShould_loginUser()
+    /** @test */
+    public function itShould_loginUser()
     {
         $email = $this->randomEmail();
         $password = $this->randomPassword();
@@ -42,7 +43,8 @@ class LoginControllerTest extends BaseTestCase
         $this->seeJsonFragment($user->makeVisible('api_token')->toArray());
     }
 
-    public function testItShould_notLoginUser_invalidInput()
+    /** @test */
+    public function itShould_notLoginUser_invalidInput()
     {
         $this->userRepositoryMock
             ->expects($this->never())
@@ -53,7 +55,8 @@ class LoginControllerTest extends BaseTestCase
         $this->assertResponseInvalidInput();
     }
 
-    public function testItShould_notLoginUser_incorrectCredentials()
+    /** @test */
+    public function itShould_notLoginUser_incorrectCredentials()
     {
         $email = $this->randomEmail();
         $password = $this->randomPassword();

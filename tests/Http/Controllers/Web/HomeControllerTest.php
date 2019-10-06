@@ -6,7 +6,8 @@ class HomeControllerTest extends BaseTestCase
 {
     // index
 
-    public function testItShould_displayHomePage()
+    /** @test */
+    public function itShould_displayHomePage()
     {
         $this->be($user = $this->createUser());
 
@@ -19,7 +20,8 @@ class HomeControllerTest extends BaseTestCase
         $this->assertViewHas('userHasOwnedOrSubscribedLessons', $user->hasOwnedOrSubscribedLessons());
     }
 
-    public function testItShould_notDisplayHomePage_unauthorized()
+    /** @test */
+    public function itShould_notDisplayHomePage_unauthorized()
     {
         $this->call('GET', '/home');
 

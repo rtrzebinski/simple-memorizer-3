@@ -35,12 +35,13 @@ class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
     }
 
     /**
+     * @test
      * @dataProvider answersProvider
      * @param $numberOfGoodAnswers
      * @param $numberOfBadAnswers
      * @param $percentOfGoodAnswers
      */
-    public function testItShould_updatePercentOfGoodAnswersOfExercise(
+    public function itShould_updatePercentOfGoodAnswersOfExercise(
         $numberOfGoodAnswers,
         $numberOfBadAnswers,
         $percentOfGoodAnswers

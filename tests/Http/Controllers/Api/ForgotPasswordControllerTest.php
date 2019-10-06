@@ -3,13 +3,14 @@
 namespace Tests\Http\Controllers\Api;
 
 use Illuminate\Auth\Notifications\ResetPassword;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class ForgotPasswordControllerTest extends BaseTestCase
 {
     // sendResetLinkEmail
 
-    public function testItShould_sendResetLinkEmail()
+    /** @test */
+    public function itShould_sendResetLinkEmail()
     {
         $user = $this->createUser()->fresh();
 
@@ -23,21 +24,24 @@ class ForgotPasswordControllerTest extends BaseTestCase
         Notification::assertSentTo($user, ResetPassword::class);
     }
 
-    public function testItShould_notSendResetLinkEmail_missingEmail()
+    /** @test */
+    public function itShould_notSendResetLinkEmail_missingEmail()
     {
         $this->callApi('POST', '/password/email');
 
         $this->assertResponseInvalidInput();
     }
 
-    public function testItShould_notSendResetLinkEmail_invalidEmail()
+    /** @test */
+    public function itShould_notSendResetLinkEmail_invalidEmail()
     {
         $this->callApi('POST', '/password/email', ['email' => uniqid()]);
 
         $this->assertResponseInvalidInput();
     }
 
-    public function testItShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()
+    /** @test */
+    public function itShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()
     {
         $this->callApi('POST', '/password/email', ['email' => $this->randomEmail()]);
 

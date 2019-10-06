@@ -4,7 +4,8 @@ namespace Tests\Models;
 
 class ExerciseTest extends \TestCase
 {
-    public function testItShould_defaultNumberOfAnswersToZero()
+    /** @test */
+    public function itShould_defaultNumberOfAnswersToZero()
     {
         $user = $this->createUser();
         $exercise = $this->createExercise();

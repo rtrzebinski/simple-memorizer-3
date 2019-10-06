@@ -4,6 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 class ExerciseSearchControllerTest extends BaseTestCase
 {
+    // searchForExercises
+
     /** @test */
     public function itShould_searchForExercises_searchPhraseSameAsQuestion()
     {

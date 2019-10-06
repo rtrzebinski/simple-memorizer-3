@@ -3,19 +3,21 @@
 namespace Tests\Http\Controllers\Web;
 
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ResetPasswordControllerTest extends BaseTestCase
 {
-    public function testItShould_showResetForm()
+    /** @test */
+    public function itShould_showResetForm()
     {
-        $this->call('GET', 'password/reset/' . uniqid());
+        $this->call('GET', 'password/reset/'.uniqid());
 
         $this->assertResponseOk();
         $this->see('Reset Password');
     }
 
-    public function testItShould_resetPassword()
+    /** @test */
+    public function itShould_resetPassword()
     {
         $user = $this->createUser();
         $password = $this->randomPassword();
@@ -40,7 +42,8 @@ class ResetPasswordControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/home');
     }
 
-    public function testItShould_notResetPassword_invalidToken()
+    /** @test */
+    public function itShould_notResetPassword_invalidToken()
     {
         $user = $this->createUser();
         $password = $this->randomPassword();
@@ -58,7 +61,8 @@ class ResetPasswordControllerTest extends BaseTestCase
         $this->assertResponseInvalidInput();
     }
 
-    public function testItShould_notResetPassword_invalidPassword()
+    /** @test */
+    public function itShould_notResetPassword_invalidPassword()
     {
         $user = $this->createUser();
         $token = uniqid();

@@ -19,7 +19,8 @@ class RegisterControllerTest extends BaseTestCase
         $this->app->instance(UserRepository::class, $this->userRepositoryMock);
     }
 
-    public function testItShould_registerUser()
+    /** @test */
+    public function itShould_registerUser()
     {
         $email = $this->randomEmail();
         $password = $this->randomPassword();
@@ -43,7 +44,8 @@ class RegisterControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/home');
     }
 
-    public function testItShould_notRegisterUser_invalidInput()
+    /** @test */
+    public function itShould_notRegisterUser_invalidInput()
     {
         $this->userRepositoryMock
             ->expects($this->never())

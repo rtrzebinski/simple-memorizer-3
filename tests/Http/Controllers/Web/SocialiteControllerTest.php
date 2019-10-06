@@ -4,14 +4,15 @@ namespace Tests\Http\Controllers\Web;
 
 use App\Exceptions\UserCreatedWithAnotherDriverException;
 use App\Repositories\UserRepository;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Two\AbstractProvider;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\RedirectResponse;
 
 class SocialiteControllerTest extends BaseTestCase
 {
-    public function testItShould_redirectToProvider()
+    /** @test */
+    public function itShould_redirectToProvider()
     {
         $redirectResponse = new RedirectResponse($redirectUrl = $this->randomUrl());
 
@@ -24,12 +25,13 @@ class SocialiteControllerTest extends BaseTestCase
             ->with($driver = uniqid())
             ->andReturn($provider);
 
-        $this->call('GET', '/login/' . $driver);
+        $this->call('GET', '/login/'.$driver);
 
         $this->assertResponseRedirectedTo($redirectUrl);
     }
 
-    public function testItShould_handleProviderCallback()
+    /** @test */
+    public function itShould_handleProviderCallback()
     {
         $socialiteUser = $this->createSocialiteUser();
         $user = $this->createUser();
@@ -49,13 +51,14 @@ class SocialiteControllerTest extends BaseTestCase
             ->with($socialiteUser, $driver)
             ->willReturn($user);
 
-        $this->call('GET', '/login/callback/' . $driver);
+        $this->call('GET', '/login/callback/'.$driver);
 
         $this->assertEquals($user, Auth::user());
         $this->assertResponseRedirectedTo('/home');
     }
 
-    public function testItShould_handleProviderCallback_regularUserAlreadyExists()
+    /** @test */
+    public function itShould_handleProviderCallback_regularUserAlreadyExists()
     {
         $socialiteUser = $this->createSocialiteUser();
         $user = $this->createUser();
@@ -75,7 +78,7 @@ class SocialiteControllerTest extends BaseTestCase
             ->with($socialiteUser, $driver)
             ->willThrowException(new UserCreatedWithAnotherDriverException($user));
 
-        $this->call('GET', '/login/callback/' . $driver);
+        $this->call('GET', '/login/callback/'.$driver);
 
         $this->assertNull(Auth::user());
         $this->assertResponseRedirectedTo('/login');
@@ -83,7 +86,8 @@ class SocialiteControllerTest extends BaseTestCase
         $this->assertSessionErrorMessage(sprintf($message, $socialiteUser->email, $driver));
     }
 
-    public function testItShould_handleProviderCallback_oauthUserAlreadyExists()
+    /** @test */
+    public function itShould_handleProviderCallback_oauthUserAlreadyExists()
     {
         $socialiteUser = $this->createSocialiteUser();
         $user = $this->createUser(['auth_driver' => $oldAuthDriver = uniqid()]);
@@ -103,7 +107,7 @@ class SocialiteControllerTest extends BaseTestCase
             ->with($socialiteUser, $driver)
             ->willThrowException(new UserCreatedWithAnotherDriverException($user));
 
-        $this->call('GET', '/login/callback/' . $driver);
+        $this->call('GET', '/login/callback/'.$driver);
 
         $this->assertNull(Auth::user());
         $this->assertResponseRedirectedTo('/login');

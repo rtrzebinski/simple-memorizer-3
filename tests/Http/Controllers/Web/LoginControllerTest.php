@@ -19,7 +19,8 @@ class LoginControllerTest extends BaseTestCase
         $this->app->instance(UserRepository::class, $this->userRepositoryMock);
     }
 
-    public function testItShould_loginUser()
+    /** @test */
+    public function itShould_loginUser()
     {
         $email = $this->randomEmail();
         $password = $this->randomPassword();
@@ -37,7 +38,8 @@ class LoginControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/home');
     }
 
-    public function testItShould_notLoginUser_invalidCredentials()
+    /** @test */
+    public function itShould_notLoginUser_invalidCredentials()
     {
         $this->call('POST', '/login', [
             'email' => uniqid(),
@@ -48,7 +50,8 @@ class LoginControllerTest extends BaseTestCase
         $this->assertResponseInvalidInput();
     }
 
-    public function testItShould_logoutUser()
+    /** @test */
+    public function itShould_logoutUser()
     {
         $this->be($this->createUser());
 

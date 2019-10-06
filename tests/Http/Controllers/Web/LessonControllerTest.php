@@ -10,7 +10,8 @@ class LessonControllerTest extends BaseTestCase
 {
     // create
 
-    public function testItShould_showLessonCreatePage()
+    /** @test */
+    public function itShould_showLessonCreatePage()
     {
         $this->be($user = $this->createUser());
 
@@ -19,7 +20,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseOk();
     }
 
-    public function testItShould_notShowLessonCreatePage_unauthorized()
+    /** @test */
+    public function itShould_notShowLessonCreatePage_unauthorized()
     {
         $this->call('GET', '/lessons/create');
 
@@ -28,7 +30,8 @@ class LessonControllerTest extends BaseTestCase
 
     // store
 
-    public function testItShould_storeLesson()
+    /** @test */
+    public function itShould_storeLesson()
     {
         $this->be($user = $this->createUser());
 
@@ -57,14 +60,16 @@ class LessonControllerTest extends BaseTestCase
         $this->assertCount(0, $lesson->subscribersWithOwnerExcluded);
     }
 
-    public function testItShould_notStoreLesson_unauthorized()
+    /** @test */
+    public function itShould_notStoreLesson_unauthorized()
     {
         $this->call('POST', '/lessons');
 
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notStoreLesson_invalidInput()
+    /** @test */
+    public function itShould_notStoreLesson_invalidInput()
     {
         $this->be($user = $this->createUser());
 
@@ -75,7 +80,8 @@ class LessonControllerTest extends BaseTestCase
 
     // view
 
-    public function testItShould_showLessonViewPage()
+    /** @test */
+    public function itShould_showLessonViewPage()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -86,7 +92,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
-    public function testItShould_notShowLessonViewPage_unauthorized()
+    /** @test */
+    public function itShould_notShowLessonViewPage_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -95,7 +102,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notShowLessonViewPage_forbidden()
+    /** @test */
+    public function itShould_notShowLessonViewPage_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
@@ -105,7 +113,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notShowLessonViewPage_lessonNotFound()
+    /** @test */
+    public function itShould_notShowLessonViewPage_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -116,7 +125,8 @@ class LessonControllerTest extends BaseTestCase
 
     // exercises
 
-    public function testItShould_showLessonExercisesViewPage()
+    /** @test */
+    public function itShould_showLessonExercisesViewPage()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -127,7 +137,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
-    public function testItShould_showLessonExercisesViewPage_exerciseWithoutAnswers()
+    /** @test */
+    public function itShould_showLessonExercisesViewPage_exerciseWithoutAnswers()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -143,7 +154,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals(0, $this->view()->exercises[0]->percent_of_good_answers);
     }
 
-    public function testItShould_showLessonExercisesViewPage_exerciseWithGoodAnswer()
+    /** @test */
+    public function itShould_showLessonExercisesViewPage_exerciseWithGoodAnswer()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -164,7 +176,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals(66, $this->view()->exercises[0]->percent_of_good_answers);
     }
 
-    public function testItShould_notShowLessonExercisesViewPage_unauthorized()
+    /** @test */
+    public function itShould_notShowLessonExercisesViewPage_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -173,7 +186,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notShowLessonExercisesViewPage_forbidden()
+    /** @test */
+    public function itShould_notShowLessonExercisesViewPage_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
@@ -183,7 +197,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notShowLessonExercisesViewPage_lessonNotFound()
+    /** @test */
+    public function itShould_notShowLessonExercisesViewPage_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -194,7 +209,8 @@ class LessonControllerTest extends BaseTestCase
 
     // edit
 
-    public function testItShould_showLessonEditPage()
+    /** @test */
+    public function itShould_showLessonEditPage()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -205,7 +221,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($lesson->id, $this->view()->lesson->id);
     }
 
-    public function testItShould_notShowLessonEditPage_unauthorized()
+    /** @test */
+    public function itShould_notShowLessonEditPage_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -214,7 +231,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notShowLessonEditPage_forbidden()
+    /** @test */
+    public function itShould_notShowLessonEditPage_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
@@ -224,7 +242,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notShowLessonEditPage_lessonNotFound()
+    /** @test */
+    public function itShould_notShowLessonEditPage_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -235,7 +254,8 @@ class LessonControllerTest extends BaseTestCase
 
     // update
 
-    public function testItShould_updateLesson()
+    /** @test */
+    public function itShould_updateLesson()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -255,7 +275,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/edit');
     }
 
-    public function testItShould_notUpdateLesson_unauthorized()
+    /** @test */
+    public function itShould_notUpdateLesson_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -264,7 +285,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notUpdateLesson_forbidden()
+    /** @test */
+    public function itShould_notUpdateLesson_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
@@ -274,7 +296,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notUpdateLesson_lessonNotFound()
+    /** @test */
+    public function itShould_notUpdateLesson_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -283,7 +306,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseNotFound();
     }
 
-    public function testItShould_notUpdateLesson_invalidInput()
+    /** @test */
+    public function itShould_notUpdateLesson_invalidInput()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -295,7 +319,8 @@ class LessonControllerTest extends BaseTestCase
 
     // delete
 
-    public function testItShould_deleteLesson()
+    /** @test */
+    public function itShould_deleteLesson()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -306,7 +331,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertNull($lesson->fresh());
     }
 
-    public function testItShould_notDeleteLesson_unauthorized()
+    /** @test */
+    public function itShould_notDeleteLesson_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -315,7 +341,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notDeleteLesson_forbidden()
+    /** @test */
+    public function itShould_notDeleteLesson_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
@@ -325,7 +352,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notDeleteLesson_lessonNotFound()
+    /** @test */
+    public function itShould_notDeleteLesson_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -336,7 +364,8 @@ class LessonControllerTest extends BaseTestCase
 
     // subscribe
 
-    public function testItShould_subscribeLesson()
+    /** @test */
+    public function itShould_subscribeLesson()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -348,7 +377,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedBack();
     }
 
-    public function testItShould_notSubscribeLesson_unauthorized()
+    /** @test */
+    public function itShould_notSubscribeLesson_unauthorized()
     {
         $lesson = $this->createPublicLesson();
 
@@ -357,7 +387,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notSubscribeLesson_forbidden()
+    /** @test */
+    public function itShould_notSubscribeLesson_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
@@ -368,7 +399,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedBack();
     }
 
-    public function testItShould_notSubscribeLesson_lessonNotFound()
+    /** @test */
+    public function itShould_notSubscribeLesson_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -379,7 +411,8 @@ class LessonControllerTest extends BaseTestCase
 
     // unsubscribe
 
-    public function testItShould_unsubscribeLesson()
+    /** @test */
+    public function itShould_unsubscribeLesson()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -391,7 +424,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedBack();
     }
 
-    public function testItShould_notUnsubscribeLesson_unauthorized()
+    /** @test */
+    public function itShould_notUnsubscribeLesson_unauthorized()
     {
         $lesson = $this->createPublicLesson();
 
@@ -400,7 +434,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notUnsubscribeLesson_forbidden()
+    /** @test */
+    public function itShould_notUnsubscribeLesson_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -410,7 +445,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedBack();
     }
 
-    public function testItShould_notUnsubscribeLesson_lessonNotFound()
+    /** @test */
+    public function itShould_notUnsubscribeLesson_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -421,7 +457,8 @@ class LessonControllerTest extends BaseTestCase
 
     // subscribeAndLearn
 
-    public function testItShould_subscribeAndLearn()
+    /** @test */
+    public function itShould_subscribeAndLearn()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson();
@@ -433,7 +470,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/learn/lessons/'.$lesson->id);
     }
 
-    public function testItShould_notSubscribeAndLearn_unauthorized()
+    /** @test */
+    public function itShould_notSubscribeAndLearn_unauthorized()
     {
         $lesson = $this->createPublicLesson();
 
@@ -442,7 +480,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notSubscribeAndLearn_forbidden()
+    /** @test */
+    public function itShould_notSubscribeAndLearn_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
@@ -453,7 +492,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/learn/lessons/'.$lesson->id);
     }
 
-    public function testItShould_notSubscribeAndLearn_lessonNotFound()
+    /** @test */
+    public function itShould_notSubscribeAndLearn_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -464,7 +504,8 @@ class LessonControllerTest extends BaseTestCase
 
     // exportCsv
 
-    public function testItShould_exportCsv()
+    /** @test */
+    public function itShould_exportCsv()
     {
         $user = $this->createUser();
         $this->be($user);
@@ -506,7 +547,8 @@ class LessonControllerTest extends BaseTestCase
         ], $first);
     }
 
-    public function testItShould_notExportCsv_unauthorised()
+    /** @test */
+    public function itShould_notExportCsv_unauthorised()
     {
         $lesson = $this->createPrivateLesson();
 
@@ -515,7 +557,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notExportCsv_lessonNotFound()
+    /** @test */
+    public function itShould_notExportCsv_lessonNotFound()
     {
         $user = $this->createUser();
         $this->be($user);
@@ -527,7 +570,8 @@ class LessonControllerTest extends BaseTestCase
 
     // importCsv
 
-    public function testItShould_importCsv()
+    /** @test */
+    public function itShould_importCsv()
     {
         $user = $this->createUser();
         $this->be($user);
@@ -569,7 +613,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals(80, $lesson->exercises->first()->resultOfUser($user->id)->percent_of_good_answers);
     }
 
-    public function testItShould_notImportCsv_unauthorized()
+    /** @test */
+    public function itShould_notImportCsv_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -603,7 +648,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notImportCsv_forbidden()
+    /** @test */
+    public function itShould_notImportCsv_forbidden()
     {
         $user = $this->createUser();
         $this->be($user);
@@ -639,7 +685,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notImportCsv_lessonNotFound()
+    /** @test */
+    public function itShould_notImportCsv_lessonNotFound()
     {
         $user = $this->createUser();
         $this->be($user);
@@ -674,7 +721,8 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseNotFound();
     }
 
-    public function testItShould_notImportCsv_invalidInput()
+    /** @test */
+    public function itShould_notImportCsv_invalidInput()
     {
         $user = $this->createUser();
         $this->be($user);

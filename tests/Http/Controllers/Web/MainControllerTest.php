@@ -4,7 +4,8 @@ namespace Tests\Http\Controllers\Web;
 
 class MainControllerTest extends BaseTestCase
 {
-    public function testItShould_displayMainPage_authenticatedUser()
+    /** @test */
+    public function itShould_displayMainPage_authenticatedUser()
     {
         $this->be($user = $this->createUser());
 
@@ -13,7 +14,8 @@ class MainControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/home');
     }
 
-    public function testItShould_displayMainPage_notAuthenticatedUser()
+    /** @test */
+    public function itShould_displayMainPage_notAuthenticatedUser()
     {
         $this->call('GET', '/');
 

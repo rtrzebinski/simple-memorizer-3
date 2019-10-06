@@ -21,29 +21,8 @@ class LearningServiceTest extends TestCase
         $this->learningService = new LearningService();
     }
 
-    // not
-    public function testItShould_notReturnRandomExercise_lessonHasNoExercises()
-    {
-        $lesson = $this->createLesson();
-
-        $this->expectException(NotEnoughExercisesException::class);
-
-        $this->learningService->fetchRandomExerciseOfLesson($lesson, $this->createUser()->id);
-    }
-
-    // not
-    public function testItShould_notReturnRandomExercise_lessonOnlyHasPreviousExercise()
-    {
-        $user = $this->createUser();
-        $lesson = $this->createLesson();
-        $previousExercise = $this->createExercise();
-
-        $this->expectException(NotEnoughExercisesException::class);
-
-        $this->learningService->fetchRandomExerciseOfLesson($lesson, $user->id, $previousExercise->id);
-    }
-
-    public function testItShould_returnRandomExercise_exerciseOnlyHasAnswersOfAnotherUser()
+    /** @test */
+    public function itShould_returnRandomExercise_exerciseOnlyHasAnswersOfAnotherUser()
     {
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
@@ -57,7 +36,8 @@ class LearningServiceTest extends TestCase
         $this->assertExerciseCanWin($lesson, $this->createUser()->id, $exercise->id);
     }
 
-    public function testItShould_returnRandomExercise_onePossibleExercise()
+    /** @test */
+    public function itShould_returnRandomExercise_onePossibleExercise()
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
@@ -67,7 +47,8 @@ class LearningServiceTest extends TestCase
         $this->assertExerciseCanWin($lesson, $user->id, $exercise->id);
     }
 
-    public function testItShould_returnRandomExercise_twoPossibleExercises()
+    /** @test */
+    public function itShould_returnRandomExercise_twoPossibleExercises()
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
@@ -86,7 +67,8 @@ class LearningServiceTest extends TestCase
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id);
     }
 
-    public function testItShould_returnRandomExercise_twoPossibleExercises_withPrevious()
+    /** @test */
+    public function itShould_returnRandomExercise_twoPossibleExercises_withPrevious()
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
@@ -105,6 +87,29 @@ class LearningServiceTest extends TestCase
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id, $previousExercise->id);
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id, $previousExercise->id);
     }
+
+    /** @test */
+    public function itShould_notReturnRandomExercise_lessonHasNoExercises()
+    {
+        $lesson = $this->createLesson();
+
+        $this->expectException(NotEnoughExercisesException::class);
+
+        $this->learningService->fetchRandomExerciseOfLesson($lesson, $this->createUser()->id);
+    }
+
+    /** @test */
+    public function itShould_notReturnRandomExercise_lessonOnlyHasPreviousExercise()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $previousExercise = $this->createExercise();
+
+        $this->expectException(NotEnoughExercisesException::class);
+
+        $this->learningService->fetchRandomExerciseOfLesson($lesson, $user->id, $previousExercise->id);
+    }
+
 
     private function assertExerciseCanWin(Lesson $lesson, int $userId, int $exerciseId, int $previousId = null)
     {

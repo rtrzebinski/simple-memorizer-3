@@ -18,7 +18,8 @@ class ExercisePolicyTest extends TestCase
         $this->policy = new ExercisePolicy();
     }
 
-    public function testItShould_authorizeExerciseAccess_userIsLessonOwner()
+    /** @test */
+    public function itShould_authorizeExerciseAccess_userIsLessonOwner()
     {
         $exercise = $this->createExercise();
         $user = $exercise->lesson->owner;
@@ -26,7 +27,8 @@ class ExercisePolicyTest extends TestCase
         $this->assertTrue($this->policy->access($user, $exercise));
     }
 
-    public function testItShould_authorizeExerciseAccess_userSubscribesLesson()
+    /** @test */
+    public function itShould_authorizeExerciseAccess_userSubscribesLesson()
     {
         $exercise = $this->createExercise();
         $user = $this->createUser();
@@ -35,7 +37,8 @@ class ExercisePolicyTest extends TestCase
         $this->assertTrue($this->policy->access($user, $exercise));
     }
 
-    public function testItShould_notAuthorizeExerciseAccess_userIsNotLessonOwnerAndDoesNotSubscribeIt()
+    /** @test */
+    public function itShould_notAuthorizeExerciseAccess_userIsNotLessonOwnerAndDoesNotSubscribeIt()
     {
         $exercise = $this->createExercise();
         $user = $this->createUser();
@@ -43,7 +46,8 @@ class ExercisePolicyTest extends TestCase
         $this->assertFalse($this->policy->access($user, $exercise));
     }
 
-    public function testItShould_authorizeExerciseModify_userIsLessonOwner()
+    /** @test */
+    public function itShould_authorizeExerciseModify_userIsLessonOwner()
     {
         $exercise = $this->createExercise();
         $user = $exercise->lesson->owner;
@@ -51,7 +55,8 @@ class ExercisePolicyTest extends TestCase
         $this->assertTrue($this->policy->modify($user, $exercise));
     }
 
-    public function testItShould_notAuthorizeExerciseModify_userIsNotLessonOwner()
+    /** @test */
+    public function itShould_notAuthorizeExerciseModify_userIsNotLessonOwner()
     {
         $exercise = $this->createExercise();
         $user = $this->createUser();

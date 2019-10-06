@@ -18,7 +18,8 @@ class LessonPolicyTest extends TestCase
         $this->policy = new LessonPolicy;
     }
 
-    public function testItShould_authorizeLessonAccess_userIsLessonOwner()
+    /** @test */
+    public function itShould_authorizeLessonAccess_userIsLessonOwner()
     {
         $lesson = $this->createLesson();
         $user = $lesson->owner;
@@ -26,7 +27,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->access($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonAccess_lessonIsPublic()
+    /** @test */
+    public function itShould_authorizeLessonAccess_lessonIsPublic()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
@@ -34,7 +36,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->access($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonAccess_lessonIsPrivate()
+    /** @test */
+    public function itShould_notAuthorizeLessonAccess_lessonIsPrivate()
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson();
@@ -42,7 +45,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->access($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonSubscribe_publicAndNotOwnedLesson()
+    /** @test */
+    public function itShould_authorizeLessonSubscribe_publicAndNotOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
@@ -50,7 +54,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonSubscribe_publicAndOwnedLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonSubscribe_publicAndOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
@@ -58,7 +63,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonSubscribe_privateAndOwnedLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonSubscribe_privateAndOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson($user);
@@ -66,7 +72,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonSubscribe_lessonWasSubscribedByAnotherUser()
+    /** @test */
+    public function itShould_authorizeLessonSubscribe_lessonWasSubscribedByAnotherUser()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
@@ -76,7 +83,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonSubscribe_privateAndNotOwnedLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonSubscribe_privateAndNotOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson();
@@ -84,7 +92,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPublicAndOwnedLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPublicAndOwnedLesson()
     {
         $user = $this->createUser();
         // will also subscribe owner to the lesson
@@ -93,7 +102,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPublicAndNotOwnedLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPublicAndNotOwnedLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
@@ -102,7 +112,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPrivateAndOwnedLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonSubscribe_userAlreadySubscribedPrivateAndOwnedLesson()
     {
         $user = $this->createUser();
         // will also subscribe owner to the lesson
@@ -111,7 +122,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->subscribe($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonUnsubscribe_userSubscribeLesson()
+    /** @test */
+    public function itShould_authorizeLessonUnsubscribe_userSubscribeLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
@@ -120,7 +132,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->unsubscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonUnsubscribe_userDoesNotSubscribeLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonUnsubscribe_userDoesNotSubscribeLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson();
@@ -128,7 +141,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->unsubscribe($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonUnsubscribe_userOwnsLesson()
+    /** @test */
+    public function itShould_notAuthorizeLessonUnsubscribe_userOwnsLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
@@ -136,7 +150,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->unsubscribe($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonModify_userIsLessonOwner()
+    /** @test */
+    public function itShould_authorizeLessonModify_userIsLessonOwner()
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson($user);
@@ -144,7 +159,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->modify($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonModify_userIsNotLessonOwner()
+    /** @test */
+    public function itShould_notAuthorizeLessonModify_userIsNotLessonOwner()
     {
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson();
@@ -152,7 +168,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->modify($user, $lesson));
     }
 
-    public function testItShould_authorizeLessonLearn()
+    /** @test */
+    public function itShould_authorizeLessonLearn()
     {
         $lesson = $this->createLesson();
         $user = $lesson->owner;
@@ -161,7 +178,8 @@ class LessonPolicyTest extends TestCase
         $this->assertTrue($this->policy->learn($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonLearn_noAccess()
+    /** @test */
+    public function itShould_notAuthorizeLessonLearn_noAccess()
     {
         $lesson = $this->createPrivateLesson();
         $user = $this->createUser();
@@ -170,7 +188,8 @@ class LessonPolicyTest extends TestCase
         $this->assertFalse($this->policy->learn($user, $lesson));
     }
 
-    public function testItShould_notAuthorizeLessonLearn_notEnoughExercises()
+    /** @test */
+    public function itShould_notAuthorizeLessonLearn_notEnoughExercises()
     {
         $lesson = $this->createLesson();
         $user = $lesson->owner;

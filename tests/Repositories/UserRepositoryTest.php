@@ -5,7 +5,7 @@ namespace Tests\Models\Repositories;
 use App\Exceptions\UserCreatedWithAnotherDriverException;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use TestCase;
 
 class UserRepositoryTest extends TestCase
@@ -21,7 +21,8 @@ class UserRepositoryTest extends TestCase
         $this->repository = new UserRepository();
     }
 
-    public function testItShould_createNewUser_withPassword()
+    /** @test */
+    public function itShould_createNewUser_withPassword()
     {
         $input = [
             'email' => $this->randomEmail(),
@@ -41,7 +42,8 @@ class UserRepositoryTest extends TestCase
         $this->assertTrue(auth()->guard('api')->validate(['api_token' => $user->api_token]));
     }
 
-    public function testItShould_createNewUser_withAuthDriver()
+    /** @test */
+    public function itShould_createNewUser_withAuthDriver()
     {
         $input = [
             'email' => $this->randomEmail(),
@@ -64,7 +66,8 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($driver, $user->auth_driver);
     }
 
-    public function testItShould_findUserByCredentials()
+    /** @test */
+    public function itShould_findUserByCredentials()
     {
         $email = $this->randomEmail();
         $password = uniqid();
@@ -77,17 +80,20 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($user->id, $this->repository->findByCredentials($email, $password)->id);
     }
 
-    public function testItShould_notFindUserByCredentials_notExistingUser()
+    /** @test */
+    public function itShould_notFindUserByCredentials_notExistingUser()
     {
         $this->assertNull($this->repository->findByCredentials($this->randomEmail(), uniqid()));
     }
 
-    public function testItShould_notFindUserByCredentials_wrongPassword()
+    /** @test */
+    public function itShould_notFindUserByCredentials_wrongPassword()
     {
         $this->assertNull($this->repository->findByCredentials($this->createUser()->email, uniqid()));
     }
 
-    public function testItShould_handleSocialiteUser_userExists_sameDriver()
+    /** @test */
+    public function itShould_handleSocialiteUser_userExists_sameDriver()
     {
         $driver = uniqid();
         $socialiteUser = $this->createSocialiteUser();
@@ -102,7 +108,8 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($user->id, $result->id);
     }
 
-    public function testItShould_handleSocialiteUser_userExists_differentDriver()
+    /** @test */
+    public function itShould_handleSocialiteUser_userExists_differentDriver()
     {
         $driver = uniqid();
         $socialiteUser = $this->createSocialiteUser();
@@ -121,7 +128,8 @@ class UserRepositoryTest extends TestCase
         $this->fail('Exception was not thrown.');
     }
 
-    public function testItShould_handleSocialiteUser_userDoesNotExist()
+    /** @test */
+    public function itShould_handleSocialiteUser_userDoesNotExist()
     {
         $driver = uniqid();
         $socialiteUser = $this->createSocialiteUser();

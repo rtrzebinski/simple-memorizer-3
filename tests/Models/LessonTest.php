@@ -22,21 +22,6 @@ class LessonTest extends \TestCase
         ]);
     }
 
-    /** @test */
-    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLessons()
-    {
-        $parentLesson = $this->createLesson();
-        $this->createExercise(['lesson_id' => $parentLesson->id]);
-        $this->createExercise(['lesson_id' => $parentLesson->id]);
-        $childLesson = $this->createLesson();
-        $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExercise(['lesson_id' => $childLesson->id]);
-
-        $parentLesson->childLessons()->attach($childLesson);
-
-        $this->assertCount(4, $parentLesson->all_exercises);
-    }
-
     // parentLessons()
 
     /** @test */
@@ -55,8 +40,60 @@ class LessonTest extends \TestCase
         ]);
     }
 
+    // fetchAllExercisesOfLesson
+
     /** @test */
-    public function itShould_fetchAllExercisesOfLesson_dontIncludeExercisesFromParentLessons()
+    public function itShould_fetchAllExercisesOfLesson()
+    {
+        $lesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->assertCount(2, $lesson->all_exercises);
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLessons()
+    {
+        $parentLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $parentLesson->id]);
+        $childLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $childLesson->id]);
+
+        $parentLesson->childLessons()->attach($childLesson);
+
+        $this->assertCount(2, $parentLesson->all_exercises);
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_doNotIncludeExercisesFromOtherLessons()
+    {
+        $lesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->createExercise();
+
+        $this->assertCount(2, $lesson->all_exercises);
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_doNotIncludeExercisesFromOtherLessonsOfTheSameUser()
+    {
+        $user = $this->createUser();
+
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $anotherLesson = $this->createPublicLesson($user);
+        $this->createExercise(['lesson_id' => $anotherLesson->id]);
+
+        $this->assertCount(2, $lesson->all_exercises);
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_doNotIncludeExercisesFromParentLessons()
     {
         $parentLesson = $this->createLesson();
         $this->createExercise(['lesson_id' => $parentLesson->id]);
@@ -66,6 +103,24 @@ class LessonTest extends \TestCase
         $childLesson->parentLessons()->attach($parentLesson);
 
         $this->assertCount(0, $childLesson->all_exercises);
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_doNotIncludeExercisesFromGrandparentLessons()
+    {
+        $grandparentLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $grandparentLesson->id]);
+
+        $parentLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $parentLesson->id]);
+
+        $childLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $childLesson->id]);
+
+        $grandparentLesson->childLessons()->attach($parentLesson);
+        $parentLesson->childLessons()->attach($childLesson);
+
+        $this->assertCount(2, $parentLesson->all_exercises);
     }
 
     // subscribers()

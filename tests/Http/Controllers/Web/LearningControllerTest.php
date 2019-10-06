@@ -4,19 +4,21 @@ namespace Tests\Http\Controllers\Web;
 
 use App\Models\Lesson;
 use App\Services\LearningService;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class LearningControllerTest extends BaseTestCase
 {
     // learn
 
-    public function testItShould_showLessonLearnPage()
+    /** @test */
+    public function itShould_showLessonLearnPage()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $this->createExercise();
 
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        /** @var LearningService|MockObject $learningService */
         $learningService = $this->createMock(LearningService::class);
         $this->instance(LearningService::class, $learningService);
 
@@ -31,7 +33,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertEquals($exercise->id, $this->view()->exercise->id);
     }
 
-    public function testItShould_showLessonLearnPage_withPreviousExercise()
+    /** @test */
+    public function itShould_showLessonLearnPage_withPreviousExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createExercise()->lesson;
@@ -39,7 +42,7 @@ class LearningControllerTest extends BaseTestCase
         $previous = $lesson->exercises[0];
         $exercise = $this->createExercise();
 
-        /** @var LearningService|\PHPUnit_Framework_MockObject_MockObject $learningService */
+        /** @var LearningService|MockObject $learningService */
         $learningService = $this->createMock(LearningService::class);
         $this->instance(LearningService::class, $learningService);
 
@@ -54,7 +57,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertEquals($exercise->id, $this->view()->exercise->id);
     }
 
-    public function testItShould_showLessonLearnPage_withRequestedExercise()
+    /** @test */
+    public function itShould_showLessonLearnPage_withRequestedExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
@@ -68,7 +72,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertEquals($requested->id, $this->view()->exercise->id);
     }
 
-    public function testItShould_notShowLessonLearnPage_unauthorized()
+    /** @test */
+    public function itShould_notShowLessonLearnPage_unauthorized()
     {
         $lesson = $this->createLesson();
 
@@ -77,7 +82,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notShowLessonLearnPage_forbiddenToLearnLesson()
+    /** @test */
+    public function itShould_notShowLessonLearnPage_forbiddenToLearnLesson()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
@@ -87,7 +93,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
+    /** @test */
+    public function itShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
@@ -99,7 +106,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notShowLessonLearnPage_lessonNotFound()
+    /** @test */
+    public function itShould_notShowLessonLearnPage_lessonNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -110,7 +118,8 @@ class LearningControllerTest extends BaseTestCase
 
     // handleGoodAnswer
 
-    public function testItShould_handleGoodAnswer()
+    /** @test */
+    public function itShould_handleGoodAnswer()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -126,7 +135,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertEquals(50, $lesson->percentOfGoodAnswersOfUser($user->id));
     }
 
-    public function testItShould_notHandleGoodAnswer_unauthorized()
+    /** @test */
+    public function itShould_notHandleGoodAnswer_unauthorized()
     {
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
@@ -137,7 +147,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notHandleGoodAnswer_forbidden()
+    /** @test */
+    public function itShould_notHandleGoodAnswer_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createExercise()->lesson;
@@ -148,7 +159,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notHandleGoodAnswer_exerciseNotFound()
+    /** @test */
+    public function itShould_notHandleGoodAnswer_exerciseNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -159,7 +171,8 @@ class LearningControllerTest extends BaseTestCase
 
     // handleBadAnswer
 
-    public function testItShould_handleBadAnswer()
+    /** @test */
+    public function itShould_handleBadAnswer()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -175,7 +188,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
     }
 
-    public function testItShould_notHandleBadAnswer_unauthorized()
+    /** @test */
+    public function itShould_notHandleBadAnswer_unauthorized()
     {
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
@@ -186,7 +200,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notHandleBadAnswer_forbidden()
+    /** @test */
+    public function itShould_notHandleBadAnswer_forbidden()
     {
         $this->be($user = $this->createUser());
         $exercise = $this->createExercise();
@@ -196,7 +211,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notHandleBadAnswer_exerciseNotFound()
+    /** @test */
+    public function itShould_notHandleBadAnswer_exerciseNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -207,7 +223,8 @@ class LearningControllerTest extends BaseTestCase
 
     // updateExercise
 
-    public function testItShould_updateExercise()
+    /** @test */
+    public function itShould_updateExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
@@ -226,7 +243,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$exercise->id);
     }
 
-    public function testItShould_notUpdateExercise_unauthorized()
+    /** @test */
+    public function itShould_notUpdateExercise_unauthorized()
     {
         $lesson = $this->createPublicLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
@@ -241,7 +259,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseUnauthorized();
     }
 
-    public function testItShould_notUpdateExercise_forbidden()
+    /** @test */
+    public function itShould_notUpdateExercise_forbidden()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
@@ -257,7 +276,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseForbidden();
     }
 
-    public function testItShould_notUpdateExercise_exerciseNotFound()
+    /** @test */
+    public function itShould_notUpdateExercise_exerciseNotFound()
     {
         $this->be($user = $this->createUser());
 
@@ -271,7 +291,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseNotFound();
     }
 
-    public function testItShould_notUpdateExercise_invalidInput()
+    /** @test */
+    public function itShould_notUpdateExercise_invalidInput()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
