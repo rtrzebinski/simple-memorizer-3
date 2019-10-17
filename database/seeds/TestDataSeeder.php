@@ -204,7 +204,7 @@ class TestDataSeeder extends Seeder
                 ]);
             }
         }
-        $lesson->subscribers()->save($user);
+        $lesson->subscribedUsers()->save($user);
 
         // other lessons
         $lesson = factory(Lesson::class)->create([
@@ -245,10 +245,13 @@ class TestDataSeeder extends Seeder
         /** @var Lesson $lesson */
         $lesson = factory(Lesson::class)->create([
             'name' => $name,
-            'bidirectional' => $bidirectional,
         ]);
 
         $lesson->subscribe($lesson->owner);
+
+        $lesson->subscribedUsers()
+            ->where('lesson_user.user_id', '=', $lesson->owner->id)
+            ->update(['bidirectional' => $bidirectional]);
 
         foreach ($exercises as $k => $v) {
             factory(Exercise::class)->create([

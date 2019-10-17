@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\JoinClause;
 
 /**
@@ -17,27 +18,23 @@ use Illuminate\Database\Query\JoinClause;
  * @property int                                                                  $owner_id
  * @property string                                                               $name
  * @property string                                                               $visibility
- * @property \Carbon\Carbon|null                                                  $created_at
- * @property \Carbon\Carbon|null                                                  $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exercise[] $exercises
- * @property-read Collection                                                      $all_exercises
+ * @property \Illuminate\Support\Carbon|null                                      $created_at
+ * @property \Illuminate\Support\Carbon|null                                      $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $childLessons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exercise[] $exercises
  * @property-read \App\Models\User                                                $owner
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $parentLessons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribedUsers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribedUsersWithOwnerExcluded
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
- * @mixin Eloquent
- * @property int                                                                  $bidirectional
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereBidirectional($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $subscribersWithOwnerExcluded
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[] $parentLessons
  */
 class Lesson extends Model
 {
@@ -49,7 +46,6 @@ class Lesson extends Model
     protected $fillable = [
         'visibility',
         'name',
-        'bidirectional',
     ];
 
     /**
@@ -59,7 +55,6 @@ class Lesson extends Model
      */
     protected $casts = [
         'owner_id' => 'int',
-        'bidirectional' => 'bool',
     ];
 
     /**
@@ -95,9 +90,12 @@ class Lesson extends Model
     }
 
     /**
-     * @return Collection
+     * All exercises of a lesson, including exercises from aggregated lessons.
+     * Note that exercises only from one level below current lesson are included,
+     * so exercise of a child will be included, but exercise of grandchild will be not.
+     * @return Collection|Exercise[]
      */
-    public function getAllExercisesAttribute()
+    public function allExercises(): Collection
     {
         $allExercises = $this->exercises;
 
@@ -109,21 +107,56 @@ class Lesson extends Model
     }
 
     /**
-     * @return BelongsToMany
+     * Exercises of this lesson, and child lessons, that user should have served when learning.
+     * Exercises that have percent_of_good_answers above the threshold will be filtered out.
+     * ExerciseResults of a given user will be eager loaded.
+     * @param int $userId
+     * @return Collection|Exercise[]
      */
-    public function subscribers()
+    public function exercisesForGivenUser(int $userId): Collection
     {
-        return $this->belongsToMany(User::class)
-            // required for percent_of_good_answers to be included in the result
-            ->withPivot(['percent_of_good_answers']);
+        // All exercises of a lesson, including exercises from aggregated lessons.
+        $exercises = $this->allExercises();
+
+        // Eager load ExerciseResults (alleviates the N + 1 query problem)
+        $exercises->load([
+            'results' => function (Relation $relation) use ($userId) {
+                // only load exercise results of given user
+                $relation->where('exercise_results.user_id', $userId);
+            }
+        ]);
+
+        // Filter out exercises with percent_of_good_answers below the threshold
+        return $exercises->filter(function (Exercise $exercise) use ($userId) {
+            /** @var ExerciseResult $result */
+            $result = $exercise->results->where('user_id', '=', $userId)->first();
+
+            // User needs this exercise if his percent_of_good_answers is below or at the threshold
+            if ($result instanceof ExerciseResult) {
+                return $result->percent_of_good_answers <= $this->threshold($userId);
+            }
+
+            // User has no answers for this exercise, so we know that he needs it
+            return true;
+        });
     }
 
     /**
      * @return BelongsToMany
      */
-    public function subscribersWithOwnerExcluded()
+    public function subscribedUsers()
     {
-        return $this->subscribers()
+        return $this->belongsToMany(User::class)
+            // required for percent_of_good_answers to be included in the result
+            ->withPivot(['percent_of_good_answers', 'bidirectional', 'threshold']);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function subscribedUsersWithOwnerExcluded()
+    {
+        return $this->subscribedUsers()
             // exclude lesson owner from subscribers
             ->join('lessons', function (JoinClause $joinClause) {
                 $joinClause->on('lessons.id', '=', 'lesson_user.lesson_id')->on('lessons.owner_id', '!=', 'lesson_user.user_id');
@@ -131,28 +164,11 @@ class Lesson extends Model
     }
 
     /**
-     * @param int $userId
-     * @return int
-     * @throws \Exception
-     */
-    public function percentOfGoodAnswersOfUser(int $userId): int
-    {
-        // use relation so it can be eager loaded
-        $subscriber = $this->subscribers()->where('lesson_user.user_id', $userId)->first();
-
-        if (!$subscriber) {
-            throw new \Exception('User does not subscribe lesson: '.$this->id);
-        }
-
-        return $subscriber->pivot->percent_of_good_answers;
-    }
-
-    /**
      * @param User $user
      */
     public function subscribe(User $user)
     {
-        $this->subscribers()->save($user);
+        $this->subscribedUsers()->save($user);
     }
 
     /**
@@ -166,6 +182,63 @@ class Lesson extends Model
             throw new \Exception('Unable to unsubscribe owned lesson: '.$this->id);
         }
 
-        $this->subscribers()->detach($user);
+        $this->subscribedUsers()->detach($user);
+    }
+
+    /**
+     * @param int $userId
+     * @return int
+     * @throws \Exception
+     */
+    public function percentOfGoodAnswers(int $userId): int
+    {
+        if ($pivot = $this->subscriberPivot($userId)) {
+            return $pivot->percent_of_good_answers;
+        }
+
+        throw new \Exception('User does not subscribe lesson: '.$this->id);
+    }
+
+    /**
+     * @param int $userId
+     * @return bool
+     * @throws \Exception
+     */
+    public function isBidirectional(int $userId): bool
+    {
+        if ($pivot = $this->subscriberPivot($userId)) {
+            return $pivot->bidirectional;
+        }
+
+        throw new \Exception('User does not subscribe lesson: '.$this->id);
+    }
+
+    /**
+     * @param int $userId
+     * @return int
+     * @throws \Exception
+     */
+    public function threshold(int $userId): int
+    {
+        if ($pivot = $this->subscriberPivot($userId)) {
+            return $pivot->threshold;
+        }
+
+        throw new \Exception('User does not subscribe lesson: '.$this->id);
+    }
+
+    /**
+     * @param int $userId
+     * @return Pivot|null
+     */
+    public function subscriberPivot(int $userId): ?Pivot
+    {
+        $user = $this->subscribedUsers()->where('user_id', $userId)->first();
+
+        if ($user instanceof User) {
+            return $user->pivot;
+        }
+
+        return null;
     }
 }

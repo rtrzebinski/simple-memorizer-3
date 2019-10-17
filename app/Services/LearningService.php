@@ -3,15 +3,14 @@
 namespace App\Services;
 
 use App\Models\Exercise;
+use App\Models\ExerciseResult;
 use App\Models\Lesson;
-use App\Exceptions\NotEnoughExercisesException;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 
 class LearningService
 {
     /**
-     * Fetch random exercise of lesson
+     * Fetch pseudo random exercise of lesson
      *
      * Exercise that user knows less have more chance to be returned.
      * Exercise that user knows more have less chance to be returned.
@@ -19,39 +18,28 @@ class LearningService
      * @param Lesson   $lesson
      * @param int      $userId
      * @param int|null $previousExerciseId
-     * @return Exercise
+     * @return Exercise|null
      * @throws Exception
-     * @throws NotEnoughExercisesException
      */
-    public function fetchRandomExerciseOfLesson(Lesson $lesson, int $userId, int $previousExerciseId = null): Exercise
+    public function fetchRandomExerciseOfLesson(Lesson $lesson, int $userId, int $previousExerciseId = null): ?Exercise
     {
-        /** @var Exercise[]|Collection $exercises */
-        $exercises = $lesson->all_exercises
+        $exercises = $lesson->exercisesForGivenUser($userId)
             ->filter(function (Exercise $exercise) use ($previousExerciseId) {
-                // filter out previously served exercise
                 return $exercise->id != $previousExerciseId;
             });
+
+        if ($exercises->isEmpty()) {
+            return null;
+        }
 
         if ($exercises->count() == 1) {
             return $exercises->first();
         }
 
-        if ($exercises->isEmpty()) {
-            throw new NotEnoughExercisesException;
-        }
-
-        // eager loading alleviates the N + 1 query problem
-        $exercises->load([
-            'results' => function ($relation) use ($userId) {
-                // only load exercise results of given user
-                $relation->where('exercise_results.user_id', $userId);
-            }
-        ]);
-
         // if lesson is bidirectional
         // clone each exercise with reversed question and answer
         // so both variants are in the collection
-        if ($lesson->bidirectional) {
+        if ($lesson->isBidirectional($userId)) {
             foreach ($exercises as $exercise) {
                 $clonedExercise = clone $exercise;
                 $clonedExercise->question = $exercise->answer;
@@ -62,22 +50,16 @@ class LearningService
 
         $tmp = [];
         foreach ($exercises as $exercise) {
-            // fetch exercise results of given user only
-            // this is just in case as eager loading above should had already filtered this
-            $results = $exercise->results->filter(function ($item) use ($userId) {
-                return $item->user_id == $userId;
-            });
+            /** @var ExerciseResult $result */
+            $result = $exercise->results->where('user_id', '=', $userId)->first();
 
-            if ($results->isEmpty()) {
-                /*
-                 * User has no answers for this exercise, so we know that percent of good answers is 0
-                 */
-                $percentOfGoodAnswers = 0;
+            // User needs this exercise if his percent_of_good_answers is below the threshold
+            if ($result instanceof ExerciseResult) {
+                // Check percent of good answers of a user
+                $percentOfGoodAnswers = $result->percent_of_good_answers;
             } else {
-                /*
-                 * Check percent of good answers of a user
-                 */
-                $percentOfGoodAnswers = $results->first()->percent_of_good_answers;
+                // User has no answers for this exercise, so we know that percent of good answers is 0
+                $percentOfGoodAnswers = 0;
             }
 
             /*

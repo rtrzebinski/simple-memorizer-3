@@ -29,7 +29,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
-    Route::put('/lessons/{lesson}', 'Web\LessonController@update');
+    Route::put('/lessons/{lesson}/edit', 'Web\LessonController@saveEdit');
+
+    Route::get('/lessons/{lesson}/settings', 'Web\LessonController@settings');
+
+    Route::put('/lessons/{lesson}/settings', 'Web\LessonController@saveSettings');
 
     Route::delete('/lessons/{lesson}', 'Web\LessonController@delete');
 

@@ -6,7 +6,7 @@ use App\Http\Requests\LessonImportCsvRequest;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
-use Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,7 +18,7 @@ class LessonController extends Controller
     /**
      * @return View
      */
-    public function create() : View
+    public function create(): View
     {
         return view('lessons.create');
     }
@@ -26,13 +26,13 @@ class LessonController extends Controller
     /**
      * @param Request $request
      * @return RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
             'visibility' => 'required|in:public,private',
             'name' => 'required|string',
-            'bidirectional' => 'required|boolean',
         ]);
 
         $lesson = new Lesson($request->all());
@@ -42,14 +42,15 @@ class LessonController extends Controller
         // always subscribe owned lesson
         $lesson->subscribe($this->user());
 
-        return redirect('/lessons/' . $lesson->id);
+        return redirect('/lessons/'.$lesson->id);
     }
 
     /**
      * @param Lesson $lesson
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function view(Lesson $lesson) : View
+    public function view(Lesson $lesson): View
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
@@ -59,15 +60,16 @@ class LessonController extends Controller
     /**
      * @param Lesson $lesson
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function exercises(Lesson $lesson) : View
+    public function exercises(Lesson $lesson): View
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
-        $exercises = $lesson->all_exercises
+        $exercises = $lesson->allExercises()
             ->each(function (Exercise $exercise) {
                 // for each load percent_of_good_answers property
-                $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswersOfUser($this->user()->id);
+                $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswers($this->user()->id);
             });
 
         $data = [
@@ -81,8 +83,9 @@ class LessonController extends Controller
     /**
      * @param Lesson $lesson
      * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(Lesson $lesson) : View
+    public function edit(Lesson $lesson): View
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
         return view('lessons.edit', compact('lesson'));
@@ -90,21 +93,61 @@ class LessonController extends Controller
 
     /**
      * @param Request $request
-     * @param Lesson $lesson
+     * @param Lesson  $lesson
      * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Lesson $lesson) : RedirectResponse
+    public function saveEdit(Request $request, Lesson $lesson): RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
 
         $this->validate($request, [
             'visibility' => 'required|in:public,private',
             'name' => 'required|string',
-            'bidirectional' => 'required|boolean',
         ]);
 
         $lesson->update($request->all());
-        return redirect('/lessons/' . $lesson->id . '/edit');
+        return redirect('/lessons/'.$lesson->id.'/edit');
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @return View|RedirectResponse
+     */
+    public function settings(Lesson $lesson)
+    {
+        if (!Gate::forUser($this->user())->denies('subscribe', $lesson)) {
+            return redirect('/lessons/'.$lesson->id);
+        }
+
+        return view('lessons.settings', compact('lesson'));
+    }
+
+    /**
+     * @param Request $request
+     * @param Lesson  $lesson
+     * @return RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function saveSettings(Request $request, Lesson $lesson): RedirectResponse
+    {
+        if (!Gate::forUser($this->user())->denies('subscribe', $lesson)) {
+            return redirect('/lessons/'.$lesson->id);
+        }
+
+        $this->validate($request, [
+            'threshold' => 'required|integer|min:1|max:100',
+            'bidirectional' => 'required|boolean',
+        ]);
+
+        $pivot = $lesson->subscriberPivot($this->user()->id);
+        $pivot->update([
+            'threshold' => $request->threshold,
+            'bidirectional' => $request->bidirectional,
+        ]);
+
+        return redirect('/lessons/'.$lesson->id.'/settings');
     }
 
     /**
@@ -112,7 +155,7 @@ class LessonController extends Controller
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function delete(Lesson $lesson) : RedirectResponse
+    public function delete(Lesson $lesson): RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
         $lesson->delete();
@@ -123,7 +166,7 @@ class LessonController extends Controller
      * @param Lesson $lesson
      * @return RedirectResponse
      */
-    public function subscribe(Lesson $lesson) : RedirectResponse
+    public function subscribe(Lesson $lesson): RedirectResponse
     {
         if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
             $lesson->subscribe($this->user());
@@ -134,8 +177,9 @@ class LessonController extends Controller
     /**
      * @param Lesson $lesson
      * @return RedirectResponse
+     * @throws \Exception
      */
-    public function unsubscribe(Lesson $lesson) : RedirectResponse
+    public function unsubscribe(Lesson $lesson): RedirectResponse
     {
         if (Gate::forUser($this->user())->allows('unsubscribe', $lesson)) {
             $lesson->unsubscribe($this->user());
@@ -147,19 +191,19 @@ class LessonController extends Controller
      * @param Lesson $lesson
      * @return RedirectResponse
      */
-    public function subscribeAndLearn(Lesson $lesson) :  RedirectResponse
+    public function subscribeAndLearn(Lesson $lesson): RedirectResponse
     {
         if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
             $lesson->subscribe($this->user());
         }
-        return redirect('/learn/lessons/' . $lesson->id);
+        return redirect('/learn/lessons/'.$lesson->id);
     }
 
     /**
      * @param Lesson $lesson
      * @return Response
      */
-    public function exportCsv(Lesson $lesson) : Response
+    public function exportCsv(Lesson $lesson): Response
     {
         $writer = $this->createCsvWriter();
 
@@ -184,19 +228,19 @@ class LessonController extends Controller
             ]);
         }
 
-        $filename = $lesson->name . '.csv';
+        $filename = $lesson->name.'.csv';
 
         return response((string)$writer, 200)
             ->header('Content-type', 'application/force-download')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
 
     /**
-     * @param Lesson $lesson
+     * @param Lesson                 $lesson
      * @param LessonImportCsvRequest $request
      * @return RedirectResponse
      */
-    public function importCsv(Lesson $lesson, LessonImportCsvRequest $request) : RedirectResponse
+    public function importCsv(Lesson $lesson, LessonImportCsvRequest $request): RedirectResponse
     {
         $reader = Reader::createFromPath($request->file('csv_file')->getRealPath());
 
@@ -223,6 +267,6 @@ class LessonController extends Controller
             $exerciseResult->save();
         }
 
-        return redirect('/lessons/' . $lesson->id);
+        return redirect('/lessons/'.$lesson->id);
     }
 }

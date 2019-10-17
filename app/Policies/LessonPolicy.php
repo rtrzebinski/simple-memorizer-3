@@ -37,7 +37,8 @@ class LessonPolicy
      */
     public function modify(User $user, Lesson $lesson): bool
     {
-        return Lesson::whereId($lesson->id)
+        return Lesson::query()
+            ->where('lessons.id', '=', $lesson->id)
             ->whereOwnerId($user->id)
             ->exists();
     }
@@ -51,10 +52,11 @@ class LessonPolicy
      */
     public function subscribe(User $user, Lesson $lesson): bool
     {
-        return Lesson::whereId($lesson->id)
+        return Lesson::query()
+            ->where('lessons.id', '=', $lesson->id)
             ->where('lessons.owner_id', '!=', $user->id)
             ->where('lessons.visibility', '=', 'public')
-            ->whereNotIn('lessons.id', $user->subscribedLessons()->pluck('id'))
+            ->whereNotIn('lessons.id', $user->subscribedLessons()->pluck('lessons.id'))
             ->exists();
     }
 
@@ -67,7 +69,8 @@ class LessonPolicy
      */
     public function unsubscribe(User $user, Lesson $lesson): bool
     {
-        return Lesson::whereId($lesson->id)
+        return Lesson::query()
+            ->where('lessons.id', '=', $lesson->id)
             ->join('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
             ->where('lesson_user.user_id', '=', $user->id)
             ->where('lessons.owner_id', '!=', $user->id)
@@ -83,7 +86,7 @@ class LessonPolicy
      */
     public function learn(User $user, Lesson $lesson)
     {
-        return ($lesson->all_exercises->count() >= config('app.min_exercises_to_learn_lesson')) &&
+        return ($lesson->exercisesForGivenUser($user->id)->count() >= config('app.min_exercises_to_learn_lesson')) &&
             $this->access($user, $lesson);
     }
 }

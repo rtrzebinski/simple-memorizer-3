@@ -38,7 +38,6 @@ class LessonControllerTest extends BaseTestCase
         $input = [
             'visibility' => 'public',
             'name' => uniqid(),
-            'bidirectional' => '1',
         ];
 
         $this->call('POST', '/lessons', $input);
@@ -56,8 +55,8 @@ class LessonControllerTest extends BaseTestCase
             'lesson_id' => $lesson->id,
             'percent_of_good_answers' => 0,
         ]);
-        $this->assertCount(1, $lesson->subscribers);
-        $this->assertCount(0, $lesson->subscribersWithOwnerExcluded);
+        $this->assertCount(1, $lesson->subscribedUsers);
+        $this->assertCount(0, $lesson->subscribedUsersWithOwnerExcluded);
     }
 
     /** @test */
@@ -252,7 +251,7 @@ class LessonControllerTest extends BaseTestCase
         $this->assertResponseNotFound();
     }
 
-    // update
+    // saveEdit
 
     /** @test */
     public function itShould_updateLesson()
@@ -263,16 +262,17 @@ class LessonControllerTest extends BaseTestCase
         $input = [
             'visibility' => 'private',
             'name' => uniqid(),
-            'bidirectional' => '1',
         ];
 
-        $this->call('PUT', '/lessons/'.$lesson->id, $input);
+        $this->call('PUT', '/lessons/'.$lesson->id.'/edit', $input);
+
+        $this->assertResponseStatus(302);
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/edit');
 
         /** @var Lesson $lesson */
         $lesson = $lesson->fresh();
         $this->assertEquals($input['visibility'], $lesson->visibility);
         $this->assertEquals($input['name'], $lesson->name);
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/edit');
     }
 
     /** @test */
@@ -280,7 +280,7 @@ class LessonControllerTest extends BaseTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->call('PUT', '/lessons/'.$lesson->id);
+        $this->call('PUT', '/lessons/'.$lesson->id.'/edit');
 
         $this->assertResponseUnauthorized();
     }
@@ -291,7 +291,7 @@ class LessonControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
 
-        $this->call('PUT', '/lessons/'.$lesson->id);
+        $this->call('PUT', '/lessons/'.$lesson->id.'/edit');
 
         $this->assertResponseForbidden();
     }
@@ -301,7 +301,7 @@ class LessonControllerTest extends BaseTestCase
     {
         $this->be($user = $this->createUser());
 
-        $this->call('PUT', '/lessons/-1');
+        $this->call('PUT', '/lessons/-1/edit');
 
         $this->assertResponseNotFound();
     }
@@ -312,7 +312,7 @@ class LessonControllerTest extends BaseTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('PUT', '/lessons/'.$lesson->id);
+        $this->call('PUT', '/lessons/'.$lesson->id.'/edit');
 
         $this->assertResponseInvalidInput();
     }
@@ -360,6 +360,82 @@ class LessonControllerTest extends BaseTestCase
         $this->call('DELETE', '/lessons/-1');
 
         $this->assertResponseNotFound();
+    }
+
+    // settings
+
+    /** @test */
+    public function itShould_showLessonSettingsPage()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/settings');
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+    }
+
+    /** @test */
+    public function itShould_notShowLessonSettingsPage_userDoesNotSubscribeLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson($this->createUser());
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/settings');
+
+        $this->assertResponseStatus(500);
+    }
+
+    // saveSettings
+
+    /** @test */
+    public function itShould_saveLessonSettings()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $input = [
+            'threshold' => '50',
+            'bidirectional' => '1',
+        ];
+
+        $this->call('PUT', '/lessons/'.$lesson->id.'/settings', $input);
+
+        $this->assertResponseStatus(302);
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/settings');
+
+        /** @var Lesson $lesson */
+        $lesson = $lesson->fresh();
+        $this->assertEquals($input['threshold'], $lesson->threshold($user->id));
+        $this->assertEquals($input['bidirectional'], $lesson->isBidirectional($user->id));
+    }
+
+    /** @test */
+    public function itShould_saveLessonSettings_unauthorised()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson($this->createUser());
+
+        $input = [
+            'threshold' => '50',
+            'bidirectional' => '1',
+        ];
+
+        $this->call('PUT', '/lessons/'.$lesson->id.'/settings', $input);
+
+        $this->assertResponseStatus(500);
+    }
+
+    /** @test */
+    public function itShould_saveLessonSettings_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('PUT', '/lessons/'.$lesson->id.'/settings');
+
+        $this->assertResponseInvalidInput();
     }
 
     // subscribe

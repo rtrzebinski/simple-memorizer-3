@@ -50,7 +50,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         $event = new ExerciseGoodAnswer($exercise, $user);
         $listener->handle($event);
 
-        $this->assertEquals($expectedResult, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals($expectedResult, $lesson->percentOfGoodAnswers($user->id));
     }
 
     /** @test */
@@ -69,8 +69,8 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         $childLesson->subscribe($user);
         $parentLesson->childLessons()->attach($childLesson);
 
-        $this->assertEquals(0, $parentLesson->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $childLesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $parentLesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $childLesson->percentOfGoodAnswers($user->id));
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
         $this->createExerciseResult([
@@ -86,9 +86,9 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
             'percent_of_good_answers' => 100,
         ]);
 
-        $this->assertEquals(0, $childLesson->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $parentLesson->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $grandparentLesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $childLesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $parentLesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $grandparentLesson->percentOfGoodAnswers($user->id));
 
         // (50 + 100) / 2 = 75
 
@@ -96,8 +96,8 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         $event = new ExerciseGoodAnswer($exercise, $user);
         $listener->handle($event);
 
-        $this->assertEquals(75, $childLesson->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(75, $parentLesson->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $grandparentLesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(75, $childLesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(75, $parentLesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $grandparentLesson->percentOfGoodAnswers($user->id));
     }
 }

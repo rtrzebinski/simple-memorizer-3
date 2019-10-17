@@ -46,9 +46,9 @@
                                                 <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->all_exercises->count() }} </br>
-                                                Number of subscribers: {{ $row->subscribersWithOwnerExcluded()->count() }} </br>
-                                                Percent of good answers: {{ $row->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>
+                                                Number of exercises: {{ $row->allExercises()->count() }} </br>
+                                                Number of subscribers: {{ $row->subscribedUsersWithOwnerExcluded()->count() }} </br>
+                                                Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
                                                 @can('learn', $row)
@@ -83,9 +83,9 @@
                                                 <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->all_exercises->count() }} </br>
-                                                Number of subscribers: {{ $row->subscribersWithOwnerExcluded()->count() }} </br>
-                                                Percent of good answers: {{ $row->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>
+                                                Number of exercises: {{ $row->allExercises()->count() }} </br>
+                                                Number of subscribers: {{ $row->subscribedUsersWithOwnerExcluded()->count() }} </br>
+                                                Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
                                                 <a href="/learn/lessons/{{ $row->id }}"
@@ -162,8 +162,8 @@
                                             <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
                                         </h4>
                                         <p>
-                                            Number of exercises: {{ $row->all_exercises->count() }} </br>
-                                            Number of subscribers: {{ $row->subscribersWithOwnerExcluded()->count() }} </br>
+                                            Number of exercises: {{ $row->allExercises()->count() }} </br>
+                                            Number of subscribers: {{ $row->subscribedUsersWithOwnerExcluded()->count() }} </br>
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->id }}"

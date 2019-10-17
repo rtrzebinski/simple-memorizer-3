@@ -10,7 +10,7 @@ class UserTest extends \TestCase
         $user = $this->createUser();
         $ownedLesson = $this->createPublicLesson($user);
         $subscribedLesson = $this->createPublicLesson();
-        $subscribedLesson->subscribers()->save($user);
+        $subscribedLesson->subscribedUsers()->save($user);
         $this->createPublicLesson();
         $this->createPrivateLesson(); // not available
 
@@ -24,7 +24,7 @@ class UserTest extends \TestCase
         $user = $this->createUser();
         $this->createPublicLesson($user);
         $subscribedLesson = $this->createPublicLesson();
-        $subscribedLesson->subscribers()->save($user);
+        $subscribedLesson->subscribedUsers()->save($user);
         $this->createPublicLesson();
         $this->createPrivateLesson(); // not available
 
@@ -38,7 +38,7 @@ class UserTest extends \TestCase
         $user = $this->createUser();
         $this->createPublicLesson($user);
         $subscribedLesson = $this->createPublicLesson();
-        $subscribedLesson->subscribers()->save($user);
+        $subscribedLesson->subscribedUsers()->save($user);
         $availableLesson = $this->createPublicLesson();
         $this->createPrivateLesson(); // not available
 
@@ -51,8 +51,8 @@ class UserTest extends \TestCase
     {
         $user = $this->createUser();
         $subscribedLesson = $this->createPublicLesson();
-        $subscribedLesson->subscribers()->save($user);
-        $subscribedLesson->subscribers()->save($this->createUser());
+        $subscribedLesson->subscribedUsers()->save($user);
+        $subscribedLesson->subscribedUsers()->save($this->createUser());
 
         $this->assertCount(0, $user->availableLessons());
     }
@@ -62,7 +62,7 @@ class UserTest extends \TestCase
     {
         $user = $this->createUser();
         $subscribedLesson = $this->createPublicLesson();
-        $subscribedLesson->subscribers()->save($this->createUser());
+        $subscribedLesson->subscribedUsers()->save($this->createUser());
 
         $this->assertCount(1, $user->availableLessons());
     }
@@ -80,7 +80,7 @@ class UserTest extends \TestCase
     public function it_hasOwnedOrSubscribedLessons_subscribedLesson()
     {
         $user = $this->createUser();
-        $this->createPublicLesson()->subscribers()->save($user);
+        $this->createPublicLesson()->subscribedUsers()->save($user);
 
         $this->assertTrue($user->hasOwnedOrSubscribedLessons());
     }

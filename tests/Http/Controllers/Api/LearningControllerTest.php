@@ -2,7 +2,6 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Exceptions\NotEnoughExercisesException;
 use App\Models\Lesson;
 use App\Services\LearningService;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -76,7 +75,7 @@ class LearningControllerTest extends BaseTestCase
     }
 
     /** @test */
-    public function itShould_notFetchRandomExerciseOfLesson_notEnoughExercises()
+    public function itShould_notFetchRandomExerciseOfLesson_noExercises()
     {
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
@@ -87,11 +86,12 @@ class LearningControllerTest extends BaseTestCase
 
         $learningService->method('fetchRandomExerciseOfLesson')
             ->with($this->isInstanceOf(Lesson::class), $user->id)
-            ->willThrowException(new NotEnoughExercisesException());
+            ->willReturn(null);
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', [], $user);
 
-        $this->assertResponseStatus(NotEnoughExercisesException::HTTP_RESPONSE_CODE);
+        $this->assertResponseOk();
+        $this->seeJson([]);
     }
 
     // handleGoodAnswer
@@ -109,8 +109,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseOk();
 
         $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(50, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(100, $exercise->percentOfGoodAnswers($user->id));
+        $this->assertEquals(50, $lesson->percentOfGoodAnswers($user->id)); // 50 because 2 exercises are required to learn a lesson
     }
 
     /** @test */
@@ -121,18 +121,6 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer');
 
         $this->assertResponseUnauthorised();
-    }
-
-    /** @test */
-    public function itShould_notHandleGoodAnswer_forbidden()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer', $data =
-            [], $user);
-
-        $this->assertResponseForbidden();
     }
 
     /** @test */
@@ -161,8 +149,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseOk();
 
         $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $exercise->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
     }
 
     /** @test */
@@ -173,18 +161,6 @@ class LearningControllerTest extends BaseTestCase
         $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer');
 
         $this->assertResponseUnauthorised();
-    }
-
-    /** @test */
-    public function itShould_notHandleBadAnswer_forbidden()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer', $data =
-            [], $user);
-
-        $this->assertResponseForbidden();
     }
 
     /** @test */

@@ -81,9 +81,9 @@ class ExerciseControllerTest extends BaseTestCase
 
         // pre set percent_of_good_answers to some value different than 0,
         // because 0 should be the result percent_of_good_answers after first exercise is stored
-        $lesson->subscribers[0]->pivot->percent_of_good_answers = 20;
-        $lesson->subscribers[0]->pivot->save();
-        $this->assertEquals(20, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $lesson->subscribedUsers[0]->pivot->percent_of_good_answers = 20;
+        $lesson->subscribedUsers[0]->pivot->save();
+        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
 
         $parameters = [
             'question' => uniqid(),
@@ -99,7 +99,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
 
         // just one exercise without answers = 0% of good answers
-        $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
     }
 
     /** @test */
@@ -320,9 +320,9 @@ class ExerciseControllerTest extends BaseTestCase
 
         // pre set percent_of_good_answers to some value different than 0,
         // because 0 should be the result percent_of_good_answers after only exercise is deleted
-        $lesson->subscribers[0]->pivot->percent_of_good_answers = 20;
-        $lesson->subscribers[0]->pivot->save();
-        $this->assertEquals(20, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $lesson->subscribedUsers[0]->pivot->percent_of_good_answers = 20;
+        $lesson->subscribedUsers[0]->pivot->save();
+        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
 
         $this->call('DELETE', '/exercises/'.$exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
             'HTTP_REFERER' => $redirectTo,
@@ -332,7 +332,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo($redirectTo);
 
         // just one exercise without answers = 0% of good answers
-        $this->assertEquals(0, $lesson->fresh()->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $lesson->fresh()->percentOfGoodAnswers($user->id));
     }
 
     /** @test */

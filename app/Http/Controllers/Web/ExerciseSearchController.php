@@ -31,7 +31,7 @@ class ExerciseSearchController extends Controller
             ->get()
             ->each(function (Exercise $exercise) {
                 // for each load percent_if_good_answers property
-                $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswersOfUser($this->user()->id);
+                $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswers($this->user()->id);
             });
 
         $data = [

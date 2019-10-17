@@ -84,8 +84,8 @@ class User extends Authenticatable
         return Lesson::query()
             ->where('lessons.owner_id', '!=', $this->id)
             ->where('lessons.visibility', '=', 'public')
-            ->whereNotIn('lessons.id', $this->subscribedLessons()->pluck('id'))
-            ->with('exercises', 'subscribers')
+            ->whereNotIn('lessons.id', $this->subscribedLessons()->pluck('lessons.id'))
+            ->with('exercises', 'subscribedUsers')
             ->get();
     }
 

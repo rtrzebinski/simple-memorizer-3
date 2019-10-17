@@ -98,7 +98,7 @@ class Exercise extends Model
      * @param int $userId
      * @return int
      */
-    public function percentOfGoodAnswersOfUser(int $userId): int
+    public function percentOfGoodAnswers(int $userId): int
     {
         $exerciseResult = $this->resultOfUser($userId);
         return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;

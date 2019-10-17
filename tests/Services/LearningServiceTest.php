@@ -4,7 +4,6 @@ namespace Tests\Services;
 
 use App\Services\LearningService;
 use TestCase;
-use App\Exceptions\NotEnoughExercisesException;
 use App\Models\Exercise;
 use App\Models\Lesson;
 
@@ -52,6 +51,7 @@ class LearningServiceTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
+        $lesson->subscribe($user);
 
         $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
@@ -72,6 +72,7 @@ class LearningServiceTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
+        $lesson->subscribe($user);
 
         $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
@@ -93,9 +94,9 @@ class LearningServiceTest extends TestCase
     {
         $lesson = $this->createLesson();
 
-        $this->expectException(NotEnoughExercisesException::class);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $this->createUser()->id);
 
-        $this->learningService->fetchRandomExerciseOfLesson($lesson, $this->createUser()->id);
+        $this->assertNull($result);
     }
 
     /** @test */
@@ -103,13 +104,69 @@ class LearningServiceTest extends TestCase
     {
         $user = $this->createUser();
         $lesson = $this->createLesson();
-        $previousExercise = $this->createExercise();
+        $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->expectException(NotEnoughExercisesException::class);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user->id, $previousExercise->id);
 
-        $this->learningService->fetchRandomExerciseOfLesson($lesson, $user->id, $previousExercise->id);
+        $this->assertNull($result);
     }
 
+    /** @test */
+    public function itShould_returnRandomExercise_bidirectional()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $lesson->exercises[0];
+
+        $subscriber = $lesson->subscribedUsers()
+            ->where('lesson_user.user_id', '=', $user->id)
+            ->first();
+
+        // set subscription as bidirectional
+        $subscriber->pivot->bidirectional = true;
+        $subscriber->pivot->save();
+
+        // 1000 retries is more than enough
+        $counter = 1000;
+        do {
+            if (!$counter--) {
+                $this->fail('Bidirectional flag does not work - unable to fetch reverted exercise.');
+            }
+            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user->id);
+            // just to avoid "This test did not perform any assertions" warning
+            $this->assertTrue(true);
+        } while ($result->answer != $exercise->question);
+    }
+
+    /** @test */
+    public function itShould_returnRandomExercise_notBidirectional()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $lesson->exercises[0];
+
+        $subscriber = $lesson->subscribedUsers()
+            ->where('lesson_user.user_id', '=', $user->id)
+            ->first();
+
+        // set subscription as bidirectional
+        $subscriber->pivot->bidirectional = false;
+        $subscriber->pivot->save();
+
+        $counter = 10;
+        do {
+            if (!$counter--) {
+                $this->fail('Bidirectional flag does not work - reverted exercise was fetched while it should not.');
+            }
+            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user->id);
+            // just to avoid "This test did not perform any assertions" warning
+            $this->assertTrue(true);
+        } while ($result->answer == $exercise->question);
+    }
 
     private function assertExerciseCanWin(Lesson $lesson, int $userId, int $exerciseId, int $previousId = null)
     {

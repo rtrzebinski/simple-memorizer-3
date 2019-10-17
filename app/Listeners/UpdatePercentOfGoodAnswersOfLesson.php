@@ -34,11 +34,11 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
     private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user)
     {
         // will include exercises of child lessons
-        $exercises = $lesson->all_exercises;
+        $exercises = $lesson->allExercises();
 
         // lessons only takes exercises from 1 level below, so if lesson has no exercises, that means its children also don't have any
         if (!$exercises->count()) {
-            $subscriber = $lesson->subscribers()->where('lesson_user.user_id', $user->id)->first();
+            $subscriber = $lesson->subscribedUsers()->where('lesson_user.user_id', $user->id)->first();
             $subscriber->pivot->percent_of_good_answers = 0;
             $subscriber->pivot->save();
             return;
@@ -47,12 +47,12 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
         // if lesson has at least one exercise, we need to calculate and store percent of good answers
         $percentOfGoodAnswersTotal = 0;
         $exercises->each(function (Exercise $exercise) use (&$percentOfGoodAnswersTotal, $user) {
-            $percentOfGoodAnswersTotal += $exercise->percentOfGoodAnswersOfUser($user->id);
+            $percentOfGoodAnswersTotal += $exercise->percentOfGoodAnswers($user->id);
         });
 
         $percentOfGoodAnswersOfLesson = round($percentOfGoodAnswersTotal / $exercises->count());
 
-        $subscriber = $lesson->subscribers()->where('lesson_user.user_id', $user->id)->first();
+        $subscriber = $lesson->subscribedUsers()->where('lesson_user.user_id', $user->id)->first();
         $subscriber->pivot->percent_of_good_answers = $percentOfGoodAnswersOfLesson;
         $subscriber->pivot->save();
 

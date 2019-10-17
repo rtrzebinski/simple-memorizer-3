@@ -83,17 +83,6 @@ class LearningControllerTest extends BaseTestCase
     }
 
     /** @test */
-    public function itShould_notShowLessonLearnPage_forbiddenToLearnLesson()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPrivateLesson();
-
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
-
-        $this->assertResponseForbidden();
-    }
-
-    /** @test */
     public function itShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
     {
         $this->be($user = $this->createUser());
@@ -131,8 +120,8 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
 
         $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(50, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(100, $exercise->percentOfGoodAnswers($user->id));
+        $this->assertEquals(50, $lesson->percentOfGoodAnswers($user->id)); // 50 because 2 exercises are required to learn a lesson
     }
 
     /** @test */
@@ -145,18 +134,6 @@ class LearningControllerTest extends BaseTestCase
         $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
         $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notHandleGoodAnswer_forbidden()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createExercise()->lesson;
-        $exercise = $lesson->exercises[0];
-
-        $this->call('POST', '/learn/handle-good-answer/exercises/'.$exercise->id.'/'.$lesson->id);
-
-        $this->assertResponseForbidden();
     }
 
     /** @test */
@@ -182,8 +159,8 @@ class LearningControllerTest extends BaseTestCase
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
         $this->assertEquals(0, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $lesson->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $exercise->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
 
         $this->assertResponseRedirectedTo('/learn/lessons/'.$exercise->lesson_id.'?previous_exercise_id='.$exercise->id);
     }
@@ -198,17 +175,6 @@ class LearningControllerTest extends BaseTestCase
         $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$lesson->id);
 
         $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notHandleBadAnswer_forbidden()
-    {
-        $this->be($user = $this->createUser());
-        $exercise = $this->createExercise();
-
-        $this->call('POST', '/learn/handle-bad-answer/exercises/'.$exercise->id.'/'.$exercise->lesson_id);
-
-        $this->assertResponseForbidden();
     }
 
     /** @test */

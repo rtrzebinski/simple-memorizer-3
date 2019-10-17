@@ -41,8 +41,8 @@ class LessonControllerTest extends BaseTestCase
             'lesson_id' => $lesson->id,
             'percent_of_good_answers' => 0,
         ]);
-        $this->assertCount(1, $lesson->subscribers);
-        $this->assertCount(0, $lesson->subscribersWithOwnerExcluded);
+        $this->assertCount(1, $lesson->subscribedUsers);
+        $this->assertCount(0, $lesson->subscribedUsersWithOwnerExcluded);
     }
 
     /** @test */
@@ -74,7 +74,7 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('POST', '/lessons/'.$lesson->id.'/user', $input = [], $user);
 
         $this->assertResponseOk();
-        $this->assertEquals($user->id, $lesson->subscribers[0]->id);
+        $this->assertEquals($user->id, $lesson->subscribedUsers[0]->id);
     }
 
     /** @test */
@@ -96,7 +96,7 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('POST', '/lessons/'.$lesson->id.'/user', $input = [], $user);
 
         $this->assertResponseForbidden();
-        $this->assertEmpty($lesson->subscribers);
+        $this->assertEmpty($lesson->subscribedUsers);
     }
 
     /** @test */
@@ -121,7 +121,7 @@ class LessonControllerTest extends BaseTestCase
         $this->callApi('DELETE', '/lessons/'.$lesson->id.'/user', $input = [], $user);
 
         $this->assertResponseOk();
-        $this->assertCount(0, $lesson->subscribers);
+        $this->assertCount(0, $lesson->subscribedUsers);
     }
 
     /** @test */

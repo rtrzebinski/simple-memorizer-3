@@ -12,7 +12,7 @@ class ExerciseTest extends \TestCase
 
         $this->assertEquals(0, $exercise->numberOfGoodAnswersOfUser($user->id));
         $this->assertEquals(0, $exercise->numberOfBadAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(0, $exercise->percentOfGoodAnswers($user->id));
     }
 
     public function test_numberOfGoodAnswersOfUser()
@@ -43,7 +43,7 @@ class ExerciseTest extends \TestCase
         $this->assertEquals(10, $exercise->numberOfBadAnswersOfUser($user->id));
     }
 
-    public function test_percentOfGoodAnswersOfUser()
+    public function test_percentOfGoodAnswers()
     {
         $user = $this->createUser();
         $exercise = $this->createExercise();
@@ -54,6 +54,6 @@ class ExerciseTest extends \TestCase
             'percent_of_good_answers' => 10,
         ]);
 
-        $this->assertEquals(10, $exercise->percentOfGoodAnswersOfUser($user->id));
+        $this->assertEquals(10, $exercise->percentOfGoodAnswers($user->id));
     }
 }

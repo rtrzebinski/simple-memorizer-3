@@ -8,12 +8,18 @@
             </h4>
             <p>
                 Visibility: {{ $lesson->visibility }} </br>
-                Bidirectional: {{ $lesson->bidirectional ? 'yes' : 'no' }} </br>
-                Number of exercises: {{ $lesson->all_exercises->count() }} </br>
-                Number of aggregates: {{ $lesson->childLessons()->count() }} </br>
-                Number of subscribers: {{ $lesson->subscribersWithOwnerExcluded()->count() }} </br>
                 @cannot('subscribe', $lesson)
-                    Percent of good answers: {{ $lesson->percentOfGoodAnswersOfUser(Auth::user()->id) }} </br>
+                    Threshold: {{ $lesson->threshold(Auth::user()->id) }} </br>
+                    Bidirectional: {{ $lesson->isBidirectional(Auth::user()->id) ? 'yes' : 'no' }} </br>
+                @endcannot
+                Number of exercises: {{ $lesson->allExercises()->count() }} </br>
+                @cannot('subscribe', $lesson)
+                    Number of active exercises: {{ $lesson->exercisesForGivenUser(Auth::user()->id)->count() }} </br>
+                @endcannot
+                Number of aggregates: {{ $lesson->childLessons()->count() }} </br>
+                Number of subscribers: {{ $lesson->subscribedUsersWithOwnerExcluded()->count() }} </br>
+                @cannot('subscribe', $lesson)
+                    Percent of good answers: {{ $lesson->percentOfGoodAnswers(Auth::user()->id) }} </br>
                 @endcannot
             </p>
 
@@ -53,6 +59,13 @@
                         Edit
                     </a>
                 @endcan
+
+                @cannot('subscribe', $lesson)
+                    <a href="/lessons/{{ $lesson->id }}/settings" class="btn btn-info margin-bottom" role="button">
+                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                        Settings
+                    </a>
+                @endcannot
 
                 @can('modify', $lesson)
                     <button class="btn btn-danger margin-bottom" data-title="Delete"
