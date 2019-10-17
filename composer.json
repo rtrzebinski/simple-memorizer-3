@@ -8,7 +8,8 @@
         "php": "~7.2.0",
         "laravel/framework": "5.8.*",
         "laravel/socialite": "^2.0",
-        "league/csv": "^8.1"
+        "league/csv": "^8.1",
+        "laravel/telescope": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
