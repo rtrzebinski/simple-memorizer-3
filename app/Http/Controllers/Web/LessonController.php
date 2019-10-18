@@ -6,6 +6,7 @@ use App\Http\Requests\LessonImportCsvRequest;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
-        return view('lessons.view', ['lesson' => $lesson]);
+        return view('lessons.view', $this->manageLessonViewData($lesson));
     }
 
     /**
@@ -66,16 +67,26 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
-        $exercises = $lesson->allExercises()
-            ->each(function (Exercise $exercise) {
-                // for each load percent_of_good_answers property
-                $exercise->percent_of_good_answers = $exercise->percentOfGoodAnswers($this->user()->id);
-            });
+        // will include exercises from aggregated lessons
+        $exercises = $lesson->allExercises();
+
+        // eager load exercise results of current user only
+        $exercises->load([
+            'results' => function (Relation $relation) {
+                $relation->where('exercise_results.user_id', $this->user()->id);
+            }
+        ]);
+
+        // load percent_of_good_answers property using eager loaded 'results' relationship
+        foreach ($exercises as $exercise) {
+            // only current user results were eager loaded above, so we don't need any more filtering here
+            $exercise->percent_of_good_answers = $exercise->results->first()->percent_of_good_answers ?? 0;
+        }
 
         $data = [
-            'lesson' => $lesson,
-            'exercises' => $exercises,
-        ];
+                'canModifyLesson' => Gate::forUser($this->user())->allows('modify', $lesson),
+                'exercises' => $exercises,
+            ] + $this->manageLessonViewData($lesson);
 
         return view('lessons.exercises', $data);
     }
@@ -88,7 +99,7 @@ class LessonController extends Controller
     public function edit(Lesson $lesson): View
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
-        return view('lessons.edit', compact('lesson'));
+        return view('lessons.edit', $this->manageLessonViewData($lesson));
     }
 
     /**
@@ -121,7 +132,7 @@ class LessonController extends Controller
             return redirect('/lessons/'.$lesson->id);
         }
 
-        return view('lessons.settings', compact('lesson'));
+        return view('lessons.settings', $this->manageLessonViewData($lesson));
     }
 
     /**

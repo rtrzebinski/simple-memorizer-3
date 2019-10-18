@@ -11,7 +11,7 @@
                     <div class="panel-heading">Exercises</div>
                     <div class="panel-body">
                         <div class="col-md-8 no-padding">
-                            @can('modify', $lesson)
+                            @if($canModifyLesson)
                                 <p>
                                     <a href="/lessons/{{ $lesson->id }}/exercises/create"
                                        class="btn btn-success margin-bottom" role="button">
@@ -24,12 +24,12 @@
                                         Delete selected
                                     </button>
 
-                                    @can('modify', $lesson)
+                                    @if($canModifyLesson)
                                         <a href="" class="btn btn-default margin-bottom">
                                             <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
                                             Import from CSV
                                         </a>
-                                    @endcan
+                                    @endif
 
                                     <a href="/lessons/{{ $lesson->id }}/csv" class="btn btn-default margin-bottom">
                                         <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
@@ -37,31 +37,31 @@
                                     </a>
 
                                 </p>
-                            @endcan
+                            @endif
                         </div>
                         <div class="clearfix"></div>
                         <div class="table-responsive">
                             <table class="table table-bordred table-striped">
                                 <thead>
-                                @can('modify', $lesson)
+                                @if($canModifyLesson)
                                     <th><input type="checkbox" id="checkall"/></th>
-                                @endcan
+                                @endif
                                 <th>Question</th>
                                 <th>Answer</th>
                                 <th><span class="glyphicon glyphicon-education" aria-hidden="true"></span> %</th>
-                                @can('modify', $lesson)
+                                @if($canModifyLesson)
                                     <th>Edit</th>
                                     <th>Delete</th>
-                                @endcan
+                                @endif
                                 </thead>
                                 <tbody>
                                 @foreach($exercises as $row)
                                     <tr>
-                                        @can('modify', $lesson)
+                                        @if($canModifyLesson)
                                             <td>
                                                 <input type="checkbox" class="checkthis"/>
                                             </td>
-                                        @endcan
+                                        @endif
                                         <td>
                                             {{ $row->question }}
                                         </td>
@@ -71,7 +71,7 @@
                                         <td>
                                             {{ $row->percent_of_good_answers }}
                                         </td>
-                                        @can('modify', $lesson)
+                                        @if($canModifyLesson)
                                             <td>
                                                 <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
                                                     <span class="glyphicon glyphicon-pencil"></span>
@@ -83,7 +83,7 @@
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </button>
                                             </td>
-                                        @endcan
+                                        @endif
                                     </tr>
                                     <div class="modal fade" id="delete-exercise-{{ $row->id }}" tabindex="-1"
                                          role="dialog"

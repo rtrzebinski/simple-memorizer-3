@@ -18,18 +18,18 @@ class ExerciseController extends Controller
      * @return View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function create(Lesson $lesson) : View
+    public function create(Lesson $lesson): View
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
-        return view('exercises.create', compact('lesson'));
+        return view('exercises.create', $this->manageLessonViewData($lesson));
     }
 
     /**
-     * @param Lesson $lesson
+     * @param Lesson               $lesson
      * @param StoreExerciseRequest $request
      * @return RedirectResponse
      */
-    public function store(Lesson $lesson, StoreExerciseRequest $request) : RedirectResponse
+    public function store(Lesson $lesson, StoreExerciseRequest $request): RedirectResponse
     {
         $exercise = new Exercise($request->all());
         $exercise->lesson_id = $lesson->id;
@@ -37,7 +37,7 @@ class ExerciseController extends Controller
 
         event(new ExerciseCreated($lesson, $this->user()));
 
-        return redirect('/lessons/' . $lesson->id . '/exercises');
+        return redirect('/lessons/'.$lesson->id.'/exercises');
     }
 
     /**
@@ -45,22 +45,21 @@ class ExerciseController extends Controller
      * @return View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(Exercise $exercise) : View
+    public function edit(Exercise $exercise): View
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 
         return view('exercises.edit', [
-            'exercise' => $exercise,
-            'lesson' => $exercise->lesson,
-        ]);
+                'exercise' => $exercise,
+            ] + $this->manageLessonViewData($exercise->lesson));
     }
 
     /**
-     * @param Exercise $exercise
+     * @param Exercise              $exercise
      * @param UpdateExerciseRequest $request
      * @return RedirectResponse
      */
-    public function update(Exercise $exercise, UpdateExerciseRequest $request) : RedirectResponse
+    public function update(Exercise $exercise, UpdateExerciseRequest $request): RedirectResponse
     {
         $exercise->update($request->only(['question', 'answer']));
 
@@ -72,7 +71,7 @@ class ExerciseController extends Controller
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function delete(Exercise $exercise) : RedirectResponse
+    public function delete(Exercise $exercise): RedirectResponse
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 

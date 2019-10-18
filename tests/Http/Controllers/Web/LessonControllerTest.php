@@ -137,6 +137,34 @@ class LessonControllerTest extends BaseTestCase
     }
 
     /** @test */
+    public function itShould_showLessonExercisesViewPage_canModifyLesson()
+    {
+        $this->be($user = $this->createUser());
+        // user is lesson owner, so cam modify it
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals(true, $this->view()->canModifyLesson);
+    }
+
+    /** @test */
+    public function itShould_showLessonExercisesViewPage_canNotModifyLesson()
+    {
+        $this->be($user = $this->createUser());
+        // user is not lesson owner, so cam modify it
+        $lesson = $this->createPublicLesson();
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals(false, $this->view()->canModifyLesson);
+    }
+
+    /** @test */
     public function itShould_showLessonExercisesViewPage_exerciseWithoutAnswers()
     {
         $this->be($user = $this->createUser());

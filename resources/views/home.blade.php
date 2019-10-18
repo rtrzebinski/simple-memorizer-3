@@ -46,8 +46,9 @@
                                                 <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->allExercises()->count() }} </br>
-                                                Number of subscribers: {{ $row->subscribedUsersWithOwnerExcluded()->count() }} </br>
+                                                Number of exercises: {{ count($row->allExercises()) }} </br>
+                                                {{-- - 1 because owner is always subscribing --}}
+                                                Number of subscribers: {{ count($row->subscribedUsers) - 1 }} </br>
                                                 Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
@@ -83,8 +84,8 @@
                                                 <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->allExercises()->count() }} </br>
-                                                Number of subscribers: {{ $row->subscribedUsersWithOwnerExcluded()->count() }} </br>
+                                                Number of exercises: {{ count($row->allExercises()) }} </br>
+                                                Number of subscribers: {{ count($row->subscribedUsers) }} </br>
                                                 Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
@@ -162,8 +163,8 @@
                                             <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
                                         </h4>
                                         <p>
-                                            Number of exercises: {{ $row->allExercises()->count() }} </br>
-                                            Number of subscribers: {{ $row->subscribedUsersWithOwnerExcluded()->count() }} </br>
+                                            Number of exercises: {{ count($row->allExercises()) }} </br>
+                                            Number of subscribers: {{ count($row->subscribedUsers) }} </br>
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->id }}"

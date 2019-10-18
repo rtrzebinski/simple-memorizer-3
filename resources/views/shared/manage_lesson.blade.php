@@ -8,25 +8,25 @@
             </h4>
             <p>
                 Visibility: {{ $lesson->visibility }} </br>
-                @cannot('subscribe', $lesson)
-                    Threshold: {{ $lesson->threshold(Auth::user()->id) }} </br>
-                    Bidirectional: {{ $lesson->isBidirectional(Auth::user()->id) ? 'yes' : 'no' }} </br>
-                @endcannot
-                Number of exercises: {{ $lesson->allExercises()->count() }} </br>
-                @cannot('subscribe', $lesson)
-                    Number of active exercises: {{ $lesson->exercisesForGivenUser(Auth::user()->id)->count() }} </br>
-                @endcannot
-                Number of aggregates: {{ $lesson->childLessons()->count() }} </br>
-                Number of subscribers: {{ $lesson->subscribedUsersWithOwnerExcluded()->count() }} </br>
-                @cannot('subscribe', $lesson)
-                    Percent of good answers: {{ $lesson->percentOfGoodAnswers(Auth::user()->id) }} </br>
-                @endcannot
+                @if($canNotSubscribe)
+                    Threshold: {{ $threshold }} </br>
+                    Bidirectional: {{ $bidirectional }} </br>
+                @endif
+                Number of exercises: {{ $numberOfExercises }} </br>
+                @if($canNotSubscribe)
+                    Number of active exercises: {{ $numberOfActiveExercises }} </br>
+                @endif
+                Number of aggregates: {{ $numberOfAggregates }} </br>
+                Number of subscribers: {{ $subscribedUsersWithOwnerExcluded }} </br>
+                @if($canNotSubscribe)
+                    Percent of good answers: {{ $percentOfGoodAnswers }} </br>
+                @endif
             </p>
 
         </div>
         <div class="col-md-6 no-padding">
             <p>
-                @can('subscribe', $lesson)
+                @if($canSubscribe)
                     <button type="submit" form="subscribe-and-learn" class="btn btn-primary margin-bottom">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                         Subscribe and start
@@ -35,65 +35,65 @@
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         Subscribe
                     </button>
-                @endcan
+                @endif
 
-                @cannot('subscribe', $lesson)
+                @if($canNotSubscribe)
                     @can('learn', $lesson)
                         <a href="/learn/lessons/{{ $lesson->id }}" class="btn btn-primary margin-bottom" role="button">
                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                             Start
                         </a>
                     @endcan
-                @endcannot
+                @endif
 
-                @can('unsubscribe', $lesson)
+                @if($canUnsubscribe)
                     <button type="submit" form="unsubscribe" class="btn btn-danger margin-bottom">
                         <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
                         Unsubscribe
                     </button>
-                @endcan
+                @endif
 
-                @can('modify', $lesson)
+                @if($canModify)
                     <a href="/lessons/{{ $lesson->id }}/edit" class="btn btn-info margin-bottom" role="button">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         Edit
                     </a>
-                @endcan
+                @endif
 
-                @cannot('subscribe', $lesson)
+                @if($canNotSubscribe)
                     <a href="/lessons/{{ $lesson->id }}/settings" class="btn btn-info margin-bottom" role="button">
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                         Settings
                     </a>
-                @endcannot
+                @endif
 
-                @can('modify', $lesson)
+                @if($canModify)
                     <button class="btn btn-danger margin-bottom" data-title="Delete"
                             data-toggle="modal" data-target="#delete_lesson">
                         <span class="glyphicon glyphicon-trash"></span>
                         Delete
                     </button>
-                @endcan
+                @endif
 
-                @can('modify', $lesson)
+                @if($canModify)
                     <a href="/lessons/{{ $lesson->id }}/exercises/create"
                        class="btn btn-success margin-bottom" role="button">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         Add exercise
                     </a>
-                @endcan
+                @endif
 
                 <a href="/lessons/{{ $lesson->id }}/exercises" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                     Exercises
                 </a>
 
-                @can('modify', $lesson)
+                @if($canModify)
                     <a href="/lessons/aggregate/{{ $lesson->id }}" class="btn btn-default margin-bottom">
                         <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                         Aggregate
                     </a>
-                @endcan
+                @endif
 
             </p>
         </div>

@@ -126,14 +126,16 @@ class Lesson extends Model
             }
         ]);
 
+        $subscriberPivot = $this->subscriberPivot($userId);
+
         // Filter out exercises with percent_of_good_answers below the threshold
-        return $exercises->filter(function (Exercise $exercise) use ($userId) {
+        return $exercises->filter(function (Exercise $exercise) use ($userId, $subscriberPivot) {
             /** @var ExerciseResult $result */
             $result = $exercise->results->where('user_id', '=', $userId)->first();
 
             // User needs this exercise if his percent_of_good_answers is below or at the threshold
             if ($result instanceof ExerciseResult) {
-                return $result->percent_of_good_answers <= $this->threshold($userId);
+                return $result->percent_of_good_answers <= $subscriberPivot->threshold;
             }
 
             // User has no answers for this exercise, so we know that he needs it
