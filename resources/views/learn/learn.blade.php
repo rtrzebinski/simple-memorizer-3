@@ -134,13 +134,9 @@
                 // left arrow: 37
                 $("#good-answer-button").click();
             }
-            if (ev.which == 40) {
-                // down arrow: 40
-                $("#bad-answer-button").click();
-            }
             if (ev.which == 39) {
                 // right arrow: 39
-                $("#next-button").click();
+                $("#bad-answer-button").click();
             }
             // quick learning - use space bar to show answer / skip to next question
             if (ev.which == 32) {
@@ -155,8 +151,5 @@
             }
         });
     });
-
-
-
     </script>
 @endpush
