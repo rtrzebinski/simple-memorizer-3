@@ -150,4 +150,22 @@ class ExerciseSearchControllerTest extends BaseTestCase
         $this->assertEmpty($viewData['exercises']);
         $this->assertEquals($viewData['phrase'], $phrase);
     }
+
+    /** @test */
+    public function itShould_searchForExercises_noResultsForEmptyPhrase()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson($user);
+
+        $phrase = '';
+
+        $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
+
+        $this->call('GET', '/exercises/search?phrase='.$phrase);
+
+        $this->assertResponseOk();
+        $viewData = $this->view()->getData();
+
+        $this->assertEmpty($viewData['exercises']);
+    }
 }

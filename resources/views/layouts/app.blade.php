@@ -53,6 +53,9 @@
                     <li>
                     </li>
                     <li>
+                        <a href="{{ url('/exercises/search') }}">Search</a>
+                    </li>
+                    <li>
                         <a href="{{ url('/logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout ({{ auth()->user()->email }})
