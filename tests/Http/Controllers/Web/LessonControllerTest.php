@@ -92,16 +92,6 @@ class LessonControllerTest extends BaseTestCase
     }
 
     /** @test */
-    public function itShould_notShowLessonViewPage_unauthorized()
-    {
-        $lesson = $this->createLesson();
-
-        $this->call('GET', '/lessons/'.$lesson->id);
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
     public function itShould_notShowLessonViewPage_forbidden()
     {
         $this->be($user = $this->createUser());
@@ -201,16 +191,6 @@ class LessonControllerTest extends BaseTestCase
         $this->assertEquals($lesson->id, $this->view()->lesson->id);
         $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
         $this->assertEquals(66, $this->view()->exercises[0]->percent_of_good_answers);
-    }
-
-    /** @test */
-    public function itShould_notShowLessonExercisesViewPage_unauthorized()
-    {
-        $lesson = $this->createLesson();
-
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
-
-        $this->assertResponseUnauthorized();
     }
 
     /** @test */

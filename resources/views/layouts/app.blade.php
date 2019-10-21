@@ -51,8 +51,6 @@
                     <li><a href="{{ url('/register') }}">Register</a></li>
                 @else
                     <li>
-                    </li>
-                    <li>
                         <a href="{{ url('/exercises/search') }}">Search</a>
                     </li>
                     <li>

@@ -70,17 +70,20 @@ class LessonController extends Controller
         // will include exercises from aggregated lessons
         $exercises = $lesson->allExercises();
 
-        // eager load exercise results of current user only
-        $exercises->load([
-            'results' => function (Relation $relation) {
-                $relation->where('exercise_results.user_id', $this->user()->id);
-            }
-        ]);
+        if ($this->user()) {
+            // eager load exercise results of current user only
+            $exercises->load([
+                'results' => function (Relation $relation) {
+                    $relation->where('exercise_results.user_id', $this->user()->id);
+                }
+            ]);
 
-        // load percent_of_good_answers property using eager loaded 'results' relationship
-        foreach ($exercises as $exercise) {
-            // only current user results were eager loaded above, so we don't need any more filtering here
-            $exercise->percent_of_good_answers = $exercise->results->first()->percent_of_good_answers ?? 0;
+            // load percent_of_good_answers property using eager loaded 'results' relationship
+            foreach ($exercises as $exercise) {
+                // only current user results were eager loaded above, so we don't need any more filtering here
+                $exercise->percent_of_good_answers = $exercise->results->first()->percent_of_good_answers ?? 0;
+            }
+
         }
 
         $data = [

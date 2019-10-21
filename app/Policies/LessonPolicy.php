@@ -18,8 +18,16 @@ class LessonPolicy
      * @param Lesson $lesson
      * @return bool
      */
-    public function access(User $user, Lesson $lesson): bool
+    public function access(User $user = null, Lesson $lesson): bool
     {
+        if ($lesson->visibility == 'public') {
+            return true;
+        }
+
+        if (!$user) {
+            return false;
+        }
+
         return Lesson::whereId($lesson->id)
             ->where(function (Builder $query) use ($user) {
                 $query->where('visibility', '=', 'public')

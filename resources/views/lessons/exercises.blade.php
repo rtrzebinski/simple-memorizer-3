@@ -48,7 +48,9 @@
                                 @endif
                                 <th>Question</th>
                                 <th>Answer</th>
-                                <th><span class="glyphicon glyphicon-education" aria-hidden="true"></span> %</th>
+                                @if($user)
+                                    <th><span class="glyphicon glyphicon-education" aria-hidden="true"></span> %</th>
+                                @endif
                                 @if($canModifyLesson)
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -68,9 +70,11 @@
                                         <td>
                                             {{ $row->answer }}
                                         </td>
-                                        <td>
-                                            {{ $row->percent_of_good_answers }}
-                                        </td>
+                                        @if($user)
+                                            <td>
+                                                {{ $row->percent_of_good_answers }}
+                                            </td>
+                                        @endif
                                         @if($canModifyLesson)
                                             <td>
                                                 <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">

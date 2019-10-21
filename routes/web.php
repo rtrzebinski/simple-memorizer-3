@@ -11,6 +11,8 @@
 |
 */
 
+// authorised users only
+
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', 'Web\HomeController@index');
@@ -22,10 +24,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/lessons/create', 'Web\LessonController@create');
 
     Route::post('/lessons', 'Web\LessonController@store');
-
-    Route::get('/lessons/{lesson}', 'Web\LessonController@view');
-
-    Route::get('/lessons/{lesson}/exercises', 'Web\LessonController@exercises');
 
     Route::get('/lessons/{lesson}/edit', 'Web\LessonController@edit');
 
@@ -76,6 +74,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/learn/exercises/{exercise}/{lesson}', 'Web\LearningController@updateExercise');
 });
 
+// guest users only
+
 Route::group(['middleware' => ['guest']], function () {
 
     Route::get('/', 'Web\MainController@index');
@@ -101,3 +101,9 @@ Route::group(['middleware' => ['guest']], function () {
     Route::post('password/reset', 'Web\ResetPasswordController@reset');
 
 });
+
+// lessons
+
+Route::get('/lessons/{lesson}', 'Web\LessonController@view');
+
+Route::get('/lessons/{lesson}/exercises', 'Web\LessonController@exercises');

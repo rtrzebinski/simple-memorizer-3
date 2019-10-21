@@ -52,10 +52,11 @@ class Controller extends BaseController
         $canLearn = Gate::forUser($this->user())->allows('learn', $lesson);
         $canModify = Gate::forUser($this->user())->allows('modify', $lesson);
 
-        $subscriberPivot = $lesson->subscriberPivot($this->user()->id);
+        $subscriberPivot = $this->user() ? $lesson->subscriberPivot($this->user()->id) : null;
 
         return [
             'lesson' => $lesson,
+            'user' => $this->user(),
             'threshold' => $subscriberPivot->threshold ?? null,
             'bidirectional' => ($subscriberPivot->bidirectional ?? null) ? 'yes' : 'no',
             'percentOfGoodAnswers' => $subscriberPivot->percent_of_good_answers ?? null,

@@ -7,18 +7,22 @@
                 <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
             </h4>
             <p>
-                Visibility: {{ $lesson->visibility }} </br>
-                @if($canNotSubscribe)
+                @if($canModify)
+                    Visibility: {{ $lesson->visibility }} </br>
+                @endif
+                @if($canNotSubscribe && $user)
                     Threshold: {{ $threshold }} </br>
                     Bidirectional: {{ $bidirectional }} </br>
                 @endif
                 Number of exercises: {{ $numberOfExercises }} </br>
-                @if($canNotSubscribe)
+                @if($canNotSubscribe && $user)
                     Number of active exercises: {{ $numberOfActiveExercises }} </br>
                 @endif
-                Number of aggregates: {{ $numberOfAggregates }} </br>
+                @if ($canModify)
+                    Number of aggregates: {{ $numberOfAggregates }} </br>
+                @endif
                 Number of subscribers: {{ $subscribedUsersWithOwnerExcluded }} </br>
-                @if($canNotSubscribe)
+                @if($canNotSubscribe && $user)
                     Percent of good answers: {{ $percentOfGoodAnswers }} </br>
                 @endif
             </p>
@@ -26,7 +30,7 @@
         </div>
         <div class="col-md-6 no-padding">
             <p>
-                @if($canSubscribe)
+                @if($canSubscribe || !$user)
                     <button type="submit" form="subscribe-and-learn" class="btn btn-primary margin-bottom">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                         Subscribe and start
@@ -60,7 +64,7 @@
                     </a>
                 @endif
 
-                @if($canNotSubscribe)
+                @if($canNotSubscribe && $user)
                     <a href="/lessons/{{ $lesson->id }}/settings" class="btn btn-info margin-bottom" role="button">
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                         Settings

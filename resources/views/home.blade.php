@@ -85,7 +85,8 @@
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ count($row->allExercises()) }} </br>
-                                                Number of subscribers: {{ count($row->subscribedUsers) }} </br>
+                                                {{-- - 1 because owner is always subscribing --}}
+                                                Number of subscribers: {{ count($row->subscribedUsers) - 1 }} </br>
                                                 Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
                                             </p>
                                             <p>
@@ -133,10 +134,6 @@
                                         Create your own lesson
                                     </a>
                                 @endif
-                                <a href="#" class="btn btn-default" role="button">
-                                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                                    All available lessons
-                                </a>
                             </p>
                         </div>
                         <div class="col-md-4 no-padding">
@@ -160,11 +157,12 @@
                                     <div class="caption">
                                         <h4>
                                             <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                            <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
+                                            <a href="/lessons/{{ $row->id }}/exercises">{{ $row->name }}</a>
                                         </h4>
                                         <p>
                                             Number of exercises: {{ count($row->allExercises()) }} </br>
-                                            Number of subscribers: {{ count($row->subscribedUsers) }} </br>
+                                            {{-- - 1 because owner is always subscribing --}}
+                                            Number of subscribers: {{ count($row->subscribedUsers) - 1 }} </br>
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->id }}"

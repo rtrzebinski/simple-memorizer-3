@@ -4,7 +4,7 @@ Application consists of web interface, and REST API which allows intergation wit
 
 [REST API documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki/REST-API)
 
-[Application live demo](http://peaceful-chamber-70920.herokuapp.com/home)
+[Application live demo](https://simple-memorizer.online)
 
 ### How does it work
 
