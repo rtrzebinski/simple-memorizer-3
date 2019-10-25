@@ -109,8 +109,12 @@ class LearningControllerTest extends BaseTestCase
         $this->assertResponseOk();
 
         $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswers($user->id));
-        $this->assertEquals(50, $lesson->percentOfGoodAnswers($user->id)); // 50 because 2 exercises are required to learn a lesson
+        // just one good and no bad answers - predefined 20%
+        $this->assertEquals(20, $exercise->percentOfGoodAnswers($user->id));
+        // 10 because 2 exercises are required to learn a lesson,
+        // so one will be 0%, another will be 20%
+        // (0 + 20) / 2 = 10
+        $this->assertEquals(10, $lesson->percentOfGoodAnswers($user->id));
     }
 
     /** @test */
