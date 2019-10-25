@@ -49,7 +49,7 @@ class LearningService
         }
 
         $tmp = [];
-        foreach ($exercises as $exercise) {
+        foreach ($exercises as $key => $exercise) {
             /** @var ExerciseResult $result */
             $result = $exercise->results->where('user_id', '=', $userId)->first();
 
@@ -63,32 +63,37 @@ class LearningService
             }
 
             /*
-             * Fill $tmp array with $exercises multiplied by number of points.
-             *
-             * This way exercises with higher number of points (so lower user knowledge),
-             * will have bigger chance to be returned.
+             * Fill $tmp array with exercises $key multiplied by number of points.
+             * This way exercises with higher number of points (so lower user knowledge) have bigger chance to be returned.
              */
-            for ($i = $this->calculateNumberOfPoints($percentOfGoodAnswers); $i > 0; $i--) {
-                $tmp[] = $exercise;
+            for ($i = $this->convertPercentOfGoodAnswersToPoints($percentOfGoodAnswers); $i > 0; $i--) {
+                $tmp[] = $key;
             }
         }
 
-        // do randomization
-        shuffle($tmp);
-        return $tmp[array_rand($tmp)];
+        // get a random $key and return matching exercise
+        return $exercises[$tmp[array_rand($tmp)]];
     }
 
     /**
+     * Will return number of points related to percent of good answer.
+     * For percent of good answer = 0 return 100 points (maximum).
+     * For percent of good answer = 100 return 1 point (minimum).
+     * For percent of good answer = 20 return 80 points.
+     * For percent of good answer = 50 return 50 points.
+     * For percent of good answer = 90 return 10 points.
+     * etc.
+     *
      * @param int $percentOfGoodAnswers
      * @return int
      * @throws \Exception
      */
-    private function calculateNumberOfPoints(int $percentOfGoodAnswers): int
+    private function convertPercentOfGoodAnswersToPoints(int $percentOfGoodAnswers): int
     {
         if ($percentOfGoodAnswers == 100) {
             return 1;
         }
 
-        return 100 - $percentOfGoodAnswers;
+        return (100 - $percentOfGoodAnswers);
     }
 }
