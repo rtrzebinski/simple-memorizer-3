@@ -219,6 +219,7 @@ class TestDataSeeder extends Seeder
                 'answer' => $a + $b,
             ]);
         }
+        $lesson->subscribedUsers()->save($lesson->owner);
 
         $lesson = factory(Lesson::class)->create([
             'name' => 'Math: subtracting integer numbers',
@@ -232,6 +233,7 @@ class TestDataSeeder extends Seeder
                 'answer' => $a - $b,
             ]);
         }
+        $lesson->subscribedUsers()->save($lesson->owner);
     }
 
     /**
