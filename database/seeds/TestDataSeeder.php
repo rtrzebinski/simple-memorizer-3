@@ -234,6 +234,20 @@ class TestDataSeeder extends Seeder
             ]);
         }
         $lesson->subscribedUsers()->save($lesson->owner);
+
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Quite a big lesson',
+        ]);
+        for ($i = 1; $i <= 1000; $i++) {
+            $a = rand(100, 10000);
+            $b = rand(100, 10000);
+            factory(Exercise::class)->create([
+                'lesson_id' => $lesson->id,
+                'question' => $a.' + '.$b,
+                'answer' => $a + $b,
+            ]);
+        }
+        $lesson->subscribedUsers()->save($lesson->owner);
     }
 
     /**
