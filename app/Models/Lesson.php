@@ -35,6 +35,7 @@ use Illuminate\Database\Query\JoinClause;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
+ * @mixin \Eloquent
  */
 class Lesson extends Model
 {

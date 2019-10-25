@@ -4,6 +4,7 @@ namespace Tests\Listeners;
 
 use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
+use Carbon\Carbon;
 
 class UpdateNumberOfGoodAnswersOfExerciseTest extends \TestCase
 {
@@ -18,12 +19,19 @@ class UpdateNumberOfGoodAnswersOfExerciseTest extends \TestCase
 
         $listener = new UpdateNumberOfGoodAnswersOfExercise();
         $event = new ExerciseGoodAnswer($exercise, $user);
+
+        Carbon::setTestNow($now = Carbon::now()->subDays(2));
         $listener->handle($event);
 
         $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
+        $this->assertEquals($now, $exercise->results[0]->latest_good_answer);
+        $this->assertEquals(null, $exercise->results[0]->latest_bad_answer);
 
+        Carbon::setTestNow($now = Carbon::now()->subDays(1));
         $listener->handle($event);
 
         $this->assertEquals(2, $exercise->numberOfGoodAnswersOfUser($user->id));
+        $this->assertEquals($now, $exercise->fresh()->results[0]->latest_good_answer);
+        $this->assertEquals(null, $exercise->fresh()->results[0]->latest_bad_answer);
     }
 }

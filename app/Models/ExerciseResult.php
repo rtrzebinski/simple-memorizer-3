@@ -29,6 +29,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult query()
+ * @property string|null $latest_good_answer
+ * @property string|null $latest_bad_answer
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult whereLatestBadAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult whereLatestGoodAnswer($value)
  */
 class ExerciseResult extends Model
 {

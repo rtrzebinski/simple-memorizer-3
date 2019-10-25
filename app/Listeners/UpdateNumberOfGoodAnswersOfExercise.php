@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ExerciseGoodAnswer;
 use App\Models\ExerciseResult;
+use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
@@ -31,11 +32,15 @@ class UpdateNumberOfGoodAnswersOfExercise implements ShouldQueue
             $exerciseResult->user_id = $user->id;
             $exerciseResult->exercise_id = $exercise->id;
             $exerciseResult->number_of_good_answers = 1;
+            $exerciseResult->latest_good_answer = Carbon::now();
             $exerciseResult->save();
         } else {
             // increase number of answers for existing exercise result
             DB::table('exercise_results')->where('id', '=', $exerciseResult->id)
-                ->update(['number_of_good_answers' => DB::raw('number_of_good_answers + 1')]);
+                ->update([
+                    'number_of_good_answers' => DB::raw('number_of_good_answers + 1'),
+                    'latest_good_answer' => Carbon::now(),
+                ]);
         }
     }
 }
