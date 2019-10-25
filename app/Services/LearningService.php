@@ -49,30 +49,46 @@ class LearningService
         }
 
         $tmp = [];
-        foreach ($exercises as $key => $exercise) {
-            /** @var ExerciseResult $result */
-            $result = $exercise->results->where('user_id', '=', $userId)->first();
 
-            // User needs this exercise if his percent_of_good_answers is below the threshold
-            if ($result instanceof ExerciseResult) {
-                // Check percent of good answers of a user
-                $percentOfGoodAnswers = $result->percent_of_good_answers;
-            } else {
-                // User has no answers for this exercise, so we know that percent of good answers is 0
-                $percentOfGoodAnswers = 0;
-            }
+        foreach ($exercises as $key => $exercise) {
+            // extra check - ensure only results of single user are loaded
+            // results count might be 1 if user has ever answered an exercise or 0 otherwise
+            assert(count($exercise->results) <= 1, 'Some unexpected results were loaded');
+
+            $exerciseResult = $exercise->results->first();
+
+            $points = $this->calculatePoints($exerciseResult);
 
             /*
              * Fill $tmp array with exercises $key multiplied by number of points.
              * This way exercises with higher number of points (so lower user knowledge) have bigger chance to be returned.
              */
-            for ($i = $this->convertPercentOfGoodAnswersToPoints($percentOfGoodAnswers); $i > 0; $i--) {
+            for ($i = $points; $i > 0; $i--) {
                 $tmp[] = $key;
             }
         }
 
         // get a random $key and return matching exercise
         return $exercises[$tmp[array_rand($tmp)]];
+    }
+
+    /**
+     * Calculate points for given exercise result.
+     *
+     * @param ExerciseResult|null $exerciseResult
+     * @return int
+     * @throws Exception
+     */
+    private function calculatePoints(?ExerciseResult $exerciseResult): int
+    {
+        if (!$exerciseResult instanceof ExerciseResult) {
+            // user has no answers for this exercise - it needs maximum number of points,
+            // so exercise is very likely to be served
+            return 1;
+        }
+
+        // calculate points based on percent of good answers
+        return $this->convertPercentOfGoodAnswersToPoints($exerciseResult->percent_of_good_answers);
     }
 
     /**
