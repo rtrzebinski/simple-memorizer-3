@@ -96,13 +96,8 @@ class Lesson extends Model
      */
     public function allExercises(): Collection
     {
-        $allExercises = $this->exercises;
-
-        foreach ($this->childLessons as $lesson) {
-            $allExercises = $allExercises->merge($lesson->exercises);
-        }
-
-        return $allExercises;
+        $lessonIds = $this->childLessons()->pluck('id')->add($this->id);
+        return Exercise::whereIn('lesson_id', $lessonIds)->get();
     }
 
     /**
