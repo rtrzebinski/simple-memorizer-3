@@ -53,7 +53,7 @@ class LessonTest extends \TestCase
     }
 
     /** @test */
-    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLessons()
+    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLesson()
     {
         $parentLesson = $this->createLesson();
         $this->createExercise(['lesson_id' => $parentLesson->id]);
@@ -63,6 +63,22 @@ class LessonTest extends \TestCase
         $parentLesson->childLessons()->attach($childLesson);
 
         $this->assertCount(2, $parentLesson->allExercises());
+    }
+
+    /** @test */
+    public function itShould_fetchAllExercisesOfLesson_includeExercisesFromChildLessons()
+    {
+        $parentLesson = $this->createLesson();
+        $this->createExercise(['lesson_id' => $parentLesson->id]);
+        $childLesson1 = $this->createLesson();
+        $this->createExercise(['lesson_id' => $childLesson1->id]);
+        $childLesson2 = $this->createLesson();
+        $this->createExercise(['lesson_id' => $childLesson2->id]);
+
+        $parentLesson->childLessons()->attach($childLesson1);
+        $parentLesson->childLessons()->attach($childLesson2);
+
+        $this->assertCount(3, $parentLesson->allExercises());
     }
 
     /** @test */
