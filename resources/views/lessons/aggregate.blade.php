@@ -29,7 +29,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ $lesson['name'] }}
+                                                <a href="/lessons/{{ $lesson['id'] }}">{{ $lesson['name'] }}</a>
                                             </td>
                                         </tr>
                                     @endforeach
