@@ -5,15 +5,21 @@ namespace App\Services;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
+use Carbon\Carbon;
 use Exception;
 
+/**
+ * Based on history of answers of a user,
+ * find out which exercise should be present to him
+ * in order to memorize the entire lesson in most effective way.
+ *
+ * Class LearningService
+ * @package App\Services
+ */
 class LearningService
 {
     /**
-     * Fetch pseudo random exercise of lesson
-     *
-     * Exercise that user knows less have more chance to be returned.
-     * Exercise that user knows more have less chance to be returned.
+     * Fetch pseudo random exercise of lesson. Should be served to a user in learning mode.
      *
      * @param Lesson   $lesson
      * @param int      $userId
@@ -25,6 +31,7 @@ class LearningService
     {
         $exercises = $lesson->exercisesForGivenUser($userId)
             ->filter(function (Exercise $exercise) use ($previousExerciseId) {
+                // exclude previous exercise
                 return $exercise->id != $previousExerciseId;
             });
 
@@ -79,15 +86,52 @@ class LearningService
      * @return int
      * @throws Exception
      */
-    private function calculatePoints(?ExerciseResult $exerciseResult): int
+    public function calculatePoints(?ExerciseResult $exerciseResult): int
     {
         if (!$exerciseResult instanceof ExerciseResult) {
             // user has no answers for this exercise - it needs maximum number of points,
             // so exercise is very likely to be served
+            return 100;
+        }
+
+        /** @var Carbon|null $latestGoodAnswer */
+        $latestGoodAnswer = $exerciseResult->latest_good_answer;
+
+        /** @var Carbon|null $latestBadAnswer */
+        $latestBadAnswer = $exerciseResult->latest_bad_answer;
+
+        // user had both good and bad answers today
+        if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday() && $latestBadAnswer->isToday()) {
+
+            // if good answer was the most recent - return 1 point to not bother user with this question anymore today
+            // it makes more sense to serve it another day than serve again today
+            if ($latestGoodAnswer->isAfter($latestBadAnswer)) {
+                return 1;
+            }
+
+            // if bad answer was the most recent - return 100 points so it's likely it will be served today again
+            // this will speed up memorizing of this particular exercise
+            if ($latestBadAnswer->isAfter($latestGoodAnswer)) {
+                return 100;
+            }
+        }
+
+        // user had just good answer today
+        if ($latestGoodAnswer instanceof Carbon && $latestGoodAnswer->isToday()) {
+            // return 1 point to not bother user with this question anymore today
+            // it makes more sense to serve it another day than serve again today
             return 1;
         }
 
-        // calculate points based on percent of good answers
+        // user had just bad answer today
+        if ($latestBadAnswer instanceof Carbon && $latestBadAnswer->isToday()) {
+            // return 100 points so it's likely it will be served today again
+            // this will speed up memorizing of this particular exercise
+            return 100;
+        }
+
+        // calculate points based on percent of good answers, so if user did not answer this exercise today,
+        // we want to calculate points based on the ration of previous good and bad answers
         return $this->convertPercentOfGoodAnswersToPoints($exerciseResult->percent_of_good_answers);
     }
 

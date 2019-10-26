@@ -3,6 +3,7 @@
 namespace Tests\Services;
 
 use App\Services\LearningService;
+use Carbon\Carbon;
 use TestCase;
 use App\Models\Exercise;
 use App\Models\Lesson;
@@ -20,6 +21,8 @@ class LearningServiceTest extends TestCase
         $this->learningService = new LearningService();
     }
 
+    // fetchRandomExerciseOfLesson
+
     /** @test */
     public function itShould_returnRandomExercise_exerciseOnlyHasAnswersOfAnotherUser()
     {
@@ -29,7 +32,7 @@ class LearningServiceTest extends TestCase
         $this->createExerciseResult([
             'user_id' => $this->createUser()->id,
             'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => 100,
+            'percent_of_good_answers' => 10,
         ]);
 
         $this->assertExerciseCanWin($lesson, $this->createUser()->id, $exercise->id);
@@ -58,7 +61,7 @@ class LearningServiceTest extends TestCase
         $this->createExerciseResult([
             'user_id' => $this->createUser()->id,
             'exercise_id' => $exerciseWithAnswer->id,
-            'percent_of_good_answers' => 100,
+            'percent_of_good_answers' => 10,
         ]);
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
@@ -79,14 +82,147 @@ class LearningServiceTest extends TestCase
         $this->createExerciseResult([
             'user_id' => $this->createUser()->id,
             'exercise_id' => $exerciseWithAnswer->id,
-            'percent_of_good_answers' => 100,
+            'percent_of_good_answers' => 10,
         ]);
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
-        $previousExercise = $this->createExercise();
+        $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id, $previousExercise->id);
         $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id, $previousExercise->id);
+        $this->assertPreviousExerciseCanNotWin($lesson, $user->id, $previousExercise->id);
+    }
+
+    /** @test */
+    public function itShould_returnRandomExercise_fourPossibleExercises()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+
+        $exerciseWithAnswer1 = $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer1->id,
+            'percent_of_good_answers' => 10,
+        ]);
+
+        $exerciseWithAnswer2 = $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer2->id,
+            'percent_of_good_answers' => 10,
+        ]);
+
+        $exerciseWithNoAnswer1 = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $exerciseWithNoAnswer2 = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer1->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer2->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer1->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer2->id);
+    }
+
+    /** @test */
+    public function itShould_returnRandomExercise_fourPossibleExercises_withPrevious()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+
+        $exerciseWithAnswer1 = $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer1->id,
+            'percent_of_good_answers' => 10,
+        ]);
+
+        $exerciseWithAnswer2 = $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer2->id,
+            'percent_of_good_answers' => 10,
+        ]);
+
+        $exerciseWithNoAnswer1 = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $exerciseWithNoAnswer2 = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer1->id, $previousExercise->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer2->id, $previousExercise->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer1->id, $previousExercise->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer2->id, $previousExercise->id);
+        $this->assertPreviousExerciseCanNotWin($lesson, $user->id, $previousExercise->id);
+    }
+
+    /** @test */
+    public function itShould_returnRandomExercise_goodAndBadAnswerToday()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+
+        $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer->id,
+            'percent_of_good_answers' => 10,
+            'latest_good_answer' => Carbon::now(),
+            'latest_bad_answer' => Carbon::now(),
+        ]);
+
+        $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id);
+    }
+
+    /** @test */
+    public function itShould_returnRandomExercise_goodAnswerToday()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+
+        $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer->id,
+            'percent_of_good_answers' => 10,
+            'latest_good_answer' => Carbon::now(),
+        ]);
+
+        $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id);
+    }
+
+    /** @test */
+    public function itShould_returnRandomExercise_badAnswerToday()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+
+        $exerciseWithAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'exercise_id' => $exerciseWithAnswer->id,
+            'percent_of_good_answers' => 10,
+            'latest_bad_answer' => Carbon::now(),
+        ]);
+
+        $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($lesson, $user->id, $exerciseWithNoAnswer->id);
     }
 
     /** @test */
@@ -170,7 +306,9 @@ class LearningServiceTest extends TestCase
 
     private function assertExerciseCanWin(Lesson $lesson, int $userId, int $exerciseId, int $previousId = null)
     {
-        // 1000 retries is more than enough
+        // try 1000 times - it does not bother us if this number is high,
+        // as exercise is likely to be returned in one of first attempts anyway
+        // keeping this counter big will prevent from occasional false positives
         $counter = 1000;
         do {
             if (!$counter--) {
@@ -178,6 +316,150 @@ class LearningServiceTest extends TestCase
             }
             $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $userId, $previousId);
             $this->assertInstanceOf(Exercise::class, $result);
-        } while ($result->id != $exerciseId && $result->id && $previousId);
+        } while ($result->id != $exerciseId);
+    }
+
+    private function assertPreviousExerciseCanNotWin(Lesson $lesson, int $userId, int $previousId)
+    {
+        // try 5 times - should be enough to often find a failing case
+        // it won't be 100% accurate, but we don't want this check to be too slow as well
+        $counter = 5;
+        do {
+            if (!$counter--) {
+                // all good - previous exercise was never returned
+                return;
+            }
+            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $userId, $previousId);
+            $this->assertTrue($result->id != $previousId, 'Previous exercise was returned');
+        } while (1);
+    }
+
+    // calculatePoints
+
+    public function pointsProvider()
+    {
+        return [
+            ['percent_of_good_answers' => 100, 'expected_points' => 1],
+            ['percent_of_good_answers' => 80, 'expected_points' => 20],
+            ['percent_of_good_answers' => 50, 'expected_points' => 50],
+            ['percent_of_good_answers' => 20, 'expected_points' => 80],
+            ['percent_of_good_answers' => 1, 'expected_points' => 99],
+            ['percent_of_good_answers' => 0, 'expected_points' => 100],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider pointsProvider
+     * @param int $percentOfGoodAnswers
+     * @param int $expectedPoints
+     * @throws \Exception
+     */
+    public function itShould_calculatePoints(int $percentOfGoodAnswers, int $expectedPoints)
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => $percentOfGoodAnswers,
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals($expectedPoints, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_goodAndBadAnswersToday_goodMostRecent()
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => 50,
+            'latest_good_answer' => Carbon::today()->addMinute(),
+            'latest_bad_answer' => Carbon::today(),
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals(1, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_goodAndBadAnswersToday_badMostRecent()
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => 50,
+            'latest_good_answer' => Carbon::today(),
+            'latest_bad_answer' => Carbon::today()->addMinute(),
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals(100, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_goodAnswerToday_noBadAnswer()
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => 50,
+            'latest_good_answer' => Carbon::today(),
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals(1, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_goodAnswerToday_badAnswerYesterday()
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => 50,
+            'latest_good_answer' => Carbon::today(),
+            'latest_bad_answer' => Carbon::yesterday(),
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals(1, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer()
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => 50,
+            'latest_bad_answer' => Carbon::today(),
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals(100, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_badAnswersToday_goodAnswerYesterday()
+    {
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $this->createUser()->id,
+            'percent_of_good_answers' => 50,
+            'latest_bad_answer' => Carbon::today(),
+            'latest_good_answer' => Carbon::yesterday(),
+        ]);
+
+        $result = $this->learningService->calculatePoints($exerciseResult);
+
+        $this->assertEquals(100, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_noResult()
+    {
+        $result = $this->learningService->calculatePoints(null);
+
+        $this->assertEquals(100, $result);
     }
 }
