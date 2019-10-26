@@ -43,18 +43,6 @@ class LearningService
             return $exercises->first();
         }
 
-        // if lesson is bidirectional
-        // clone each exercise with reversed question and answer
-        // so both variants are in the collection
-        if ($lesson->isBidirectional($userId)) {
-            foreach ($exercises as $exercise) {
-                $clonedExercise = clone $exercise;
-                $clonedExercise->question = $exercise->answer;
-                $clonedExercise->answer = $exercise->question;
-                $exercises->add($clonedExercise);
-            }
-        }
-
         $tmp = [];
 
         foreach ($exercises as $key => $exercise) {
@@ -75,8 +63,21 @@ class LearningService
             }
         }
 
-        // get a random $key and return matching exercise
-        return $exercises[$tmp[array_rand($tmp)]];
+        /**
+         * get a random $key and return matching exercise
+         * @var Exercise $winner
+         */
+        $winner = $exercises[$tmp[array_rand($tmp)]];
+
+        // if lesson is bidirectional flip question and answer with 50% chance
+        if ($lesson->isBidirectional($userId) && rand(0, 1) == 1) {
+            $flippedWinner = clone $winner;
+            $flippedWinner->question = $winner->answer;
+            $flippedWinner->answer = $winner->question;
+            return $flippedWinner;
+        }
+
+        return $winner;
     }
 
     /**
