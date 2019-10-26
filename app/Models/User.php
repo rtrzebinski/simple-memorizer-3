@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @property string                                                                                                         $password
  * @property string                                                                                                         $api_token
  * @property string|null                                                                                                    $remember_token
- * @property string|null                                                                                                    $auth_driver
  * @property \Carbon\Carbon|null                                                                                            $created_at
  * @property \Carbon\Carbon|null                                                                                            $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications

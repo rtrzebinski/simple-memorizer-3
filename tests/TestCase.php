@@ -6,7 +6,6 @@ use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Socialite\Two\User as SocialiteUser;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
@@ -88,16 +87,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function createUser(array $data = [])
     {
         return factory(User::class)->create($data);
-    }
-
-    /**
-     * @return SocialiteUser
-     */
-    protected function createSocialiteUser(): SocialiteUser
-    {
-        $user = new SocialiteUser();
-        $user->email = $this->randomEmail();
-        return $user;
     }
 
     /**

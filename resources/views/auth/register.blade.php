@@ -63,18 +63,6 @@
                             </div>
                         </form>
 
-                    <a href="{{ url('/login/facebook') }}" class="btn btn-block btn-social btn-facebook">
-                        <span class="fa fa-facebook"></span> Register with Facebook
-                    </a>
-
-                    <a href="{{ url('/login/google') }}" class="btn btn-block btn-social btn-google">
-                        <span class="fa fa-google"></span> Register with Google
-                    </a>
-
-                    <a href="{{ url('/login/github') }}" class="btn btn-block btn-social btn-github">
-                        <span class="fa fa-github"></span> Register with Github
-                    </a>
-
                     </div>
                 </div>
             </div>
