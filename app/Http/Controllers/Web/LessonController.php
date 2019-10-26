@@ -151,13 +151,11 @@ class LessonController extends Controller
         }
 
         $this->validate($request, [
-            'threshold' => 'required|integer|min:1|max:100',
             'bidirectional' => 'required|boolean',
         ]);
 
         $pivot = $lesson->subscriberPivot($this->user()->id);
         $pivot->update([
-            'threshold' => $request->threshold,
             'bidirectional' => $request->bidirectional,
         ]);
 

@@ -57,11 +57,9 @@ class Controller extends BaseController
         return [
             'lesson' => $lesson,
             'user' => $this->user(),
-            'threshold' => $subscriberPivot->threshold ?? null,
             'bidirectional' => ($subscriberPivot->bidirectional ?? null) ? 'yes' : 'no',
             'percentOfGoodAnswers' => $subscriberPivot->percent_of_good_answers ?? null,
             'numberOfExercises' => $lesson->allExercises()->count(),
-            'numberOfActiveExercises' => $subscriberPivot ? $lesson->exercisesForGivenUser($this->user()->id)->count() : null,
             'numberOfAggregates' => $lesson->childLessons()->count(),
             'subscribedUsersWithOwnerExcluded' => $lesson->subscribedUsersWithOwnerExcluded()->count(),
             'canSubscribe' => $canSubscribe,

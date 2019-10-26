@@ -27,6 +27,8 @@ class Lessons extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('lesson_id')->unsigned();
             $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
+            $table->boolean('bidirectional')->default(false);
+            $table->integer('percent_of_good_answers')->default('0');
             $table->unique(['user_id', 'lesson_id']);
             $table->timestamps();
         });

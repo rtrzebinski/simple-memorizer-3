@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\JoinClause;
 
 /**
@@ -35,7 +34,6 @@ use Illuminate\Database\Query\JoinClause;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
- * @mixin \Eloquent
  */
 class Lesson extends Model
 {
@@ -108,50 +106,13 @@ class Lesson extends Model
     }
 
     /**
-     * Exercises of this lesson, and child lessons, that user should have served when learning.
-     * Exercises that have percent_of_good_answers above the threshold will be filtered out.
-     * ExerciseResults of a given user will be eager loaded.
-     * @param int $userId
-     * @return Collection|Exercise[]
-     */
-    public function exercisesForGivenUser(int $userId): Collection
-    {
-        // All exercises of a lesson, including exercises from aggregated lessons.
-        $exercises = $this->allExercises();
-
-        // Eager load ExerciseResults (alleviates the N + 1 query problem)
-        $exercises->load([
-            'results' => function (Relation $relation) use ($userId) {
-                // only load exercise results of given user
-                $relation->where('exercise_results.user_id', $userId);
-            }
-        ]);
-
-        $subscriberPivot = $this->subscriberPivot($userId);
-
-        // Filter out exercises with percent_of_good_answers below the threshold
-        return $exercises->filter(function (Exercise $exercise) use ($userId, $subscriberPivot) {
-            /** @var ExerciseResult $result */
-            $result = $exercise->results->where('user_id', '=', $userId)->first();
-
-            // User needs this exercise if his percent_of_good_answers is below or at the threshold
-            if ($result instanceof ExerciseResult) {
-                return $result->percent_of_good_answers <= $subscriberPivot->threshold;
-            }
-
-            // User has no answers for this exercise, so we know that he needs it
-            return true;
-        });
-    }
-
-    /**
      * @return BelongsToMany
      */
     public function subscribedUsers()
     {
         return $this->belongsToMany(User::class)
             // required for percent_of_good_answers to be included in the result
-            ->withPivot(['percent_of_good_answers', 'bidirectional', 'threshold']);
+            ->withPivot(['percent_of_good_answers', 'bidirectional']);
     }
 
     /**
@@ -211,20 +172,6 @@ class Lesson extends Model
     {
         if ($pivot = $this->subscriberPivot($userId)) {
             return $pivot->bidirectional;
-        }
-
-        throw new \Exception('User does not subscribe lesson: '.$this->id);
-    }
-
-    /**
-     * @param int $userId
-     * @return int
-     * @throws \Exception
-     */
-    public function threshold(int $userId): int
-    {
-        if ($pivot = $this->subscriberPivot($userId)) {
-            return $pivot->threshold;
         }
 
         throw new \Exception('User does not subscribe lesson: '.$this->id);

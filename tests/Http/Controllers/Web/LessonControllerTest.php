@@ -404,7 +404,6 @@ class LessonControllerTest extends BaseTestCase
         $lesson = $this->createPublicLesson($user);
 
         $input = [
-            'threshold' => '50',
             'bidirectional' => '1',
         ];
 
@@ -415,7 +414,6 @@ class LessonControllerTest extends BaseTestCase
 
         /** @var Lesson $lesson */
         $lesson = $lesson->fresh();
-        $this->assertEquals($input['threshold'], $lesson->threshold($user->id));
         $this->assertEquals($input['bidirectional'], $lesson->isBidirectional($user->id));
     }
 
@@ -426,7 +424,6 @@ class LessonControllerTest extends BaseTestCase
         $lesson = $this->createPrivateLesson($this->createUser());
 
         $input = [
-            'threshold' => '50',
             'bidirectional' => '1',
         ];
 

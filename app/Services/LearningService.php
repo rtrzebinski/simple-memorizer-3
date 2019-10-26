@@ -7,6 +7,7 @@ use App\Models\ExerciseResult;
 use App\Models\Lesson;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Based on history of answers of a user,
@@ -29,11 +30,20 @@ class LearningService
      */
     public function fetchRandomExerciseOfLesson(Lesson $lesson, int $userId, int $previousExerciseId = null): ?Exercise
     {
-        $exercises = $lesson->exercisesForGivenUser($userId)
+        // All exercises of a lesson, including exercises from aggregated lessons.
+        $exercises = $lesson->allExercises()
             ->filter(function (Exercise $exercise) use ($previousExerciseId) {
                 // exclude previous exercise
                 return $exercise->id != $previousExerciseId;
             });
+
+        // Eager load ExerciseResults (alleviates the N + 1 query problem)
+        $exercises->load([
+            'results' => function (Relation $relation) use ($userId) {
+                // only load exercise results of given user
+                $relation->where('exercise_results.user_id', $userId);
+            }
+        ]);
 
         if ($exercises->isEmpty()) {
             return null;

@@ -11,13 +11,9 @@
                     Visibility: {{ $lesson->visibility }} </br>
                 @endif
                 @if($canNotSubscribe && $user)
-                    Threshold: {{ $threshold }} </br>
                     Bidirectional: {{ $bidirectional }} </br>
                 @endif
                 Number of exercises: {{ $numberOfExercises }} </br>
-                @if($canNotSubscribe && $user)
-                    Number of active exercises: {{ $numberOfActiveExercises }} </br>
-                @endif
                 @if ($canModify)
                     Number of aggregates: {{ $numberOfAggregates }} </br>
                 @endif

@@ -17,16 +17,6 @@
                                     <input name="_method" type="hidden" value="PUT">
 
                                     <div class="form-group">
-                                        <label>Threshold</label>
-                                        <input name="threshold" type="text" class="form-control" value="{{ $lesson->threshold(Auth::user()->id) }}">
-                                        <span class="help-block">
-                                            Maximum percent of good answers of exercise, that will allow exercise to be served in learning mode. </br>
-                                            Set to 90 if you only want to learn exercises with percent of good answers between 1 and 90, and skip best known. </br>
-                                            Set to 50 to focus only on exercises with more bad than good answers.
-                                        </span>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label>Bidirectional</label>
                                         <select name="bidirectional" class="form-control">
                                             <option @if($lesson->isBidirectional(Auth::user()->id)) selected @endif value="1">Yes</option>
