@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
+ * @property-read int|null $notifications_count
+ * @property-read int|null $owned_lessons_count
+ * @property-read int|null $subscribed_lessons_count
  */
 class User extends Authenticatable
 {

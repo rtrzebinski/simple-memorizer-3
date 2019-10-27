@@ -34,6 +34,12 @@ use Illuminate\Database\Query\JoinClause;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
+ * @property-read int|null $child_lessons_count
+ * @property-read int|null $exercises_count
+ * @property-read int|null $parent_lessons_count
+ * @property-read int|null $subscribed_users_count
+ * @property-read int|null $subscribed_users_with_owner_excluded_count
+ * @mixin \Eloquent
  */
 class Lesson extends Model
 {
