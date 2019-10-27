@@ -131,6 +131,7 @@ class TestDataSeeder extends Seeder
             'owner_id' => $user->id,
         ]);
         $lesson->subscribe($user);
+
         $lesson = factory(Lesson::class)->create([
             'name' => 'Private lesson with one exercise',
             'visibility' => 'private',
@@ -140,6 +141,7 @@ class TestDataSeeder extends Seeder
         factory(Exercise::class)->create([
             'lesson_id' => $lesson->id,
         ]);
+
         $lesson = factory(Lesson::class)->create([
             'name' => 'Private lesson with two exercises',
             'visibility' => 'private',
@@ -147,6 +149,16 @@ class TestDataSeeder extends Seeder
         ]);
         $lesson->subscribe($user);
         factory(Exercise::class, 2)->create([
+            'lesson_id' => $lesson->id,
+        ]);
+
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Private lesson with three exercises',
+            'visibility' => 'private',
+            'owner_id' => $user->id,
+        ]);
+        $lesson->subscribe($user);
+        factory(Exercise::class, 3)->create([
             'lesson_id' => $lesson->id,
         ]);
 

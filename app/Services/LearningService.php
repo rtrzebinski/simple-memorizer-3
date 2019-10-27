@@ -45,12 +45,9 @@ class LearningService
             }
         ]);
 
+        // case here is exercise deleted by the owner during the lesson
         if ($exercises->isEmpty()) {
             return null;
-        }
-
-        if ($exercises->count() == 1) {
-            return $exercises->first();
         }
 
         $tmp = [];
@@ -71,6 +68,31 @@ class LearningService
             for ($i = $points; $i > 0; $i--) {
                 $tmp[] = $key;
             }
+        }
+
+        // all exercises have 0 points - none should be returned (served)
+        if (empty($tmp)) {
+
+            // but perhaps previous has some points? let's check
+            if ($previousExerciseId) {
+
+                /** @var Exercise $previous */
+                $previous = Exercise::find($previousExerciseId);
+
+                /** @var ExerciseResult|null $previousResult */
+                $previousResult = $previous->results()->where('user_id', $userId)->first();
+
+                $previousPoints = $this->calculatePoints($previousResult);
+
+                // if previous has points, but no other exercise have points,
+                // let's keep serving previous until user says he knows it,
+                // in which case null will be returned, and lesson terminated
+                if ($previousPoints > 0) {
+                    return $previous;
+                }
+            }
+
+            return null;
         }
 
         /**
@@ -114,10 +136,10 @@ class LearningService
         // user had both good and bad answers today
         if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday() && $latestBadAnswer->isToday()) {
 
-            // if good answer was the most recent - return 1 point to not bother user with this question anymore today
+            // if good answer was the most recent - return 0 point to not bother user with this question anymore today
             // it makes more sense to serve it another day than serve again today
             if ($latestGoodAnswer->isAfter($latestBadAnswer)) {
-                return 1;
+                return 0;
             }
 
             // if bad answer was the most recent - return 100 points so it's likely it will be served today again
@@ -129,9 +151,9 @@ class LearningService
 
         // user had just good answer today
         if ($latestGoodAnswer instanceof Carbon && $latestGoodAnswer->isToday()) {
-            // return 1 point to not bother user with this question anymore today
+            // return 0 point to not bother user with this question anymore today
             // it makes more sense to serve it another day than serve again today
-            return 1;
+            return 0;
         }
 
         // user had just bad answer today

@@ -19,8 +19,10 @@ class ExerciseResults extends Migration
             $table->integer('exercise_id')->unsigned();
             $table->foreign('exercise_id')->references('id')->on('exercises')->onDelete('cascade');
             $table->integer('number_of_good_answers')->default('0');
+            $table->integer('number_of_good_answers_today')->default('0');
             $table->timestamp('latest_good_answer')->nullable();
             $table->integer('number_of_bad_answers')->default('0');
+            $table->integer('number_of_bad_answers_today')->default('0');
             $table->timestamp('latest_bad_answer')->nullable();
             $table->integer('percent_of_good_answers')->default('0');
             $table->timestamps();
