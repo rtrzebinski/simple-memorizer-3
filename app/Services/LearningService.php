@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use App\Models\User;
 use App\Structures\UserExercise;
 use App\Structures\UserExerciseRepository;
+use App\Structures\UserLesson;
 use Carbon\Carbon;
 use Exception;
 
@@ -44,9 +45,9 @@ class LearningService
      * @return Exercise|null
      * @throws Exception
      */
-    public function fetchRandomExerciseOfLesson(Lesson $lesson, User $user, int $previousExerciseId = null): ?UserExercise
+    public function fetchRandomExerciseOfLesson(UserLesson $userLesson, User $user, int $previousExerciseId = null): ?UserExercise
     {
-        $userExercises = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $lesson->id)
+        $userExercises = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $userLesson->lesson_id)
             ->filter(function (UserExercise $userExercise) use ($previousExerciseId) {
                 // exclude previous exercise
                 return $userExercise->exercise_id != $previousExerciseId;
@@ -98,7 +99,7 @@ class LearningService
         $winner = $userExercises[$tmp[array_rand($tmp)]];
 
         // if lesson is bidirectional flip question and answer with 50% chance
-        if ($lesson->isBidirectional($user->id) && rand(0, 1) == 1) {
+        if ($userLesson->is_bidirectional && rand(0, 1) == 1) {
             $flippedWinner = clone $winner;
             $flippedWinner->question = $winner->answer;
             $flippedWinner->answer = $winner->question;

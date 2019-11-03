@@ -5,6 +5,7 @@ use App\Models\ExerciseResult;
 use App\Models\Lesson;
 use App\Models\User;
 use App\Structures\UserExercise;
+use App\Structures\UserLesson;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -198,5 +199,15 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
 
         return $userExercise;
+    }
+
+    protected function createUserLesson(User $user, Lesson $lesson, $isBidirectional)
+    {
+        $userLesson = new UserLesson();
+        $userLesson->lesson_id = $lesson->id;
+        $userLesson->owner_id = $user->id;
+        $userLesson->name = $lesson->name;
+        $userLesson->is_bidirectional = $isBidirectional;
+        return $userLesson;
     }
 }

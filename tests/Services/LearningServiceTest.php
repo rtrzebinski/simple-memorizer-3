@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\LearningService;
 use App\Structures\UserExercise;
 use App\Structures\UserExerciseRepository;
+use App\Structures\UserLesson;
 use Carbon\Carbon;
 use TestCase;
 use App\Models\Lesson;
@@ -39,7 +40,16 @@ class LearningServiceTest extends TestCase
             'percent_of_good_answers' => 10,
         ]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exercise->id);
+        $subscriber = $lesson->subscribedUsers()
+            ->where('lesson_user.user_id', '=', $user->id)
+            ->first();
+
+        // set subscription as bidirectional
+        $subscriber->pivot->bidirectional = true;
+        $subscriber->pivot->save();
+
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exercise->id);
     }
 
     /** @test */
@@ -51,7 +61,8 @@ class LearningServiceTest extends TestCase
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exercise->id);
     }
 
     /** @test */
@@ -71,8 +82,9 @@ class LearningServiceTest extends TestCase
 
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer->id, $previousExercise->id);
-        $this->assertExerciseCanWin($lesson, $user, $previousExercise->id, $exerciseWithAnswer->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer->id, $previousExercise->id);
+        $this->assertExerciseCanWin($userLesson, $user, $previousExercise->id, $exerciseWithAnswer->id);
     }
 
     /** @test */
@@ -104,7 +116,8 @@ class LearningServiceTest extends TestCase
             'latest_good_answer' => Carbon::today(),
         ]);
 
-        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previous->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previous->id);
 
         $this->assertNull($result);
     }
@@ -138,7 +151,8 @@ class LearningServiceTest extends TestCase
 
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previousExercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($previousExercise->id, $result->exercise_id);
@@ -178,7 +192,8 @@ class LearningServiceTest extends TestCase
             'percent_of_good_answers' => 10,
         ]);
 
-        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previousExercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($previousExercise->id, $result->exercise_id);
@@ -221,7 +236,8 @@ class LearningServiceTest extends TestCase
             'latest_good_answer' => Carbon::today(),
         ]);
 
-        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previousExercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertNull($result);
     }
@@ -243,8 +259,9 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer->id);
     }
 
     /** @test */
@@ -265,9 +282,10 @@ class LearningServiceTest extends TestCase
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer->id, $previousExercise->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer->id, $previousExercise->id);
-        $this->assertPreviousExerciseCanNotWin($lesson, $user, $previousExercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer->id, $previousExercise->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer->id, $previousExercise->id);
+        $this->assertPreviousExerciseCanNotWin($userLesson, $user, $previousExercise->id);
     }
 
     /** @test */
@@ -295,10 +313,11 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithNoAnswer2 = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer1->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer2->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer1->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer2->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer1->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer2->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer1->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer2->id);
     }
 
     /** @test */
@@ -328,11 +347,12 @@ class LearningServiceTest extends TestCase
 
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer1->id, $previousExercise->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer2->id, $previousExercise->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer1->id, $previousExercise->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer2->id, $previousExercise->id);
-        $this->assertPreviousExerciseCanNotWin($lesson, $user, $previousExercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer1->id, $previousExercise->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer2->id, $previousExercise->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer1->id, $previousExercise->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer2->id, $previousExercise->id);
+        $this->assertPreviousExerciseCanNotWin($userLesson, $user, $previousExercise->id);
     }
 
     /** @test */
@@ -354,8 +374,9 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer->id);
     }
 
     /** @test */
@@ -376,8 +397,9 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer->id);
     }
 
     /** @test */
@@ -398,8 +420,9 @@ class LearningServiceTest extends TestCase
 
         $exerciseWithNoAnswer = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithAnswer->id);
-        $this->assertExerciseCanWin($lesson, $user, $exerciseWithNoAnswer->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithAnswer->id);
+        $this->assertExerciseCanWin($userLesson, $user, $exerciseWithNoAnswer->id);
     }
 
     /** @test */
@@ -407,7 +430,8 @@ class LearningServiceTest extends TestCase
     {
         $lesson = $this->createLesson();
 
-        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $this->createUser());
+        $userLesson = $this->createUserLesson($this->createUser(), $lesson, $isBidirectional = false);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $this->createUser());
 
         $this->assertNull($result);
     }
@@ -419,7 +443,8 @@ class LearningServiceTest extends TestCase
         $lesson = $this->createLesson();
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previousExercise->id);
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
+        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertNull($result);
     }
@@ -443,11 +468,12 @@ class LearningServiceTest extends TestCase
 
         // 1000 retries is more than enough
         $counter = 1000;
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = true);
         do {
             if (!$counter--) {
                 $this->fail('Bidirectional flag does not work - unable to fetch reverted exercise.');
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user);
+            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user);
             // just to avoid "This test did not perform any assertions" warning
             $this->assertTrue(true);
         } while ($result->answer != $exercise->question);
@@ -471,17 +497,18 @@ class LearningServiceTest extends TestCase
         $subscriber->pivot->save();
 
         $counter = 10;
+        $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
         do {
             if (!$counter--) {
                 $this->fail('Bidirectional flag does not work - reverted exercise was fetched while it should not.');
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user);
+            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user);
             // just to avoid "This test did not perform any assertions" warning
             $this->assertTrue(true);
         } while ($result->answer == $exercise->question);
     }
 
-    private function assertExerciseCanWin(Lesson $lesson, User $user, int $exerciseId, int $previousId = null)
+    private function assertExerciseCanWin(UserLesson $userLesson, User $user, int $exerciseId, int $previousId = null)
     {
         // try 1000 times - it does not bother us if this number is high,
         // as exercise is likely to be returned in one of first attempts anyway
@@ -491,12 +518,12 @@ class LearningServiceTest extends TestCase
             if (!$counter--) {
                 $this->fail('Unable to fetch random exercise.');
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previousId);
+            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousId);
             $this->assertInstanceOf(UserExercise::class, $result);
         } while ($result->exercise_id != $exerciseId);
     }
 
-    private function assertPreviousExerciseCanNotWin(Lesson $lesson, User $user, int $previousId)
+    private function assertPreviousExerciseCanNotWin(UserLesson $userLesson, User $user, int $previousId)
     {
         // try 5 times - should be enough to often find a failing case
         // it won't be 100% accurate, but we don't want this check to be too slow as well
@@ -506,7 +533,7 @@ class LearningServiceTest extends TestCase
                 // all good - previous exercise was never returned
                 return;
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($lesson, $user, $previousId);
+            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousId);
             $this->assertTrue($result->exercise_id != $previousId, 'Previous exercise was returned');
         } while (1);
     }

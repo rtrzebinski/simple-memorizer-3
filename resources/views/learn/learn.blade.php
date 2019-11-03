@@ -15,7 +15,7 @@
                                 <div class="col-md-8 col-md-offset-2">
                                     <h4>
                                         <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                        <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
+                                        <a href="/lessons/{{ $userLesson->lesson_id }}">{{ $userLesson->name }}</a>
                                     </h4>
                                     {{--check if user can modify lesson without db query--}}
                                     @if($canModifyExercise)
@@ -29,7 +29,7 @@
                                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                         Show answer
                                     </button>
-                                    <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $userExercise->exercise_id }}">
+                                    <a href="/learn/lessons/{{ $userLesson->lesson_id }}?previous_exercise_id={{ $userExercise->exercise_id }}">
                                         <button class="btn btn-default margin-bottom" id="next-button">
                                             <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
                                             Next
@@ -41,7 +41,7 @@
                             </br>
 
                             <div class="row">
-                                <form method="POST" id="update-exercise-form" action="/learn/exercises/{{ $userExercise->exercise_id }}/{{ $lesson->id }}">
+                                <form method="POST" id="update-exercise-form" action="/learn/exercises/{{ $userExercise->exercise_id }}/{{ $userLesson->lesson_id }}">
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="PUT">
                                     <div class="col-md-8 col-md-offset-2 margin-bottom">
@@ -77,12 +77,12 @@
                                     </button>
                                 </div>
                                 <form id="handle-good-answer-form"
-                                      action="/learn/handle-good-answer/exercises/{{ $userExercise->exercise_id }}/{{ $lesson->id }}"
+                                      action="/learn/handle-good-answer/exercises/{{ $userExercise->exercise_id }}/{{ $userLesson->lesson_id }}"
                                       method="POST">
                                     {{ csrf_field() }}
                                 </form>
                                 <form id="handle-bad-answer-form"
-                                      action="/learn/handle-bad-answer/exercises/{{ $userExercise->exercise_id }}/{{ $lesson->id }}"
+                                      action="/learn/handle-bad-answer/exercises/{{ $userExercise->exercise_id }}/{{ $userLesson->lesson_id }}"
                                       method="POST">
                                     {{ csrf_field() }}
                                 </form>
@@ -96,7 +96,7 @@
                         <div class="col-md-8 col-md-offset-2">
                             <h4>
                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
+                                <a href="/lessons/{{ $userLesson->lesson_id }}">{{ $userLesson->name }}</a>
                             </h4>
 
                             Well done! You've answered correctly to all questions in this lesson today. Please come back tomorrow or <a href=" {{ url('/home') }}">select another lesson</a>.

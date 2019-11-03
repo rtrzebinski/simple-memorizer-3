@@ -9,6 +9,8 @@ use App\Models\Exercise;
 use App\Models\Lesson;
 use App\Services\LearningService;
 use App\Structures\UserExerciseRepository;
+use App\Structures\UserLesson;
+use App\Structures\UserLessonRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,15 +18,19 @@ use Illuminate\View\View;
 class LearningController extends Controller
 {
     /**
-     * @param Lesson                 $lesson
+     * @param int                    $lessonId
      * @param Request                $request
      * @param LearningService        $learningService
      * @param UserExerciseRepository $userExerciseRepository
+     * @param UserLessonRepository   $userLessonRepository
      * @return \Illuminate\Contracts\View\Factory|View
      * @throws \Exception
      */
-    public function learnLesson(Lesson $lesson, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository)
+    public function learnLesson(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository, UserLessonRepository $userLessonRepository)
     {
+        // todo authorize that user can learn (access) lesson, but not change
+        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+
         $requestedExerciseId = $request->get('requested_exercise_id');
 
         if ($requestedExerciseId) {
@@ -34,13 +40,14 @@ class LearningController extends Controller
 //            $this->authorizeForUser($this->user(), 'access', $exercise);
         } else {
             $previousExerciseId = $request->get('previous_exercise_id');
-            $userExercise = $learningService->fetchRandomExerciseOfLesson($lesson, $this->user(), $previousExerciseId);
+            $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $this->user(), $previousExerciseId);
         }
 
         return view('learn.learn', [
-            'lesson' => $lesson,
+            'userLesson' => $userLesson,
             'userExercise' => $userExercise,
-            'canModifyExercise' => $lesson->owner_id == $this->user()->id,
+            // todo change to can modify lesson, and use UserLesson gate
+            'canModifyExercise' => $userLesson->owner_id == $this->user()->id,
         ]);
     }
 
