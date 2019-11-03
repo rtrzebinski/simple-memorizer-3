@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
+use App\Models\User;
+use App\Structures\UserExercise;
+use App\Structures\UserExerciseRepository;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Based on history of answers of a user,
@@ -20,46 +22,45 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 class LearningService
 {
     /**
+     * @var UserExerciseRepository
+     */
+    private $userExerciseRepository;
+
+    /**
+     * LearningService constructor.
+     * @param UserExerciseRepository $userExerciseRepository
+     */
+    public function __construct(UserExerciseRepository $userExerciseRepository)
+    {
+        $this->userExerciseRepository = $userExerciseRepository;
+    }
+
+    /**
      * Fetch pseudo random exercise of lesson. Should be served to a user in learning mode.
      *
      * @param Lesson   $lesson
-     * @param int      $userId
+     * @param User     $user
      * @param int|null $previousExerciseId
      * @return Exercise|null
      * @throws Exception
      */
-    public function fetchRandomExerciseOfLesson(Lesson $lesson, int $userId, int $previousExerciseId = null): ?Exercise
+    public function fetchRandomExerciseOfLesson(Lesson $lesson, User $user, int $previousExerciseId = null): ?UserExercise
     {
-        // All exercises of a lesson, including exercises from aggregated lessons.
-        $exercises = $lesson->allExercises()
-            ->filter(function (Exercise $exercise) use ($previousExerciseId) {
+        $userExercises = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $lesson->id)
+            ->filter(function (UserExercise $userExercise) use ($previousExerciseId) {
                 // exclude previous exercise
-                return $exercise->id != $previousExerciseId;
+                return $userExercise->exercise_id != $previousExerciseId;
             });
 
-        // Eager load ExerciseResults (alleviates the N + 1 query problem)
-        $exercises->load([
-            'results' => function (Relation $relation) use ($userId) {
-                // only load exercise results of given user
-                $relation->where('exercise_results.user_id', $userId);
-            }
-        ]);
-
         // case here is exercise deleted by the owner during the lesson
-        if ($exercises->isEmpty()) {
+        if ($userExercises->isEmpty()) {
             return null;
         }
 
         $tmp = [];
 
-        foreach ($exercises as $key => $exercise) {
-            // extra check - ensure only results of single user are loaded
-            // results count might be 1 if user has ever answered an exercise or 0 otherwise
-            assert(count($exercise->results) <= 1, 'Some unexpected results were loaded');
-
-            $exerciseResult = $exercise->results->first();
-
-            $points = $this->calculatePoints($exerciseResult);
+        foreach ($userExercises as $key => $userExercise) {
+            $points = $this->calculatePoints($userExercise);
 
             /*
              * Fill $tmp array with exercises $key multiplied by number of points.
@@ -72,23 +73,18 @@ class LearningService
 
         // all exercises have 0 points - none should be returned (served)
         if (empty($tmp)) {
-
             // but perhaps previous has some points? let's check
             if ($previousExerciseId) {
 
-                /** @var Exercise $previous */
-                $previous = Exercise::find($previousExerciseId);
+                $previousUserExercise = $this->userExerciseRepository->fetchUserExerciseOfExercise($user, $previousExerciseId);
 
-                /** @var ExerciseResult|null $previousResult */
-                $previousResult = $previous->results()->where('user_id', $userId)->first();
-
-                $previousPoints = $this->calculatePoints($previousResult);
+                $previousPoints = $this->calculatePoints($previousUserExercise);
 
                 // if previous has points, but no other exercise have points,
                 // let's keep serving previous until user says he knows it,
                 // in which case null will be returned, and lesson terminated
                 if ($previousPoints > 0) {
-                    return $previous;
+                    return $previousUserExercise;
                 }
             }
 
@@ -99,10 +95,10 @@ class LearningService
          * get a random $key and return matching exercise
          * @var Exercise $winner
          */
-        $winner = $exercises[$tmp[array_rand($tmp)]];
+        $winner = $userExercises[$tmp[array_rand($tmp)]];
 
         // if lesson is bidirectional flip question and answer with 50% chance
-        if ($lesson->isBidirectional($userId) && rand(0, 1) == 1) {
+        if ($lesson->isBidirectional($user->id) && rand(0, 1) == 1) {
             $flippedWinner = clone $winner;
             $flippedWinner->question = $winner->answer;
             $flippedWinner->answer = $winner->question;
@@ -115,23 +111,17 @@ class LearningService
     /**
      * Calculate points for given exercise result.
      *
-     * @param ExerciseResult|null $exerciseResult
+     * @param UserExercise $userExercise
      * @return int
      * @throws Exception
      */
-    public function calculatePoints(?ExerciseResult $exerciseResult): int
+    public function calculatePoints(UserExercise $userExercise): int
     {
-        if (!$exerciseResult instanceof ExerciseResult) {
-            // user has no answers for this exercise - it needs maximum number of points,
-            // so exercise is very likely to be served
-            return 100;
-        }
-
         /** @var Carbon|null $latestGoodAnswer */
-        $latestGoodAnswer = $exerciseResult->latest_good_answer;
+        $latestGoodAnswer = $userExercise->latest_good_answer ? new Carbon($userExercise->latest_good_answer) : null;
 
         /** @var Carbon|null $latestBadAnswer */
-        $latestBadAnswer = $exerciseResult->latest_bad_answer;
+        $latestBadAnswer = $userExercise->latest_bad_answer ? new Carbon($userExercise->latest_bad_answer) : null;
 
         // user had both good and bad answers today
         if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday() && $latestBadAnswer->isToday()) {
@@ -165,7 +155,7 @@ class LearningService
 
         // calculate points based on percent of good answers, so if user did not answer this exercise today,
         // we want to calculate points based on the ration of previous good and bad answers
-        return $this->convertPercentOfGoodAnswersToPoints($exerciseResult->percent_of_good_answers);
+        return $this->convertPercentOfGoodAnswersToPoints($userExercise->percent_of_good_answers);
     }
 
     /**

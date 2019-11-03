@@ -15,10 +15,11 @@ use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
 use App\Models\User;
+use Carbon\Carbon;
 
 $factory->define(User::class, function () {
     return [
-        'email' => uniqid() . '@example.com',
+        'email' => uniqid().'@example.com',
         'password' => uniqid(),
         'api_token' => uniqid(),
     ];
@@ -46,7 +47,5 @@ $factory->define(Lesson::class, function (Faker\Generator $faker) {
 
 $factory->define(ExerciseResult::class, function () {
     return [
-        'user_id' => factory(User::class)->create()->id,
-        'exercise_id' => factory(Exercise::class)->create()->id,
     ];
 });

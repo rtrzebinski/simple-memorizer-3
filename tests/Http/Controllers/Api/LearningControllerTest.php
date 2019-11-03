@@ -3,6 +3,7 @@
 namespace Tests\Http\Controllers\Api;
 
 use App\Models\Lesson;
+use App\Models\User;
 use App\Services\LearningService;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -19,19 +20,21 @@ class LearningControllerTest extends BaseTestCase
         $previous = $this->createExercise(['lesson_id' => $lesson->id]);
         $exercise = $this->createExercise();
 
+        $userExercise = $this->createUserExercise($user, $exercise);
+
         /** @var LearningService|MockObject $learningService */
         $learningService = $this->createMock(LearningService::class);
         $this->instance(LearningService::class, $learningService);
 
         $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(Lesson::class), $user->id, $previous->id)
-            ->willReturn($exercise);
+            ->with($this->isInstanceOf(Lesson::class), $this->isInstanceOf(User::class), $previous->id)
+            ->willReturn($userExercise);
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
             ['previous_exercise_id' => $previous->id], $user);
 
         $this->assertResponseOk();
-        $this->seeJsonFragment($exercise->toArray());
+        $this->seeJsonFragment((array)$userExercise);
     }
 
     /** @test */
@@ -85,7 +88,7 @@ class LearningControllerTest extends BaseTestCase
         $this->instance(LearningService::class, $learningService);
 
         $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(Lesson::class), $user->id)
+            ->with($this->isInstanceOf(Lesson::class), $this->isInstanceOf(User::class))
             ->willReturn(null);
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', [], $user);

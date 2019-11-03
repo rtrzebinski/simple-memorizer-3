@@ -4,6 +4,7 @@ use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
 use App\Models\User;
+use App\Structures\UserExercise;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -160,5 +161,42 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
 
         return $lesson;
+    }
+
+    /**
+     * @param User     $user
+     * @param Exercise $exercise
+     * @return UserExercise
+     */
+    protected function createUserExercise(User $user, Exercise $exercise): UserExercise
+    {
+        $userExercise = new UserExercise();
+        $userExercise->exercise_id = $exercise->id;
+        $userExercise->lesson_id = $exercise->lesson_id;
+        $userExercise->question = $exercise->question;
+        $userExercise->answer = $exercise->answer;
+
+        /** @var ExerciseResult $exerciseResult */
+        $exerciseResult = $exercise->results()->where('user_id', $user->id)->first();
+
+        if ($exerciseResult) {
+            $userExercise->number_of_good_answers = $exerciseResult->number_of_good_answers;
+            $userExercise->number_of_good_answers_today = $exerciseResult->number_of_good_answers_today;
+            $userExercise->latest_good_answer = $exerciseResult->latest_good_answer;
+            $userExercise->number_of_bad_answers = $exerciseResult->number_of_bad_answers;
+            $userExercise->number_of_bad_answers_today = $exerciseResult->number_of_bad_answers_today;
+            $userExercise->latest_bad_answer = $exerciseResult->latest_bad_answer;
+            $userExercise->percent_of_good_answers = $exerciseResult->percent_of_good_answers;
+        } else {
+            $userExercise->number_of_good_answers = 0;
+            $userExercise->number_of_good_answers_today = 0;
+            $userExercise->latest_good_answer = null;
+            $userExercise->number_of_bad_answers = 0;
+            $userExercise->number_of_bad_answers_today = 0;
+            $userExercise->latest_bad_answer = null;
+            $userExercise->percent_of_good_answers = 0;
+        }
+
+        return $userExercise;
     }
 }
