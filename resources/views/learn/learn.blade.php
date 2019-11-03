@@ -9,7 +9,7 @@
                     <div class="panel-heading">Learning</div>
                     <div class="panel-body">
 
-                        @if($exercise)
+                        @if($userExercise)
 
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
@@ -17,18 +17,19 @@
                                         <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
                                         <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
                                     </h4>
-                                    @can('modify', $exercise)
+                                    {{--check if user can modify lesson without db query--}}
+                                    @if($canModifyExercise)
                                         <button type="submit" form="update-exercise-form"
                                                 class="btn btn-default margin-bottom">
                                             <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                                             Save changes
                                         </button>
-                                    @endcan
+                                    @endif
                                     <button id="show_answer_button" class="btn btn-default margin-bottom">
                                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                         Show answer
                                     </button>
-                                    <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $exercise->id }}">
+                                    <a href="/learn/lessons/{{ $lesson->id }}?previous_exercise_id={{ $userExercise->exercise_id }}">
                                         <button class="btn btn-default margin-bottom" id="next-button">
                                             <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
                                             Next
@@ -40,7 +41,7 @@
                             </br>
 
                             <div class="row">
-                                <form method="POST" id="update-exercise-form" action="/learn/exercises/{{ $exercise->id }}/{{ $lesson->id }}">
+                                <form method="POST" id="update-exercise-form" action="/learn/exercises/{{ $userExercise->exercise_id }}/{{ $lesson->id }}">
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="PUT">
                                     <div class="col-md-8 col-md-offset-2 margin-bottom">
@@ -48,7 +49,7 @@
                                             <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                                             Question
                                         </label>
-                                        <textarea name="question" class="form-control" rows="{{ substr_count( $exercise->question, "\n" ) + 1 }}">{{ $exercise->question }}</textarea>
+                                        <textarea name="question" class="form-control" rows="{{ substr_count( $userExercise->question, "\n" ) + 1 }}">{{ $userExercise->question }}</textarea>
                                     </div>
                                     <div class="clearfix"></div>
                                     <div id="answer_input" class="col-md-8 col-md-offset-2 margin-bottom hidden">
@@ -57,7 +58,7 @@
                                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                                             Correct answer
                                         </label>
-                                        <textarea name="answer" class="form-control" rows="{{ substr_count( $exercise->answer, "\n" ) + 1 }}">{{ $exercise->answer }}</textarea>
+                                        <textarea name="answer" class="form-control" rows="{{ substr_count( $userExercise->answer, "\n" ) + 1 }}">{{ $userExercise->answer }}</textarea>
                                     </div>
                                 </form>
                             </div>
@@ -76,12 +77,12 @@
                                     </button>
                                 </div>
                                 <form id="handle-good-answer-form"
-                                      action="/learn/handle-good-answer/exercises/{{ $exercise->id }}/{{ $lesson->id }}"
+                                      action="/learn/handle-good-answer/exercises/{{ $userExercise->exercise_id }}/{{ $lesson->id }}"
                                       method="POST">
                                     {{ csrf_field() }}
                                 </form>
                                 <form id="handle-bad-answer-form"
-                                      action="/learn/handle-bad-answer/exercises/{{ $exercise->id }}/{{ $lesson->id }}"
+                                      action="/learn/handle-bad-answer/exercises/{{ $userExercise->exercise_id }}/{{ $lesson->id }}"
                                       method="POST">
                                     {{ csrf_field() }}
                                 </form>
@@ -152,10 +153,5 @@
             }
         });
     });
-
-
-
-
-
     </script>
 @endpush
