@@ -2,7 +2,6 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use App\Models\Lesson;
 use App\Services\LearningService;
 use App\Structures\UserLesson;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,6 +15,7 @@ class LearningControllerTest extends BaseTestCase
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createExercise()->lesson;
+        $lesson->subscribe($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $this->createExercise();
 
@@ -41,6 +41,7 @@ class LearningControllerTest extends BaseTestCase
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createExercise()->lesson;
+        $lesson->subscribe($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $previous = $lesson->exercises[0];
         $exercise = $this->createExercise();
@@ -110,6 +111,18 @@ class LearningControllerTest extends BaseTestCase
         $this->call('GET', '/learn/lessons/-1');
 
         $this->assertResponseNotFound();
+    }
+
+    /** @test */
+    public function itShould_notShowLessonLearnPage_userDoesNotSubscribeLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createExercise()->lesson;
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('GET', '/learn/lessons/'.$lesson->id);
+
+        $this->assertResponseForbidden();
     }
 
     // handleGoodAnswer

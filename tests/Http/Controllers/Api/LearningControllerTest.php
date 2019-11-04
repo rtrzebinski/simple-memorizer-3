@@ -2,7 +2,6 @@
 
 namespace Tests\Http\Controllers\Api;
 
-use App\Models\Lesson;
 use App\Models\User;
 use App\Services\LearningService;
 use App\Structures\UserLesson;
@@ -17,7 +16,7 @@ class LearningControllerTest extends BaseTestCase
     public function itShould_fetchRandomExerciseOfLesson()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id]);
+        $lesson = $this->createPublicLesson($user);
         $previous = $this->createExercise(['lesson_id' => $lesson->id]);
         $exercise = $this->createExercise();
 
@@ -82,7 +81,7 @@ class LearningControllerTest extends BaseTestCase
     public function itShould_notFetchRandomExerciseOfLesson_noExercises()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id]);
+        $lesson = $this->createPublicLesson($user);
 
         /** @var LearningService|MockObject $learningService */
         $learningService = $this->createMock(LearningService::class);

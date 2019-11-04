@@ -29,12 +29,7 @@ class UserLessonRepositoryTest extends \TestCase
 
         $result = $this->repository->fetchUserLesson($user, $lesson->id);
 
-        $this->assertInstanceOf(UserLesson::class, $result);
-
-        $this->assertEquals($user->id, $result->owner_id);
-        $this->assertEquals($lesson->id, $result->lesson_id);
-        $this->assertEquals($lesson->name, $result->name);
-        $this->assertEquals(0, $result->is_bidirectional);
+        $this->assertNull($result);
     }
 
     /** @test */

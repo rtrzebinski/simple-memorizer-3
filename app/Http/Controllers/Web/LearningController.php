@@ -6,13 +6,12 @@ use App\Events\ExerciseBadAnswer;
 use App\Events\ExerciseGoodAnswer;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
-use App\Models\Lesson;
 use App\Services\LearningService;
 use App\Structures\UserExerciseRepository;
-use App\Structures\UserLesson;
 use App\Structures\UserLessonRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class LearningController extends Controller
@@ -28,8 +27,12 @@ class LearningController extends Controller
      */
     public function learnLesson(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository, UserLessonRepository $userLessonRepository)
     {
-        // todo authorize that user can learn (access) lesson, but not change
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+
+        if (!$userLesson) {
+            // user does not subscribe lesson
+            return response('This action is unauthorized', Response::HTTP_FORBIDDEN);
+        }
 
         $requestedExerciseId = $request->get('requested_exercise_id');
 
@@ -46,7 +49,6 @@ class LearningController extends Controller
         return view('learn.learn', [
             'userLesson' => $userLesson,
             'userExercise' => $userExercise,
-            // todo change to can modify lesson, and use UserLesson gate
             'canModifyExercise' => $userLesson->owner_id == $this->user()->id,
         ]);
     }

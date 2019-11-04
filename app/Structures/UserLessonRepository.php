@@ -11,9 +11,9 @@ class UserLessonRepository
     /**
      * @param User $user
      * @param int  $lessonId
-     * @return UserLesson
+     * @return UserLesson|null
      */
-    public function fetchUserLesson(User $user, int $lessonId): UserLesson
+    public function fetchUserLesson(User $user, int $lessonId): ?UserLesson
     {
         return DB::table('lessons')
             ->select([
@@ -23,7 +23,7 @@ class UserLessonRepository
                 DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
             ])
             ->from('lessons AS l')
-            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) use ($user, $lessonId) {
+            ->join('lesson_user AS lu', function (JoinClause $joinClause) use ($user, $lessonId) {
                 $joinClause
                     ->on('lu.lesson_id', '=', 'l.id')
                     ->where('lu.user_id', '=', $user->id)
