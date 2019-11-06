@@ -10,8 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpdateNumberOfBadAnswersOfExercise implements ShouldQueue
 {
-    use InteractsWithQueue;
-
     /**
      * Handle the event.
      *
