@@ -3,15 +3,29 @@
 namespace App\Listeners;
 
 use App\Events\LessonEventInterface;
-use App\Models\Exercise;
 use App\Models\Lesson;
 use App\Models\User;
+use App\Structures\UserExerciseRepository;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
 {
     use InteractsWithQueue;
+
+    /**
+     * @var UserExerciseRepository
+     */
+    private $userExerciseRepository;
+
+    /**
+     * UpdatePercentOfGoodAnswersOfLesson constructor.
+     * @param UserExerciseRepository $userExerciseRepository
+     */
+    public function __construct(UserExerciseRepository $userExerciseRepository)
+    {
+        $this->userExerciseRepository = $userExerciseRepository;
+    }
 
     /**
      * Handle the event.
@@ -33,25 +47,19 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
      */
     private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user)
     {
-        // will include exercises of child lessons
-        $exercises = $lesson->allExercises();
+        // fetch user exercises of a lesson
+        $userExercisesOfALesson = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $lesson->id);
+        $userExercisesCount = $userExercisesOfALesson->count();
 
-        // lessons only takes exercises from 1 level below, so if lesson has no exercises, that means its children also don't have any
-        if (!$exercises->count()) {
-            $subscriber = $lesson->subscribedUsers()->where('lesson_user.user_id', $user->id)->first();
-            $subscriber->pivot->percent_of_good_answers = 0;
-            $subscriber->pivot->save();
-            return;
+        // calculate percent_of_good_answers of a lesson
+        if ($userExercisesCount) {
+            $percentOfGoodAnswersSum = $userExercisesOfALesson->sum('percent_of_good_answers');
+            $percentOfGoodAnswersOfLesson = round($percentOfGoodAnswersSum / $userExercisesCount);
+        } else {
+            $percentOfGoodAnswersOfLesson = 0;
         }
 
-        // if lesson has at least one exercise, we need to calculate and store percent of good answers
-        $percentOfGoodAnswersTotal = 0;
-        $exercises->each(function (Exercise $exercise) use (&$percentOfGoodAnswersTotal, $user) {
-            $percentOfGoodAnswersTotal += $exercise->percentOfGoodAnswers($user->id);
-        });
-
-        $percentOfGoodAnswersOfLesson = round($percentOfGoodAnswersTotal / $exercises->count());
-
+        // update percent_of_good_answers of a lesson
         $subscriber = $lesson->subscribedUsers()->where('lesson_user.user_id', $user->id)->first();
         $subscriber->pivot->percent_of_good_answers = $percentOfGoodAnswersOfLesson;
         $subscriber->pivot->save();

@@ -4,6 +4,7 @@ namespace Tests\Listeners;
 
 use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdatePercentOfGoodAnswersOfLesson;
+use App\Structures\UserExerciseRepository;
 
 class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
 {
@@ -46,11 +47,37 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
             'percent_of_good_answers' => $exercise2percentOfGoodAnswers,
         ]);
 
-        $listener = new UpdatePercentOfGoodAnswersOfLesson();
+        $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
         $event = new ExerciseGoodAnswer($exercise, $user);
         $listener->handle($event);
 
         $this->assertEquals($expectedResult, $lesson->percentOfGoodAnswers($user->id));
+    }
+
+    /** @test */
+    public function itShould_updatePercentOfGoodAnswersOfLesson_exerciseWithoutAnswer()
+    {
+        $user = $this->createUser();
+
+        $lesson = $this->createLesson();
+        $lesson->subscribe($user);
+
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $this->createExerciseResult([
+            'user_id' => $user->id,
+            'exercise_id' => $exercise->id,
+            'percent_of_good_answers' => 100,
+        ]);
+
+        // this should be considered 0%, as it has no answers
+        $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
+        $event = new ExerciseGoodAnswer($exercise, $user);
+        $listener->handle($event);
+
+        // (100 + 0) / 2 = 50
+        $this->assertEquals(50, $lesson->percentOfGoodAnswers($user->id));
     }
 
     /** @test */
@@ -92,7 +119,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
 
         // (50 + 100) / 2 = 75
 
-        $listener = new UpdatePercentOfGoodAnswersOfLesson();
+        $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
         $event = new ExerciseGoodAnswer($exercise, $user);
         $listener->handle($event);
 
