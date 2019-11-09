@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdateNumberOfBadAnswersOfExercise implements ShouldQueue
+class UpdateNumberOfBadAnswersOfExercise
 {
     /**
      * Handle the event.
