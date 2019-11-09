@@ -18,7 +18,7 @@ class UpdateNumberOfBadAnswersOfExerciseTest extends \TestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson]);
 
         $listener = new UpdateNumberOfBadAnswersOfExercise();
-        $event = new ExerciseBadAnswer($exercise, $user);
+        $event = new ExerciseBadAnswer($exercise->id, $user);
 
         /*
          * Day 1
@@ -91,11 +91,11 @@ class UpdateNumberOfBadAnswersOfExerciseTest extends \TestCase
         Carbon::setTestNow($now = Carbon::now());
 
         $listener = new UpdateNumberOfGoodAnswersOfExercise();
-        $event = new ExerciseGoodAnswer($exercise, $user);
+        $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
         $listener = new UpdateNumberOfBadAnswersOfExercise();
-        $event = new ExerciseBadAnswer($exercise, $user);
+        $event = new ExerciseBadAnswer($exercise->id, $user);
         $listener->handle($event);
 
         $this->assertEquals($now->toDateTimeString(), $exercise->results[0]->latest_good_answer->toDateTimeString());

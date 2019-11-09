@@ -77,13 +77,17 @@
                                     </button>
                                 </div>
                                 <form id="handle-good-answer-form"
-                                      action="/learn/handle-good-answer/exercises/{{ $userExercise->exercise_id }}/{{ $userLesson->lesson_id }}"
+                                      action="/learn/lessons/{{ $userLesson->lesson_id }}"
                                       method="POST">
+                                    <input type="hidden" name="previous_exercise_id" value="{{ $userExercise->exercise_id }}">
+                                    <input type="hidden" name="answer" value="good">
                                     {{ csrf_field() }}
                                 </form>
                                 <form id="handle-bad-answer-form"
-                                      action="/learn/handle-bad-answer/exercises/{{ $userExercise->exercise_id }}/{{ $userLesson->lesson_id }}"
+                                      action="/learn/lessons/{{ $userLesson->lesson_id }}"
                                       method="POST">
+                                    <input type="hidden" name="previous_exercise_id" value="{{ $userExercise->exercise_id }}">
+                                    <input type="hidden" name="answer" value="bad">
                                     {{ csrf_field() }}
                                 </form>
                             </div>
@@ -153,5 +157,7 @@
             }
         });
     });
+
+
     </script>
 @endpush

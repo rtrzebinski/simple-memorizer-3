@@ -19,10 +19,10 @@ class UpdatePercentOfGoodAnswersOfExercise implements ShouldQueue
      */
     public function handle(ExerciseEvent $event)
     {
-        $exercise = $event->exercise();
+        $exerciseId = $event->exerciseId();
         $user = $event->user();
 
-        $exerciseResult = ExerciseResult::whereExerciseId($exercise->id)->whereUserId($user->id)->first();
+        $exerciseResult = ExerciseResult::whereExerciseId($exerciseId)->whereUserId($user->id)->first();
         $exerciseResult->percent_of_good_answers = $this->calculatePercentOfGoodAnswers($exerciseResult);
         $exerciseResult->save();
     }

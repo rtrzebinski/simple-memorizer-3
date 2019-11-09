@@ -22,7 +22,7 @@ class LearningController extends Controller
      * @param LearningService        $learningService
      * @param UserExerciseRepository $userExerciseRepository
      * @param UserLessonRepository   $userLessonRepository
-     * @return \Illuminate\Contracts\View\Factory|View
+     * @return View
      * @throws \Exception
      */
     public function learnLesson(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository, UserLessonRepository $userLessonRepository)
@@ -54,27 +54,32 @@ class LearningController extends Controller
     }
 
     /**
-     * @param Exercise $exercise
-     * @param int      $lessonId
-     * @return RedirectResponse
+     * @param int                    $lessonId
+     * @param Request                $request
+     * @param LearningService        $learningService
+     * @param UserExerciseRepository $userExerciseRepository
+     * @param UserLessonRepository   $userLessonRepository
+     * @return View
+     * @throws \Exception
      */
-    public function handleGoodAnswer(Exercise $exercise, int $lessonId): RedirectResponse
+    public function handleAnswer(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository, UserLessonRepository $userLessonRepository)
     {
-        event(new ExerciseGoodAnswer($exercise, $this->user()));
+        $this->validate($request, [
+            'answer' => 'required|in:good,bad',
+            'previous_exercise_id' => 'required|int',
+        ]);
 
-        return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
-    }
+        $previousExerciseId = $request->previous_exercise_id;
 
-    /**
-     * @param Exercise $exercise
-     * @param int      $lessonId
-     * @return RedirectResponse
-     */
-    public function handleBadAnswer(Exercise $exercise, int $lessonId)
-    {
-        event(new ExerciseBadAnswer($exercise, $this->user()));
+        if ($request->answer == 'good') {
+            event(new ExerciseGoodAnswer($previousExerciseId, $this->user()));
+        }
 
-        return redirect('/learn/lessons/'.$lessonId.'?previous_exercise_id='.$exercise->id);
+        if ($request->answer == 'bad') {
+            event(new ExerciseBadAnswer($previousExerciseId, $this->user()));
+        }
+
+        return $this->learnLesson($lessonId, $request, $learningService, $userExerciseRepository, $userLessonRepository);
     }
 
     /**

@@ -18,16 +18,16 @@ class UpdateNumberOfBadAnswersOfExercise implements ShouldQueue
      */
     public function handle(ExerciseBadAnswer $event)
     {
-        $exercise = $event->exercise();
+        $exerciseId = $event->exerciseId();
         $user = $event->user();
 
-        $exerciseResult = ExerciseResult::whereExerciseId($exercise->id)->whereUserId($user->id)->first();
+        $exerciseResult = ExerciseResult::whereExerciseId($exerciseId)->whereUserId($user->id)->first();
 
         if (is_null($exerciseResult)) {
             // create new exercise result if user never answered before
             $exerciseResult = new ExerciseResult();
             $exerciseResult->user_id = $user->id;
-            $exerciseResult->exercise_id = $exercise->id;
+            $exerciseResult->exercise_id = $exerciseId;
             $exerciseResult->number_of_bad_answers = 1;
             $exerciseResult->number_of_bad_answers_today = 1;
             $exerciseResult->latest_bad_answer = Carbon::now();

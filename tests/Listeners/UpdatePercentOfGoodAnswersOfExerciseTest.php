@@ -61,7 +61,7 @@ class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
         ]);
 
         $listener = new UpdatePercentOfGoodAnswersOfExercise();
-        $event = new ExerciseGoodAnswer($exercise, $user);
+        $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
         $this->assertEquals($percentOfGoodAnswers, $exerciseResult->fresh()->percent_of_good_answers);

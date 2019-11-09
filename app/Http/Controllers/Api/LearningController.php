@@ -38,7 +38,7 @@ class LearningController extends Controller
      */
     public function handleGoodAnswer(Exercise $exercise)
     {
-        event(new ExerciseGoodAnswer($exercise, $this->user()));
+        event(new ExerciseGoodAnswer($exercise->id, $this->user()));
     }
 
     /**
@@ -46,6 +46,6 @@ class LearningController extends Controller
      */
     public function handleBadAnswer(Exercise $exercise)
     {
-        event(new ExerciseBadAnswer($exercise, $this->user()));
+        event(new ExerciseBadAnswer($exercise->id, $this->user()));
     }
 }

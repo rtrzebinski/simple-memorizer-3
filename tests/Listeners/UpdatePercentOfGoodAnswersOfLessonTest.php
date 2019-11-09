@@ -48,7 +48,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         ]);
 
         $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
-        $event = new ExerciseGoodAnswer($exercise, $user);
+        $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
         $this->assertEquals($expectedResult, $lesson->percentOfGoodAnswers($user->id));
@@ -73,7 +73,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         $this->createExercise(['lesson_id' => $lesson->id]);
 
         $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
-        $event = new ExerciseGoodAnswer($exercise, $user);
+        $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
         // (100 + 0) / 2 = 50
@@ -120,7 +120,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         // (50 + 100) / 2 = 75
 
         $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
-        $event = new ExerciseGoodAnswer($exercise, $user);
+        $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
         $this->assertEquals(75, $childLesson->percentOfGoodAnswers($user->id));

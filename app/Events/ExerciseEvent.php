@@ -2,16 +2,15 @@
 
 namespace App\Events;
 
-use App\Models\Exercise;
 use App\Models\Lesson;
 use App\Models\User;
 
 abstract class ExerciseEvent implements LessonEventInterface
 {
     /**
-     * @var Exercise
+     * @var int
      */
-    protected $exercise;
+    protected $exerciseId;
 
     /**
      * @var User
@@ -21,12 +20,12 @@ abstract class ExerciseEvent implements LessonEventInterface
     /**
      * Create a new event instance.
      *
-     * @param Exercise $exercise
-     * @param User     $user
+     * @param int  $exerciseId
+     * @param User $user
      */
-    public function __construct(Exercise $exercise, User $user)
+    public function __construct(int $exerciseId, User $user)
     {
-        $this->exercise = $exercise;
+        $this->exerciseId = $exerciseId;
         $this->user = $user;
     }
 
@@ -35,13 +34,18 @@ abstract class ExerciseEvent implements LessonEventInterface
         return $this->user;
     }
 
-    public function exercise(): Exercise
+    public function exerciseId(): int
     {
-        return $this->exercise;
+        return $this->exerciseId;
     }
 
     public function lesson(): Lesson
     {
-        return $this->exercise->lesson;
+        return Lesson::query()
+            ->select('l.*')
+            ->from('lessons AS l')
+            ->join('exercises AS e', 'e.lesson_id', '=', 'l.id')
+            ->where('e.id', '=', $this->exerciseId)
+            ->first();
     }
 }

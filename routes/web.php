@@ -65,11 +65,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     // learn
 
-    Route::get('/learn/lessons/{lesson}', 'Web\LearningController@learnLesson');
+    Route::get('/learn/lessons/{lesson_id}', 'Web\LearningController@learnLesson');
 
-    Route::post('/learn/handle-good-answer/exercises/{exercise}/{lesson}', 'Web\LearningController@handleGoodAnswer');
-
-    Route::post('/learn/handle-bad-answer/exercises/{exercise}/{lesson}', 'Web\LearningController@handleBadAnswer');
+    Route::post('/learn/lessons/{lesson_id}', 'Web\LearningController@handleAnswer');
 
     Route::put('/learn/exercises/{exercise}/{lesson}', 'Web\LearningController@updateExercise');
 });
