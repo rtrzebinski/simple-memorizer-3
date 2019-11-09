@@ -91,7 +91,6 @@ class LearningControllerTest extends BaseTestCase
     /** @test */
     public function itShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
     {
-        self::markTestSkipped();
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
@@ -105,12 +104,11 @@ class LearningControllerTest extends BaseTestCase
     /** @test */
     public function itShould_notShowLessonLearnPage_lessonNotFound()
     {
-        self::markTestSkipped();
         $this->be($user = $this->createUser());
 
         $this->call('GET', '/learn/lessons/-1');
 
-        $this->assertResponseNotFound();
+        $this->assertResponseForbidden();
     }
 
     /** @test */

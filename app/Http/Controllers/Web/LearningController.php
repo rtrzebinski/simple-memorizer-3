@@ -34,16 +34,12 @@ class LearningController extends Controller
             return response('This action is unauthorized', Response::HTTP_FORBIDDEN);
         }
 
-        $requestedExerciseId = $request->get('requested_exercise_id');
-
-        if ($requestedExerciseId) {
+        if ($requestedExerciseId = $request->get('requested_exercise_id')) {
             $userExercise = $userExerciseRepository->fetchUserExerciseOfExercise($this->user(), $requestedExerciseId);
-            // todo create gate for UserExercise and fix skipped test
-            // we'll need to check if user exercise belongs to a lesson or lesson child
-//            $this->authorizeForUser($this->user(), 'access', $exercise);
+            // ensure user can access this exercise
+            $this->authorizeForUser($this->user(), 'access', $userExercise);
         } else {
-            $previousExerciseId = $request->get('previous_exercise_id');
-            $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $this->user(), $previousExerciseId);
+            $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $this->user(), $request->get('previous_exercise_id'));
         }
 
         return view('learn.learn', [
