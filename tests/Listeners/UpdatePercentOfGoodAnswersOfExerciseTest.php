@@ -3,6 +3,7 @@
 namespace Tests\Listeners;
 
 use App\Events\ExerciseGoodAnswer;
+use App\Events\ExercisePercentOfGoodAnswersUpdated;
 use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
 
 class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
@@ -59,6 +60,8 @@ class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
             'number_of_good_answers' => $numberOfGoodAnswers,
             'number_of_bad_answers' => $numberOfBadAnswers,
         ]);
+
+        $this->expectsEvents(ExercisePercentOfGoodAnswersUpdated::class);
 
         $listener = new UpdatePercentOfGoodAnswersOfExercise();
         $event = new ExerciseGoodAnswer($exercise->id, $user);

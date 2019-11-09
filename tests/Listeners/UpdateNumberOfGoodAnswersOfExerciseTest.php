@@ -2,6 +2,7 @@
 
 namespace Tests\Listeners;
 
+use App\Events\ExerciseAnswerUpdated;
 use App\Events\ExerciseBadAnswer;
 use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
@@ -21,6 +22,8 @@ class UpdateNumberOfGoodAnswersOfExerciseTest extends \TestCase
 
         $listener = new UpdateNumberOfGoodAnswersOfExercise();
         $event = new ExerciseGoodAnswer($exercise->id, $user);
+
+        $this->expectsEvents(ExerciseAnswerUpdated::class);
 
         /*
          * Day 1
@@ -91,6 +94,8 @@ class UpdateNumberOfGoodAnswersOfExerciseTest extends \TestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson]);
 
         Carbon::setTestNow($now = Carbon::now());
+
+        $this->expectsEvents(ExerciseAnswerUpdated::class);
 
         $listener = new UpdateNumberOfBadAnswersOfExercise();
         $event = new ExerciseBadAnswer($exercise->id, $user);

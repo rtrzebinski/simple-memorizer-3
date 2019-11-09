@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\ExerciseAnswerUpdated;
 use App\Events\ExerciseBadAnswer;
 use App\Models\ExerciseResult;
 use Carbon\Carbon;
@@ -49,5 +50,7 @@ class UpdateNumberOfBadAnswersOfExercise
             $exerciseResult->latest_bad_answer = Carbon::now();
             $exerciseResult->save();
         }
+
+        event(new ExerciseAnswerUpdated($exerciseId, $user));
     }
 }

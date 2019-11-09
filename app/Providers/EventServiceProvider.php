@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\ExerciseAnswerUpdated;
 use App\Events\ExerciseBadAnswer;
 use App\Events\ExerciseCreated;
 use App\Events\ExerciseDeleted;
 use App\Events\ExerciseGoodAnswer;
+use App\Events\ExercisePercentOfGoodAnswersUpdated;
 use App\Events\LessonAggregatesUpdated;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
 use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
@@ -23,12 +25,14 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         ExerciseGoodAnswer::class => [
             UpdateNumberOfGoodAnswersOfExercise::class,
-            UpdatePercentOfGoodAnswersOfExercise::class,
-            UpdatePercentOfGoodAnswersOfLesson::class,
         ],
         ExerciseBadAnswer::class => [
             UpdateNumberOfBadAnswersOfExercise::class,
+        ],
+        ExerciseAnswerUpdated::class => [
             UpdatePercentOfGoodAnswersOfExercise::class,
+        ],
+        ExercisePercentOfGoodAnswersUpdated::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
         ],
         ExerciseCreated::class => [
