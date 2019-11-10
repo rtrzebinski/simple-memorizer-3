@@ -2,6 +2,8 @@
 
 namespace Tests\Models;
 
+use Carbon\Carbon;
+
 class LessonTest extends \TestCase
 {
     // childLessons()
@@ -158,6 +160,10 @@ class LessonTest extends \TestCase
         $lesson->subscribe($this->createUser());
         $this->assertEquals(2, $lesson->subscribedUsers()->count());
         $this->assertEquals(1, $lesson->subscribedUsersWithOwnerExcluded()->count());
+        $this->assertDatabaseHas('lesson_user', [
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
     }
 
     // unsubscribe()
