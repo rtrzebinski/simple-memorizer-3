@@ -6,8 +6,10 @@ use App\Events\LessonEventInterface;
 use App\Models\Lesson;
 use App\Models\User;
 use App\Structures\UserExerciseRepository;
+use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\DB;
 
 class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
 {
@@ -48,21 +50,32 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
     private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user)
     {
         // fetch user exercises of a lesson
-        $userExercisesOfALesson = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $lesson->id);
-        $userExercisesCount = $userExercisesOfALesson->count();
+        $userExercises = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $lesson->id);
 
-        // calculate percent_of_good_answers of a lesson
-        if ($userExercisesCount) {
-            $percentOfGoodAnswersSum = $userExercisesOfALesson->sum('percent_of_good_answers');
+        if ($userExercisesCount = $userExercises->count()) {
+            // calculate percent_of_good_answers of a lesson
+            $percentOfGoodAnswersSum = $userExercises->sum('percent_of_good_answers');
             $percentOfGoodAnswersOfLesson = round($percentOfGoodAnswersSum / $userExercisesCount);
-        } else {
-            $percentOfGoodAnswersOfLesson = 0;
-        }
 
-        // update percent_of_good_answers of a lesson
-        $subscriber = $lesson->subscribedUsers()->where('lesson_user.user_id', $user->id)->first();
-        $subscriber->pivot->percent_of_good_answers = $percentOfGoodAnswersOfLesson;
-        $subscriber->pivot->save();
+            // update percent_of_good_answers of a lesson
+            DB::table('lesson_user')
+                ->where('lesson_user.lesson_id', '=', $lesson->id)
+                ->where('lesson_user.user_id', '=', $user->id)
+                ->update([
+                    'percent_of_good_answers' => $percentOfGoodAnswersOfLesson,
+                    'updated_at' => Carbon::now(),
+
+                ]);
+        } else {
+            // no answers - set percent_of_good_answers to 0
+            DB::table('lesson_user')
+                ->where('lesson_user.lesson_id', '=', $lesson->id)
+                ->where('lesson_user.user_id', '=', $user->id)
+                ->update([
+                    'percent_of_good_answers' => 0,
+                    'updated_at' => Carbon::now(),
+                ]);
+        }
 
         // recursively update for each parent lesson
         foreach ($lesson->parentLessons as $parentLesson) {
