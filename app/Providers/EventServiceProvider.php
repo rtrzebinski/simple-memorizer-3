@@ -2,16 +2,16 @@
 
 namespace App\Providers;
 
-use App\Events\ExerciseAnswerUpdated;
+use App\Events\ExerciseResultUpdated;
 use App\Events\ExerciseBadAnswer;
 use App\Events\ExerciseCreated;
 use App\Events\ExerciseDeleted;
 use App\Events\ExerciseGoodAnswer;
-use App\Events\ExercisePercentOfGoodAnswersUpdated;
+use App\Events\ExerciseResultPercentOfGoodAnswersUpdated;
 use App\Events\LessonAggregatesUpdated;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
 use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
-use App\Listeners\UpdatePercentOfGoodAnswersOfExercise;
+use App\Listeners\UpdatePercentOfGoodAnswersOfExerciseResult;
 use App\Listeners\UpdatePercentOfGoodAnswersOfLesson;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -29,10 +29,10 @@ class EventServiceProvider extends ServiceProvider
         ExerciseBadAnswer::class => [
             UpdateNumberOfBadAnswersOfExercise::class,
         ],
-        ExerciseAnswerUpdated::class => [
-            UpdatePercentOfGoodAnswersOfExercise::class,
+        ExerciseResultUpdated::class => [
+            UpdatePercentOfGoodAnswersOfExerciseResult::class,
         ],
-        ExercisePercentOfGoodAnswersUpdated::class => [
+        ExerciseResultPercentOfGoodAnswersUpdated::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
         ],
         ExerciseCreated::class => [

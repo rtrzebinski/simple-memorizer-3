@@ -3,12 +3,12 @@
 namespace App\Listeners;
 
 use App\Events\ExerciseEvent;
-use App\Events\ExercisePercentOfGoodAnswersUpdated;
+use App\Events\ExerciseResultPercentOfGoodAnswersUpdated;
 use App\Models\ExerciseResult;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdatePercentOfGoodAnswersOfExercise implements ShouldQueue
+class UpdatePercentOfGoodAnswersOfExerciseResult implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -27,7 +27,7 @@ class UpdatePercentOfGoodAnswersOfExercise implements ShouldQueue
         $exerciseResult->percent_of_good_answers = $this->calculatePercentOfGoodAnswers($exerciseResult);
         $exerciseResult->save();
 
-        event(new ExercisePercentOfGoodAnswersUpdated($exerciseId, $user));
+        event(new ExerciseResultPercentOfGoodAnswersUpdated($exerciseId, $user));
     }
 
     /**
