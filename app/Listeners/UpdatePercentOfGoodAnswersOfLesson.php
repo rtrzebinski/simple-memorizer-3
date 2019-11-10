@@ -77,7 +77,7 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
                 ]);
         }
 
-        // recursively update for each parent lesson
+        // recursively run for each parent lesson
         foreach ($lesson->parentLessons as $parentLesson) {
             $this->updatePercentOfGoodAnswersOfLesson($parentLesson, $user);
         }

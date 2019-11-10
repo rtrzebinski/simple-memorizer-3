@@ -201,7 +201,7 @@ class LessonPolicyTest extends TestCase
         $user = $lesson->owner;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->assertTrue($this->policy->learn($user, $lesson));
+        $this->assertTrue($this->policy->learn($user, $lesson->fresh()));
     }
 
     /** @test */
@@ -211,7 +211,7 @@ class LessonPolicyTest extends TestCase
         $user = $this->createUser();
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->assertFalse($this->policy->learn($user, $lesson));
+        $this->assertFalse($this->policy->learn($user, $lesson->fresh()));
     }
 
     /** @test */
@@ -220,6 +220,6 @@ class LessonPolicyTest extends TestCase
         $lesson = $this->createLesson();
         $user = $lesson->owner;
 
-        $this->assertFalse($this->policy->learn($user, $lesson));
+        $this->assertFalse($this->policy->learn($user, $lesson->fresh()));
     }
 }

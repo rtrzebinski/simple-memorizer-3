@@ -77,6 +77,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function createExercisesRequiredToLearnLesson(int $lessonId)
     {
         $minExercisesToLearnLesson = config('app.min_exercises_to_learn_lesson');
+
+        /** @var Lesson $lesson */
+        $lesson = Lesson::find($lessonId);
+        $lesson->exercises_count = $minExercisesToLearnLesson;
+        $lesson->save();
+
         for ($i = $minExercisesToLearnLesson; $i > 0; $i--) {
             $this->createExercise(['lesson_id' => $lessonId]);
         }

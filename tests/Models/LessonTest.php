@@ -2,6 +2,8 @@
 
 namespace Tests\Models;
 
+use App\Events\LessonSubscribed;
+use App\Events\LessonUnsubscribed;
 use Carbon\Carbon;
 
 class LessonTest extends \TestCase
@@ -149,7 +151,6 @@ class LessonTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
 
-        $this->assertEquals(0, $lesson->subscribedUsersWithOwnerExcluded()->count());
         $this->assertEquals(1, $lesson->subscribedUsers()->count());
         $this->assertDatabaseHas('lesson_user', [
             'user_id' => $user->id,
@@ -157,13 +158,19 @@ class LessonTest extends \TestCase
             'percent_of_good_answers' => 0,
         ]);
 
-        $lesson->subscribe($this->createUser());
+        $this->expectsEvents(LessonSubscribed::class);
+
+        $lesson->subscribe($user = $this->createUser());
         $this->assertEquals(2, $lesson->subscribedUsers()->count());
-        $this->assertEquals(1, $lesson->subscribedUsersWithOwnerExcluded()->count());
         $this->assertDatabaseHas('lesson_user', [
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+
+        $this->expectsEvents(LessonUnsubscribed::class);
+
+        $lesson->unsubscribe($user);
+        $this->assertEquals(1, $lesson->subscribedUsers()->count());
     }
 
     // unsubscribe()

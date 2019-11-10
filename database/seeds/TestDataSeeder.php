@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\ExerciseCreated;
+use App\Events\LessonAggregatesUpdated;
 use App\Models\Exercise;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -141,6 +143,7 @@ class TestDataSeeder extends Seeder
         factory(Exercise::class)->create([
             'lesson_id' => $lesson->id,
         ]);
+        event(new ExerciseCreated($lesson, $lesson->owner));
 
         $lesson = factory(Lesson::class)->create([
             'name' => 'Private lesson with two exercises',
@@ -151,6 +154,7 @@ class TestDataSeeder extends Seeder
         factory(Exercise::class, 2)->create([
             'lesson_id' => $lesson->id,
         ]);
+        event(new ExerciseCreated($lesson, $lesson->owner));
 
         $lesson = factory(Lesson::class)->create([
             'name' => 'Private lesson with three exercises',
@@ -161,6 +165,7 @@ class TestDataSeeder extends Seeder
         factory(Exercise::class, 3)->create([
             'lesson_id' => $lesson->id,
         ]);
+        event(new ExerciseCreated($lesson, $lesson->owner));
 
         // owned lessons
         $ownedMathLesson1 = factory(Lesson::class)->create([
@@ -177,6 +182,7 @@ class TestDataSeeder extends Seeder
                 ]);
             }
         }
+        event(new ExerciseCreated($ownedMathLesson1, $lesson->owner));
 
         $ownedMathLesson2 = factory(Lesson::class)->create([
             'name' => 'Math: multiplication table 100-400',
@@ -192,6 +198,7 @@ class TestDataSeeder extends Seeder
                 ]);
             }
         }
+        event(new ExerciseCreated($ownedMathLesson2, $ownedMathLesson2->owner));
 
         // owned aggregate lesson
         /** @var Lesson $lesson */
@@ -202,11 +209,13 @@ class TestDataSeeder extends Seeder
         $lesson->subscribe($user);
         $lesson->childLessons()->attach($ownedMathLesson1);
         $lesson->childLessons()->attach($ownedMathLesson2);
+        event(new LessonAggregatesUpdated($lesson, $ownedMathLesson2->owner));
 
         // subscribed lesson
         $lesson = factory(Lesson::class)->create([
             'name' => 'Math: multiplication table 400-900',
         ]);
+        $lesson->subscribe($lesson->owner);
         for ($i = 20; $i <= 30; $i++) {
             for ($j = 20; $j <= 30; $j++) {
                 factory(Exercise::class)->create([
@@ -214,9 +223,10 @@ class TestDataSeeder extends Seeder
                     'question' => $i.' x '.$j,
                     'answer' => $i * $j,
                 ]);
+                event(new ExerciseCreated($lesson, $lesson->owner));
             }
         }
-        $lesson->subscribedUsers()->save($user);
+        $lesson->subscribe($user);
 
         // other lessons
         $lesson = factory(Lesson::class)->create([
@@ -230,8 +240,9 @@ class TestDataSeeder extends Seeder
                 'question' => $a.' + '.$b,
                 'answer' => $a + $b,
             ]);
+            event(new ExerciseCreated($lesson, $lesson->owner));
         }
-        $lesson->subscribedUsers()->save($lesson->owner);
+        $lesson->subscribe($lesson->owner);
 
         $lesson = factory(Lesson::class)->create([
             'name' => 'Math: subtracting integer numbers',
@@ -245,21 +256,8 @@ class TestDataSeeder extends Seeder
                 'answer' => $a - $b,
             ]);
         }
-        $lesson->subscribedUsers()->save($lesson->owner);
-
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Quite a big lesson',
-        ]);
-        for ($i = 1; $i <= 1000; $i++) {
-            $a = rand(100, 10000);
-            $b = rand(100, 10000);
-            factory(Exercise::class)->create([
-                'lesson_id' => $lesson->id,
-                'question' => $a.' + '.$b,
-                'answer' => $a + $b,
-            ]);
-        }
-        $lesson->subscribedUsers()->save($lesson->owner);
+        event(new ExerciseCreated($lesson, $lesson->owner));
+        $lesson->subscribe($lesson->owner);
     }
 
     /**
@@ -288,6 +286,7 @@ class TestDataSeeder extends Seeder
                 'answer' => $v,
             ]);
         }
+        event(new ExerciseCreated($lesson, $lesson->owner));
 
         return $lesson;
     }

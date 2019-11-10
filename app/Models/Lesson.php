@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Events\LessonSubscribed;
+use App\Events\LessonUnsubscribed;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Database\Query\JoinClause;
 
 /**
  * App\Models\Lesson
@@ -17,6 +18,8 @@ use Illuminate\Database\Query\JoinClause;
  * @property int                                                                  $owner_id
  * @property string                                                               $name
  * @property string                                                               $visibility
+ * @property int                                                                  $exercises_count
+ * @property int                                                                  $subscribers_count
  * @property \Illuminate\Support\Carbon|null                                      $created_at
  * @property \Illuminate\Support\Carbon|null                                      $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $childLessons
@@ -24,22 +27,17 @@ use Illuminate\Database\Query\JoinClause;
  * @property-read \App\Models\User                                                $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $parentLessons
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribedUsers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribedUsersWithOwnerExcluded
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereExercisesCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereSubscribersCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereVisibility($value)
- * @property-read int|null                                                        $child_lessons_count
- * @property-read int|null                                                        $exercises_count
- * @property-read int|null                                                        $parent_lessons_count
- * @property-read int|null                                                        $subscribed_users_count
- * @property-read int|null                                                        $subscribed_users_with_owner_excluded_count
- * @mixin \Eloquent
  */
 class Lesson extends Model
 {
@@ -118,23 +116,12 @@ class Lesson extends Model
     }
 
     /**
-     * @return BelongsToMany
-     */
-    public function subscribedUsersWithOwnerExcluded()
-    {
-        return $this->subscribedUsers()
-            // exclude lesson owner from subscribers
-            ->join('lessons', function (JoinClause $joinClause) {
-                $joinClause->on('lessons.id', '=', 'lesson_user.lesson_id')->on('lessons.owner_id', '!=', 'lesson_user.user_id');
-            });
-    }
-
-    /**
      * @param User $user
      */
     public function subscribe(User $user)
     {
         $this->subscribedUsers()->save($user);
+        event(new LessonSubscribed($this, $user));
     }
 
     /**
@@ -149,6 +136,7 @@ class Lesson extends Model
         }
 
         $this->subscribedUsers()->detach($user);
+        event(new LessonUnsubscribed($this, $user));
     }
 
     /**

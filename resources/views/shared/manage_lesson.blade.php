@@ -17,7 +17,7 @@
                 @if ($canModify)
                     Number of aggregates: {{ $numberOfAggregates }} </br>
                 @endif
-                Number of subscribers: {{ $subscribedUsersWithOwnerExcluded }} </br>
+                Number of subscribers: {{ $numberOfSubscribers }} </br>
                 @if($canNotSubscribe && $user)
                     Percent of good answers: {{ $percentOfGoodAnswers }} </br>
                 @endif

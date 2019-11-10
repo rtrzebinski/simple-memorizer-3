@@ -56,7 +56,6 @@ class LessonControllerTest extends BaseTestCase
             'percent_of_good_answers' => 0,
         ]);
         $this->assertCount(1, $lesson->subscribedUsers);
-        $this->assertCount(0, $lesson->subscribedUsersWithOwnerExcluded);
     }
 
     /** @test */

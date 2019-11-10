@@ -9,10 +9,14 @@ use App\Events\ExerciseDeleted;
 use App\Events\ExerciseGoodAnswer;
 use App\Events\ExerciseResultPercentOfGoodAnswersUpdated;
 use App\Events\LessonAggregatesUpdated;
+use App\Events\LessonSubscribed;
+use App\Events\LessonUnsubscribed;
+use App\Listeners\UpdateExercisesCountOfLesson;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
 use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
 use App\Listeners\UpdatePercentOfGoodAnswersOfExerciseResult;
 use App\Listeners\UpdatePercentOfGoodAnswersOfLesson;
+use App\Listeners\UpdateSubscribersCountOfLesson;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -37,12 +41,21 @@ class EventServiceProvider extends ServiceProvider
         ],
         ExerciseCreated::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
+            UpdateExercisesCountOfLesson::class,
         ],
         ExerciseDeleted::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
+            UpdateExercisesCountOfLesson::class,
         ],
         LessonAggregatesUpdated::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
+            UpdateExercisesCountOfLesson::class,
+        ],
+        LessonSubscribed::class => [
+            UpdateSubscribersCountOfLesson::class,
+        ],
+        LessonUnsubscribed::class => [
+            UpdateSubscribersCountOfLesson::class,
         ],
     ];
 
