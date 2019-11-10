@@ -18,6 +18,8 @@ class Lessons extends Migration
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->enum('visibility', ['public', 'private']);
+            $table->integer('exercises_count')->default(0);
+            $table->integer('subscribers_count')->default(0);
             $table->timestamps();
         });
 
