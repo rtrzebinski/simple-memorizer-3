@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\UserRepository;
+use App\Models\UserRepository;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Models;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository

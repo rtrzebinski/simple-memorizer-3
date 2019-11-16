@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\UserRepository;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;

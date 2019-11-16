@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use App\Repositories\UserRepository;
+use App\Models\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class RegisterControllerTest extends BaseTestCase

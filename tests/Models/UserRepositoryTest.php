@@ -2,8 +2,8 @@
 
 namespace Tests\Models\Repositories;
 
+use App\Models\UserRepository;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use TestCase;
 
