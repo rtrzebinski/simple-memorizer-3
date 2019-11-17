@@ -122,19 +122,14 @@ class LearningService
         /** @var Carbon|null $latestBadAnswer */
         $latestBadAnswer = $userExercise->latest_bad_answer ? new Carbon($userExercise->latest_bad_answer) : null;
 
+        // check for answers today first
+
         // user had both good and bad answers today
         if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday() && $latestBadAnswer->isToday()) {
-
             // if good answer was the most recent - return 0 point to not bother user with this question anymore today
             // it makes more sense to serve it another day than serve again today
             if ($latestGoodAnswer->isAfter($latestBadAnswer)) {
                 return 0;
-            }
-
-            // if bad answer was the most recent - return 100 points so it's likely it will be served today again
-            // this will speed up memorizing of this particular exercise
-            if ($latestBadAnswer->isAfter($latestGoodAnswer)) {
-                return 100;
             }
         }
 
@@ -145,12 +140,29 @@ class LearningService
             return 0;
         }
 
-        // user had just bad answer today
+        // user had just bad answers today
         if ($latestBadAnswer instanceof Carbon && $latestBadAnswer->isToday()) {
-            // return 100 points so it's likely it will be served today again
-            // this will speed up memorizing of this particular exercise
-            return 100;
+            // here we decrease points with incoming bad answers today
+            // so user is not overloaded with this question
+            // but he still see it once a while
+
+            if ($userExercise->number_of_bad_answers_today == 1) {
+                return 80;
+            }
+
+            if ($userExercise->number_of_bad_answers_today == 2) {
+                return 50;
+            }
+
+            if ($userExercise->number_of_bad_answers_today >= 3) {
+                return 20;
+            }
         }
+
+        // no answers today - check for answers of just one type
+
+
+        // no answers with just one type - calculate points
 
         // calculate points based on percent of good answers, so if user did not answer this exercise today,
         // we want to calculate points based on the ration of previous good and bad answers

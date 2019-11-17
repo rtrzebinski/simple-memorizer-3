@@ -594,25 +594,6 @@ class LearningServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShould_calculatePoints_goodAndBadAnswersToday_badMostRecent()
-    {
-        $user = $this->createUser();
-        $exercise = $this->createExercise();
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => 50,
-            'latest_good_answer' => Carbon::today(),
-            'latest_bad_answer' => Carbon::today()->addMinute(),
-        ]);
-        $userExercise = $this->createUserExercise($user, $exercise);
-
-        $result = $this->learningService->calculatePoints($userExercise);
-
-        $this->assertEquals(100, $result);
-    }
-
-    /** @test */
     public function itShould_calculatePoints_goodAnswerToday_noBadAnswer()
     {
         $user = $this->createUser();
@@ -649,8 +630,24 @@ class LearningServiceTest extends TestCase
         $this->assertEquals(0, $result);
     }
 
-    /** @test */
-    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer()
+    public function justBadAnswersTodayProvider()
+    {
+        return [
+            [$numberOfBadAnswersToday = 1, $points = 80],
+            [$numberOfBadAnswersToday = 2, $points = 50],
+            [$numberOfBadAnswersToday = 3, $points = 20],
+            [$numberOfBadAnswersToday = 4, $points = 20],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider justBadAnswersTodayProvider
+     * @param int $numberOfBadAnswersToday
+     * @param int $points
+     * @throws \Exception
+     */
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer(int $numberOfBadAnswersToday, int $points)
     {
         $user = $this->createUser();
         $exercise = $this->createExercise();
@@ -659,16 +656,23 @@ class LearningServiceTest extends TestCase
             'exercise_id' => $exercise->id,
             'percent_of_good_answers' => 50,
             'latest_bad_answer' => Carbon::today(),
+            'number_of_bad_answers_today' => $numberOfBadAnswersToday,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
         $result = $this->learningService->calculatePoints($userExercise);
 
-        $this->assertEquals(100, $result);
+        $this->assertEquals($points, $result);
     }
 
-    /** @test */
-    public function itShould_calculatePoints_badAnswersToday_goodAnswerYesterday()
+    /**
+     * @test
+     * @dataProvider justBadAnswersTodayProvider
+     * @param int $numberOfBadAnswersToday
+     * @param int $points
+     * @throws \Exception
+     */
+    public function itShould_calculatePoints_badAnswersToday_goodAnswerYesterday(int $numberOfBadAnswersToday, int $points)
     {
         $user = $this->createUser();
         $exercise = $this->createExercise();
@@ -678,12 +682,13 @@ class LearningServiceTest extends TestCase
             'percent_of_good_answers' => 50,
             'latest_bad_answer' => Carbon::today(),
             'latest_good_answer' => Carbon::yesterday(),
+            'number_of_bad_answers_today' => $numberOfBadAnswersToday,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
         $result = $this->learningService->calculatePoints($userExercise);
 
-        $this->assertEquals(100, $result);
+        $this->assertEquals($points, $result);
     }
 
     /** @test */
