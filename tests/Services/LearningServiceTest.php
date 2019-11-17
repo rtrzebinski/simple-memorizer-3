@@ -566,6 +566,9 @@ class LearningServiceTest extends TestCase
             'user_id' => $user->id,
             'exercise_id' => $exercise->id,
             'percent_of_good_answers' => $percentOfGoodAnswers,
+            // do not leave these two empty, to avoid a '100' returned for no answers at all
+            'number_of_good_answers' => 1,
+            'number_of_bad_answers' => 1,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
@@ -585,6 +588,9 @@ class LearningServiceTest extends TestCase
             'percent_of_good_answers' => 50,
             'latest_good_answer' => Carbon::today()->addMinute(),
             'latest_bad_answer' => Carbon::today(),
+            // do not leave these two empty, to avoid a '100' returned for no answers at all
+            'number_of_good_answers' => 1,
+            'number_of_bad_answers' => 1,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
@@ -603,6 +609,9 @@ class LearningServiceTest extends TestCase
             'exercise_id' => $exercise->id,
             'percent_of_good_answers' => 50,
             'latest_good_answer' => Carbon::today(),
+            // do not leave these two empty, to avoid a '100' returned for no answers at all
+            'number_of_good_answers' => 1,
+            'number_of_bad_answers' => 1,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
@@ -622,6 +631,9 @@ class LearningServiceTest extends TestCase
             'percent_of_good_answers' => 50,
             'latest_good_answer' => Carbon::today(),
             'latest_bad_answer' => Carbon::yesterday(),
+            // do not leave these two empty, to avoid a '100' returned for no answers at all
+            'number_of_good_answers' => 1,
+            'number_of_bad_answers' => 1,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
@@ -657,6 +669,9 @@ class LearningServiceTest extends TestCase
             'percent_of_good_answers' => 50,
             'latest_bad_answer' => Carbon::today(),
             'number_of_bad_answers_today' => $numberOfBadAnswersToday,
+            // do not leave these two empty, to avoid a '100' returned for no answers at all
+            'number_of_good_answers' => 1,
+            'number_of_bad_answers' => 1,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
@@ -683,6 +698,44 @@ class LearningServiceTest extends TestCase
             'latest_bad_answer' => Carbon::today(),
             'latest_good_answer' => Carbon::yesterday(),
             'number_of_bad_answers_today' => $numberOfBadAnswersToday,
+            // do not leave these two empty, to avoid a '100' returned for no answers at all
+            'number_of_good_answers' => 1,
+            'number_of_bad_answers' => 1,
+        ]);
+        $userExercise = $this->createUserExercise($user, $exercise);
+
+        $result = $this->learningService->calculatePoints($userExercise);
+
+        $this->assertEquals($points, $result);
+    }
+
+    public function justGoodAnswersProvider()
+    {
+        return [
+            [$numberOfGoodAnswers = 0, $points = 100],
+            [$numberOfGoodAnswers = 1, $points = 80],
+            [$numberOfGoodAnswers = 2, $points = 50],
+            [$numberOfGoodAnswers = 3, $points = 20],
+            [$numberOfGoodAnswers = 4, $points = 1],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider justGoodAnswersProvider
+     * @param int $numberOfGoodAnswers
+     * @param int $points
+     * @throws \Exception
+     */
+    public function itShould_calculatePoints_goodAnswersOnlyButNoneToday(int $numberOfGoodAnswers, int $points)
+    {
+        $user = $this->createUser();
+        $exercise = $this->createExercise();
+        $this->createExerciseResult([
+            'user_id' => $user->id,
+            'exercise_id' => $exercise->id,
+            'number_of_good_answers' => $numberOfGoodAnswers,
+            'number_of_bad_answers' => 0,
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 

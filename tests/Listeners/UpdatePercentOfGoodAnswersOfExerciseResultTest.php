@@ -6,7 +6,7 @@ use App\Events\ExerciseGoodAnswer;
 use App\Events\ExerciseResultPercentOfGoodAnswersUpdated;
 use App\Listeners\UpdatePercentOfGoodAnswersOfExerciseResult;
 
-class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
+class UpdatePercentOfGoodAnswersOfExerciseResultTest extends \TestCase
 {
     public function answersProvider()
     {
@@ -32,10 +32,10 @@ class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
             [9, 1, 90],
             [19, 1, 95],
             [10, 0, 100],
-            [1, 0, 20],
-            [2, 0, 40],
-            [3, 0, 60],
-            [4, 0, 80],
+            [1, 0, 100],
+            [2, 0, 100],
+            [3, 0, 100],
+            [4, 0, 100],
         ];
     }
 
@@ -45,6 +45,7 @@ class UpdatePercentOfGoodAnswersOfExerciseTest extends \TestCase
      * @param $numberOfGoodAnswers
      * @param $numberOfBadAnswers
      * @param $percentOfGoodAnswers
+     * @throws \Exception
      */
     public function itShould_updatePercentOfGoodAnswersOfExercise(
         $numberOfGoodAnswers,

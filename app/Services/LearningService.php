@@ -116,6 +116,12 @@ class LearningService
      */
     public function calculatePoints(UserExercise $userExercise): int
     {
+        // no answers at all
+        if ($userExercise->number_of_good_answers == 0 && $userExercise->number_of_bad_answers == 0) {
+            // give question without any answers highest chance to be served
+            return 100;
+        }
+
         /** @var Carbon|null $latestGoodAnswer */
         $latestGoodAnswer = $userExercise->latest_good_answer ? new Carbon($userExercise->latest_good_answer) : null;
 
@@ -161,6 +167,22 @@ class LearningService
 
         // no answers today - check for answers of just one type
 
+        // only good answers exist, but none today
+        if ($userExercise->number_of_bad_answers == 0 && $userExercise->number_of_good_answers > 0) {
+            if ($userExercise->number_of_good_answers == 1) {
+                return 80;
+            }
+
+            if ($userExercise->number_of_good_answers == 2) {
+                return 50;
+            }
+
+            if ($userExercise->number_of_good_answers == 3) {
+                return 20;
+            }
+
+            return 1;
+        }
 
         // no answers with just one type - calculate points
 
