@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\Exercise;
-use App\Models\ExerciseResult;
-use App\Models\Lesson;
 use App\Models\User;
 use App\Structures\UserExercise;
 use App\Structures\UserExerciseRepository;
@@ -39,9 +37,9 @@ class LearningService
     /**
      * Fetch pseudo random exercise of lesson. Should be served to a user in learning mode.
      *
-     * @param Lesson   $lesson
-     * @param User     $user
-     * @param int|null $previousExerciseId
+     * @param UserLesson $userLesson
+     * @param User       $user
+     * @param int|null   $previousExerciseId
      * @return Exercise|null
      * @throws Exception
      */

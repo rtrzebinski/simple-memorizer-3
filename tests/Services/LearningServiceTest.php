@@ -9,7 +9,6 @@ use App\Structures\UserExerciseRepository;
 use App\Structures\UserLesson;
 use Carbon\Carbon;
 use TestCase;
-use App\Models\Lesson;
 
 class LearningServiceTest extends TestCase
 {
