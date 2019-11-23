@@ -11,6 +11,7 @@ use App\Events\ExerciseResultPercentOfGoodAnswersUpdated;
 use App\Events\LessonAggregatesUpdated;
 use App\Events\LessonSubscribed;
 use App\Events\LessonUnsubscribed;
+use App\Listeners\UpdateChildLessonsCountOfLesson;
 use App\Listeners\UpdateExercisesCountOfLesson;
 use App\Listeners\UpdateNumberOfBadAnswersOfExercise;
 use App\Listeners\UpdateNumberOfGoodAnswersOfExercise;
@@ -50,6 +51,7 @@ class EventServiceProvider extends ServiceProvider
         LessonAggregatesUpdated::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
             UpdateExercisesCountOfLesson::class,
+            UpdateChildLessonsCountOfLesson::class,
         ],
         LessonSubscribed::class => [
             UpdateSubscribersCountOfLesson::class,

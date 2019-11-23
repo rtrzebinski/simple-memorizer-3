@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property string                                                               $visibility
  * @property int                                                                  $exercises_count
  * @property int                                                                  $subscribers_count
+ * @property int                                                                  $child_lessons_count
  * @property \Illuminate\Support\Carbon|null                                      $created_at
  * @property \Illuminate\Support\Carbon|null                                      $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $childLessons

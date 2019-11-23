@@ -60,7 +60,7 @@ class Controller extends BaseController
             'bidirectional' => ($subscriberPivot->bidirectional ?? null) ? 'yes' : 'no',
             'percentOfGoodAnswers' => $subscriberPivot->percent_of_good_answers ?? null,
             'numberOfExercises' => $lesson->exercises_count,
-            'numberOfAggregates' => $lesson->childLessons()->count(),
+            'childLessonsCount' => $lesson->child_lessons_count,
             // exclude owner from numberOfSubscribers display
             'numberOfSubscribers' => $lesson->subscribers_count - 1,
             'canSubscribe' => $canSubscribe,

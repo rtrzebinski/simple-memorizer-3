@@ -14,10 +14,10 @@
                     Bidirectional: {{ $bidirectional }} </br>
                 @endif
                 Number of exercises: {{ $numberOfExercises }} </br>
-                @if ($canModify)
-                    Number of aggregates: {{ $numberOfAggregates }} </br>
-                @endif
                 Number of subscribers: {{ $numberOfSubscribers }} </br>
+                @if ($canModify)
+                    Number of child lessons: {{ $childLessonsCount }} </br>
+                @endif
                 @if($canNotSubscribe && $user)
                     Percent of good answers: {{ $percentOfGoodAnswers }} </br>
                 @endif
