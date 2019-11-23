@@ -17,7 +17,7 @@ class ExerciseControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -48,7 +48,7 @@ class ExerciseControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1/exercises/create');
 
-        $this->assertResponseNotFound();
+        $this->assertResponseForbidden();
     }
 
     // store

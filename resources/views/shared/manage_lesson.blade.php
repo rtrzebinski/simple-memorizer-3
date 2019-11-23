@@ -4,11 +4,11 @@
         <div class="col-md-6 no-padding">
             <h4>
                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                <a href="/lessons/{{ $lesson->id }}">{{ $lesson->name }}</a>
+                <a href="/lessons/{{ $userLesson->lesson_id }}">{{ $userLesson->name }}</a>
             </h4>
             <p>
                 @if($canModify)
-                    Visibility: {{ $lesson->visibility }} </br>
+                    Visibility: {{ $userLesson->visibility }} </br>
                 @endif
                 @if($canNotSubscribe && $user)
                     Bidirectional: {{ $bidirectional }} </br>
@@ -38,8 +38,8 @@
                 @endif
 
                 @if($canNotSubscribe)
-                    @can('learn', $lesson)
-                        <a href="/learn/lessons/{{ $lesson->id }}" class="btn btn-primary margin-bottom" role="button">
+                    @can('learn', $userLesson)
+                        <a href="/learn/lessons/{{ $userLesson->lesson_id }}" class="btn btn-primary margin-bottom" role="button">
                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                             Start
                         </a>
@@ -54,14 +54,14 @@
                 @endif
 
                 @if($canModify)
-                    <a href="/lessons/{{ $lesson->id }}/edit" class="btn btn-info margin-bottom" role="button">
+                    <a href="/lessons/{{ $userLesson->lesson_id }}/edit" class="btn btn-info margin-bottom" role="button">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         Edit
                     </a>
                 @endif
 
                 @if($canNotSubscribe && $user)
-                    <a href="/lessons/{{ $lesson->id }}/settings" class="btn btn-info margin-bottom" role="button">
+                    <a href="/lessons/{{ $userLesson->lesson_id }}/settings" class="btn btn-info margin-bottom" role="button">
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                         Settings
                     </a>
@@ -76,20 +76,20 @@
                 @endif
 
                 @if($canModify)
-                    <a href="/lessons/{{ $lesson->id }}/exercises/create"
+                    <a href="/lessons/{{ $userLesson->lesson_id }}/exercises/create"
                        class="btn btn-success margin-bottom" role="button">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         Add exercise
                     </a>
                 @endif
 
-                <a href="/lessons/{{ $lesson->id }}/exercises" class="btn btn-default margin-bottom">
+                <a href="/lessons/{{ $userLesson->lesson_id }}/exercises" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                     Exercises
                 </a>
 
                 @if($canModify)
-                    <a href="/lessons/aggregate/{{ $lesson->id }}" class="btn btn-default margin-bottom">
+                    <a href="/lessons/aggregate/{{ $userLesson->lesson_id }}" class="btn btn-default margin-bottom">
                         <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                         Aggregate
                     </a>
@@ -98,13 +98,13 @@
             </p>
         </div>
     </div>
-    <form id="subscribe" action="/lessons/{{ $lesson->id }}/subscribe" method="POST">
+    <form id="subscribe" action="/lessons/{{ $userLesson->lesson_id }}/subscribe" method="POST">
         {{ csrf_field() }}
     </form>
-    <form id="subscribe-and-learn" action="/lessons/{{ $lesson->id }}/subscribe-and-learn" method="POST">
+    <form id="subscribe-and-learn" action="/lessons/{{ $userLesson->lesson_id }}/subscribe-and-learn" method="POST">
         {{ csrf_field() }}
     </form>
-    <form id="unsubscribe" action="/lessons/{{ $lesson->id }}/unsubscribe" method="POST">
+    <form id="unsubscribe" action="/lessons/{{ $userLesson->lesson_id }}/unsubscribe" method="POST">
         {{ csrf_field() }}
     </form>
 </div>
@@ -134,7 +134,7 @@
             </div>
         </div>
     </div>
-    <form id="delete-lesson" action="/lessons/{{ $lesson->id }}" method="POST">
+    <form id="delete-lesson" action="/lessons/{{ $userLesson->lesson_id }}" method="POST">
         <input name="_method" type="hidden" value="DELETE">
         {{ csrf_field() }}
     </form>

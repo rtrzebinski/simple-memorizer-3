@@ -13,7 +13,7 @@
                         <div class="col-md-8 no-padding">
                             @if($canModifyLesson)
                                 <p>
-                                    <a href="/lessons/{{ $lesson->id }}/exercises/create"
+                                    <a href="/lessons/{{ $userLesson->lesson_id }}/exercises/create"
                                        class="btn btn-success margin-bottom" role="button">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Add exercise
@@ -31,7 +31,7 @@
                                         </a>
                                     @endif
 
-                                    <a href="/lessons/{{ $lesson->id }}/csv" class="btn btn-default margin-bottom">
+                                    <a href="/lessons/{{ $userLesson->lesson_id }}/csv" class="btn btn-default margin-bottom">
                                         <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                                         Export to CSV
                                     </a>

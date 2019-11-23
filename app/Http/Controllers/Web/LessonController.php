@@ -6,6 +6,7 @@ use App\Http\Requests\LessonImportCsvRequest;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
+use App\Structures\UserLessonRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -47,23 +48,27 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson $lesson
-     * @return mixed
+     * @param int                  $lessonId
+     * @param UserLessonRepository $userLessonRepository
+     * @return View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function view(Lesson $lesson): View
+    public function view(int $lessonId, UserLessonRepository $userLessonRepository): View
     {
-        $this->authorizeForUser($this->user(), 'access', $lesson);
+        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 
-        return view('lessons.view', $this->manageLessonViewData($lesson));
+        $this->authorizeForUser($this->user(), 'access', $userLesson);
+
+        return view('lessons.view', $this->lessonViewData($userLesson));
     }
 
     /**
-     * @param Lesson $lesson
+     * @param Lesson               $lesson
+     * @param UserLessonRepository $userLessonRepository
      * @return mixed
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function exercises(Lesson $lesson): View
+    public function exercises(Lesson $lesson, UserLessonRepository $userLessonRepository): View
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
@@ -86,23 +91,29 @@ class LessonController extends Controller
 
         }
 
+        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lesson->id);
+
         $data = [
                 'canModifyLesson' => Gate::forUser($this->user())->allows('modify', $lesson),
                 'exercises' => $exercises,
-            ] + $this->manageLessonViewData($lesson);
+            ] + $this->lessonViewData($userLesson);
 
         return view('lessons.exercises', $data);
     }
 
     /**
-     * @param Lesson $lesson
+     * @param int                  $lessonId
+     * @param UserLessonRepository $userLessonRepository
      * @return View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(Lesson $lesson): View
+    public function edit(int $lessonId, UserLessonRepository $userLessonRepository): View
     {
-        $this->authorizeForUser($this->user(), 'modify', $lesson);
-        return view('lessons.edit', $this->manageLessonViewData($lesson));
+        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+
+        $this->authorizeForUser($this->user(), 'modify', $userLesson);
+
+        return view('lessons.edit', $this->lessonViewData($userLesson));
     }
 
     /**
@@ -126,16 +137,20 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson $lesson
+     * @param int                  $lessonId
+     * @param UserLessonRepository $userLessonRepository
      * @return View|RedirectResponse
      */
-    public function settings(Lesson $lesson)
+    public function settings(int $lessonId, UserLessonRepository $userLessonRepository)
     {
-        if (!Gate::forUser($this->user())->denies('subscribe', $lesson)) {
-            return redirect('/lessons/'.$lesson->id);
+        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+
+        // user does not subscribe lesson
+        if (!$userLesson->is_subscriber) {
+            return response('This action is unauthorized', Response::HTTP_FORBIDDEN);
         }
 
-        return view('lessons.settings', $this->manageLessonViewData($lesson));
+        return view('lessons.settings', $this->lessonViewData($userLesson));
     }
 
     /**

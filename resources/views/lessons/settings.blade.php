@@ -12,15 +12,15 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <form method="POST" content="" action="/lessons/{{ $lesson->id }}/settings">
+                                <form method="POST" content="" action="/lessons/{{ $userLesson->lesson_id }}/settings">
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="PUT">
 
                                     <div class="form-group">
                                         <label>Bidirectional</label>
                                         <select name="bidirectional" class="form-control">
-                                            <option @if($lesson->isBidirectional(Auth::user()->id)) selected @endif value="1">Yes</option>
-                                            <option @if(!$lesson->isBidirectional(Auth::user()->id)) selected @endif value="0">No</option>
+                                            <option @if($userLesson->is_bidirectional) selected @endif value="1">Yes</option>
+                                            <option @if(!$userLesson->is_bidirectional) selected @endif value="0">No</option>
                                         </select>
                                         <span class="help-block">
                                             Bidirectional lesson will serve exercises in 2 versions -> regular + with question and answer reversed.

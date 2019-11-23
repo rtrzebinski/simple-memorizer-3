@@ -108,7 +108,7 @@ class LearningControllerTest extends BaseTestCase
 
         $this->call('GET', '/learn/lessons/-1');
 
-        $this->assertResponseForbidden();
+        $this->assertResponseNotFound();
     }
 
     /** @test */

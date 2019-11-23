@@ -87,7 +87,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id);
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -108,7 +108,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1');
 
-        $this->assertResponseNotFound();
+        $this->assertResponseForbidden();
     }
 
     // exercises
@@ -122,7 +122,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -135,7 +135,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
         $this->assertEquals(true, $this->view()->canModifyLesson);
     }
 
@@ -149,7 +149,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
         $this->assertEquals(false, $this->view()->canModifyLesson);
     }
 
@@ -165,7 +165,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
         $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
         $this->assertEquals(0, $this->view()->exercises[0]->percent_of_good_answers);
     }
@@ -187,7 +187,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
         $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
         $this->assertEquals(66, $this->view()->exercises[0]->percent_of_good_answers);
     }
@@ -224,7 +224,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/edit');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -255,7 +255,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/-1/edit');
 
-        $this->assertResponseNotFound();
+        $this->assertResponseForbidden();
     }
 
     // saveEdit
@@ -380,7 +380,7 @@ class LessonControllerTest extends BaseTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/settings');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->lesson->id);
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -391,7 +391,7 @@ class LessonControllerTest extends BaseTestCase
 
         $this->call('GET', '/lessons/'.$lesson->id.'/settings');
 
-        $this->assertResponseStatus(500);
+        $this->assertResponseForbidden();
     }
 
     // saveSettings

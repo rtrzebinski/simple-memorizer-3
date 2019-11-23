@@ -17,13 +17,20 @@ class UserLessonRepository
     {
         return DB::table('lessons')
             ->select([
+                DB::raw($user->id.' AS user_id'),
                 'l.id AS lesson_id',
                 'l.owner_id AS owner_id',
                 'l.name AS name',
+                'l.visibility AS visibility',
+                'l.exercises_count AS exercises_count',
+                'l.subscribers_count AS subscribers_count',
+                'l.child_lessons_count AS child_lessons_count',
+                DB::raw('COALESCE(lu.id, 0) AS is_subscriber'),
                 DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
-            ->join('lesson_user AS lu', function (JoinClause $joinClause) use ($user, $lessonId) {
+            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) use ($user, $lessonId) {
                 $joinClause
                     ->on('lu.lesson_id', '=', 'l.id')
                     ->where('lu.user_id', '=', $user->id)

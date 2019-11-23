@@ -29,8 +29,13 @@ class LearningController extends Controller
     {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 
+        // lesson does not exist
         if (!$userLesson) {
-            // user does not subscribe lesson
+            return response('Not Found', Response::HTTP_NOT_FOUND);
+        }
+
+        // user does not subscribe lesson
+        if (!$userLesson->is_subscriber) {
             return response('This action is unauthorized', Response::HTTP_FORBIDDEN);
         }
 

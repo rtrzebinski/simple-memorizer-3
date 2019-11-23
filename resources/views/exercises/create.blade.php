@@ -12,7 +12,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <form method="POST" action="/lessons/{{ $lesson->id }}/exercises">
+                                <form method="POST" action="/lessons/{{ $userLesson->lesson_id }}/exercises">
                                     {{ csrf_field() }}
                                     <div class="form-group {{ $errors->has('question') ? 'has-error' : false }}">
                                         <label>Question</label>

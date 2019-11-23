@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\Lesson;
 use App\Models\User;
+use App\Structures\UserLesson;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -41,28 +41,30 @@ class Controller extends BaseController
     }
 
     /**
-     * @param Lesson $lesson
+     * @param UserLesson|null $userLesson
      * @return array
      */
-    protected function manageLessonViewData(Lesson $lesson): array
+    protected function lessonViewData(UserLesson $userLesson = null): array
     {
-        $canSubscribe = Gate::forUser($this->user())->allows('subscribe', $lesson);
-        $canNotSubscribe = !$canSubscribe;
-        $canUnsubscribe = Gate::forUser($this->user())->allows('unsubscribe', $lesson);
-        $canLearn = Gate::forUser($this->user())->allows('learn', $lesson);
-        $canModify = Gate::forUser($this->user())->allows('modify', $lesson);
+        $canSubscribe = !$userLesson->is_subscriber;
+        $canNotSubscribe = $userLesson->is_subscriber;
+        // owner can not unsubscribe
+        $canUnsubscribe = $userLesson->owner_id != $userLesson->user_id;
 
-        $subscriberPivot = $this->user() ? $lesson->subscriberPivot($this->user()->id) : null;
+        $canLearn = Gate::forUser($this->user())->allows('learn', $userLesson);
+
+        // only owner can modify
+        $canModify = $userLesson->owner_id == $userLesson->user_id;
 
         return [
-            'lesson' => $lesson,
+            'userLesson' => $userLesson,
             'user' => $this->user(),
-            'bidirectional' => ($subscriberPivot->bidirectional ?? null) ? 'yes' : 'no',
-            'percentOfGoodAnswers' => $subscriberPivot->percent_of_good_answers ?? null,
-            'numberOfExercises' => $lesson->exercises_count,
-            'childLessonsCount' => $lesson->child_lessons_count,
+            'bidirectional' => $userLesson->is_bidirectional,
+            'percentOfGoodAnswers' => $userLesson->percent_of_good_answers,
+            'numberOfExercises' => $userLesson->exercises_count,
+            'childLessonsCount' => $userLesson->child_lessons_count,
             // exclude owner from numberOfSubscribers display
-            'numberOfSubscribers' => $lesson->subscribers_count - 1,
+            'numberOfSubscribers' => $userLesson->subscribers_count - 1,
             'canSubscribe' => $canSubscribe,
             'canNotSubscribe' => $canNotSubscribe,
             'canUnsubscribe' => $canUnsubscribe,
