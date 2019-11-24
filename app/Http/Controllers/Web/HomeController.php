@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Structures\UserLessonRepository;
 use Illuminate\Http\Response;
 
 class HomeController extends Controller
@@ -9,14 +10,15 @@ class HomeController extends Controller
     /**
      * Show the application home page.
      *
+     * @param UserLessonRepository $userLessonRepository
      * @return Response
      */
-    public function index()
+    public function index(UserLessonRepository $userLessonRepository)
     {
         $data = [
-            'ownedLessons' => $this->user()->ownedLessons()->with('exercises', 'subscribedUsers')->get(),
-            'subscribedLessons' => $this->user()->subscribedLessons()->with('exercises', 'subscribedUsers')->get(),
-            'availableLessons' => $this->user()->availableLessons(),
+            'ownedLessons' => $userLessonRepository->fetchOwnedUserLessons($this->user()),
+            'subscribedLessons' => $userLessonRepository->fetchSubscribedUserLessons($this->user()),
+            'availableLessons' => $userLessonRepository->fetchAvailableUserLessons($this->user()),
         ];
 
         $data['userHasOwnedOrSubscribedLessons'] = (bool)(count($data['ownedLessons']) + count($data['subscribedLessons']));

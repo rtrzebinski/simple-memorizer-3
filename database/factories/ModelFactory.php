@@ -42,6 +42,9 @@ $factory->define(Lesson::class, function (Faker\Generator $faker) {
         },
         'name' => $faker->words(10, true),
         'visibility' => 'public',
+        'exercises_count' => '0',
+        'subscribers_count' => '0',
+        'child_lessons_count' => '0',
     ];
 });
 

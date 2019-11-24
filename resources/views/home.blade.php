@@ -43,27 +43,27 @@
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                                <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
+                                                <a href="/lessons/{{ $row->lesson_id }}">{{ $row->name }}</a>
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ $row->exercises_count }} </br>
                                                 {{-- - 1 because owner is always subscribing --}}
                                                 Number of subscribers: {{ $row->subscribers_count - 1 }} </br>
-                                                Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
+                                                Percent of good answers: {{ $row->percent_of_good_answers }} </br>
                                             </p>
                                             <p>
                                                 @can('learn', $row)
-                                                    <a href="/learn/lessons/{{ $row->id }}" class="btn btn-primary margin-bottom"
+                                                    <a href="/learn/lessons/{{ $row->lesson_id }}" class="btn btn-primary margin-bottom"
                                                        role="button">
                                                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                         Start
                                                     </a>
                                                 @endcan
-                                                <a href="/lessons/{{ $row->id }}/exercises/create" class="btn btn-success margin-bottom" role="button">
+                                                <a href="/lessons/{{ $row->lesson_id }}/exercises/create" class="btn btn-success margin-bottom" role="button">
                                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                     Add exercise
                                                 </a>
-                                                <a href="/lessons/{{ $row->id }}/exercises" class="btn btn-default margin-bottom">
+                                                <a href="/lessons/{{ $row->lesson_id }}/exercises" class="btn btn-default margin-bottom">
                                                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                                                     Exercises
                                                 </a>
@@ -81,33 +81,33 @@
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                                <a href="/lessons/{{ $row->id }}">{{ $row->name }}</a>
+                                                <a href="/lessons/{{ $row->lesson_id }}">{{ $row->name }}</a>
                                             </h4>
                                             <p>
                                                 Number of exercises: {{ $row->exercises_count }} </br>
                                                 {{-- - 1 because owner is always subscribing --}}
                                                 Number of subscribers: {{ $row->subscribers_count - 1 }} </br>
-                                                Percent of good answers: {{ $row->percentOfGoodAnswers(Auth::user()->id) }} </br>
+                                                Percent of good answers: {{ $row->percent_of_good_answers }} </br>
                                             </p>
                                             <p>
-                                                <a href="/learn/lessons/{{ $row->id }}"
+                                                <a href="/learn/lessons/{{ $row->lesson_id }}"
                                                    class="btn btn-primary margin-bottom"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                     Start
                                                 </a>
-                                                <button type="submit" form="unsubscribe-{{ $row->id }}"
+                                                <button type="submit" form="unsubscribe-{{ $row->lesson_id }}"
                                                         class="btn btn-danger margin-bottom">
                                                 <span class="glyphicon glyphicon-remove-sign"
                                                       aria-hidden="true"></span>
                                                     Unsubscribe
                                                 </button>
-                                                <a href="/lessons/{{ $row->id }}/exercises" class="btn btn-default margin-bottom">
+                                                <a href="/lessons/{{ $row->lesson_id }}/exercises" class="btn btn-default margin-bottom">
                                                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                                                     Exercises
                                                 </a>
-                                            <form id="unsubscribe-{{ $row->id }}"
-                                                  action="/lessons/{{ $row->id }}/unsubscribe"
+                                            <form id="unsubscribe-{{ $row->lesson_id }}"
+                                                  action="/lessons/{{ $row->lesson_id }}/unsubscribe"
                                                   method="POST">
                                                 {{ csrf_field() }}
                                             </form>
@@ -157,7 +157,7 @@
                                     <div class="caption">
                                         <h4>
                                             <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                            <a href="/lessons/{{ $row->id }}/exercises">{{ $row->name }}</a>
+                                            <a href="/lessons/{{ $row->lesson_id }}/exercises">{{ $row->name }}</a>
                                         </h4>
                                         <p>
                                             Number of exercises: {{ $row->exercises_count }} </br>
@@ -165,29 +165,29 @@
                                             Number of subscribers: {{ $row->subscribers_count - 1 }} </br>
                                         </p>
                                         <p>
-                                            <button type="submit" form="subscribe-and-learn-{{ $row->id }}"
+                                            <button type="submit" form="subscribe-and-learn-{{ $row->lesson_id }}"
                                                     class="btn btn-primary margin-bottom">
                                                     <span class="glyphicon glyphicon-play"
                                                           aria-hidden="true"></span>
                                                 Subscribe and start
                                             </button>
-                                            <button type="submit" form="subscribe-{{ $row->id }}"
+                                            <button type="submit" form="subscribe-{{ $row->lesson_id }}"
                                                     class="btn btn-danger margin-bottom">
                                                     <span class="glyphicon glyphicon-ok"
                                                           aria-hidden="true"></span>
                                                 Subscribe
                                             </button>
-                                            <a href="/lessons/{{ $row->id }}/exercises" class="btn btn-default margin-bottom">
+                                            <a href="/lessons/{{ $row->lesson_id }}/exercises" class="btn btn-default margin-bottom">
                                                 <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                                                 Exercises
                                             </a>
-                                        <form id="subscribe-{{ $row->id }}"
-                                              action="/lessons/{{ $row->id }}/subscribe"
+                                        <form id="subscribe-{{ $row->lesson_id }}"
+                                              action="/lessons/{{ $row->lesson_id }}/subscribe"
                                               method="POST">
                                             {{ csrf_field() }}
                                         </form>
-                                        <form id="subscribe-and-learn-{{ $row->id }}"
-                                              action="/lessons/{{ $row->id }}/subscribe-and-learn"
+                                        <form id="subscribe-and-learn-{{ $row->lesson_id }}"
+                                              action="/lessons/{{ $row->lesson_id }}/subscribe-and-learn"
                                               method="POST">
                                             {{ csrf_field() }}
                                         </form>
