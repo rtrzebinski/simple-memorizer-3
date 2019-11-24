@@ -32,7 +32,7 @@
             </button>
 
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ Auth::guest() ? url('/') : url('/home') }}">
                 {{ config('app.name') }}
             </a>
         </div>
