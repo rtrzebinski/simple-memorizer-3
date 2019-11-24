@@ -13,11 +13,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home', [
+        $data = [
             'ownedLessons' => $this->user()->ownedLessons()->with('exercises', 'subscribedUsers')->get(),
             'subscribedLessons' => $this->user()->subscribedLessons()->with('exercises', 'subscribedUsers')->get(),
             'availableLessons' => $this->user()->availableLessons(),
-            'userHasOwnedOrSubscribedLessons' => $this->user()->hasOwnedOrSubscribedLessons(),
-        ]);
+        ];
+
+        $data['userHasOwnedOrSubscribedLessons'] = (bool)(count($data['ownedLessons']) + count($data['subscribedLessons']));
+
+        return view('home', $data);
     }
 }

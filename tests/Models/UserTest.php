@@ -66,30 +66,4 @@ class UserTest extends \TestCase
 
         $this->assertCount(1, $user->availableLessons());
     }
-
-    /** @test */
-    public function it_hasOwnedOrSubscribedLessons_ownedLesson()
-    {
-        $user = $this->createUser();
-        $this->createPublicLesson($user);
-
-        $this->assertTrue($user->hasOwnedOrSubscribedLessons());
-    }
-
-    /** @test */
-    public function it_hasOwnedOrSubscribedLessons_subscribedLesson()
-    {
-        $user = $this->createUser();
-        $this->createPublicLesson()->subscribedUsers()->save($user);
-
-        $this->assertTrue($user->hasOwnedOrSubscribedLessons());
-    }
-
-    /** @test */
-    public function it_hasNoOwnedOrSubscribedLessons()
-    {
-        $user = $this->createUser();
-
-        $this->assertFalse($user->hasOwnedOrSubscribedLessons());
-    }
 }
