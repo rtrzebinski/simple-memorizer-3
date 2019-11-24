@@ -20,6 +20,7 @@ class Lessons extends Migration
             $table->enum('visibility', ['public', 'private']);
             $table->integer('exercises_count')->default(0);
             $table->integer('subscribers_count')->default(0);
+            $table->integer('child_lessons_count')->default(0);
             $table->timestamps();
         });
 
