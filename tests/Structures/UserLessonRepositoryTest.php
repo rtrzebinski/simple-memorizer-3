@@ -50,6 +50,32 @@ class UserLessonRepositoryTest extends \TestCase
     }
 
     /** @test */
+    public function itShould_fetchUserLesson_guestUser()
+    {
+        $lesson = $this->createLesson([
+            'name' => uniqid(),
+            'exercises_count' => 2,
+            'subscribers_count' => 3,
+            'child_lessons_count' => 4,
+        ]);
+
+        $result = $this->repository->fetchUserLesson($user = null, $lesson->id);
+
+        $this->assertInstanceOf(UserLesson::class, $result);
+        $this->assertEquals(null, $result->user_id);
+        $this->assertEquals($lesson->id, $result->lesson_id);
+        $this->assertEquals($lesson->owner_id, $result->owner_id);
+        $this->assertEquals($lesson->name, $result->name);
+        $this->assertEquals($lesson->visibility, $result->visibility);
+        $this->assertEquals($lesson->exercises_count, $result->exercises_count);
+        $this->assertEquals($lesson->subscribers_count, $result->subscribers_count);
+        $this->assertEquals($lesson->child_lessons_count, $result->child_lessons_count);
+        $this->assertEquals(0, $result->is_subscriber);
+        $this->assertEquals(0, $result->is_bidirectional);
+        $this->assertEquals(0, $result->percent_of_good_answers);
+    }
+
+    /** @test */
     public function itShould_fetchUserLesson_subscribed()
     {
         $user = $this->createUser(['id' => 5]);
@@ -332,6 +358,35 @@ class UserLessonRepositoryTest extends \TestCase
         $this->assertEquals($availableLesson->exercises_count, $result->exercises_count);
         $this->assertEquals($availableLesson->subscribers_count, $result->subscribers_count);
         $this->assertEquals($availableLesson->child_lessons_count, $result->child_lessons_count);
+        $this->assertEquals(0, $result->is_subscriber);
+        $this->assertEquals(0, $result->is_bidirectional);
+        $this->assertEquals(0, $result->percent_of_good_answers);
+    }
+
+    // fetchPublicUserLessons
+
+    /** @test */
+    public function itShould_fetchPublicUserLessons()
+    {
+        $publicLesson = $this->createPublicLesson();
+        $privateLesson = $this->createPrivateLesson();
+
+        $result = $this->repository->fetchPublicUserLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(1, $result);
+
+        /** @var UserLesson $result */
+        $result = $result[0];
+        $this->assertInstanceOf(UserLesson::class, $result);
+        $this->assertEquals(null, $result->user_id);
+        $this->assertEquals($publicLesson->id, $result->lesson_id);
+        $this->assertEquals($publicLesson->owner_id, $result->owner_id);
+        $this->assertEquals($publicLesson->name, $result->name);
+        $this->assertEquals($publicLesson->visibility, $result->visibility);
+        $this->assertEquals($publicLesson->exercises_count, $result->exercises_count);
+        $this->assertEquals($publicLesson->subscribers_count, $result->subscribers_count);
+        $this->assertEquals($publicLesson->child_lessons_count, $result->child_lessons_count);
         $this->assertEquals(0, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);

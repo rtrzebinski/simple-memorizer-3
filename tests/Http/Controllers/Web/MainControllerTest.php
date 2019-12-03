@@ -2,7 +2,7 @@
 
 namespace Tests\Http\Controllers\Web;
 
-use App\Models\Lesson;
+use App\Structures\UserLesson;
 
 class MainControllerTest extends BaseTestCase
 {
@@ -28,8 +28,8 @@ class MainControllerTest extends BaseTestCase
         $this->assertViewHas('ownedLessons', []);
         $this->assertViewHas('subscribedLessons', []);
         $this->assertCount(1, $this->view()->availableLessons);
-        $this->assertInstanceOf(Lesson::class, $this->view()->availableLessons[0]);
-        $this->assertEquals($publicLesson->id, $this->view()->availableLessons[0]->id);
+        $this->assertInstanceOf(UserLesson::class, $this->view()->availableLessons[0]);
+        $this->assertEquals($publicLesson->id, $this->view()->availableLessons[0]->lesson_id);
         $this->assertViewHas('userHasOwnedOrSubscribedLessons', false);
     }
 }

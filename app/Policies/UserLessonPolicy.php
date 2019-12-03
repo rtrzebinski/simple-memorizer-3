@@ -13,11 +13,11 @@ class UserLessonPolicy
     /**
      * Lesson must be public or user must be lesson owner.
      *
-     * @param User       $user
+     * @param User|null       $user
      * @param UserLesson $userLesson
      * @return bool
      */
-    public function access(User $user, UserLesson $userLesson): bool
+    public function access(?User $user, UserLesson $userLesson): bool
     {
         return $userLesson->visibility == 'public' || $user->id == $userLesson->owner_id;
     }

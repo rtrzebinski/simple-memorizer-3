@@ -24,6 +24,19 @@ class UserLessonPolicyTest extends \TestCase
     }
 
     /** @test */
+    public function itShould_authorizeUserLessonAccess_publicLesson_guestUser()
+    {
+        $userLesson = new UserLesson();
+        $userLesson->visibility = 'public';
+
+        $policy = new UserLessonPolicy();
+
+        $result = $policy->access($user = null, $userLesson);
+
+        $this->assertTrue($result);
+    }
+
+    /** @test */
     public function itShould_authorizeUserLessonAccess_ownedLesson()
     {
         $user = $this->createUser();

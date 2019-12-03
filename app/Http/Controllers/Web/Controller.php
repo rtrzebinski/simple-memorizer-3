@@ -49,7 +49,7 @@ class Controller extends BaseController
         $canSubscribe = !$userLesson->is_subscriber;
         $canNotSubscribe = $userLesson->is_subscriber;
         // owner can not unsubscribe
-        $canUnsubscribe = $userLesson->owner_id != $userLesson->user_id;
+        $canUnsubscribe = $userLesson->user_id && $userLesson->is_subscriber && $userLesson->owner_id != $userLesson->user_id;
 
         $canLearn = Gate::forUser($this->user())->allows('learn', $userLesson);
 

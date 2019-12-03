@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\Lesson;
+use App\Structures\UserLessonRepository;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,9 +11,10 @@ class MainController extends Controller
     /**
      * Show the application main page.
      *
+     * @param UserLessonRepository $userLessonRepository
      * @return Response
      */
-    public function index()
+    public function index(UserLessonRepository $userLessonRepository)
     {
         if (!Auth::guest()) {
             redirect('/home');
@@ -22,7 +23,7 @@ class MainController extends Controller
         return view('home', [
             'ownedLessons' => [],
             'subscribedLessons' => [],
-            'availableLessons' => Lesson::whereVisibility('public')->get(),
+            'availableLessons' => $userLessonRepository->fetchPublicUserLessons(),
             'userHasOwnedOrSubscribedLessons' => false,
         ]);
     }

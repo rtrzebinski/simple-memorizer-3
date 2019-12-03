@@ -91,6 +91,17 @@ class LessonControllerTest extends BaseTestCase
     }
 
     /** @test */
+    public function itShould_showLessonViewPage_guestUser()
+    {
+        $lesson = $this->createPublicLesson();
+
+        $this->call('GET', '/lessons/'.$lesson->id);
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
+    }
+
+    /** @test */
     public function itShould_notShowLessonViewPage_forbidden()
     {
         $this->be($user = $this->createUser());
@@ -117,6 +128,17 @@ class LessonControllerTest extends BaseTestCase
     public function itShould_showLessonExercisesViewPage()
     {
         $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson();
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
+    }
+
+    /** @test */
+    public function itShould_showLessonExercisesViewPage_guestUser()
+    {
         $lesson = $this->createPublicLesson();
 
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises');
