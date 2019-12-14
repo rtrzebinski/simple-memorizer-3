@@ -363,6 +363,21 @@ class UserLessonRepositoryTest extends \TestCase
         $this->assertEquals(0, $result->percent_of_good_answers);
     }
 
+    /** @test */
+    public function itShould_fetchAvailableUserLessons_excludePrivateLessonsOfAnotherUsers()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->createLesson([
+            'visibility' => 'private',
+        ]);
+
+        $result = $this->repository->fetchAvailableUserLessons($user);
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(0, $result);
+    }
+
     // fetchPublicUserLessons
 
     /** @test */

@@ -258,6 +258,22 @@ class TestDataSeeder extends Seeder
         }
         event(new ExerciseCreated($lesson, $lesson->owner));
         $lesson->subscribe($lesson->owner);
+
+        $lesson = factory(Lesson::class)->create([
+            'name' => 'Private lesson of another user',
+            'visibility' => 'private',
+        ]);
+        for ($i = 1; $i <= 5; $i++) {
+            $a = rand(10, 100);
+            $b = rand(10, 100);
+            factory(Exercise::class)->create([
+                'lesson_id' => $lesson->id,
+                'question' => $a.' - '.$b,
+                'answer' => $a - $b,
+            ]);
+        }
+        event(new ExerciseCreated($lesson, $lesson->owner));
+        $lesson->subscribe($lesson->owner);
     }
 
     /**

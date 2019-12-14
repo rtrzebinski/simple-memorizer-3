@@ -2,6 +2,7 @@
 
 namespace App\Structures;
 
+use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -155,6 +156,7 @@ class UserLessonRepository
                     ->where('lu.user_id', '=', $user->id);
             })
             ->whereNull('lu.id')
+            ->where('l.visibility', '=', 'public')
             ->get()
             ->mapInto(UserLesson::class);
     }
