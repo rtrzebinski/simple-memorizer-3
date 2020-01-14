@@ -17,6 +17,11 @@ class UserExercise extends AbstractStructure
     /**
      * @var string
      */
+    public $lesson_name;
+
+    /**
+     * @var string
+     */
     public $question;
 
     /**
