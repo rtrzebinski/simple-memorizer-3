@@ -43,6 +43,9 @@ artisan-migrate:
 artisan-seed:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace php artisan db:seed
 
+artisan-telescope-clear:
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace php artisan telescope:clear
+
 ssh:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace bash
 
