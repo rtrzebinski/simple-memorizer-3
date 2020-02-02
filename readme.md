@@ -47,14 +47,17 @@ Thanks to [Laradock](https://laradock.io) project has a built in [Docker](https:
 
 ### Commands
 
-`make up` build and run the application
-
-`make db` access cli mysql client
-
-`make test` run phpunit test suite
-
-`make ssh` ssh to workspace container (to run artisan or composer commands for instance)
-
-`composer-install` install composer dependencies
-
-`composer-update` update composer dependencies
+- `make build` - build or rebuild docker services
+- `make up` - start docker services
+- `make down` - stop docker services
+- `make restart` - restart docker services
+- `make run` - prepare and run application
+- `make start` - start docker services, prepare and run application
+- `make composer-install` - install composer dependencies
+- `make composer-update` - update composer dependencies
+- `make artisan-migrate` - run all migrations
+- `make artisan-seed` - seed the database with records
+- `make artisan-telescope-clear` - clear all entries from telescope
+- `make mysql` - connect to dev database via mysql cli client
+- `make ssh` - ssh to workspace container
+- `make test` - run phpunit test suite
