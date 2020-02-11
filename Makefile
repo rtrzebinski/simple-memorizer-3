@@ -56,3 +56,8 @@ ssh:
 
 test:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit
+
+args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+
+test-filter:
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit --filter $(call args, default)
