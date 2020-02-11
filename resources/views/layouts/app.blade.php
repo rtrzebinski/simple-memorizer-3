@@ -15,7 +15,16 @@
     <link href="/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <link href="/bootstrap-social-gh-pages/bootstrap-social.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet">
-    
+
+    <!-- https://realfavicongenerator.net -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_package_v0.16/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_package_v0.16/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_package_v0.16/favicon-16x16.png">
+    <link rel="manifest" href="/favicon_package_v0.16/site.webmanifest">
+    <link rel="mask-icon" href="/favicon_package_v0.16/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
 </head>
 <body>
 <nav class="navbar navbar-default navbar-static-top">
@@ -87,7 +96,7 @@
 
 @yield('content')
 
-        <!-- Scripts -->
+<!-- Scripts -->
 <script src="/jquery/jquery-1.12.4.min.js"></script>
 <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 @stack('scripts')
