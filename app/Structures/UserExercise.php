@@ -4,63 +4,16 @@ namespace App\Structures;
 
 class UserExercise extends AbstractStructure
 {
-    /**
-     * @var int
-     */
-    public $exercise_id;
-
-    /**
-     * @var int
-     */
-    public $lesson_id;
-
-    /**
-     * @var string
-     */
-    public $lesson_name;
-
-    /**
-     * @var string
-     */
-    public $question;
-
-    /**
-     * @var string
-     */
-    public $answer;
-
-    /**
-     * @var int
-     */
-    public $number_of_good_answers;
-
-    /**
-     * @var int
-     */
-    public $number_of_good_answers_today;
-
-    /**
-     * @var string|null
-     */
-    public $latest_good_answer;
-
-    /**
-     * @var int
-     */
-    public $number_of_bad_answers;
-
-    /**
-     * @var int
-     */
-    public $number_of_bad_answers_today;
-
-    /**
-     * @var string|null
-     */
-    public $latest_bad_answer;
-
-    /**
-     * @var int
-     */
-    public $percent_of_good_answers;
+    public ?int $exercise_id = null;
+    public ?int $lesson_id = null;
+    public ?string $lesson_name = null;
+    public ?string $question = null;
+    public ?string $answer = null;
+    public ?int $number_of_good_answers = null;
+    public ?int $number_of_good_answers_today = null;
+    public ?string $latest_good_answer = null;
+    public ?int $number_of_bad_answers = null;
+    public ?int $number_of_bad_answers_today = null;
+    public ?string $latest_bad_answer = null;
+    public ?int $percent_of_good_answers = null;
 }

@@ -9,10 +9,7 @@ use TestCase;
 
 class UserRepositoryTest extends TestCase
 {
-    /**
-     * @var UserRepository
-     */
-    private $repository;
+    private UserRepository $repository;
 
     public function setUp(): void
     {

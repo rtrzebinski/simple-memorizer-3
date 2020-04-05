@@ -7,15 +7,8 @@ use App\Models\User;
 
 abstract class LessonEvent implements LessonEventInterface
 {
-    /**
-     * @var Lesson
-     */
-    protected $lesson;
-
-    /**
-     * @var User
-     */
-    protected $user;
+    protected Lesson $lesson;
+    protected User $user;
 
     /**
      * Create a new event instance.

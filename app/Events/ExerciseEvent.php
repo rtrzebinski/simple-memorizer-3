@@ -7,15 +7,8 @@ use App\Models\User;
 
 abstract class ExerciseEvent implements LessonEventInterface
 {
-    /**
-     * @var int
-     */
-    protected $exerciseId;
-
-    /**
-     * @var User
-     */
-    protected $user;
+    protected int $exerciseId;
+    protected User $user;
 
     /**
      * Create a new event instance.

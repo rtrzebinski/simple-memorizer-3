@@ -15,10 +15,7 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    /**
-     * @var UserExerciseRepository
-     */
-    private $userExerciseRepository;
+    private ?UserExerciseRepository $userExerciseRepository = null;
 
     /**
      * UpdatePercentOfGoodAnswersOfLesson constructor.
