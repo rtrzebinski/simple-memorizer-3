@@ -63,3 +63,4 @@ Thanks to [Laradock](https://laradock.io) project has a built in [Docker](https:
 - `make mysql` - connect to dev database via mysql cli client
 - `make ssh` - ssh to workspace container
 - `make test` - run phpunit test suite
+- `make test-filter` - run phpunit filtered by class or test name
