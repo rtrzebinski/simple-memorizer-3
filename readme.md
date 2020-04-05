@@ -4,6 +4,8 @@ Simple memorizer helps efficiently memorizing any question-answer sets.
 
 [Application live demo](https://simple-memorizer.online)
 
+[![Build Status](https://travis-ci.com/rtrzebinski/simple-memorizer-3.svg?branch=master)](https://travis-ci.com/rtrzebinski/simple-memorizer-3)
+
 ### How does it work
 
 - User can subscribe and learn one of lessons created by other users or create own lesson.

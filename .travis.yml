@@ -1,0 +1,12 @@
+language: php
+
+php:
+  - 7.4
+
+before_script:
+  - phpenv config-rm xdebug.ini
+  - composer install --no-interaction --no-scripts --no-progress --optimize-autoloader
+  - cp env-dev .env
+
+script:
+  - ./vendor/bin/phpunit
