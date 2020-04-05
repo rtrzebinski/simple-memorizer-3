@@ -10,10 +10,7 @@ use Illuminate\Support\Collection;
 
 class UserExerciseRepositoryTest extends \TestCase
 {
-    /**
-     * @var UserExerciseRepository
-     */
-    private $repository;
+    private UserExerciseRepository $repository;
 
     public function setUp(): void
     {
@@ -164,13 +161,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($exercise->lesson_id, $result[0]->lesson_id);
         $this->assertEquals($exercise->question, $result[0]->question);
         $this->assertEquals($exercise->answer, $result[0]->answer);
-        $this->assertSame('0', $result[0]->number_of_good_answers);
-        $this->assertSame('0', $result[0]->number_of_good_answers_today);
+        $this->assertSame(0, $result[0]->number_of_good_answers);
+        $this->assertSame(0, $result[0]->number_of_good_answers_today);
         $this->assertSame(null, $result[0]->latest_good_answer);
-        $this->assertSame('0', $result[0]->number_of_bad_answers);
-        $this->assertSame('0', $result[0]->number_of_bad_answers_today);
+        $this->assertSame(0, $result[0]->number_of_bad_answers);
+        $this->assertSame(0, $result[0]->number_of_bad_answers_today);
         $this->assertSame(null, $result[0]->latest_bad_answer);
-        $this->assertSame('0', $result[0]->percent_of_good_answers);
+        $this->assertSame(0, $result[0]->percent_of_good_answers);
     }
 
     /** @test */
@@ -217,13 +214,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($exercise2->lesson_id, $result[1]->lesson_id);
         $this->assertEquals($exercise2->question, $result[1]->question);
         $this->assertEquals($exercise2->answer, $result[1]->answer);
-        $this->assertSame('0', $result[1]->number_of_good_answers);
-        $this->assertSame('0', $result[1]->number_of_good_answers_today);
+        $this->assertSame(0, $result[1]->number_of_good_answers);
+        $this->assertSame(0, $result[1]->number_of_good_answers_today);
         $this->assertSame(null, $result[1]->latest_good_answer);
-        $this->assertSame('0', $result[1]->number_of_bad_answers);
-        $this->assertSame('0', $result[1]->number_of_bad_answers_today);
+        $this->assertSame(0, $result[1]->number_of_bad_answers);
+        $this->assertSame(0, $result[1]->number_of_bad_answers_today);
         $this->assertSame(null, $result[1]->latest_bad_answer);
-        $this->assertSame('0', $result[1]->percent_of_good_answers);
+        $this->assertSame(0, $result[1]->percent_of_good_answers);
     }
 
     /** @test */
@@ -245,26 +242,26 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($exercise1->lesson_id, $result[0]->lesson_id);
         $this->assertEquals($exercise1->question, $result[0]->question);
         $this->assertEquals($exercise1->answer, $result[0]->answer);
-        $this->assertSame('0', $result[0]->number_of_good_answers);
-        $this->assertSame('0', $result[0]->number_of_good_answers_today);
+        $this->assertSame(0, $result[0]->number_of_good_answers);
+        $this->assertSame(0, $result[0]->number_of_good_answers_today);
         $this->assertSame(null, $result[0]->latest_good_answer);
-        $this->assertSame('0', $result[0]->number_of_bad_answers);
-        $this->assertSame('0', $result[0]->number_of_bad_answers_today);
+        $this->assertSame(0, $result[0]->number_of_bad_answers);
+        $this->assertSame(0, $result[0]->number_of_bad_answers_today);
         $this->assertSame(null, $result[0]->latest_bad_answer);
-        $this->assertSame('0', $result[0]->percent_of_good_answers);
+        $this->assertSame(0, $result[0]->percent_of_good_answers);
 
         $this->assertInstanceOf(UserExercise::class, $result[1]);
         $this->assertEquals($exercise2->id, $result[1]->exercise_id);
         $this->assertEquals($exercise2->lesson_id, $result[1]->lesson_id);
         $this->assertEquals($exercise2->question, $result[1]->question);
         $this->assertEquals($exercise2->answer, $result[1]->answer);
-        $this->assertSame('0', $result[1]->number_of_good_answers);
-        $this->assertSame('0', $result[1]->number_of_good_answers_today);
+        $this->assertSame(0, $result[1]->number_of_good_answers);
+        $this->assertSame(0, $result[1]->number_of_good_answers_today);
         $this->assertSame(null, $result[1]->latest_good_answer);
-        $this->assertSame('0', $result[1]->number_of_bad_answers);
-        $this->assertSame('0', $result[1]->number_of_bad_answers_today);
+        $this->assertSame(0, $result[1]->number_of_bad_answers);
+        $this->assertSame(0, $result[1]->number_of_bad_answers_today);
         $this->assertSame(null, $result[1]->latest_bad_answer);
-        $this->assertSame('0', $result[1]->percent_of_good_answers);
+        $this->assertSame(0, $result[1]->percent_of_good_answers);
     }
 
     /** @test */
@@ -294,13 +291,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($exercise->lesson_id, $result[0]->lesson_id);
         $this->assertEquals($exercise->question, $result[0]->question);
         $this->assertEquals($exercise->answer, $result[0]->answer);
-        $this->assertSame('0', $result[0]->number_of_good_answers);
-        $this->assertSame('0', $result[0]->number_of_good_answers_today);
+        $this->assertSame(0, $result[0]->number_of_good_answers);
+        $this->assertSame(0, $result[0]->number_of_good_answers_today);
         $this->assertSame(null, $result[0]->latest_good_answer);
-        $this->assertSame('0', $result[0]->number_of_bad_answers);
-        $this->assertSame('0', $result[0]->number_of_bad_answers_today);
+        $this->assertSame(0, $result[0]->number_of_bad_answers);
+        $this->assertSame(0, $result[0]->number_of_bad_answers_today);
         $this->assertSame(null, $result[0]->latest_bad_answer);
-        $this->assertSame('0', $result[0]->percent_of_good_answers);
+        $this->assertSame(0, $result[0]->percent_of_good_answers);
     }
 
     /** @test */
@@ -460,13 +457,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($exercise->lesson_id, $result->lesson_id);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('0', $result->percent_of_good_answers);
+        $this->assertSame(0, $result->percent_of_good_answers);
     }
 
     // fetchUserExercisesWithPhrase
@@ -489,13 +486,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($lesson->name, $result->lesson_name);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('0', $result->percent_of_good_answers);
+        $this->assertSame(0, $result->percent_of_good_answers);
     }
 
     /** @test */
@@ -523,13 +520,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($lesson->name, $result->lesson_name);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('66', $result->percent_of_good_answers);
+        $this->assertSame(66, $result->percent_of_good_answers);
     }
 
     /** @test */
@@ -554,13 +551,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($lesson->name, $result->lesson_name);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('0', $result->percent_of_good_answers);
+        $this->assertSame(0, $result->percent_of_good_answers);
     }
 
     /** @test */
@@ -583,13 +580,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($lesson->name, $result->lesson_name);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('0', $result->percent_of_good_answers);
+        $this->assertSame(0, $result->percent_of_good_answers);
     }
 
     /** @test */
@@ -614,13 +611,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($lesson->name, $result->lesson_name);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('0', $result->percent_of_good_answers);
+        $this->assertSame(0, $result->percent_of_good_answers);
     }
 
     /** @test */
@@ -644,13 +641,13 @@ class UserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($lesson->name, $result->lesson_name);
         $this->assertEquals($exercise->question, $result->question);
         $this->assertEquals($exercise->answer, $result->answer);
-        $this->assertSame('0', $result->number_of_good_answers);
-        $this->assertSame('0', $result->number_of_good_answers_today);
+        $this->assertSame(0, $result->number_of_good_answers);
+        $this->assertSame(0, $result->number_of_good_answers_today);
         $this->assertSame(null, $result->latest_good_answer);
-        $this->assertSame('0', $result->number_of_bad_answers);
-        $this->assertSame('0', $result->number_of_bad_answers_today);
+        $this->assertSame(0, $result->number_of_bad_answers);
+        $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
-        $this->assertSame('0', $result->percent_of_good_answers);
+        $this->assertSame(0, $result->percent_of_good_answers);
     }
 
     /** @test */

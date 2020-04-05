@@ -12,10 +12,7 @@ use TestCase;
 
 class LearningServiceTest extends TestCase
 {
-    /**
-     * @var LearningService
-     */
-    private $learningService;
+    private LearningService $learningService;
 
     public function setUp(): void
     {

@@ -7,10 +7,7 @@ use TestCase;
 
 class LessonPolicyTest extends TestCase
 {
-    /**
-     * @var LessonPolicy
-     */
-    private $policy;
+    private LessonPolicy $policy;
 
     public function setUp(): void
     {

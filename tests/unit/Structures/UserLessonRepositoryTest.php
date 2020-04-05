@@ -8,10 +8,7 @@ use Illuminate\Support\Collection;
 
 class UserLessonRepositoryTest extends \TestCase
 {
-    /**
-     * @var UserLessonRepository
-     */
-    private $repository;
+    private UserLessonRepository $repository;
 
     public function setUp(): void
     {

@@ -4,58 +4,15 @@ namespace App\Structures;
 
 class UserLesson extends AbstractStructure
 {
-    /**
-     * @var int
-     */
-    public $user_id;
-
-    /**
-     * @var int
-     */
-    public $lesson_id;
-
-    /**
-     * @var int
-     */
-    public $owner_id;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var bool
-     */
-    public $is_bidirectional;
-
-    /**
-     * @var string
-     */
-    public $visibility;
-
-    /**
-     * @var int
-     */
-    public $exercises_count;
-
-    /**
-     * @var int
-     */
-    public $percent_of_good_answers;
-
-    /**
-     * @var int
-     */
-    public $subscribers_count;
-
-    /**
-     * @var int
-     */
-    public $child_lessons_count;
-
-    /**
-     * @var int
-     */
-    public $is_subscriber;
+    public ?int $user_id = null;
+    public ?int $lesson_id = null;
+    public ?int $owner_id = null;
+    public ?string $name = null;
+    public ?bool $is_bidirectional = null;
+    public ?string $visibility = null;
+    public ?int $exercises_count = null;
+    public ?int $percent_of_good_answers = null;
+    public ?int $subscribers_count = null;
+    public ?int $child_lessons_count = null;
+    public ?int $is_subscriber = null;
 }

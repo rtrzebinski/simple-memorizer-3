@@ -10,10 +10,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class TestCase extends \TestCase
 {
-    /**
-     * @var TestResponse
-     */
-    protected $response;
+    protected TestResponse $response;
 
     /**
      * Call the given URI.

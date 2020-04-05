@@ -7,10 +7,7 @@ use TestCase;
 
 class ExercisePolicyTest extends TestCase
 {
-    /**
-     * @var ExercisePolicy
-     */
-    private $policy;
+    private ExercisePolicy $policy;
 
     public function setUp(): void
     {

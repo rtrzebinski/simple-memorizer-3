@@ -20,10 +20,7 @@ use Exception;
  */
 class LearningService
 {
-    /**
-     * @var UserExerciseRepository
-     */
-    private $userExerciseRepository;
+    private UserExerciseRepository $userExerciseRepository;
 
     /**
      * LearningService constructor.
