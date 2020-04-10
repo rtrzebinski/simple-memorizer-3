@@ -6,7 +6,9 @@ use App\Http\Requests\LessonImportCsvRequest;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
+use App\Structures\UserExerciseRepository;
 use App\Structures\UserLessonRepository;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -51,7 +53,7 @@ class LessonController extends Controller
      * @param int                  $lessonId
      * @param UserLessonRepository $userLessonRepository
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function view(int $lessonId, UserLessonRepository $userLessonRepository): View
     {
@@ -63,39 +65,23 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson               $lesson
-     * @param UserLessonRepository $userLessonRepository
+     * @param Lesson                 $lesson
+     * @param UserLessonRepository   $userLessonRepository
+     * @param UserExerciseRepository $userExerciseRepository
      * @return mixed
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
-    public function exercises(Lesson $lesson, UserLessonRepository $userLessonRepository): View
+    public function exercises(Lesson $lesson, UserLessonRepository $userLessonRepository, UserExerciseRepository $userExerciseRepository): View
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
-        // will include exercises from aggregated lessons
-        $exercises = $lesson->allExercises();
-
-        if ($this->user()) {
-            // eager load exercise results of current user only
-            $exercises->load([
-                'results' => function (Relation $relation) {
-                    $relation->where('exercise_results.user_id', $this->user()->id);
-                }
-            ]);
-
-            // load percent_of_good_answers property using eager loaded 'results' relationship
-            foreach ($exercises as $exercise) {
-                // only current user results were eager loaded above, so we don't need any more filtering here
-                $exercise->percent_of_good_answers = $exercise->results->first()->percent_of_good_answers ?? 0;
-            }
-
-        }
+        $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($this->user(), $lesson->id);
 
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lesson->id);
 
         $data = [
                 'canModifyLesson' => Gate::forUser($this->user())->allows('modify', $lesson),
-                'exercises' => $exercises,
+                'userExercises' => $userExercises,
             ] + $this->lessonViewData($userLesson);
 
         return view('lessons.exercises', $data);
@@ -105,7 +91,7 @@ class LessonController extends Controller
      * @param int                  $lessonId
      * @param UserLessonRepository $userLessonRepository
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function edit(int $lessonId, UserLessonRepository $userLessonRepository): View
     {
@@ -120,7 +106,7 @@ class LessonController extends Controller
      * @param Request $request
      * @param Lesson  $lesson
      * @return RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
     public function saveEdit(Request $request, Lesson $lesson): RedirectResponse
