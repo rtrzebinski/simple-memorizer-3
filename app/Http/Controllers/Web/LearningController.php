@@ -7,8 +7,9 @@ use App\Events\ExerciseGoodAnswer;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Services\LearningService;
-use App\Structures\UserExerciseRepository;
-use App\Structures\UserLessonRepository;
+use App\Structures\UserExerciseRepositoryInterface;
+use App\Structures\UserLessonRepositoryInterface;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,15 +18,15 @@ use Illuminate\View\View;
 class LearningController extends Controller
 {
     /**
-     * @param int                    $lessonId
-     * @param Request                $request
-     * @param LearningService        $learningService
-     * @param UserExerciseRepository $userExerciseRepository
-     * @param UserLessonRepository   $userLessonRepository
-     * @return View
-     * @throws \Exception
+     * @param int                             $lessonId
+     * @param Request                         $request
+     * @param LearningService                 $learningService
+     * @param UserExerciseRepositoryInterface $userExerciseRepository
+     * @param UserLessonRepositoryInterface   $userLessonRepository
+     * @return View|Response
+     * @throws Exception
      */
-    public function learnLesson(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository, UserLessonRepository $userLessonRepository)
+    public function learnLesson(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepositoryInterface $userExerciseRepository, UserLessonRepositoryInterface $userLessonRepository)
     {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 
@@ -55,15 +56,15 @@ class LearningController extends Controller
     }
 
     /**
-     * @param int                    $lessonId
-     * @param Request                $request
-     * @param LearningService        $learningService
-     * @param UserExerciseRepository $userExerciseRepository
-     * @param UserLessonRepository   $userLessonRepository
+     * @param int                             $lessonId
+     * @param Request                         $request
+     * @param LearningService                 $learningService
+     * @param UserExerciseRepositoryInterface $userExerciseRepository
+     * @param UserLessonRepositoryInterface   $userLessonRepository
      * @return View
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handleAnswer(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepository $userExerciseRepository, UserLessonRepository $userLessonRepository)
+    public function handleAnswer(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepositoryInterface $userExerciseRepository, UserLessonRepositoryInterface $userLessonRepository)
     {
         $this->validate($request, [
             'answer' => 'required|in:good,bad',

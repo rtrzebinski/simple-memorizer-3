@@ -8,7 +8,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class UserExerciseRepository
+class UserExerciseRepository implements UserExerciseRepositoryInterface
 {
     /**
      * @param User|null $user

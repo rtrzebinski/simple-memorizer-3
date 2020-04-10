@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\LessonEventInterface;
 use App\Models\Lesson;
 use App\Models\User;
-use App\Structures\UserExerciseRepository;
+use App\Structures\UserExerciseRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,13 +15,13 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    private ?UserExerciseRepository $userExerciseRepository = null;
+    private ?UserExerciseRepositoryInterface $userExerciseRepository = null;
 
     /**
      * UpdatePercentOfGoodAnswersOfLesson constructor.
-     * @param UserExerciseRepository $userExerciseRepository
+     * @param UserExerciseRepositoryInterface $userExerciseRepository
      */
-    public function __construct(UserExerciseRepository $userExerciseRepository)
+    public function __construct(UserExerciseRepositoryInterface $userExerciseRepository)
     {
         $this->userExerciseRepository = $userExerciseRepository;
     }

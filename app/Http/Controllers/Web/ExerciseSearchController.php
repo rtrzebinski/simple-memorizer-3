@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Structures\UserExerciseRepository;
+use App\Structures\UserExerciseRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ExerciseSearchController extends Controller
 {
     /**
-     * @param Request                $request
-     * @param UserExerciseRepository $userExerciseRepository
-     * @return \Illuminate\View\View
+     * @param Request                         $request
+     * @param UserExerciseRepositoryInterface $userExerciseRepository
+     * @return View
      */
-    public function searchForExercises(Request $request, UserExerciseRepository $userExerciseRepository)
+    public function searchForExercises(Request $request, UserExerciseRepositoryInterface $userExerciseRepository)
     {
         $phrase = $request->get('phrase');
 

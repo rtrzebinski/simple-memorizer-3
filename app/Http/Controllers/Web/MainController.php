@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Structures\UserLessonRepository;
+use App\Structures\UserLessonRepositoryInterface;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class MainController extends Controller
 {
     /**
      * Show the application main page.
      *
-     * @param UserLessonRepository $userLessonRepository
-     * @return Response
+     * @param UserLessonRepositoryInterface $userLessonRepository
+     * @return Factory|Response|View
      */
-    public function index(UserLessonRepository $userLessonRepository)
+    public function index(UserLessonRepositoryInterface $userLessonRepository)
     {
         if (!Auth::guest()) {
             redirect('/home');
