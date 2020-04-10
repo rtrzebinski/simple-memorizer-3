@@ -39,6 +39,9 @@ composer-install:
 composer-update:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace composer update
 
+composer-dump-autoload:
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace composer dump-autoload
+
 artisan-migrate:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace php artisan migrate
 
@@ -54,10 +57,10 @@ mysql:
 ssh:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace bash
 
-test:
-	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit
-
 args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 
+test:
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit $(call args)
+
 test-filter:
-	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit --filter $(call args, default)
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit --filter $(call args)
