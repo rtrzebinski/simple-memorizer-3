@@ -57,7 +57,7 @@
                                 @endif
                                 </thead>
                                 <tbody>
-                                @foreach($exercises as $row)
+                                @foreach($userExercises as $row)
                                     <tr>
                                         @if($canModifyLesson)
                                             <td>
@@ -77,19 +77,19 @@
                                         @endif
                                         @if($canModifyLesson)
                                             <td>
-                                                <a href="/exercises/{{ $row->id }}/edit" class="btn btn-info btn-xs">
+                                                <a href="/exercises/{{ $row->exercise_id }}/edit" class="btn btn-info btn-xs">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </a>
                                             </td>
                                             <td>
                                                 <button class="btn btn-danger btn-xs" data-title="Delete"
-                                                        data-toggle="modal" data-target="#delete-exercise-{{ $row->id }}">
+                                                        data-toggle="modal" data-target="#delete-exercise-{{ $row->exercise_id }}">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </button>
                                             </td>
                                         @endif
                                     </tr>
-                                    <div class="modal fade" id="delete-exercise-{{ $row->id }}" tabindex="-1"
+                                    <div class="modal fade" id="delete-exercise-{{ $row->exercise_id }}" tabindex="-1"
                                          role="dialog"
                                          aria-labelledby="delete" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -109,7 +109,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" form="delete-exercise-form-{{ $row->id }}" class="btn btn-success">
+                                                    <button type="submit" form="delete-exercise-form-{{ $row->exercise_id }}" class="btn btn-success">
                                                         <span class="glyphicon glyphicon-ok-sign"></span> Yes
                                                     </button>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -118,7 +118,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <form id="delete-exercise-form-{{ $row->id }}" action="/exercises/{{ $row->id }}" method="POST">
+                                        <form id="delete-exercise-form-{{ $row->exercise_id }}" action="/exercises/{{ $row->exercise_id }}" method="POST">
                                             <input name="_method" type="hidden" value="DELETE">
                                             {{ csrf_field() }}
                                         </form>

@@ -2,7 +2,6 @@
 
 namespace App\Structures;
 
-use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;

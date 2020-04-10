@@ -188,8 +188,8 @@ class LessonControllerTest extends TestCase
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
-        $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
-        $this->assertEquals(0, $this->view()->exercises[0]->percent_of_good_answers);
+        $this->assertEquals($lesson->id, $this->view()->userExercises->first()->exercise_id);
+        $this->assertEquals(0, $this->view()->userExercises[0]->percent_of_good_answers);
     }
 
     /** @test */
@@ -210,8 +210,8 @@ class LessonControllerTest extends TestCase
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
-        $this->assertEquals($lesson->id, $this->view()->exercises->first()->id);
-        $this->assertEquals(66, $this->view()->exercises[0]->percent_of_good_answers);
+        $this->assertEquals($lesson->id, $this->view()->userExercises->first()->exercise_id);
+        $this->assertEquals(66, $this->view()->userExercises[0]->percent_of_good_answers);
     }
 
     /** @test */
