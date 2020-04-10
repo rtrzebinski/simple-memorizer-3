@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Structures\UserExerciseRepository;
+use App\Structures\UserExerciseRepositoryInterface;
+use App\Structures\UserLessonRepository;
+use App\Structures\UserLessonRepositoryInterface;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,5 +36,13 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() === 'production') {
             URL::forceScheme('https');
         }
+
+        $this->app->bind(UserExerciseRepositoryInterface::class, function () {
+            return new UserExerciseRepository();
+        });
+
+        $this->app->bind(UserLessonRepositoryInterface::class, function () {
+            return new UserLessonRepository();
+        });
     }
 }

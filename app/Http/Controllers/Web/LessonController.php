@@ -6,10 +6,9 @@ use App\Http\Requests\LessonImportCsvRequest;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
-use App\Structures\UserExerciseRepository;
-use App\Structures\UserLessonRepository;
+use App\Structures\UserExerciseRepositoryInterface;
+use App\Structures\UserLessonRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -50,12 +49,12 @@ class LessonController extends Controller
     }
 
     /**
-     * @param int                  $lessonId
-     * @param UserLessonRepository $userLessonRepository
+     * @param int                           $lessonId
+     * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
      */
-    public function view(int $lessonId, UserLessonRepository $userLessonRepository): View
+    public function view(int $lessonId, UserLessonRepositoryInterface $userLessonRepository): View
     {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 
@@ -65,13 +64,13 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson                 $lesson
-     * @param UserLessonRepository   $userLessonRepository
-     * @param UserExerciseRepository $userExerciseRepository
+     * @param Lesson                          $lesson
+     * @param UserLessonRepositoryInterface   $userLessonRepository
+     * @param UserExerciseRepositoryInterface $userExerciseRepository
      * @return mixed
      * @throws AuthorizationException
      */
-    public function exercises(Lesson $lesson, UserLessonRepository $userLessonRepository, UserExerciseRepository $userExerciseRepository): View
+    public function exercises(Lesson $lesson, UserLessonRepositoryInterface $userLessonRepository, UserExerciseRepositoryInterface $userExerciseRepository): View
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
@@ -88,12 +87,12 @@ class LessonController extends Controller
     }
 
     /**
-     * @param int                  $lessonId
-     * @param UserLessonRepository $userLessonRepository
+     * @param int                           $lessonId
+     * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
      */
-    public function edit(int $lessonId, UserLessonRepository $userLessonRepository): View
+    public function edit(int $lessonId, UserLessonRepositoryInterface $userLessonRepository): View
     {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 
@@ -123,11 +122,11 @@ class LessonController extends Controller
     }
 
     /**
-     * @param int                  $lessonId
-     * @param UserLessonRepository $userLessonRepository
-     * @return View|RedirectResponse
+     * @param int                           $lessonId
+     * @param UserLessonRepositoryInterface $userLessonRepository
+     * @return View|Response
      */
-    public function settings(int $lessonId, UserLessonRepository $userLessonRepository)
+    public function settings(int $lessonId, UserLessonRepositoryInterface $userLessonRepository)
     {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 

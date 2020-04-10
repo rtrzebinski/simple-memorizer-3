@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Structures\UserLessonRepository;
+use App\Structures\UserLessonRepositoryInterface;
 use Illuminate\Http\Response;
 
 class HomeController extends Controller
@@ -10,10 +10,10 @@ class HomeController extends Controller
     /**
      * Show the application home page.
      *
-     * @param UserLessonRepository $userLessonRepository
+     * @param UserLessonRepositoryInterface $userLessonRepository
      * @return Response
      */
-    public function index(UserLessonRepository $userLessonRepository)
+    public function index(UserLessonRepositoryInterface $userLessonRepository)
     {
         $data = [
             'ownedLessons' => $userLessonRepository->fetchOwnedUserLessons($this->user()),

@@ -8,7 +8,7 @@ use App\Http\Requests\FetchRandomExerciseOfLessonRequest;
 use App\Models\Exercise;
 use App\Models\Lesson;
 use App\Services\LearningService;
-use App\Structures\UserLessonRepository;
+use App\Structures\UserLessonRepositoryInterface;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -17,7 +17,7 @@ class LearningController extends Controller
     /**
      * @param FetchRandomExerciseOfLessonRequest $request
      * @param LearningService                    $learningService
-     * @param UserLessonRepository               $userLessonRepository
+     * @param UserLessonRepositoryInterface      $userLessonRepository
      * @param Lesson                             $lesson
      * @return JsonResponse
      * @throws Exception
@@ -25,7 +25,7 @@ class LearningController extends Controller
     public function fetchRandomExerciseOfLesson(
         FetchRandomExerciseOfLessonRequest $request,
         LearningService $learningService,
-        UserLessonRepository $userLessonRepository,
+        UserLessonRepositoryInterface $userLessonRepository,
         Lesson $lesson
     ): JsonResponse {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lesson->id);
