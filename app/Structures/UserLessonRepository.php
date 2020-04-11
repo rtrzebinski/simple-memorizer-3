@@ -7,7 +7,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class UserLessonRepository implements UserLessonRepositoryInterface
+class UserLessonRepository implements UserLessonRepositoryInterface, AuthenticatedUserLessonRepositoryInterface, GuestUserLessonRepositoryInterface
 {
     /**
      * @param User|null $user
