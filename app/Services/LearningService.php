@@ -76,7 +76,7 @@ class LearningService
             // but perhaps previous has some points? let's check
             if ($previousExerciseId) {
 
-                $previousUserExercise = $this->authenticatedUserExerciseRepository->fetchUserExerciseOfExercise($user, $previousExerciseId);
+                $previousUserExercise = $this->authenticatedUserExerciseRepository->fetchUserExerciseOfExercise($previousExerciseId);
 
                 $previousPoints = $this->calculatePoints($previousUserExercise);
 

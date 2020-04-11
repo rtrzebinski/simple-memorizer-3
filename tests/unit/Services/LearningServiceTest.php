@@ -13,14 +13,6 @@ use TestCase;
 
 class LearningServiceTest extends TestCase
 {
-    private LearningService $learningService;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository());
-    }
-
     // fetchRandomExerciseOfLesson
 
     /** @test */
@@ -114,7 +106,9 @@ class LearningServiceTest extends TestCase
         ]);
 
         $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
-        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previous->id);
+
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previous->id);
 
         $this->assertNull($result);
     }
@@ -149,7 +143,9 @@ class LearningServiceTest extends TestCase
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
         $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
-        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
+
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($previousExercise->id, $result->exercise_id);
@@ -190,7 +186,9 @@ class LearningServiceTest extends TestCase
         ]);
 
         $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
-        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
+
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($previousExercise->id, $result->exercise_id);
@@ -234,7 +232,9 @@ class LearningServiceTest extends TestCase
         ]);
 
         $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
-        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
+
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertNull($result);
     }
@@ -426,9 +426,12 @@ class LearningServiceTest extends TestCase
     public function itShould_notReturnRandomExercise_lessonHasNoExercises()
     {
         $lesson = $this->createLesson();
+        $user = $this->createUser();
 
         $userLesson = $this->createUserLesson($this->createUser(), $lesson, $isBidirectional = false);
-        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $this->createUser());
+
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $this->createUser());
 
         $this->assertNull($result);
     }
@@ -441,7 +444,9 @@ class LearningServiceTest extends TestCase
         $previousExercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
         $userLesson = $this->createUserLesson($user, $lesson, $isBidirectional = false);
-        $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
+
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousExercise->id);
 
         $this->assertNull($result);
     }
@@ -470,7 +475,8 @@ class LearningServiceTest extends TestCase
             if (!$counter--) {
                 $this->fail('Bidirectional flag does not work - unable to fetch reverted exercise.');
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user);
+            $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+            $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user);
             // just to avoid "This test did not perform any assertions" warning
             $this->assertTrue(true);
         } while ($result->answer != $exercise->question);
@@ -499,7 +505,8 @@ class LearningServiceTest extends TestCase
             if (!$counter--) {
                 $this->fail('Bidirectional flag does not work - reverted exercise was fetched while it should not.');
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user);
+            $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+            $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user);
             // just to avoid "This test did not perform any assertions" warning
             $this->assertTrue(true);
         } while ($result->answer == $exercise->question);
@@ -515,7 +522,8 @@ class LearningServiceTest extends TestCase
             if (!$counter--) {
                 $this->fail('Unable to fetch random exercise.');
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousId);
+            $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+            $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousId);
             $this->assertInstanceOf(UserExercise::class, $result);
         } while ($result->exercise_id != $exerciseId);
     }
@@ -530,7 +538,8 @@ class LearningServiceTest extends TestCase
                 // all good - previous exercise was never returned
                 return;
             }
-            $result = $this->learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousId);
+            $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+            $result = $learningService->fetchRandomExerciseOfLesson($userLesson, $user, $previousId);
             $this->assertTrue($result->exercise_id != $previousId, 'Previous exercise was returned');
         } while (1);
     }
@@ -570,7 +579,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals($expectedPoints, $result);
     }
@@ -592,7 +602,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals(0, $result);
     }
@@ -613,7 +624,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals(0, $result);
     }
@@ -635,7 +647,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals(0, $result);
     }
@@ -673,7 +686,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals($points, $result);
     }
@@ -702,7 +716,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals($points, $result);
     }
@@ -737,7 +752,8 @@ class LearningServiceTest extends TestCase
         ]);
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals($points, $result);
     }
@@ -749,7 +765,8 @@ class LearningServiceTest extends TestCase
         $exercise = $this->createExercise();
         $userExercise = $this->createUserExercise($user, $exercise);
 
-        $result = $this->learningService->calculatePoints($userExercise);
+        $learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
 
         $this->assertEquals(100, $result);
     }
