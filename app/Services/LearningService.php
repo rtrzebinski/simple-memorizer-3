@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Exercise;
 use App\Models\User;
 use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
-use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserExercise;
 use App\Structures\UserLesson;
 use Carbon\Carbon;
@@ -21,17 +20,14 @@ use Exception;
  */
 class LearningService
 {
-    private UserExerciseRepositoryInterface $userExerciseRepository;
     private AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository;
 
     /**
      * LearningService constructor.
-     * @param UserExerciseRepositoryInterface              $userExerciseRepository
      * @param AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository
      */
-    public function __construct(UserExerciseRepositoryInterface $userExerciseRepository, AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository)
+    public function __construct(AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository)
     {
-        $this->userExerciseRepository = $userExerciseRepository;
         $this->authenticatedUserExerciseRepository = $authenticatedUserExerciseRepository;
     }
 
@@ -46,7 +42,7 @@ class LearningService
      */
     public function fetchRandomExerciseOfLesson(UserLesson $userLesson, User $user, int $previousExerciseId = null): ?UserExercise
     {
-        $userExercises = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $userLesson->lesson_id)
+        $userExercises = $this->authenticatedUserExerciseRepository->fetchUserExercisesOfLesson($userLesson->lesson_id)
             ->filter(function (UserExercise $userExercise) use ($previousExerciseId) {
                 // exclude previous exercise
                 return $userExercise->exercise_id != $previousExerciseId;

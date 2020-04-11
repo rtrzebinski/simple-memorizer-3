@@ -4,7 +4,7 @@ namespace Tests\Unit\Listeners;
 
 use App\Events\ExerciseGoodAnswer;
 use App\Listeners\UpdatePercentOfGoodAnswersOfLesson;
-use App\Structures\UserExerciseRepository;
+use App\Structures\GuestUserExerciseRepository;
 
 class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
 {
@@ -47,7 +47,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
             'percent_of_good_answers' => $exercise2percentOfGoodAnswers,
         ]);
 
-        $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
+        $listener = new UpdatePercentOfGoodAnswersOfLesson(new GuestUserExerciseRepository());
         $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
@@ -72,7 +72,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         // this should be considered 0%, as it has no answers
         $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
+        $listener = new UpdatePercentOfGoodAnswersOfLesson(new GuestUserExerciseRepository());
         $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
@@ -119,7 +119,7 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
 
         // (50 + 100) / 2 = 75
 
-        $listener = new UpdatePercentOfGoodAnswersOfLesson(new UserExerciseRepository());
+        $listener = new UpdatePercentOfGoodAnswersOfLesson(new GuestUserExerciseRepository());
         $event = new ExerciseGoodAnswer($exercise->id, $user);
         $listener->handle($event);
 
