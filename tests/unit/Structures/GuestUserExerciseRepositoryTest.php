@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class GuestUserExerciseRepositoryTest extends \TestCase
 {
-    // fetchUserExercisesOfLesson guest user
+    // fetchUserExercisesOfLesson
 
     /** @test */
     public function itShould_fetchUserExercisesOfLesson_guest_noExercises()

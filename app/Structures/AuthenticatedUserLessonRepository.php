@@ -24,6 +24,39 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     }
 
     /**
+     * @param int $lessonId
+     * @return UserLesson|null
+     */
+    public function fetchUserLesson(int $lessonId): ?UserLesson
+    {
+        return DB::table('lessons')
+            ->select([
+                DB::raw($this->user->id.' AS user_id'),
+                'l.id AS lesson_id',
+                'l.owner_id AS owner_id',
+                'l.name AS name',
+                'l.visibility AS visibility',
+                'l.exercises_count AS exercises_count',
+                'l.subscribers_count AS subscribers_count',
+                'l.child_lessons_count AS child_lessons_count',
+                DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
+                DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
+            ])
+            ->from('lessons AS l')
+            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) use ($lessonId) {
+                $joinClause
+                    ->on('lu.lesson_id', '=', 'l.id')
+                    ->where('lu.user_id', '=', $this->user->id)
+                    ->where('lu.lesson_id', '=', $lessonId);
+            })
+            ->where('l.id', $lessonId)
+            ->get()
+            ->mapInto(UserLesson::class)
+            ->first();
+    }
+
+    /**
      * @return Collection
      */
     public function fetchOwnedUserLessons(): Collection

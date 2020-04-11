@@ -49,7 +49,7 @@ class LessonAggregateController extends Controller
             $lessons[] = $row;
         }
 
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $parentLesson->id);
+        $userLesson = $userLessonRepository->fetchUserLesson($parentLesson->id);
 
         return view('lessons.aggregate', [
                 'lessons' => $lessons,

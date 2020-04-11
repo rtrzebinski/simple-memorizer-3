@@ -29,7 +29,7 @@ class LearningController extends Controller
      */
     public function learnLesson(int $lessonId, Request $request, LearningService $learningService, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository, UserLessonRepositoryInterface $userLessonRepository)
     {
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+        $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         // lesson does not exist
         if (!$userLesson) {

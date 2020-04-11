@@ -4,7 +4,7 @@ namespace App\Structures;
 
 use Illuminate\Support\Collection;
 
-interface AuthenticatedUserLessonRepositoryInterface
+interface AuthenticatedUserLessonRepositoryInterface extends UserLessonRepositoryInterface
 {
     /**
      * @return Collection
