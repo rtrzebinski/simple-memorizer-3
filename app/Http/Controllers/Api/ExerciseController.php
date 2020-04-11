@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Models\Lesson;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 class ExerciseController extends Controller
@@ -32,7 +33,7 @@ class ExerciseController extends Controller
     /**
      * @param Exercise $exercise
      * @return JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function fetchExercise(Exercise $exercise): JsonResponse
     {
@@ -43,7 +44,7 @@ class ExerciseController extends Controller
     /**
      * @param Lesson $lesson
      * @return JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function fetchExercisesOfLesson(Lesson $lesson): JsonResponse
     {

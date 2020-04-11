@@ -10,7 +10,6 @@ use App\Structures\GuestUserLessonRepository;
 use App\Structures\GuestUserLessonRepositoryInterface;
 use App\Structures\GuestUserExerciseRepository;
 use App\Structures\UserExerciseRepositoryInterface;
-use App\Structures\UserLessonRepository;
 use App\Structures\UserLessonRepositoryInterface;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\Auth;
