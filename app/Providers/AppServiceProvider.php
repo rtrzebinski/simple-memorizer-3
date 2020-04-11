@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Structures\AuthenticatedUserExerciseRepository;
 use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
+use App\Structures\AuthenticatedUserLessonRepository;
 use App\Structures\AuthenticatedUserLessonRepositoryInterface;
+use App\Structures\GuestUserLessonRepository;
 use App\Structures\GuestUserLessonRepositoryInterface;
 use App\Structures\UserExerciseRepository;
 use App\Structures\UserExerciseRepositoryInterface;
@@ -55,11 +57,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(AuthenticatedUserLessonRepositoryInterface::class, function () {
-            return new UserLessonRepository();
+            return new AuthenticatedUserLessonRepository();
         });
 
         $this->app->bind(GuestUserLessonRepositoryInterface::class, function () {
-            return new UserLessonRepository();
+            return new GuestUserLessonRepository();
         });
     }
 }
