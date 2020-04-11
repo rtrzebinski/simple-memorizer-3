@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Exercise;
 use App\Models\User;
 use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
+use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserExercise;
 use App\Structures\UserLesson;
 use Carbon\Carbon;
@@ -20,15 +21,18 @@ use Exception;
  */
 class LearningService
 {
-    private AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository;
+    private UserExerciseRepositoryInterface $userExerciseRepository;
+    private AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository;
 
     /**
      * LearningService constructor.
-     * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+     * @param UserExerciseRepositoryInterface              $userExerciseRepository
+     * @param AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository
      */
-    public function __construct(AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository)
+    public function __construct(UserExerciseRepositoryInterface $userExerciseRepository, AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository)
     {
         $this->userExerciseRepository = $userExerciseRepository;
+        $this->authenticatedUserExerciseRepository = $authenticatedUserExerciseRepository;
     }
 
     /**
@@ -72,7 +76,7 @@ class LearningService
             // but perhaps previous has some points? let's check
             if ($previousExerciseId) {
 
-                $previousUserExercise = $this->userExerciseRepository->fetchUserExerciseOfExercise($user, $previousExerciseId);
+                $previousUserExercise = $this->authenticatedUserExerciseRepository->fetchUserExerciseOfExercise($user, $previousExerciseId);
 
                 $previousPoints = $this->calculatePoints($previousUserExercise);
 

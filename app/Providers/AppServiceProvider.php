@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Structures\AuthenticatedUserExerciseRepository;
 use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\AuthenticatedUserLessonRepositoryInterface;
 use App\Structures\GuestUserLessonRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Structures\UserExerciseRepository;
 use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserLessonRepository;
 use App\Structures\UserLessonRepositoryInterface;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->environment() !== 'production') {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(IdeHelperServiceProvider::class);
         }
 
         // force HTTPS on production
@@ -45,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(AuthenticatedUserExerciseRepositoryInterface::class, function () {
-            return new UserExerciseRepository();
+            return new AuthenticatedUserExerciseRepository();
         });
 
         $this->app->bind(UserLessonRepositoryInterface::class, function () {

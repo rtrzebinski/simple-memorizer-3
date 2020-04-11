@@ -4,6 +4,7 @@ namespace Tests\Unit\Services;
 
 use App\Models\User;
 use App\Services\LearningService;
+use App\Structures\AuthenticatedUserExerciseRepository;
 use App\Structures\UserExercise;
 use App\Structures\UserExerciseRepository;
 use App\Structures\UserLesson;
@@ -17,7 +18,7 @@ class LearningServiceTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->learningService = new LearningService(new UserExerciseRepository());
+        $this->learningService = new LearningService(new UserExerciseRepository(), new AuthenticatedUserExerciseRepository());
     }
 
     // fetchRandomExerciseOfLesson
