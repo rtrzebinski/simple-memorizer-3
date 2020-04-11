@@ -2,15 +2,13 @@
 
 namespace App\Structures;
 
-use App\Models\User;
 use Illuminate\Support\Collection;
 
 interface UserExerciseRepositoryInterface
 {
     /**
-     * @param User|null $user
-     * @param int       $lessonId
+     * @param int $lessonId
      * @return Collection|UserExercise[]
      */
-    public function fetchUserExercisesOfLesson(?User $user, int $lessonId): Collection;
+    public function fetchUserExercisesOfLesson(int $lessonId): Collection;
 }

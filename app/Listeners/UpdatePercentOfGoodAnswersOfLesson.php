@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\LessonEventInterface;
 use App\Models\Lesson;
 use App\Models\User;
-use App\Structures\UserExerciseRepositoryInterface;
+use App\Structures\AuthenticatedUserExerciseRepository;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,17 +14,6 @@ use Illuminate\Support\Facades\DB;
 class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
 {
     use InteractsWithQueue;
-
-    private ?UserExerciseRepositoryInterface $userExerciseRepository = null;
-
-    /**
-     * UpdatePercentOfGoodAnswersOfLesson constructor.
-     * @param UserExerciseRepositoryInterface $userExerciseRepository
-     */
-    public function __construct(UserExerciseRepositoryInterface $userExerciseRepository)
-    {
-        $this->userExerciseRepository = $userExerciseRepository;
-    }
 
     /**
      * Handle the event.
@@ -47,7 +36,8 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
     private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user)
     {
         // fetch user exercises of a lesson
-        $userExercises = $this->userExerciseRepository->fetchUserExercisesOfLesson($user, $lesson->id);
+        $userExerciseRepository = new AuthenticatedUserExerciseRepository($user);
+        $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lesson->id);
 
         if ($userExercisesCount = $userExercises->count()) {
             // calculate percent_of_good_answers of a lesson

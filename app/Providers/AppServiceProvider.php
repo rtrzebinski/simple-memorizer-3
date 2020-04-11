@@ -8,7 +8,7 @@ use App\Structures\AuthenticatedUserLessonRepository;
 use App\Structures\AuthenticatedUserLessonRepositoryInterface;
 use App\Structures\GuestUserLessonRepository;
 use App\Structures\GuestUserLessonRepositoryInterface;
-use App\Structures\UserExerciseRepository;
+use App\Structures\GuestUserExerciseRepository;
 use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserLessonRepository;
 use App\Structures\UserLessonRepositoryInterface;
@@ -46,7 +46,10 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->app->bind(UserExerciseRepositoryInterface::class, function () {
-            return new UserExerciseRepository();
+            if (Auth::check()) {
+                return new AuthenticatedUserExerciseRepository(Auth::user());
+            }
+            return new GuestUserExerciseRepository();
         });
 
         $this->app->bind(AuthenticatedUserExerciseRepositoryInterface::class, function () {

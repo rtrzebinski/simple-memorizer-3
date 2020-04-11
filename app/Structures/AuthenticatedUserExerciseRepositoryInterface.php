@@ -4,7 +4,7 @@ namespace App\Structures;
 
 use Illuminate\Support\Collection;
 
-interface AuthenticatedUserExerciseRepositoryInterface
+interface AuthenticatedUserExerciseRepositoryInterface extends UserExerciseRepositoryInterface
 {
     /**
      * @param int  $exerciseId

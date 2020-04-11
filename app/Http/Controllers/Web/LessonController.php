@@ -74,7 +74,7 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
-        $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($this->user(), $lesson->id);
+        $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lesson->id);
 
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lesson->id);
 
