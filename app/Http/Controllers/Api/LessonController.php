@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\PatchLessonRequest;
 use App\Models\Lesson;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class LessonController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function storeLesson(Request $request) : JsonResponse
+    public function storeLesson(Request $request): JsonResponse
     {
         $this->validate($request, [
             'visibility' => 'required|in:public,private',
@@ -32,7 +33,7 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function subscribeLesson(Lesson $lesson)
     {
@@ -42,7 +43,7 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function unsubscribeLesson(Lesson $lesson)
     {
@@ -53,9 +54,9 @@ class LessonController extends Controller
     /**
      * @param Lesson $lesson
      * @return JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
-    public function fetchLesson(Lesson $lesson) : JsonResponse
+    public function fetchLesson(Lesson $lesson): JsonResponse
     {
         $this->authorizeForUser($this->user(), 'access', $lesson);
         return $this->response($lesson);
@@ -64,7 +65,7 @@ class LessonController extends Controller
     /**
      * @return JsonResponse
      */
-    public function fetchOwnedLessons() : JsonResponse
+    public function fetchOwnedLessons(): JsonResponse
     {
         return $this->response($this->user()->ownedLessons);
     }
@@ -72,17 +73,17 @@ class LessonController extends Controller
     /**
      * @return JsonResponse
      */
-    public function fetchSubscribedLessons() : JsonResponse
+    public function fetchSubscribedLessons(): JsonResponse
     {
         return $this->response($this->user()->subscribedLessons);
     }
 
     /**
      * @param PatchLessonRequest $request
-     * @param Lesson $lesson
+     * @param Lesson             $lesson
      * @return JsonResponse
      */
-    public function updateLesson(PatchLessonRequest $request, Lesson $lesson) : JsonResponse
+    public function updateLesson(PatchLessonRequest $request, Lesson $lesson): JsonResponse
     {
         $lesson->update($request->all());
         return $this->response($lesson);
@@ -90,7 +91,7 @@ class LessonController extends Controller
 
     /**
      * @param Lesson $lesson
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function deleteLesson(Lesson $lesson)
     {
