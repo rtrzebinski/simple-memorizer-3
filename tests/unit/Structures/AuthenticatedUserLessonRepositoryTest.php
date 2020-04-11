@@ -8,14 +8,6 @@ use Illuminate\Support\Collection;
 
 class AuthenticatedUserLessonRepositoryTest extends \TestCase
 {
-    private AuthenticatedUserLessonRepository $repository;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = new AuthenticatedUserLessonRepository();
-    }
-
     // fetchOwnedUserLessons
 
     /** @test */
@@ -28,7 +20,8 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $ownedPublicLesson = $this->createPublicLesson($user);
         $ownedPrivateLesson = $this->createPrivateLesson($user);
 
-        $result = $this->repository->fetchOwnedUserLessons($user);
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchOwnedUserLessons();
 
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(2, $result);
@@ -76,7 +69,8 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $ownedPublicLesson = $this->createPublicLesson($user);
         $ownedPrivateLesson = $this->createPrivateLesson($user);
 
-        $result = $this->repository->fetchSubscribedUserLessons($user);
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchSubscribedUserLessons();
 
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(1, $result);
@@ -109,7 +103,8 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $ownedPublicLesson = $this->createPublicLesson($user);
         $ownedPrivateLesson = $this->createPrivateLesson($user);
 
-        $result = $this->repository->fetchAvailableUserLessons($user);
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchAvailableUserLessons();
 
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(1, $result);
@@ -139,7 +134,8 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
             'visibility' => 'private',
         ]);
 
-        $result = $this->repository->fetchAvailableUserLessons($user);
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchAvailableUserLessons();
 
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(0, $result);

@@ -2,7 +2,7 @@
 
 namespace App\Structures;
 
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -10,14 +10,27 @@ use Illuminate\Support\Facades\DB;
 class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonRepositoryInterface
 {
     /**
-     * @param User $user
+     * @var Authenticatable
+     */
+    private Authenticatable $user;
+
+    /**
+     * AuthenticatedUserLessonRepository constructor.
+     * @param Authenticatable $user
+     */
+    public function __construct(Authenticatable $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @return Collection
      */
-    public function fetchOwnedUserLessons(User $user): Collection
+    public function fetchOwnedUserLessons(): Collection
     {
         return DB::table('lessons')
             ->select([
-                DB::raw($user->id.' AS user_id'),
+                DB::raw($this->user->id.' AS user_id'),
                 'l.id AS lesson_id',
                 'l.owner_id AS owner_id',
                 'l.name AS name',
@@ -30,25 +43,24 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
-            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) use ($user) {
+            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) {
                 $joinClause
                     ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $user->id);
+                    ->where('lu.user_id', '=', $this->user->id);
             })
-            ->where('l.owner_id', $user->id)
+            ->where('l.owner_id', $this->user->id)
             ->get()
             ->mapInto(UserLesson::class);
     }
 
     /**
-     * @param User $user
      * @return Collection
      */
-    public function fetchSubscribedUserLessons(User $user): Collection
+    public function fetchSubscribedUserLessons(): Collection
     {
         return DB::table('lessons')
             ->select([
-                DB::raw($user->id.' AS user_id'),
+                DB::raw($this->user->id.' AS user_id'),
                 'l.id AS lesson_id',
                 'l.owner_id AS owner_id',
                 'l.name AS name',
@@ -61,25 +73,24 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
-            ->join('lesson_user AS lu', function (JoinClause $joinClause) use ($user) {
+            ->join('lesson_user AS lu', function (JoinClause $joinClause) {
                 $joinClause
                     ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $user->id);
+                    ->where('lu.user_id', '=', $this->user->id);
             })
-            ->where('l.owner_id', '!=', $user->id)
+            ->where('l.owner_id', '!=', $this->user->id)
             ->get()
             ->mapInto(UserLesson::class);
     }
 
     /**
-     * @param User $user
      * @return Collection
      */
-    public function fetchAvailableUserLessons(User $user): Collection
+    public function fetchAvailableUserLessons(): Collection
     {
         return DB::table('lessons')
             ->select([
-                DB::raw($user->id.' AS user_id'),
+                DB::raw($this->user->id.' AS user_id'),
                 'l.id AS lesson_id',
                 'l.owner_id AS owner_id',
                 'l.name AS name',
@@ -92,10 +103,10 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
-            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) use ($user) {
+            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) {
                 $joinClause
                     ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $user->id);
+                    ->where('lu.user_id', '=', $this->user->id);
             })
             ->whereNull('lu.id')
             ->where('l.visibility', '=', 'public')

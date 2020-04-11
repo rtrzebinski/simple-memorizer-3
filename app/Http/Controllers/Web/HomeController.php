@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Structures\AuthenticatedUserLessonRepositoryInterface;
-use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
@@ -11,14 +11,14 @@ class HomeController extends Controller
      * Show the application home page.
      *
      * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
-     * @return Response
+     * @return View
      */
     public function index(AuthenticatedUserLessonRepositoryInterface $userLessonRepository)
     {
         $data = [
-            'ownedLessons' => $userLessonRepository->fetchOwnedUserLessons($this->user()),
-            'subscribedLessons' => $userLessonRepository->fetchSubscribedUserLessons($this->user()),
-            'availableLessons' => $userLessonRepository->fetchAvailableUserLessons($this->user()),
+            'ownedLessons' => $userLessonRepository->fetchOwnedUserLessons(),
+            'subscribedLessons' => $userLessonRepository->fetchSubscribedUserLessons(),
+            'availableLessons' => $userLessonRepository->fetchAvailableUserLessons(),
         ];
 
         $data['userHasOwnedOrSubscribedLessons'] = (bool)(count($data['ownedLessons']) + count($data['subscribedLessons']));

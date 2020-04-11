@@ -58,7 +58,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(AuthenticatedUserLessonRepositoryInterface::class, function () {
-            return new AuthenticatedUserLessonRepository();
+            return new AuthenticatedUserLessonRepository(Auth::user());
         });
 
         $this->app->bind(GuestUserLessonRepositoryInterface::class, function () {
