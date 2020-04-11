@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\Exercise;
 use App\Models\User;
+use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserExercise;
-use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserLesson;
 use Carbon\Carbon;
 use Exception;
@@ -20,13 +20,13 @@ use Exception;
  */
 class LearningService
 {
-    private UserExerciseRepositoryInterface $userExerciseRepository;
+    private AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository;
 
     /**
      * LearningService constructor.
-     * @param UserExerciseRepositoryInterface $userExerciseRepository
+     * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      */
-    public function __construct(UserExerciseRepositoryInterface $userExerciseRepository)
+    public function __construct(AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository)
     {
         $this->userExerciseRepository = $userExerciseRepository;
     }

@@ -7,6 +7,7 @@ use App\Events\ExerciseGoodAnswer;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Services\LearningService;
+use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserLessonRepositoryInterface;
 use Exception;
@@ -18,15 +19,15 @@ use Illuminate\View\View;
 class LearningController extends Controller
 {
     /**
-     * @param int                             $lessonId
-     * @param Request                         $request
-     * @param LearningService                 $learningService
-     * @param UserExerciseRepositoryInterface $userExerciseRepository
-     * @param UserLessonRepositoryInterface   $userLessonRepository
+     * @param int                                          $lessonId
+     * @param Request                                      $request
+     * @param LearningService                              $learningService
+     * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+     * @param UserLessonRepositoryInterface                $userLessonRepository
      * @return View|Response
      * @throws Exception
      */
-    public function learnLesson(int $lessonId, Request $request, LearningService $learningService, UserExerciseRepositoryInterface $userExerciseRepository, UserLessonRepositoryInterface $userLessonRepository)
+    public function learnLesson(int $lessonId, Request $request, LearningService $learningService, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository, UserLessonRepositoryInterface $userLessonRepository)
     {
         $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
 
