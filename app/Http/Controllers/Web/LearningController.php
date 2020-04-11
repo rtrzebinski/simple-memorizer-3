@@ -42,7 +42,7 @@ class LearningController extends Controller
         }
 
         if ($requestedExerciseId = $request->get('requested_exercise_id')) {
-            $userExercise = $userExerciseRepository->fetchUserExerciseOfExercise($this->user(), $requestedExerciseId);
+            $userExercise = $userExerciseRepository->fetchUserExerciseOfExercise($requestedExerciseId);
             // ensure user can access this exercise
             $this->authorizeForUser($this->user(), 'access', $userExercise);
         } else {

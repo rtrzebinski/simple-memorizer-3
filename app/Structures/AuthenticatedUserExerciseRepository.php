@@ -2,7 +2,7 @@
 
 namespace App\Structures;
 
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -10,13 +10,23 @@ use Illuminate\Support\Facades\DB;
 
 class AuthenticatedUserExerciseRepository implements AuthenticatedUserExerciseRepositoryInterface
 {
+    private Authenticatable $user;
+
     /**
-     * @param User $user
-     * @param int  $exerciseId
+     * AuthenticatedUserExerciseRepository constructor.
+     * @param Authenticatable $user
+     */
+    public function __construct(Authenticatable $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @param int $exerciseId
      * @return UserExercise
      * @throws \Exception
      */
-    public function fetchUserExerciseOfExercise(User $user, int $exerciseId): UserExercise
+    public function fetchUserExerciseOfExercise(int $exerciseId): UserExercise
     {
         $result = DB::table('exercises AS e')
             ->select([
@@ -32,10 +42,10 @@ class AuthenticatedUserExerciseRepository implements AuthenticatedUserExerciseRe
                 'er.latest_bad_answer AS latest_bad_answer',
                 DB::raw('COALESCE(er.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
-            ->leftJoin('exercise_results AS er', function (JoinClause $joinClause) use ($user) {
+            ->leftJoin('exercise_results AS er', function (JoinClause $joinClause) {
                 $joinClause
                     ->on('er.exercise_id', '=', 'e.id')
-                    ->where('er.user_id', '=', $user->id);
+                    ->where('er.user_id', '=', $this->user->id);
             })
             ->where('e.id', '=', $exerciseId)
             ->first();
@@ -48,11 +58,10 @@ class AuthenticatedUserExerciseRepository implements AuthenticatedUserExerciseRe
     }
 
     /**
-     * @param User   $user
      * @param string $phrase
      * @return Collection|UserExercise[]
      */
-    public function fetchUserExercisesWithPhrase(User $user, string $phrase): Collection
+    public function fetchUserExercisesWithPhrase(string $phrase): Collection
     {
         return DB::table('exercises AS e')
             ->select([
@@ -69,18 +78,18 @@ class AuthenticatedUserExerciseRepository implements AuthenticatedUserExerciseRe
                 'er.latest_bad_answer AS latest_bad_answer',
                 DB::raw('COALESCE(er.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
-            ->join('lessons AS l', function (JoinClause $join) use ($user) {
+            ->join('lessons AS l', function (JoinClause $join) {
                 $join->on('l.id', '=', 'e.lesson_id')
-                    ->where('l.owner_id', '=', $user->id);
+                    ->where('l.owner_id', '=', $this->user->id);
             })
             ->where(function (Builder $builder) use ($phrase) {
                 $builder->where('question', 'like', '%'.$phrase.'%')
                     ->orWhere('answer', 'like', '%'.$phrase.'%');
             })
-            ->leftJoin('exercise_results AS er', function (JoinClause $joinClause) use ($user) {
+            ->leftJoin('exercise_results AS er', function (JoinClause $joinClause) {
                 $joinClause
                     ->on('er.exercise_id', '=', 'e.id')
-                    ->where('er.user_id', '=', $user->id);
+                    ->where('er.user_id', '=', $this->user->id);
             })
             ->get()
             ->mapInto(UserExercise::class);

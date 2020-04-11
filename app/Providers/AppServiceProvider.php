@@ -13,6 +13,7 @@ use App\Structures\UserExerciseRepositoryInterface;
 use App\Structures\UserLessonRepository;
 use App\Structures\UserLessonRepositoryInterface;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -49,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(AuthenticatedUserExerciseRepositoryInterface::class, function () {
-            return new AuthenticatedUserExerciseRepository();
+            return new AuthenticatedUserExerciseRepository(Auth::user());
         });
 
         $this->app->bind(UserLessonRepositoryInterface::class, function () {

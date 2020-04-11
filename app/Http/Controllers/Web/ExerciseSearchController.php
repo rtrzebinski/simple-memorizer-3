@@ -18,7 +18,7 @@ class ExerciseSearchController extends Controller
         $phrase = $request->get('phrase');
 
         if ($phrase) {
-            $userExercises = $userExerciseRepository->fetchUserExercisesWithPhrase($this->user(), $phrase);
+            $userExercises = $userExerciseRepository->fetchUserExercisesWithPhrase($phrase);
         } else {
             // no results for no phrase (empty string search or parameter missing)
             $userExercises = collect();

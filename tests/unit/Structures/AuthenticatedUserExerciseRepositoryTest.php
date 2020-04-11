@@ -8,14 +8,6 @@ use Carbon\Carbon;
 
 class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 {
-    private AuthenticatedUserExerciseRepository $repository;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = new AuthenticatedUserExerciseRepository();
-    }
-
     // fetchUserExerciseOfExercise
 
     /** @test */
@@ -26,7 +18,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Exercise does not exist: 1');
 
-        $this->repository->fetchUserExerciseOfExercise($user, $exerciseId = 1);
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $repository->fetchUserExerciseOfExercise($exerciseId = 1);
     }
 
     /** @test */
@@ -47,7 +40,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
             "percent_of_good_answers" => 5,
         ]);
 
-        $result = $this->repository->fetchUserExerciseOfExercise($user, $exercise->id);
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExerciseOfExercise($exercise->id);
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -70,7 +64,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $result = $this->repository->fetchUserExerciseOfExercise($user, $exercise->id);
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExerciseOfExercise($exercise->id);
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -98,7 +93,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase)[0];
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -132,7 +128,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase)[0];
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -163,7 +160,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase)[0];
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -192,7 +190,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase)[0];
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -223,7 +222,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase)[0];
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -253,7 +253,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase)[0];
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
         $this->assertInstanceOf(UserExercise::class, $result);
         $this->assertEquals($exercise->id, $result->exercise_id);
@@ -279,7 +280,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase);
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase);
 
         $this->assertEmpty($result);
     }
@@ -297,7 +299,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
-        $result = $this->repository->fetchUserExercisesWithPhrase($user, $phrase);
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesWithPhrase($phrase);
 
         $this->assertEmpty($result);
     }
