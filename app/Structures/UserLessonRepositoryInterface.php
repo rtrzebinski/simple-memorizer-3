@@ -2,14 +2,11 @@
 
 namespace App\Structures;
 
-use App\Models\User;
-
 interface UserLessonRepositoryInterface
 {
     /**
-     * @param User|null $user
-     * @param int       $lessonId
+     * @param int $lessonId
      * @return UserLesson|null
      */
-    public function fetchUserLesson(?User $user, int $lessonId): ?UserLesson;
+    public function fetchUserLesson(int $lessonId): ?UserLesson;
 }

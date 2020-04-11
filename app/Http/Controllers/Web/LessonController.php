@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use League\Csv\Reader;
 
@@ -29,7 +30,7 @@ class LessonController extends Controller
     /**
      * @param Request $request
      * @return RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -56,7 +57,7 @@ class LessonController extends Controller
      */
     public function view(int $lessonId, UserLessonRepositoryInterface $userLessonRepository): View
     {
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+        $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         $this->authorizeForUser($this->user(), 'access', $userLesson);
 
@@ -76,7 +77,7 @@ class LessonController extends Controller
 
         $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lesson->id);
 
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lesson->id);
+        $userLesson = $userLessonRepository->fetchUserLesson($lesson->id);
 
         $data = [
                 'canModifyLesson' => Gate::forUser($this->user())->allows('modify', $lesson),
@@ -94,7 +95,7 @@ class LessonController extends Controller
      */
     public function edit(int $lessonId, UserLessonRepositoryInterface $userLessonRepository): View
     {
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+        $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         $this->authorizeForUser($this->user(), 'modify', $userLesson);
 
@@ -106,7 +107,7 @@ class LessonController extends Controller
      * @param Lesson  $lesson
      * @return RedirectResponse
      * @throws AuthorizationException
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function saveEdit(Request $request, Lesson $lesson): RedirectResponse
     {
@@ -128,7 +129,7 @@ class LessonController extends Controller
      */
     public function settings(int $lessonId, UserLessonRepositoryInterface $userLessonRepository)
     {
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+        $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         // user does not subscribe lesson
         if (!$userLesson->is_subscriber) {
@@ -142,7 +143,7 @@ class LessonController extends Controller
      * @param Request $request
      * @param Lesson  $lesson
      * @return RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function saveSettings(Request $request, Lesson $lesson): RedirectResponse
     {

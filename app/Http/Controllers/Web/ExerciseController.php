@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Models\Lesson;
 use App\Structures\UserLessonRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -18,11 +19,11 @@ class ExerciseController extends Controller
      * @param int                           $lessonId
      * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function create(int $lessonId, UserLessonRepositoryInterface $userLessonRepository): View
     {
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $lessonId);
+        $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         $this->authorizeForUser($this->user(), 'modify', $userLesson);
 
@@ -49,13 +50,13 @@ class ExerciseController extends Controller
      * @param Exercise                      $exercise
      * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function edit(Exercise $exercise, UserLessonRepositoryInterface $userLessonRepository): View
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 
-        $userLesson = $userLessonRepository->fetchUserLesson($this->user(), $exercise->lesson_id);
+        $userLesson = $userLessonRepository->fetchUserLesson($exercise->lesson_id);
 
         return view('exercises.edit', [
                 'exercise' => $exercise,

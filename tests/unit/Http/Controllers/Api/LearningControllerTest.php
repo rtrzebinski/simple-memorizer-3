@@ -9,7 +9,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class LearningControllerTest extends TestCase
 {
-
     // fetchRandomExerciseOfLesson
 
     /** @test */
