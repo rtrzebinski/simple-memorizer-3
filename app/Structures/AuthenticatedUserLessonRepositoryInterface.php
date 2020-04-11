@@ -2,26 +2,22 @@
 
 namespace App\Structures;
 
-use App\Models\User;
 use Illuminate\Support\Collection;
 
 interface AuthenticatedUserLessonRepositoryInterface
 {
     /**
-     * @param User $user
      * @return Collection
      */
-    public function fetchOwnedUserLessons(User $user): Collection;
+    public function fetchOwnedUserLessons(): Collection;
 
     /**
-     * @param User $user
      * @return Collection
      */
-    public function fetchSubscribedUserLessons(User $user): Collection;
+    public function fetchSubscribedUserLessons(): Collection;
 
     /**
-     * @param User $user
      * @return Collection
      */
-    public function fetchAvailableUserLessons(User $user): Collection;
+    public function fetchAvailableUserLessons(): Collection;
 }
