@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserExercise;
+
+use App\Structures\AbstractStructure;
 
 class UserExercise extends AbstractStructure
 {

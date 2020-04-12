@@ -8,8 +8,8 @@ use App\Policies\ExercisePolicy;
 use App\Policies\LessonPolicy;
 use App\Policies\UserExercisePolicy;
 use App\Policies\UserLessonPolicy;
-use App\Structures\UserExercise;
-use App\Structures\UserLesson;
+use App\Structures\UserExercise\UserExercise;
+use App\Structures\UserLesson\UserLesson;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

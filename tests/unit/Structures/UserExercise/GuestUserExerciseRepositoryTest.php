@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Structures;
+namespace Tests\Unit\Structures\UserExercise;
 
-use App\Structures\UserExercise;
-use App\Structures\GuestUserExerciseRepository;
+use App\Structures\UserExercise\UserExercise;
+use App\Structures\UserExercise\GuestUserExerciseRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

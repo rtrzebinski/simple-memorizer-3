@@ -3,7 +3,7 @@
 namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Services\LearningService;
-use App\Structures\UserLesson;
+use App\Structures\UserLesson\UserLesson;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class LearningControllerTest extends TestCase

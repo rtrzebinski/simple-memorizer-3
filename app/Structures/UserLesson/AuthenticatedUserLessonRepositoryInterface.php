@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserLesson;
 
 use Illuminate\Support\Collection;
 
-interface AuthenticatedUserLessonRepositoryInterface extends UserLessonRepositoryInterface
+interface AuthenticatedUserLessonRepositoryInterface extends AbstractUserLessonRepositoryInterface
 {
     /**
      * @return Collection

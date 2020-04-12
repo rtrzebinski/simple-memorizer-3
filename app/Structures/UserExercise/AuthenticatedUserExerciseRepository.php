@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserExercise;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
@@ -8,7 +8,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class AuthenticatedUserExerciseRepository implements UserExerciseRepositoryInterface, AuthenticatedUserExerciseRepositoryInterface
+class AuthenticatedUserExerciseRepository implements AbstractUserExerciseRepositoryInterface, AuthenticatedUserExerciseRepositoryInterface
 {
     private Authenticatable $user;
 

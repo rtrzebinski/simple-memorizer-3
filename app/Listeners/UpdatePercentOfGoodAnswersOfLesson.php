@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\LessonEventInterface;
 use App\Models\Lesson;
 use App\Models\User;
-use App\Structures\AuthenticatedUserExerciseRepository;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepository;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

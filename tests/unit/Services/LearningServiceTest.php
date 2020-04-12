@@ -4,9 +4,9 @@ namespace Tests\Unit\Services;
 
 use App\Models\User;
 use App\Services\LearningService;
-use App\Structures\AuthenticatedUserExerciseRepository;
-use App\Structures\UserExercise;
-use App\Structures\UserLesson;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepository;
+use App\Structures\UserExercise\UserExercise;
+use App\Structures\UserLesson\UserLesson;
 use Carbon\Carbon;
 use TestCase;
 

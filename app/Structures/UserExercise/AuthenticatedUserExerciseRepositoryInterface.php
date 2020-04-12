@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserExercise;
 
 use Illuminate\Support\Collection;
 
-interface AuthenticatedUserExerciseRepositoryInterface extends UserExerciseRepositoryInterface
+interface AuthenticatedUserExerciseRepositoryInterface extends AbstractUserExerciseRepositoryInterface
 {
     /**
      * @param int  $exerciseId

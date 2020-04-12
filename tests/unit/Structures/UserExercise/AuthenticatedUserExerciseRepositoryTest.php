@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Structures;
+namespace Tests\Unit\Structures\UserExercise;
 
 use App\Models\User;
-use App\Structures\AuthenticatedUserExerciseRepository;
-use App\Structures\UserExercise;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepository;
+use App\Structures\UserExercise\UserExercise;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

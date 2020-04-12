@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserExercise;
 
 use Illuminate\Support\Collection;
 
-interface UserExerciseRepositoryInterface
+interface AbstractUserExerciseRepositoryInterface
 {
     /**
      * @param int $lessonId

@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Structures\UserExercise;
+use App\Structures\UserExercise\UserExercise;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;

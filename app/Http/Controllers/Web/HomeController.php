@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Structures\AuthenticatedUserLessonRepositoryInterface;
+use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use Illuminate\View\View;
 
 class HomeController extends Controller

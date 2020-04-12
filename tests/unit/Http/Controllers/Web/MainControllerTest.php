@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Http\Controllers\Web;
 
-use App\Structures\UserLesson;
+use App\Structures\UserLesson\UserLesson;
 
 class MainControllerTest extends TestCase
 {

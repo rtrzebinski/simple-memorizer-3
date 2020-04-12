@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Structures\AuthenticatedUserExerciseRepository;
-use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
-use App\Structures\AuthenticatedUserLessonRepository;
-use App\Structures\AuthenticatedUserLessonRepositoryInterface;
-use App\Structures\GuestUserLessonRepository;
-use App\Structures\GuestUserLessonRepositoryInterface;
-use App\Structures\GuestUserExerciseRepository;
-use App\Structures\UserExerciseRepositoryInterface;
-use App\Structures\UserLessonRepositoryInterface;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepository;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
+use App\Structures\UserLesson\AuthenticatedUserLessonRepository;
+use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
+use App\Structures\UserLesson\GuestUserLessonRepository;
+use App\Structures\UserLesson\GuestUserLessonRepositoryInterface;
+use App\Structures\UserExercise\GuestUserExerciseRepository;
+use App\Structures\UserExercise\AbstractUserExerciseRepositoryInterface;
+use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        $this->app->bind(UserExerciseRepositoryInterface::class, function () {
+        $this->app->bind(AbstractUserExerciseRepositoryInterface::class, function () {
             if (Auth::check()) {
                 return new AuthenticatedUserExerciseRepository(Auth::user());
             }
@@ -55,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
             return new AuthenticatedUserExerciseRepository(Auth::user());
         });
 
-        $this->app->bind(UserLessonRepositoryInterface::class, function () {
+        $this->app->bind(AbstractUserLessonRepositoryInterface::class, function () {
             if (Auth::check()) {
                 return new AuthenticatedUserLessonRepository(Auth::user());
             }

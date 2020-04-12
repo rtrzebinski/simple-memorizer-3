@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Models\Exercise;
 use App\Models\User;
-use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
-use App\Structures\UserExercise;
-use App\Structures\UserLesson;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
+use App\Structures\UserExercise\UserExercise;
+use App\Structures\UserLesson\UserLesson;
 use Carbon\Carbon;
 use Exception;
 

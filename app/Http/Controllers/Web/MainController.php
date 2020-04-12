@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Structures\GuestUserLessonRepositoryInterface;
+use App\Structures\UserLesson\GuestUserLessonRepositoryInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

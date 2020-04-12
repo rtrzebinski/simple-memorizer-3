@@ -3,7 +3,7 @@
 namespace Tests\Unit\Policies;
 
 use App\Policies\UserLessonPolicy;
-use App\Structures\UserLesson;
+use App\Structures\UserLesson\UserLesson;
 
 class UserLessonPolicyTest extends \TestCase
 {

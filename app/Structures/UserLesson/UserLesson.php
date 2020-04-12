@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserLesson;
+
+use App\Structures\AbstractStructure;
 
 class UserLesson extends AbstractStructure
 {

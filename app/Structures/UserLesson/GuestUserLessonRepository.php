@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserLesson;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

@@ -4,8 +4,8 @@ use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
 use App\Models\User;
-use App\Structures\UserExercise;
-use App\Structures\UserLesson;
+use App\Structures\UserExercise\UserExercise;
+use App\Structures\UserLesson\UserLesson;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 

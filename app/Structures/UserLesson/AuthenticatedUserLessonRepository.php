@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserLesson;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\JoinClause;

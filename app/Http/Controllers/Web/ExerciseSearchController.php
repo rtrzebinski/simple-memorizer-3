@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Structures\AuthenticatedUserExerciseRepositoryInterface;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 

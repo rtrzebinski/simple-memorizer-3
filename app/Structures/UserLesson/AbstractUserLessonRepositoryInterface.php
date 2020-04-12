@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserLesson;
 
-interface UserLessonRepositoryInterface
+interface AbstractUserLessonRepositoryInterface
 {
     /**
      * @param int $lessonId

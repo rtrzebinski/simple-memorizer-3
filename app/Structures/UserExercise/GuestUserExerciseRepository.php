@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Structures;
+namespace App\Structures\UserExercise;
 
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class GuestUserExerciseRepository implements UserExerciseRepositoryInterface
+class GuestUserExerciseRepository implements AbstractUserExerciseRepositoryInterface
 {
     /**
      * @param int $lessonId
