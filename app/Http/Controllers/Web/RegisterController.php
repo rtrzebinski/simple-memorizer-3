@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\Lesson;
 use App\Models\UserRepository;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -66,5 +68,22 @@ class RegisterController extends Controller
     protected function create(array $attributes)
     {
         return $this->userRepository->create($attributes);
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param Request $request
+     * @param mixed $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        if ($request->session()->get('subscribe-lesson-id')) {
+            /** @var Lesson $lesson */
+            $lesson = Lesson::find($request->session()->get('subscribe-lesson-id'));
+            $lesson->subscribe($user);
+            return redirect($request->session()->get('subscribe-redirect-url'));
+        }
     }
 }
