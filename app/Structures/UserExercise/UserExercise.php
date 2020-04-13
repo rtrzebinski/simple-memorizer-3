@@ -4,6 +4,12 @@ namespace App\Structures\UserExercise;
 
 use App\Structures\AbstractStructure;
 
+/**
+ * Exercise details for a given User
+ *
+ * Class UserExercise
+ * @package App\Structures\UserExercise
+ */
 class UserExercise extends AbstractStructure
 {
     public ?int $exercise_id = null;

@@ -4,7 +4,13 @@ namespace App\Structures\UserLesson;
 
 use Illuminate\Support\Collection;
 
-interface AuthenticatedUserLessonRepositoryInterface extends AbstractUserLessonRepositoryInterface
+/**
+ * UserLesson operations valid for authenticated users only
+ *
+ * Interface AuthenticatedUserLessonRepositoryInterface
+ * @package App\Structures\UserLesson
+ */
+interface AuthenticatedUserLessonRepositoryInterface extends UserLessonRepositoryInterface
 {
     /**
      * @return Collection

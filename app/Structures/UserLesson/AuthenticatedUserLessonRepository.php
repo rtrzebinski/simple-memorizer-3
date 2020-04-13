@@ -7,6 +7,12 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * UserLesson operations valid for authenticated users only
+ *
+ * Class AuthenticatedUserLessonRepository
+ * @package App\Structures\UserLesson
+ */
 class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonRepositoryInterface
 {
     /**

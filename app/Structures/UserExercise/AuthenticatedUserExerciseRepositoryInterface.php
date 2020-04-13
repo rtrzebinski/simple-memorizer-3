@@ -4,7 +4,13 @@ namespace App\Structures\UserExercise;
 
 use Illuminate\Support\Collection;
 
-interface AuthenticatedUserExerciseRepositoryInterface extends AbstractUserExerciseRepositoryInterface
+/**
+ * UserExercise operations valid for authenticated users only
+ *
+ * Interface AuthenticatedUserExerciseRepositoryInterface
+ * @package App\Structures\UserExercise
+ */
+interface AuthenticatedUserExerciseRepositoryInterface extends UserExerciseRepositoryInterface
 {
     /**
      * @param int  $exerciseId

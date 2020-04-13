@@ -5,6 +5,12 @@ namespace App\Structures\UserLesson;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * UserLesson operations valid for guest users only
+ *
+ * Class GuestUserLessonRepository
+ * @package App\Structures\UserLesson
+ */
 class GuestUserLessonRepository implements GuestUserLessonRepositoryInterface
 {
     /**

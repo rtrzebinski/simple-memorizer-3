@@ -9,8 +9,8 @@ use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use App\Structures\UserLesson\GuestUserLessonRepository;
 use App\Structures\UserLesson\GuestUserLessonRepositoryInterface;
 use App\Structures\UserExercise\GuestUserExerciseRepository;
-use App\Structures\UserExercise\AbstractUserExerciseRepositoryInterface;
-use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
+use App\Structures\UserExercise\UserExerciseRepositoryInterface;
+use App\Structures\UserLesson\UserLessonRepositoryInterface;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -44,28 +44,33 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        $this->app->bind(AbstractUserExerciseRepositoryInterface::class, function () {
+        // UserExercise operations valid for all (authenticated and guest) users
+        $this->app->bind(UserExerciseRepositoryInterface::class, function () {
             if (Auth::check()) {
                 return new AuthenticatedUserExerciseRepository(Auth::user());
             }
             return new GuestUserExerciseRepository();
         });
 
+        // UserExercise operations valid for authenticated users only
         $this->app->bind(AuthenticatedUserExerciseRepositoryInterface::class, function () {
             return new AuthenticatedUserExerciseRepository(Auth::user());
         });
 
-        $this->app->bind(AbstractUserLessonRepositoryInterface::class, function () {
+        // UserLesson operations valid for all (authenticated and guest) users
+        $this->app->bind(UserLessonRepositoryInterface::class, function () {
             if (Auth::check()) {
                 return new AuthenticatedUserLessonRepository(Auth::user());
             }
             return new GuestUserLessonRepository();
         });
 
+        // UserLesson operations valid for authenticated users only
         $this->app->bind(AuthenticatedUserLessonRepositoryInterface::class, function () {
             return new AuthenticatedUserLessonRepository(Auth::user());
         });
 
+        // UserLesson operations valid for guest users only
         $this->app->bind(GuestUserLessonRepositoryInterface::class, function () {
             return new GuestUserLessonRepository();
         });

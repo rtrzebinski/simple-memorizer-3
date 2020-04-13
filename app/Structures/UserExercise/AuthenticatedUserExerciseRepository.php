@@ -8,7 +8,13 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class AuthenticatedUserExerciseRepository implements AbstractUserExerciseRepositoryInterface, AuthenticatedUserExerciseRepositoryInterface
+/**
+ * UserExercise operations valid for authenticated users only
+ *
+ * Class AuthenticatedUserExerciseRepository
+ * @package App\Structures\UserExercise
+ */
+class AuthenticatedUserExerciseRepository implements UserExerciseRepositoryInterface, AuthenticatedUserExerciseRepositoryInterface
 {
     private Authenticatable $user;
 

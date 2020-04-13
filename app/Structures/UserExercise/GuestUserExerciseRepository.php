@@ -6,7 +6,13 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class GuestUserExerciseRepository implements AbstractUserExerciseRepositoryInterface
+/**
+ * UserExercise operations valid for guest users only
+ *
+ * Class GuestUserExerciseRepository
+ * @package App\Structures\UserExercise
+ */
+class GuestUserExerciseRepository implements UserExerciseRepositoryInterface
 {
     /**
      * @param int $lessonId

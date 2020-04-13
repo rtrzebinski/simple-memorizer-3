@@ -8,24 +8,24 @@ use App\Http\Requests\FetchRandomExerciseOfLessonRequest;
 use App\Models\Exercise;
 use App\Models\Lesson;
 use App\Services\LearningService;
-use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
+use App\Structures\UserLesson\UserLessonRepositoryInterface;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
 class LearningController extends Controller
 {
     /**
-     * @param FetchRandomExerciseOfLessonRequest    $request
-     * @param LearningService                       $learningService
-     * @param AbstractUserLessonRepositoryInterface $userLessonRepository
-     * @param Lesson                                $lesson
+     * @param FetchRandomExerciseOfLessonRequest $request
+     * @param LearningService                    $learningService
+     * @param UserLessonRepositoryInterface      $userLessonRepository
+     * @param Lesson                             $lesson
      * @return JsonResponse
      * @throws Exception
      */
     public function fetchRandomExerciseOfLesson(
         FetchRandomExerciseOfLessonRequest $request,
         LearningService $learningService,
-        AbstractUserLessonRepositoryInterface $userLessonRepository,
+        UserLessonRepositoryInterface $userLessonRepository,
         Lesson $lesson
     ): JsonResponse {
         $userLesson = $userLessonRepository->fetchUserLesson($lesson->id);

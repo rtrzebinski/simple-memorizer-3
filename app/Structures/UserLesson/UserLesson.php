@@ -4,6 +4,12 @@ namespace App\Structures\UserLesson;
 
 use App\Structures\AbstractStructure;
 
+/**
+ * Lesson details for a given User
+ *
+ * Class UserLesson
+ * @package App\Structures\UserLesson
+ */
 class UserLesson extends AbstractStructure
 {
     public ?int $user_id = null;
