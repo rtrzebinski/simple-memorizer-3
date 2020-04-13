@@ -11,7 +11,6 @@ use App\Structures\UserLesson\GuestUserLessonRepositoryInterface;
 use App\Structures\UserExercise\GuestUserExerciseRepository;
 use App\Structures\UserExercise\UserExerciseRepositoryInterface;
 use App\Structures\UserLesson\UserLessonRepositoryInterface;
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -35,10 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(IdeHelperServiceProvider::class);
-        }
-
         // force HTTPS on production
         if ($this->app->environment() === 'production') {
             URL::forceScheme('https');
