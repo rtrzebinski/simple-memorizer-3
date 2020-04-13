@@ -11,6 +11,12 @@
 |
 */
 
+// all users
+
+Route::post('/lessons/{lesson}/subscribe', 'Web\LessonController@subscribe');
+
+Route::post('/lessons/{lesson}/subscribe-and-learn', 'Web\LessonController@subscribeAndLearn');
+
 // authorised users only
 
 Route::group(['middleware' => ['auth']], function () {
@@ -35,11 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::delete('/lessons/{lesson}', 'Web\LessonController@delete');
 
-    Route::post('/lessons/{lesson}/subscribe', 'Web\LessonController@subscribe');
-
     Route::post('/lessons/{lesson}/unsubscribe', 'Web\LessonController@unsubscribe');
-
-    Route::post('/lessons/{lesson}/subscribe-and-learn', 'Web\LessonController@subscribeAndLearn');
 
     Route::get('/lessons/{lesson}/csv', 'Web\LessonController@exportCsv');
 

@@ -9,6 +9,7 @@ use App\Models\Lesson;
 use App\Structures\UserExercise\UserExerciseRepositoryInterface;
 use App\Structures\UserLesson\UserLessonRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,11 +47,11 @@ class LessonController extends Controller
         // always subscribe owned lesson
         $lesson->subscribe($this->user());
 
-        return redirect('/lessons/'.$lesson->id);
+        return redirect('/lessons/' . $lesson->id);
     }
 
     /**
-     * @param int                           $lessonId
+     * @param int $lessonId
      * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
@@ -65,8 +66,8 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson                          $lesson
-     * @param UserLessonRepositoryInterface   $userLessonRepository
+     * @param Lesson $lesson
+     * @param UserLessonRepositoryInterface $userLessonRepository
      * @param UserExerciseRepositoryInterface $userExerciseRepository
      * @return mixed
      * @throws AuthorizationException
@@ -88,7 +89,7 @@ class LessonController extends Controller
     }
 
     /**
-     * @param int                           $lessonId
+     * @param int $lessonId
      * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
@@ -104,7 +105,7 @@ class LessonController extends Controller
 
     /**
      * @param Request $request
-     * @param Lesson  $lesson
+     * @param Lesson $lesson
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws ValidationException
@@ -119,11 +120,11 @@ class LessonController extends Controller
         ]);
 
         $lesson->update($request->all());
-        return redirect('/lessons/'.$lesson->id.'/edit');
+        return redirect('/lessons/' . $lesson->id . '/edit');
     }
 
     /**
-     * @param int                           $lessonId
+     * @param int $lessonId
      * @param UserLessonRepositoryInterface $userLessonRepository
      * @return View|Response
      */
@@ -141,14 +142,14 @@ class LessonController extends Controller
 
     /**
      * @param Request $request
-     * @param Lesson  $lesson
+     * @param Lesson $lesson
      * @return RedirectResponse
      * @throws ValidationException
      */
     public function saveSettings(Request $request, Lesson $lesson): RedirectResponse
     {
         if (!Gate::forUser($this->user())->denies('subscribe', $lesson)) {
-            return redirect('/lessons/'.$lesson->id);
+            return redirect('/lessons/' . $lesson->id);
         }
 
         $this->validate($request, [
@@ -160,7 +161,7 @@ class LessonController extends Controller
             'bidirectional' => $request->bidirectional,
         ]);
 
-        return redirect('/lessons/'.$lesson->id.'/settings');
+        return redirect('/lessons/' . $lesson->id . '/settings');
     }
 
     /**
@@ -181,10 +182,21 @@ class LessonController extends Controller
      */
     public function subscribe(Lesson $lesson): RedirectResponse
     {
-        if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
-            $lesson->subscribe($this->user());
+        $redirectUrl = '/home';
+
+        // authenticated user
+        if (Auth::check()) {
+            if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
+                $lesson->subscribe($this->user());
+            }
+            return redirect($redirectUrl);
         }
-        return back();
+
+        // guest user
+        session()->put('subscribe-lesson-id', $lesson->id);
+        session()->put('subscribe-redirect-url', $redirectUrl);
+
+        return redirect('/login');
     }
 
     /**
@@ -206,10 +218,21 @@ class LessonController extends Controller
      */
     public function subscribeAndLearn(Lesson $lesson): RedirectResponse
     {
-        if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
-            $lesson->subscribe($this->user());
+        $redirectUrl = '/learn/lessons/' . $lesson->id;
+
+        // authenticated user
+        if (Auth::check()) {
+            if (Gate::forUser($this->user())->allows('subscribe', $lesson)) {
+                $lesson->subscribe($this->user());
+            }
+            return redirect($redirectUrl);
         }
-        return redirect('/learn/lessons/'.$lesson->id);
+
+        // guest user
+        session()->put('subscribe-lesson-id', $lesson->id);
+        session()->put('subscribe-redirect-url', $redirectUrl);
+
+        return redirect('/login');
     }
 
     /**
@@ -241,15 +264,15 @@ class LessonController extends Controller
             ]);
         }
 
-        $filename = $lesson->name.'.csv';
+        $filename = $lesson->name . '.csv';
 
         return response((string)$writer, 200)
             ->header('Content-type', 'application/force-download')
-            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 
     /**
-     * @param Lesson                 $lesson
+     * @param Lesson $lesson
      * @param LessonImportCsvRequest $request
      * @return RedirectResponse
      */
@@ -280,6 +303,6 @@ class LessonController extends Controller
             $exerciseResult->save();
         }
 
-        return redirect('/lessons/'.$lesson->id);
+        return redirect('/lessons/' . $lesson->id);
     }
 }

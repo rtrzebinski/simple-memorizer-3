@@ -518,8 +518,6 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
             'percent_of_good_answers' => 66,
         ]);
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
-
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
@@ -546,11 +544,9 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $phrase = uniqid();
 
-        $question = uniqid().$phrase.uniqid();
+        $question = uniqid() . $phrase . uniqid();
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $question]);
-
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
@@ -580,8 +576,6 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'answer' => $phrase]);
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
-
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
@@ -608,11 +602,9 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $phrase = uniqid();
 
-        $answer = uniqid().$phrase.uniqid();
+        $answer = uniqid() . $phrase . uniqid();
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'answer' => $answer]);
-
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
@@ -643,8 +635,6 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
-
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
 
@@ -670,8 +660,6 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $phrase = uniqid();
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
-
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase);
 
@@ -688,8 +676,6 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         // lesson of another user
         $lesson = $this->createPrivateLesson();
         $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
-
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase);
