@@ -10,8 +10,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use League\Csv\Writer;
-use SplTempFileObject;
 
 class Controller extends BaseController
 {
@@ -24,20 +22,6 @@ class Controller extends BaseController
     protected function user()
     {
         return Auth::guard('web')->user();
-    }
-
-    /**
-     * @return Writer
-     */
-    protected function createCsvWriter(): Writer
-    {
-        //the CSV file will be created using a temporary File
-        $writer = Writer::createFromFileObject(new SplTempFileObject);
-        //the delimiter will be the tab character
-        $writer->setDelimiter(",");
-        //use windows line endings for compatibility with some csv libraries
-        $writer->setNewline("\r\n");
-        return $writer;
     }
 
     /**

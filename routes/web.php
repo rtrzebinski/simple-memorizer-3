@@ -43,13 +43,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/{lesson}/unsubscribe', 'Web\LessonController@unsubscribe');
 
-    Route::get('/lessons/{lesson}/csv', 'Web\LessonController@exportCsv');
-
-    Route::post('/lessons/{lesson}/csv', 'Web\LessonController@importCsv');
-
     Route::get('/lessons/aggregate/{parentLesson}', 'Web\LessonAggregateController@index');
 
     Route::post('/lessons/aggregate/{parentLesson}', 'Web\LessonAggregateController@sync');
+
+    // lesson CSV export and import
+
+    Route::get('/lessons/{lesson}/csv', 'Web\LessonCsvController@exportLessonToCsv');
+
+    Route::post('/lessons/{lesson}/csv', 'Web\LessonCsvController@importLessonFromCsv');
 
     // exercises
 
