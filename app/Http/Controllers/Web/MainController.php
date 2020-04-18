@@ -25,7 +25,7 @@ class MainController extends Controller
         return view('home', [
             'ownedLessons' => [],
             'subscribedLessons' => [],
-            'availableLessons' => $userLessonRepository->fetchPublicUserLessons(),
+            'availableLessons' => $userLessonRepository->fetchAvailableUserLessons(),
             'userHasOwnedOrSubscribedLessons' => false,
         ]);
     }

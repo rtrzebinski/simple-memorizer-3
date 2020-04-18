@@ -2,6 +2,8 @@
 
 namespace App\Structures\UserLesson;
 
+use Illuminate\Support\Collection;
+
 /**
  * UserLesson operations valid for all (authenticated and guest) users
  *
@@ -15,4 +17,9 @@ interface UserLessonRepositoryInterface
      * @return UserLesson|null
      */
     public function fetchUserLesson(int $lessonId): ?UserLesson;
+
+    /**
+     * @return Collection
+     */
+    public function fetchAvailableUserLessons(): Collection;
 }

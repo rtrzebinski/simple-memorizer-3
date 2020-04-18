@@ -42,7 +42,7 @@ class GuestUserLessonRepository implements GuestUserLessonRepositoryInterface
     /**
      * @return Collection
      */
-    public function fetchPublicUserLessons(): Collection
+    public function fetchAvailableUserLessons(): Collection
     {
         return DB::table('lessons')
             ->select([

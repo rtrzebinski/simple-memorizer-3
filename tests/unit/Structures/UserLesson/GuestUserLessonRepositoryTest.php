@@ -223,13 +223,13 @@ class GuestUserLessonRepositoryTest extends \TestCase
     // fetchPublicUserLessons
 
     /** @test */
-    public function itShould_fetchPublicUserLessons()
+    public function itShould_fetchAvailableUserLessons_guest()
     {
         $publicLesson = $this->createPublicLesson();
         $privateLesson = $this->createPrivateLesson();
 
         $repository = new GuestUserLessonRepository();
-        $result = $repository->fetchPublicUserLessons();
+        $result = $repository->fetchAvailableUserLessons();
 
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(1, $result);

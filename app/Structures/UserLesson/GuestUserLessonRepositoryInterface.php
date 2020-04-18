@@ -2,8 +2,6 @@
 
 namespace App\Structures\UserLesson;
 
-use Illuminate\Support\Collection;
-
 /**
  * UserLesson operations valid for guest users only
  *
@@ -12,8 +10,5 @@ use Illuminate\Support\Collection;
  */
 interface GuestUserLessonRepositoryInterface extends UserLessonRepositoryInterface
 {
-    /**
-     * @return Collection
-     */
-    public function fetchPublicUserLessons(): Collection;
+
 }

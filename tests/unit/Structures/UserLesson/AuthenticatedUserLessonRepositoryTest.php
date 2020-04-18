@@ -306,7 +306,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     // fetchAvailableUserLessons
 
     /** @test */
-    public function itShould_fetchAvailableUserLessons()
+    public function itShould_fetchAvailableUserLessons_authenticated()
     {
         $this->be($user = $this->createUser());
         $availableLesson = $this->createLesson();
@@ -338,7 +338,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     }
 
     /** @test */
-    public function itShould_fetchAvailableUserLessons_excludePrivateLessonsOfAnotherUsers()
+    public function itShould_fetchAvailableUserLessons_authenticated_excludePrivateLessonsOfAnotherUsers()
     {
         $this->be($user = $this->createUser());
 

@@ -21,9 +21,4 @@ interface AuthenticatedUserLessonRepositoryInterface extends UserLessonRepositor
      * @return Collection
      */
     public function fetchSubscribedUserLessons(): Collection;
-
-    /**
-     * @return Collection
-     */
-    public function fetchAvailableUserLessons(): Collection;
 }
