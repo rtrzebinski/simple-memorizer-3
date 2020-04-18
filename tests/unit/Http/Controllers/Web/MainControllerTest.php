@@ -20,6 +20,7 @@ class MainControllerTest extends TestCase
     public function itShould_displayMainPage_notAuthenticatedUser()
     {
         $publicLesson = $this->createPublicLesson();
+        $this->createExercisesRequiredToLearnLesson($publicLesson->id);
         $this->createPrivateLesson();
 
         $this->call('GET', '/');

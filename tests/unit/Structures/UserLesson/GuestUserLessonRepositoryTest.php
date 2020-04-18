@@ -223,10 +223,14 @@ class GuestUserLessonRepositoryTest extends \TestCase
     // fetchPublicUserLessons
 
     /** @test */
-    public function itShould_fetchAvailableUserLessons_guest()
+    public function itShould_fetchAvailableUserLessons_guest_excludePrivateLessons()
     {
         $publicLesson = $this->createPublicLesson();
-        $privateLesson = $this->createPrivateLesson();
+
+        $this->createExercisesRequiredToLearnLesson($publicLesson->id);
+
+        // private lesson should be excluded
+        $this->createPrivateLesson();
 
         $repository = new GuestUserLessonRepository();
         $result = $repository->fetchAvailableUserLessons();
@@ -242,12 +246,24 @@ class GuestUserLessonRepositoryTest extends \TestCase
         $this->assertEquals($publicLesson->owner_id, $result->owner_id);
         $this->assertEquals($publicLesson->name, $result->name);
         $this->assertEquals($publicLesson->visibility, $result->visibility);
-        $this->assertEquals($publicLesson->exercises_count, $result->exercises_count);
+        $this->assertEquals(config('app.min_exercises_to_learn_lesson'), $result->exercises_count);
         $this->assertEquals($publicLesson->subscribers_count, $result->subscribers_count);
         $this->assertEquals($publicLesson->child_lessons_count, $result->child_lessons_count);
         $this->assertEquals(0, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+    }
+
+    /** @test */
+    public function itShould_fetchAvailableUserLessons_guest_excludeLessonsWithNotEnoughExercisesRequiredToLearn()
+    {
+        $this->createPublicLesson();
+
+        $repository = new GuestUserLessonRepository();
+        $result = $repository->fetchAvailableUserLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(0, $result);
     }
 
 }

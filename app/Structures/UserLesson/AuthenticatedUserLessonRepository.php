@@ -149,6 +149,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
             })
             ->whereNull('lu.id')
             ->where('l.visibility', '=', 'public')
+            ->where('l.exercises_count', '>=', config('app.min_exercises_to_learn_lesson'))
             ->get()
             ->mapInto(UserLesson::class);
     }

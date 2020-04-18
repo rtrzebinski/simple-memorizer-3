@@ -11,7 +11,8 @@ class HomeControllerTest extends TestCase
     {
         $this->be($user = $this->createUser());
         // availableLessons
-        $this->createLesson();
+        $availableLesson = $this->createLesson();
+        $this->createExercisesRequiredToLearnLesson($availableLesson->id);
         // subscribedLessons
         $subscribed = $this->createLesson();
         $subscribed->subscribe($user);

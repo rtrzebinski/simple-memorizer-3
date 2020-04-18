@@ -306,14 +306,16 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     // fetchAvailableUserLessons
 
     /** @test */
-    public function itShould_fetchAvailableUserLessons_authenticated()
+    public function itShould_fetchAvailableUserLessons_authenticated_excludeOwnedLessonsOfAllTypes()
     {
         $this->be($user = $this->createUser());
+
         $availableLesson = $this->createLesson();
-        $subscribedLesson = $this->createLesson();
-        $subscribedLesson->subscribe($user);
-        $ownedPublicLesson = $this->createPublicLesson($user);
-        $ownedPrivateLesson = $this->createPrivateLesson($user);
+        $this->createExercisesRequiredToLearnLesson($availableLesson->id);
+
+        // exclude
+        $this->createPublicLesson($user);
+        $this->createPrivateLesson($user);
 
         $repository = new AuthenticatedUserLessonRepository($user);
         $result = $repository->fetchAvailableUserLessons();
@@ -329,7 +331,41 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals($availableLesson->owner_id, $result->owner_id);
         $this->assertEquals($availableLesson->name, $result->name);
         $this->assertEquals($availableLesson->visibility, $result->visibility);
-        $this->assertEquals($availableLesson->exercises_count, $result->exercises_count);
+        $this->assertEquals(config('app.min_exercises_to_learn_lesson'), $result->exercises_count);
+        $this->assertEquals($availableLesson->subscribers_count, $result->subscribers_count);
+        $this->assertEquals($availableLesson->child_lessons_count, $result->child_lessons_count);
+        $this->assertEquals(0, $result->is_subscriber);
+        $this->assertEquals(0, $result->is_bidirectional);
+        $this->assertEquals(0, $result->percent_of_good_answers);
+    }
+
+    /** @test */
+    public function itShould_fetchAvailableUserLessons_authenticated_excludeSubscribedLessons()
+    {
+        $this->be($user = $this->createUser());
+
+        $availableLesson = $this->createLesson();
+        $this->createExercisesRequiredToLearnLesson($availableLesson->id);
+
+        // exclude
+        $subscribedLesson = $this->createLesson();
+        $subscribedLesson->subscribe($user);
+
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchAvailableUserLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(1, $result);
+
+        /** @var UserLesson $result */
+        $result = $result[0];
+        $this->assertInstanceOf(UserLesson::class, $result);
+        $this->assertEquals($user->id, $result->user_id);
+        $this->assertEquals($availableLesson->id, $result->lesson_id);
+        $this->assertEquals($availableLesson->owner_id, $result->owner_id);
+        $this->assertEquals($availableLesson->name, $result->name);
+        $this->assertEquals($availableLesson->visibility, $result->visibility);
+        $this->assertEquals(config('app.min_exercises_to_learn_lesson'), $result->exercises_count);
         $this->assertEquals($availableLesson->subscribers_count, $result->subscribers_count);
         $this->assertEquals($availableLesson->child_lessons_count, $result->child_lessons_count);
         $this->assertEquals(0, $result->is_subscriber);
@@ -342,9 +378,25 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     {
         $this->be($user = $this->createUser());
 
-        $this->createLesson([
+        $lesson = $this->createLesson([
             'visibility' => 'private',
         ]);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchAvailableUserLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(0, $result);
+    }
+
+    /** @test */
+    public function itShould_fetchAvailableUserLessons_authenticated_excludeLessonsWithNotEnoughExercisesRequiredToLearn()
+    {
+        $this->be($user = $this->createUser());
+
+        // lesson without exercises
+        $lesson = $this->createLesson();
 
         $repository = new AuthenticatedUserLessonRepository($user);
         $result = $repository->fetchAvailableUserLessons();

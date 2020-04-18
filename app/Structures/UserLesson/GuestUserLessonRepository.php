@@ -59,6 +59,7 @@ class GuestUserLessonRepository implements GuestUserLessonRepositoryInterface
             ])
             ->from('lessons AS l')
             ->where('l.visibility', '=', 'public')
+            ->where('l.exercises_count', '>=', config('app.min_exercises_to_learn_lesson'))
             ->get()
             ->mapInto(UserLesson::class);
     }
