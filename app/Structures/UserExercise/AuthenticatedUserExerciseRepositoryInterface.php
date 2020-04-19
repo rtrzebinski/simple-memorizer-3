@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
  * Interface AuthenticatedUserExerciseRepositoryInterface
  * @package App\Structures\UserExercise
  */
-interface AuthenticatedUserExerciseRepositoryInterface extends UserExerciseRepositoryInterface
+interface AuthenticatedUserExerciseRepositoryInterface extends AbstractUserExerciseRepositoryInterface
 {
     /**
      * @param int  $exerciseId

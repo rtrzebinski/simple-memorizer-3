@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  * Class GuestUserLessonRepository
  * @package App\Structures\UserLesson
  */
-class GuestUserLessonRepository implements GuestUserLessonRepositoryInterface
+class GuestUserLessonRepository implements AbstractUserLessonRepositoryInterface
 {
     /**
      * @param int $lessonId

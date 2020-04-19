@@ -5,12 +5,12 @@ namespace App\Structures\UserLesson;
 use Illuminate\Support\Collection;
 
 /**
- * UserLesson operations valid for all (authenticated and guest) users
+ * UserLesson operations valid for all users
  *
  * Interface UserLessonRepositoryInterface
  * @package App\Structures\UserLesson
  */
-interface UserLessonRepositoryInterface
+interface AbstractUserLessonRepositoryInterface
 {
     /**
      * @param int $lessonId

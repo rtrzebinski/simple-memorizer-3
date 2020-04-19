@@ -5,12 +5,11 @@ namespace App\Providers;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepository;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserExercise\GuestUserExerciseRepository;
-use App\Structures\UserExercise\UserExerciseRepositoryInterface;
+use App\Structures\UserExercise\AbstractUserExerciseRepositoryInterface;
 use App\Structures\UserLesson\AuthenticatedUserLessonRepository;
 use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use App\Structures\UserLesson\GuestUserLessonRepository;
-use App\Structures\UserLesson\GuestUserLessonRepositoryInterface;
-use App\Structures\UserLesson\UserLessonRepositoryInterface;
+use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,8 +32,8 @@ class StructuresServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // UserExercise operations valid for all (authenticated and guest) users
-        $this->app->bind(UserExerciseRepositoryInterface::class, function () {
+        // UserExercise operations valid for all users
+        $this->app->bind(AbstractUserExerciseRepositoryInterface::class, function () {
             if (Auth::check()) {
                 return new AuthenticatedUserExerciseRepository(Auth::user());
             }
@@ -46,8 +45,8 @@ class StructuresServiceProvider extends ServiceProvider
             return new AuthenticatedUserExerciseRepository(Auth::user());
         });
 
-        // UserLesson operations valid for all (authenticated and guest) users
-        $this->app->bind(UserLessonRepositoryInterface::class, function () {
+        // UserLesson operations valid for all users
+        $this->app->bind(AbstractUserLessonRepositoryInterface::class, function () {
             if (Auth::check()) {
                 return new AuthenticatedUserLessonRepository(Auth::user());
             }
@@ -57,11 +56,6 @@ class StructuresServiceProvider extends ServiceProvider
         // UserLesson operations valid for authenticated users only
         $this->app->bind(AuthenticatedUserLessonRepositoryInterface::class, function () {
             return new AuthenticatedUserLessonRepository(Auth::user());
-        });
-
-        // UserLesson operations valid for guest users only
-        $this->app->bind(GuestUserLessonRepositoryInterface::class, function () {
-            return new GuestUserLessonRepository();
         });
     }
 }

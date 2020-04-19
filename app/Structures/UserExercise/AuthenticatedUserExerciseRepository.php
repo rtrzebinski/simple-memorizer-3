@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
  * Class AuthenticatedUserExerciseRepository
  * @package App\Structures\UserExercise
  */
-class AuthenticatedUserExerciseRepository implements UserExerciseRepositoryInterface, AuthenticatedUserExerciseRepositoryInterface
+class AuthenticatedUserExerciseRepository implements AbstractUserExerciseRepositoryInterface, AuthenticatedUserExerciseRepositoryInterface
 {
     private Authenticatable $user;
 

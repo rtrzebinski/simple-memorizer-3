@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
  * Class GuestUserExerciseRepository
  * @package App\Structures\UserExercise
  */
-class GuestUserExerciseRepository implements UserExerciseRepositoryInterface
+class GuestUserExerciseRepository implements AbstractUserExerciseRepositoryInterface
 {
     /**
      * @param int $lessonId

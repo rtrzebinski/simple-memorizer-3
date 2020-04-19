@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
  * Interface AuthenticatedUserLessonRepositoryInterface
  * @package App\Structures\UserLesson
  */
-interface AuthenticatedUserLessonRepositoryInterface extends UserLessonRepositoryInterface
+interface AuthenticatedUserLessonRepositoryInterface extends AbstractUserLessonRepositoryInterface
 {
     /**
      * @return Collection

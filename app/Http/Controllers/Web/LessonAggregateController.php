@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Web;
 use App\Events\LessonAggregatesUpdated;
 use App\Http\Requests\SyncLessonAggregateRequest;
 use App\Models\Lesson;
-use App\Structures\UserLesson\UserLessonRepositoryInterface;
+use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
 use Illuminate\View\View;
 use \Illuminate\Http\RedirectResponse;
 
 class LessonAggregateController extends Controller
 {
     /**
-     * @param Lesson                        $parentLesson
-     * @param UserLessonRepositoryInterface $userLessonRepository
+     * @param Lesson                                $parentLesson
+     * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      */
-    public function index(Lesson $parentLesson, UserLessonRepositoryInterface $userLessonRepository)
+    public function index(Lesson $parentLesson, AbstractUserLessonRepositoryInterface $userLessonRepository)
     {
         // all lessons owned by user
         $ownedLessons = $this->user()->ownedLessons;
