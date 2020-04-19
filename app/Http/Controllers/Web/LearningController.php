@@ -8,9 +8,10 @@ use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Services\LearningService;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
-use App\Structures\UserExercise\AbstractUserExerciseRepositoryInterface;
 use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
+use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -57,15 +58,15 @@ class LearningController extends Controller
     }
 
     /**
-     * @param int                                     $lessonId
-     * @param Request                                 $request
-     * @param LearningService                         $learningService
-     * @param AbstractUserExerciseRepositoryInterface $userExerciseRepository
-     * @param AbstractUserLessonRepositoryInterface   $userLessonRepository
+     * @param int                                          $lessonId
+     * @param Request                                      $request
+     * @param LearningService                              $learningService
+     * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+     * @param AuthenticatedUserLessonRepositoryInterface   $userLessonRepository
      * @return View
      * @throws Exception
      */
-    public function handleAnswer(int $lessonId, Request $request, LearningService $learningService, AbstractUserExerciseRepositoryInterface $userExerciseRepository, AbstractUserLessonRepositoryInterface $userLessonRepository)
+    public function handleAnswer(int $lessonId, Request $request, LearningService $learningService, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository, AuthenticatedUserLessonRepositoryInterface $userLessonRepository)
     {
         $this->validate($request, [
             'answer' => 'required|in:good,bad',
@@ -90,7 +91,7 @@ class LearningController extends Controller
      * @param int                   $lessonId
      * @param UpdateExerciseRequest $request
      * @return RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function updateExercise(Exercise $exercise, int $lessonId, UpdateExerciseRequest $request): RedirectResponse
     {
