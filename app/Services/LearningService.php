@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Exercise;
-use App\Models\User;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserExercise\UserExercise;
 use App\Structures\UserLesson\UserLesson;
@@ -35,12 +34,11 @@ class LearningService
      * Fetch pseudo random exercise of lesson. Should be served to a user in learning mode.
      *
      * @param UserLesson $userLesson
-     * @param User       $user
      * @param int|null   $previousExerciseId
      * @return Exercise|null
      * @throws Exception
      */
-    public function fetchRandomExerciseOfLesson(UserLesson $userLesson, User $user, int $previousExerciseId = null): ?UserExercise
+    public function fetchRandomExerciseOfLesson(UserLesson $userLesson, int $previousExerciseId = null): ?UserExercise
     {
         $userExercises = $this->authenticatedUserExerciseRepository->fetchUserExercisesOfLesson($userLesson->lesson_id)
             ->filter(function (UserExercise $userExercise) use ($previousExerciseId) {

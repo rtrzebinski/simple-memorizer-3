@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Http\Controllers\Api;
 
-use App\Models\User;
 use App\Services\LearningService;
 use App\Structures\UserLesson\UserLesson;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,7 +25,7 @@ class LearningControllerTest extends TestCase
         $this->instance(LearningService::class, $learningService);
 
         $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(UserLesson::class), $this->isInstanceOf(User::class), $previous->id)
+            ->with($this->isInstanceOf(UserLesson::class), $previous->id)
             ->willReturn($userExercise);
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
@@ -87,7 +86,7 @@ class LearningControllerTest extends TestCase
         $this->instance(LearningService::class, $learningService);
 
         $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(UserLesson::class), $this->isInstanceOf(User::class))
+            ->with($this->isInstanceOf(UserLesson::class))
             ->willReturn(null);
 
         $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', [], $user);

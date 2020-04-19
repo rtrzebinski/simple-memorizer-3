@@ -29,7 +29,7 @@ class LearningController extends Controller
         Lesson $lesson
     ): JsonResponse {
         $userLesson = $userLessonRepository->fetchUserLesson($lesson->id);
-        $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $this->user(), $request->previous_exercise_id);
+        $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $request->previous_exercise_id);
         return $this->response($userExercise);
     }
 

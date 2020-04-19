@@ -26,7 +26,7 @@ class LearningControllerTest extends TestCase
         $this->instance(LearningService::class, $learningService);
 
         $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(UserLesson::class), $user)
+            ->with($this->isInstanceOf(UserLesson::class))
             ->willReturn($userExercise);
 
         $this->call('GET', '/learn/lessons/'.$lesson->id);
@@ -53,7 +53,7 @@ class LearningControllerTest extends TestCase
         $this->instance(LearningService::class, $learningService);
 
         $learningService->method('fetchRandomExerciseOfLesson')
-            ->with($this->isInstanceOf(UserLesson::class), $user, $previous->id)
+            ->with($this->isInstanceOf(UserLesson::class), $previous->id)
             ->willReturn($userExercise);
 
         $this->call('GET', '/learn/lessons/'.$lesson->id.'?previous_exercise_id='.$previous->id);

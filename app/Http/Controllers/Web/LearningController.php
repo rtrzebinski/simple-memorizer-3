@@ -46,7 +46,7 @@ class LearningController extends Controller
             // ensure user can access this exercise
             $this->authorizeForUser($this->user(), 'access', $userExercise);
         } else {
-            $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $this->user(), $request->get('previous_exercise_id'));
+            $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $request->get('previous_exercise_id'));
         }
 
         return view('learn.learn', [
