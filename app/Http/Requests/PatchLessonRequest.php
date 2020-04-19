@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Lesson;
+
 /**
  * @property mixed lesson_id
  */
@@ -25,7 +27,7 @@ class PatchLessonRequest extends Request
     public function rules()
     {
         return [
-            'visibility' => 'in:public,private',
+            'visibility' => 'in:'.implode(',', Lesson::VISIBILITIES),
             'name' => 'string',
         ];
     }

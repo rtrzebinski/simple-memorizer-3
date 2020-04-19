@@ -42,6 +42,14 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 class Lesson extends Model
 {
+    const VISIBILITY_PUBLIC = 'public';
+    const VISIBILITY_PRIVATE = 'private';
+
+    const VISIBILITIES = [
+        self::VISIBILITY_PUBLIC,
+        self::VISIBILITY_PRIVATE,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

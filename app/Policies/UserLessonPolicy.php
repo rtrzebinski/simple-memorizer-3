@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Lesson;
 use App\Structures\UserLesson\UserLesson;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
@@ -19,7 +20,7 @@ class UserLessonPolicy
      */
     public function access(?User $user, UserLesson $userLesson): bool
     {
-        return $userLesson->visibility == 'public' || $user->id == $userLesson->owner_id;
+        return $userLesson->visibility == Lesson::VISIBILITY_PUBLIC || $user->id == $userLesson->owner_id;
     }
 
     /**

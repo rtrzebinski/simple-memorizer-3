@@ -17,7 +17,7 @@ class LessonController extends Controller
     public function storeLesson(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'visibility' => 'required|in:public,private',
+            'visibility' => 'required|in:'.implode(',', Lesson::VISIBILITIES),
             'name' => 'required|string',
         ]);
 

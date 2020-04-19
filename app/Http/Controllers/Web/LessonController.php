@@ -32,7 +32,7 @@ class LessonController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
-            'visibility' => 'required|in:public,private',
+            'visibility' => 'required|in:'.implode(',', Lesson::VISIBILITIES),
             'name' => 'required|string',
         ]);
 
@@ -111,7 +111,7 @@ class LessonController extends Controller
         $this->authorizeForUser($this->user(), 'modify', $lesson);
 
         $this->validate($request, [
-            'visibility' => 'required|in:public,private',
+            'visibility' => 'required|in:'.implode(',', Lesson::VISIBILITIES),
             'name' => 'required|string',
         ]);
 

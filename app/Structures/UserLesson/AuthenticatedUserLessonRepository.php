@@ -2,6 +2,7 @@
 
 namespace App\Structures\UserLesson;
 
+use App\Models\Lesson;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -148,7 +149,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                     ->where('lu.user_id', '=', $this->user->id);
             })
             ->whereNull('lu.id')
-            ->where('l.visibility', '=', 'public')
+            ->where('l.visibility', '=', Lesson::VISIBILITY_PUBLIC)
             ->where('l.exercises_count', '>=', config('app.min_exercises_to_learn_lesson'))
             ->get()
             ->mapInto(UserLesson::class);

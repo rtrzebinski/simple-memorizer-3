@@ -2,6 +2,7 @@
 
 namespace App\Structures\UserLesson;
 
+use App\Models\Lesson;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -58,7 +59,7 @@ class GuestUserLessonRepository implements AbstractUserLessonRepositoryInterface
                 DB::raw('0 AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
-            ->where('l.visibility', '=', 'public')
+            ->where('l.visibility', '=', Lesson::VISIBILITY_PUBLIC)
             ->where('l.exercises_count', '>=', config('app.min_exercises_to_learn_lesson'))
             ->get()
             ->mapInto(UserLesson::class);

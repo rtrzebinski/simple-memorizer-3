@@ -20,7 +20,7 @@ class LessonPolicy
      */
     public function access(User $user = null, Lesson $lesson): bool
     {
-        if ($lesson->visibility == 'public') {
+        if ($lesson->visibility == Lesson::VISIBILITY_PUBLIC) {
             return true;
         }
 
@@ -30,7 +30,7 @@ class LessonPolicy
 
         return Lesson::whereId($lesson->id)
             ->where(function (Builder $query) use ($user) {
-                $query->where('visibility', '=', 'public')
+                $query->where('visibility', '=', Lesson::VISIBILITY_PUBLIC)
                     ->orWhere('owner_id', '=', $user->id);
             })
             ->exists();
@@ -63,7 +63,7 @@ class LessonPolicy
         return Lesson::query()
             ->where('lessons.id', '=', $lesson->id)
             ->where('lessons.owner_id', '!=', $user->id)
-            ->where('lessons.visibility', '=', 'public')
+            ->where('lessons.visibility', '=', Lesson::VISIBILITY_PUBLIC)
             ->whereNotIn('lessons.id', $user->subscribedLessons()->pluck('lessons.id'))
             ->exists();
     }
