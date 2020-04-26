@@ -18,7 +18,7 @@ class UpdateNumberOfGoodAnswersOfExerciseTest extends \TestCase
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson]);
 
-        $this->assertEquals(0, $exercise->numberOfBadAnswersOfUser($user->id));
+        $this->assertEquals(0, $this->numberOfBadAnswers($exercise, $user->id));
 
         $listener = new UpdateNumberOfGoodAnswersOfExercise();
         $event = new ExerciseGoodAnswer($exercise->id, $user);

@@ -83,7 +83,7 @@ class ExerciseControllerTest extends TestCase
         // because 0 should be the result percent_of_good_answers after first exercise is stored
         $lesson->subscribedUsers[0]->pivot->percent_of_good_answers = 20;
         $lesson->subscribedUsers[0]->pivot->save();
-        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
         $parameters = [
             'question' => uniqid(),
@@ -99,7 +99,7 @@ class ExerciseControllerTest extends TestCase
         $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
 
         // just one exercise without answers = 0% of good answers
-        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     /** @test */
@@ -322,7 +322,7 @@ class ExerciseControllerTest extends TestCase
         // because 0 should be the result percent_of_good_answers after only exercise is deleted
         $lesson->subscribedUsers[0]->pivot->percent_of_good_answers = 20;
         $lesson->subscribedUsers[0]->pivot->save();
-        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
         $this->call('DELETE', '/exercises/'.$exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
             'HTTP_REFERER' => $redirectTo,
@@ -332,7 +332,7 @@ class ExerciseControllerTest extends TestCase
         $this->assertResponseRedirectedTo($redirectTo);
 
         // just one exercise without answers = 0% of good answers
-        $this->assertEquals(0, $lesson->fresh()->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     /** @test */

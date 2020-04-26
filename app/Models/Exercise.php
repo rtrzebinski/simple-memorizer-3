@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,21 +13,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string                                                                     $question
  * @property string                                                                     $answer
  * @property int                                                                        $lesson_id
- * @property \Carbon\Carbon|null                                                        $created_at
- * @property \Carbon\Carbon|null                                                        $updated_at
+ * @property \Illuminate\Support\Carbon|null                                            $created_at
+ * @property \Illuminate\Support\Carbon|null                                            $updated_at
  * @property-read \App\Models\Lesson                                                    $lesson
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExerciseResult[] $results
+ * @property-read int|null                                                              $results_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereAnswer($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereLessonId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereQuestion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise whereUpdatedAt($value)
- * @mixin Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise query()
- * @property-read int|null $results_count
  */
 class Exercise extends Model
 {
@@ -64,44 +62,5 @@ class Exercise extends Model
     public function results(): HasMany
     {
         return $this->hasMany(ExerciseResult::class);
-    }
-
-    /**
-     * @param int $userId
-     * @return ExerciseResult|Model|null
-     */
-    public function resultOfUser(int $userId)
-    {
-        return $this->results()->where('exercise_results.user_id', $userId)->first();
-    }
-
-    /**
-     * @param int $userId
-     * @return int
-     */
-    public function numberOfGoodAnswersOfUser(int $userId): int
-    {
-        $exerciseResult = $this->resultOfUser($userId);
-        return $exerciseResult ? $exerciseResult->number_of_good_answers : 0;
-    }
-
-    /**
-     * @param int $userId
-     * @return int
-     */
-    public function numberOfBadAnswersOfUser(int $userId): int
-    {
-        $exerciseResult = $this->resultOfUser($userId);
-        return $exerciseResult ? $exerciseResult->number_of_bad_answers : 0;
-    }
-
-    /**
-     * @param int $userId
-     * @return int
-     */
-    public function percentOfGoodAnswers(int $userId): int
-    {
-        $exerciseResult = $this->resultOfUser($userId);
-        return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;
     }
 }

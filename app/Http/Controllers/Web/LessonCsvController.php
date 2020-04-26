@@ -32,7 +32,7 @@ class LessonCsvController extends Controller
 
         foreach ($lesson->exercises as $exercise) {
             /** @var ExerciseResult $exerciseResult */
-            $exerciseResult = $exercise->resultOfUser($this->user()->id);
+            $exerciseResult = $exercise->results()->where('exercise_results.user_id', $this->user()->id)->first();
 
             $writer->insertOne([
                 'question' => $exercise->question,

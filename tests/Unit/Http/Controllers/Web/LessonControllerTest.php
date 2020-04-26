@@ -431,9 +431,7 @@ class LessonControllerTest extends TestCase
         $this->assertResponseStatus(302);
         $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/settings');
 
-        /** @var Lesson $lesson */
-        $lesson = $lesson->fresh();
-        $this->assertEquals($input['bidirectional'], $lesson->isBidirectional($user->id));
+        $this->assertEquals($input['bidirectional'], $this->isBidirectional($lesson, $user->id));
     }
 
     /** @test */

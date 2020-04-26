@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\Lesson;
+use App\Models\User;
 use App\Structures\UserExercise\AbstractUserExerciseRepositoryInterface;
 use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -152,8 +154,7 @@ class LessonController extends Controller
             'bidirectional' => 'required|boolean',
         ]);
 
-        $pivot = $lesson->subscriberPivot($this->user()->id);
-        $pivot->update([
+        $lesson->subscribedUsers()->where('user_id', $this->user()->id)->first()->pivot->update([
             'bidirectional' => $request->bidirectional,
         ]);
 

@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 /**
  * App\Models\User
@@ -17,28 +14,26 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @property string                                                                                                         $password
  * @property string                                                                                                         $api_token
  * @property string|null                                                                                                    $remember_token
- * @property \Carbon\Carbon|null                                                                                            $created_at
- * @property \Carbon\Carbon|null                                                                                            $updated_at
+ * @property \Illuminate\Support\Carbon|null                                                                                $created_at
+ * @property \Illuminate\Support\Carbon|null                                                                                $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null                                                                                                  $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]                                             $ownedLessons
+ * @property-read int|null                                                                                                  $owned_lessons_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]                                             $subscribedLessons
+ * @property-read int|null                                                                                                  $subscribed_lessons_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereApiToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereAuthDriver($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
- * @mixin Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
- * @property-read int|null                                                                                                  $notifications_count
- * @property-read int|null                                                                                                  $owned_lessons_count
- * @property-read int|null                                                                                                  $subscribed_lessons_count
  */
-class User extends Authenticatable
+class User extends \Illuminate\Foundation\Auth\User
 {
     use Notifiable;
 
@@ -75,19 +70,5 @@ class User extends Authenticatable
     public function ownedLessons()
     {
         return $this->hasMany(Lesson::class, 'owner_id');
-    }
-
-    /**
-     * Public lessons user does not own and does not subscribe.
-     * @return EloquentCollection
-     */
-    public function availableLessons(): EloquentCollection
-    {
-        return Lesson::query()
-            ->where('lessons.owner_id', '!=', $this->id)
-            ->where('lessons.visibility', '=', Lesson::VISIBILITY_PUBLIC)
-            ->whereNotIn('lessons.id', $this->subscribedLessons()->pluck('lessons.id'))
-            ->with('exercises', 'subscribedUsers')
-            ->get();
     }
 }

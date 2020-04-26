@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * App\Models\Lesson
@@ -27,10 +26,13 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exercise[] $exercises
  * @property-read \App\Models\User                                                $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $parentLessons
+ * @property-read int|null                                                        $parent_lessons_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribedUsers
+ * @property-read int|null                                                        $subscribed_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereChildLessonsCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereExercisesCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson whereId($value)
@@ -110,7 +112,7 @@ class Lesson extends Model
     public function allExercises(): Collection
     {
         $lessonIds = $this->childLessons()->pluck('id')->add($this->id);
-        return Exercise::whereIn('lesson_id', $lessonIds)->get();
+        return Exercise::query()->whereIn('lesson_id', $lessonIds)->get();
     }
 
     /**
@@ -146,48 +148,5 @@ class Lesson extends Model
 
         $this->subscribedUsers()->detach($user);
         event(new LessonUnsubscribed($this, $user));
-    }
-
-    /**
-     * @param int $userId
-     * @return int
-     * @throws \Exception
-     */
-    public function percentOfGoodAnswers(int $userId): int
-    {
-        if ($pivot = $this->subscriberPivot($userId)) {
-            return $pivot->percent_of_good_answers;
-        }
-
-        throw new \Exception('User does not subscribe lesson: '.$this->id);
-    }
-
-    /**
-     * @param int $userId
-     * @return bool
-     * @throws \Exception
-     */
-    public function isBidirectional(int $userId): bool
-    {
-        if ($pivot = $this->subscriberPivot($userId)) {
-            return $pivot->bidirectional;
-        }
-
-        throw new \Exception('User does not subscribe lesson: '.$this->id);
-    }
-
-    /**
-     * @param int $userId
-     * @return Pivot|null
-     */
-    public function subscriberPivot(int $userId): ?Pivot
-    {
-        $user = $this->subscribedUsers()->where('user_id', $userId)->first();
-
-        if ($user instanceof User) {
-            return $user->pivot;
-        }
-
-        return null;
     }
 }

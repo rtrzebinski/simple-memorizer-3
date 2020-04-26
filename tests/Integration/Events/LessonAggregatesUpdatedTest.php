@@ -13,15 +13,15 @@ class LessonAggregatesUpdatedTest extends \TestCase
         $user = $this->createUser();
         $lesson->subscribe($user);
 
-        $lesson->subscriberPivot($user->id)->update([
+        $this->subscriberPivot($lesson, $user->id)->update([
             'percent_of_good_answers' => 20,
         ]);
 
-        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
         event(new LessonAggregatesUpdated($lesson, $user));
 
-        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     /** @test */

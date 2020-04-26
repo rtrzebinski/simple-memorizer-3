@@ -202,12 +202,12 @@ class LessonTest extends \TestCase
         $user = $this->createUser();
         $lesson->subscribe($user);
 
-        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
         $user = $this->createUser();
         $lesson->subscribedUsers()->save($user, ['percent_of_good_answers' => 20]);
 
-        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     /** @test */
@@ -219,7 +219,7 @@ class LessonTest extends \TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('User does not subscribe lesson: 1');
 
-        $lesson->percentOfGoodAnswers($user->id);
+        $this->percentOfGoodAnswersOfLesson($lesson, $user->id);
     }
 
     // isBidirectional
@@ -232,7 +232,7 @@ class LessonTest extends \TestCase
         $lesson->subscribe($user);
         $lesson->subscribedUsers()->updateExistingPivot($user->id, ['bidirectional' => true]);
 
-        $this->assertEquals(true, $lesson->isBidirectional($user->id));
+        $this->assertEquals(true, $this->isBidirectional($lesson, $user->id));
     }
 
     /** @test */
@@ -243,7 +243,7 @@ class LessonTest extends \TestCase
         $lesson->subscribe($user);
         $lesson->subscribedUsers()->updateExistingPivot($user->id, ['bidirectional' => false]);
 
-        $this->assertEquals(false, $lesson->isBidirectional($user->id));
+        $this->assertEquals(false, $this->isBidirectional($lesson, $user->id));
     }
 
     /** @test */
@@ -255,6 +255,6 @@ class LessonTest extends \TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('User does not subscribe lesson: 1');
 
-        $lesson->isBidirectional($user->id);
+        $this->isBidirectional($lesson, $user->id);
     }
 }

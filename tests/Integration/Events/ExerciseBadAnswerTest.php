@@ -12,10 +12,10 @@ class ExerciseBadAnswerTest extends \TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->assertEquals(0, $exercise->numberOfBadAnswersOfUser($user->id));
+        $this->assertEquals(0, $this->numberOfBadAnswers($exercise, $user->id));
 
         event(new ExerciseBadAnswer($exercise->id, $user));
 
-        $this->assertEquals(1, $exercise->numberOfBadAnswersOfUser($user->id));
+        $this->assertEquals(1, $this->numberOfBadAnswers($exercise, $user->id));
     }
 }

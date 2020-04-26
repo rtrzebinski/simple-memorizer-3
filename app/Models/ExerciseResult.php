@@ -35,7 +35,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult wherePercentOfGoodAnswers($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult whereUserId($value)
- * @mixin \Eloquent
  */
 class ExerciseResult extends Model
 {
@@ -48,14 +47,4 @@ class ExerciseResult extends Model
         'latest_good_answer',
         'latest_bad_answer',
     ];
-
-    /**
-     * @param $query
-     * @param $userId
-     * @return mixed
-     */
-    public function scopeUser($query, $userId)
-    {
-        return $query->where('exercise_results.user_id', '=', $userId);
-    }
 }

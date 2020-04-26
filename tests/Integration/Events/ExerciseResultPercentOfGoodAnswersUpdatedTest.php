@@ -13,14 +13,14 @@ class ExerciseResultPercentOfGoodAnswersUpdatedTest extends \TestCase
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $lesson->subscriberPivot($user->id)->update([
+        $this->subscriberPivot($lesson, $user->id)->update([
             'percent_of_good_answers' => 20,
         ]);
 
-        $this->assertEquals(20, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
         event(new ExerciseResultPercentOfGoodAnswersUpdated($exercise->id, $user));
 
-        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 }

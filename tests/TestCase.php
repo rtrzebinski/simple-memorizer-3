@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Structures\UserExercise\UserExercise;
 use App\Structures\UserLesson\UserLesson;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
@@ -213,5 +214,84 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $userLesson->name = $lesson->name;
         $userLesson->is_bidirectional = $isBidirectional;
         return $userLesson;
+    }
+
+    /**
+     * @param Exercise $exercise
+     * @param int      $userId
+     * @return int
+     */
+    protected function numberOfGoodAnswers(Exercise $exercise, int $userId): int
+    {
+        $exerciseResult = $exercise->results()->where('exercise_results.user_id', $userId)->first();
+        return $exerciseResult ? $exerciseResult->number_of_good_answers : 0;
+    }
+
+    /**
+     * @param Exercise $exercise
+     * @param int      $userId
+     * @return int
+     */
+    protected function numberOfBadAnswers(Exercise $exercise, int $userId): int
+    {
+        $exerciseResult = $exercise->results()->where('exercise_results.user_id', $userId)->first();
+        return $exerciseResult ? $exerciseResult->number_of_bad_answers : 0;
+    }
+
+    /**
+     * @param Exercise $exercise
+     * @param int      $userId
+     * @return int
+     */
+    protected function percentOfGoodAnswersOfExercise(Exercise $exercise, int $userId): int
+    {
+        $exerciseResult = $exercise->results()->where('exercise_results.user_id', $userId)->first();
+        return $exerciseResult ? $exerciseResult->percent_of_good_answers : 0;
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @param int    $userId
+     * @return int
+     * @throws Exception
+     */
+    protected function percentOfGoodAnswersOfLesson(Lesson $lesson, int $userId): int
+    {
+        if ($pivot = $this->subscriberPivot($lesson, $userId)) {
+            return $pivot->percent_of_good_answers;
+        }
+
+        throw new \Exception('User does not subscribe lesson: '.$lesson->id);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @param int    $userId
+     * @return bool
+     * @throws Exception
+     */
+    protected function isBidirectional(Lesson $lesson, int $userId): bool
+    {
+        if ($pivot = $this->subscriberPivot($lesson, $userId)) {
+            return $pivot->bidirectional;
+        }
+
+        throw new \Exception('User does not subscribe lesson: '.$lesson->id);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @param int    $userId
+     * @return Pivot|null
+     */
+    protected function subscriberPivot(Lesson $lesson, int $userId): ?Pivot
+    {
+        $user = $lesson->subscribedUsers()->where('user_id', $userId)->first();
+
+        if ($user instanceof User) {
+            return $user->pivot;
+        }
+
+        return null;
     }
 }

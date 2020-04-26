@@ -110,12 +110,14 @@ class LessonCsvControllerTest extends TestCase
 
         $this->assertResponseRedirectedTo('/lessons/'.$lesson->id);
         $this->assertCount(1, $lesson->exercises);
-        $this->assertEquals($data[0], $lesson->exercises->first()->question);
-        $this->assertEquals($data[1], $lesson->exercises->first()->answer);
-        $this->assertEquals($lesson->id, $lesson->exercises->first()->lesson_id);
-        $this->assertEquals(2, $lesson->exercises->first()->resultOfUser($user->id)->number_of_good_answers);
-        $this->assertEquals(8, $lesson->exercises->first()->resultOfUser($user->id)->number_of_bad_answers);
-        $this->assertEquals(80, $lesson->exercises->first()->resultOfUser($user->id)->percent_of_good_answers);
+
+        $exercise = $lesson->exercises->first();
+        $this->assertEquals($data[0], $exercise->question);
+        $this->assertEquals($data[1], $exercise->answer);
+        $this->assertEquals($lesson->id, $exercise->lesson_id);
+        $this->assertEquals(2, $this->numberOfGoodAnswers($exercise, $user->id));
+        $this->assertEquals(8, $this->numberOfBadAnswers($exercise, $user->id));
+        $this->assertEquals(80, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
     }
 
     /** @test */

@@ -140,12 +140,12 @@ class LearningControllerTest extends TestCase
 
         $this->call('POST', '/learn/lessons/'.$lesson->id, $data);
 
-        $this->assertEquals(1, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(100, $exercise->percentOfGoodAnswers($user->id));
+        $this->assertEquals(1, $this->numberOfGoodAnswers($exercise, $user->id));
+        $this->assertEquals(100, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
         // 10 because 2 exercises are required to learn a lesson,
         // so one will be 0%, another will be 100%
         // (0 + 100) / 2 = 50
-        $this->assertEquals(50, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(50, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     /** @test */
@@ -188,9 +188,9 @@ class LearningControllerTest extends TestCase
 
         $this->call('POST', '/learn/lessons/'.$lesson->id, $data);
 
-        $this->assertEquals(0, $exercise->numberOfGoodAnswersOfUser($user->id));
-        $this->assertEquals(0, $exercise->percentOfGoodAnswers($user->id));
-        $this->assertEquals(0, $lesson->percentOfGoodAnswers($user->id));
+        $this->assertEquals(0, $this->numberOfGoodAnswers($exercise, $user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     /** @test */
