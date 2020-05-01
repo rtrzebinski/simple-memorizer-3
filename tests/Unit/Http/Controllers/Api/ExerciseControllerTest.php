@@ -127,7 +127,7 @@ class ExerciseControllerTest extends TestCase
     public function itShould_fetchExercise()
     {
         $user = $this->createUser();
-        $lesson = $this->createLesson(['owner_id' => $user->id]);
+        $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
         $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
