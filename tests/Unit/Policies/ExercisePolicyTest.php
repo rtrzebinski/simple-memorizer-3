@@ -15,6 +15,8 @@ class ExercisePolicyTest extends TestCase
         $this->policy = new ExercisePolicy();
     }
 
+    // access
+
     /** @test */
     public function itShould_authorizeExerciseAccess_userIsLessonOwnerAndSubscriber()
     {
@@ -43,6 +45,8 @@ class ExercisePolicyTest extends TestCase
 
         $this->assertFalse($this->policy->access($user, $exercise));
     }
+
+    // modify
 
     /** @test */
     public function itShould_authorizeExerciseModify_userIsLessonOwner()
