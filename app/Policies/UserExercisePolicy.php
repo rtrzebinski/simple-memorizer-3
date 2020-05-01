@@ -2,17 +2,17 @@
 
 namespace App\Policies;
 
+use App\Models\Lesson;
 use App\Structures\UserExercise\UserExercise;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 
 class UserExercisePolicy
 {
     use HandlesAuthorization;
 
     /**
-     * User must be the owner of the lesson exercise belongs to or must subscribe lesson.
+     * User must subscribe lesson to access user exercise;
      *
      * @param User         $user
      * @param UserExercise $userExercise
@@ -20,15 +20,10 @@ class UserExercisePolicy
      */
     public function access(User $user, UserExercise $userExercise): bool
     {
-        return User::query()
-            ->join('lessons', 'lessons.owner_id', '=', 'users.id')
-            ->join('exercises', 'exercises.lesson_id', '=', 'lessons.id')
-            ->leftJoin('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
-            ->where('exercises.id', '=', $userExercise->exercise_id)
-            ->where(function (Builder $query) use ($user) {
-                $query->where('users.id', '=', $user->id)
-                    ->orWhere('lesson_user.user_id', '=', $user->id);
-            })
+        return Lesson::query()
+            ->where('lessons.id', '=', $userExercise->lesson_id)
+            ->join('lesson_user', 'lesson_user.lesson_id', '=', 'lessons.id')
+            ->where('lesson_user.user_id', '=', $user->id)
             ->exists();
     }
 }
