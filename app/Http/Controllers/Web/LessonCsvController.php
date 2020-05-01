@@ -6,6 +6,7 @@ use App\Http\Requests\LessonImportCsvRequest;
 use App\Models\Exercise;
 use App\Models\ExerciseResult;
 use App\Models\Lesson;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use League\Csv\Reader;
@@ -15,10 +16,11 @@ use SplTempFileObject;
 class LessonCsvController extends Controller
 {
     /**
-     * @param Lesson $lesson
+     * @param Lesson                                       $lesson
+     * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @return Response
      */
-    public function exportLessonToCsv(Lesson $lesson): Response
+    public function exportLessonToCsv(Lesson $lesson, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository): Response
     {
         $writer = $this->createCsvWriter();
 
@@ -30,16 +32,15 @@ class LessonCsvController extends Controller
             "percent_of_good_answers"
         ]);
 
-        foreach ($lesson->exercises as $exercise) {
-            /** @var ExerciseResult $exerciseResult */
-            $exerciseResult = $exercise->results()->where('exercise_results.user_id', $this->user()->id)->first();
+        $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lesson->id);
 
+        foreach ($userExercises as $userExercise) {
             $writer->insertOne([
-                'question' => $exercise->question,
-                'answer' => $exercise->answer,
-                'number_of_good_answers' => $exerciseResult->number_of_good_answers ?? 0,
-                'number_of_bad_answers' => $exerciseResult->number_of_bad_answers ?? 0,
-                'percent_of_good_answers' => $exerciseResult->percent_of_good_answers ?? 0,
+                'question' => $userExercise->question,
+                'answer' => $userExercise->answer,
+                'number_of_good_answers' => $userExercise->number_of_good_answers,
+                'number_of_bad_answers' => $userExercise->number_of_bad_answers,
+                'percent_of_good_answers' => $userExercise->percent_of_good_answers,
             ]);
         }
 
