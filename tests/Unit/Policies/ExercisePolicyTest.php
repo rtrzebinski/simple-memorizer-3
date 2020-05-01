@@ -16,10 +16,11 @@ class ExercisePolicyTest extends TestCase
     }
 
     /** @test */
-    public function itShould_authorizeExerciseAccess_userIsLessonOwner()
+    public function itShould_authorizeExerciseAccess_userIsLessonOwnerAndSubscriber()
     {
         $exercise = $this->createExercise();
         $user = $exercise->lesson->owner;
+        $user->subscribedLessons()->attach($exercise->lesson);
 
         $this->assertTrue($this->policy->access($user, $exercise));
     }
