@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/aggregate/{parentLesson}', 'Web\LessonAggregateController@sync');
 
+    Route::get('/lessons/merge/{lesson}', 'Web\LessonMergeController@index');
+
+    Route::post('/lessons/merge/{lesson}', 'Web\LessonMergeController@merge');
+
     // lesson CSV export and import
 
     Route::get('/lessons/{lesson}/csv', 'Web\LessonCsvController@exportLessonToCsv');

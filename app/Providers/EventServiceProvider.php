@@ -8,6 +8,7 @@ use App\Events\ExerciseCreated;
 use App\Events\ExerciseDeleted;
 use App\Events\ExerciseGoodAnswer;
 use App\Events\ExerciseResultPercentOfGoodAnswersUpdated;
+use App\Events\ExercisesMerged;
 use App\Events\LessonAggregatesUpdated;
 use App\Events\LessonSubscribed;
 use App\Events\LessonUnsubscribed;
@@ -41,6 +42,10 @@ class EventServiceProvider extends ServiceProvider
             UpdatePercentOfGoodAnswersOfLesson::class,
         ],
         ExerciseCreated::class => [
+            UpdatePercentOfGoodAnswersOfLesson::class,
+            UpdateExercisesCountOfLesson::class,
+        ],
+        ExercisesMerged::class => [
             UpdatePercentOfGoodAnswersOfLesson::class,
             UpdateExercisesCountOfLesson::class,
         ],

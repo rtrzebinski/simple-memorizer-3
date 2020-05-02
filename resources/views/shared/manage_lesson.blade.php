@@ -95,6 +95,13 @@
                     </a>
                 @endif
 
+                @if($canModify)
+                    <a href="/lessons/merge/{{ $userLesson->lesson_id }}" class="btn btn-default margin-bottom">
+                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                        Merge
+                    </a>
+                @endif
+
             </p>
         </div>
     </div>
