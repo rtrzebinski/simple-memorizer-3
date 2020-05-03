@@ -59,6 +59,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     // exercises
 
+    Route::get('/lessons/{lesson}/exercises/create-many', 'Web\ExerciseController@createMany');
+
+    Route::post('/lessons/{lesson}/exercises-many', 'Web\ExerciseController@storeMany');
+
     Route::get('/lessons/{lesson}/exercises/create', 'Web\ExerciseController@create');
 
     Route::post('/lessons/{lesson}/exercises', 'Web\ExerciseController@store');

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Http\Controllers\Web;
 
+use App\Events\ExerciseCreated;
 use App\Models\Exercise;
 
 class ExerciseControllerTest extends TestCase
@@ -74,61 +75,19 @@ class ExerciseControllerTest extends TestCase
     }
 
     /** @test */
-    public function itShould_storeExercise_ensurePercentOfGoodAnswersOfLessonIsRecalculated()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPublicLesson($user);
-
-        // pre set percent_of_good_answers to some value different than 0,
-        // because 0 should be the result percent_of_good_answers after first exercise is stored
-        $lesson->subscribedUsers[0]->pivot->percent_of_good_answers = 20;
-        $lesson->subscribedUsers[0]->pivot->save();
-        $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
-
-        $parameters = [
-            'question' => uniqid(),
-            'answer' => uniqid(),
-        ];
-
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
-
-        /** @var Exercise $exercise */
-        $exercise = $this->last(Exercise::class);
-        $this->assertEquals($parameters['question'], $exercise->question);
-        $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
-
-        // just one exercise without answers = 0% of good answers
-        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
-    }
-
-    /** @test */
     public function itShould_notStoreExercise_unauthorized()
     {
-        $lesson = $this->createLesson();
-
-        $parameters = [
-            'question' => uniqid(),
-            'answer' => uniqid(),
-        ];
-
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
-
+        $this->call('POST', '/lessons/1/exercises');
         $this->assertResponseUnauthorized();
     }
 
     /** @test */
-    public function itShould_notStoreExercise_forbidden()
+    public function itShould_notStoreExercise_forbidden_userCanNotModifyLesson()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
 
-        $parameters = [
-            'question' => uniqid(),
-            'answer' => uniqid(),
-        ];
-
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises');
 
         $this->assertResponseForbidden();
     }
@@ -155,6 +114,149 @@ class ExerciseControllerTest extends TestCase
         $lesson = $this->createPublicLesson($user);
 
         $this->call('POST', '/lessons/'.$lesson->id.'/exercises');
+
+        $this->assertResponseInvalidInput();
+    }
+
+    // createMany
+
+    /** @test */
+    public function itShould_showExerciseCreateManyPage()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
+    }
+
+    /** @test */
+    public function itShould_notShowExerciseCreateManyPage_unauthorized()
+    {
+        $lesson = $this->createLesson();
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
+
+        $this->assertResponseUnauthorized();
+    }
+
+    /** @test */
+    public function itShould_notShowExerciseCreateManyPage_forbidden()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createLesson();
+
+        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
+
+        $this->assertResponseForbidden();
+    }
+
+    /** @test */
+    public function itShould_notShowExerciseCreateManyPage_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('GET', '/lessons/-1/exercises/create-many');
+
+        $this->assertResponseForbidden();
+    }
+
+    // storeMany
+
+    /** @test */
+    public function itShould_storeManyExercises()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $parameters = [
+            'exercises' => "one - two\r\nthree - four"
+        ];
+
+        $this->expectsEvents(ExerciseCreated::class);
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many', $parameters);
+
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+
+        $exercises = Exercise::query()->get();
+        $this->assertCount(2, $exercises);
+
+        $exercise1 = $exercises->pop();
+        $this->assertEquals("three", $exercise1->question);
+        $this->assertEquals("four", $exercise1->answer);
+
+        $exercise2 = $exercises->pop();
+        $this->assertEquals("one", $exercise2->question);
+        $this->assertEquals("two", $exercise2->answer);
+    }
+
+    /** @test */
+    public function itShould_storeManyExercises_ignoreLinesWithoutDelimiter()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $parameters = [
+            'exercises' => "one - two\r\nthree four"
+        ];
+
+        $this->expectsEvents(ExerciseCreated::class);
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many', $parameters);
+
+        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+
+        $exercises = Exercise::query()->get();
+        $this->assertCount(1, $exercises);
+
+        $exercise = $exercises->pop();
+        $this->assertEquals("one", $exercise->question);
+        $this->assertEquals("two", $exercise->answer);
+    }
+
+    /** @test */
+    public function itShould_notStoreManyExercises_unauthorized()
+    {
+        $this->call('POST', '/lessons/1/exercises-many');
+        $this->assertResponseUnauthorized();
+    }
+
+    /** @test */
+    public function itShould_notStoreManyExercises_forbidden_userCanNotModifyLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson();
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many');
+
+        $this->assertResponseForbidden();
+    }
+
+    /** @test */
+    public function itShould_notStoreManyExercises_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $parameters = [
+            'question' => uniqid(),
+            'answer' => uniqid(),
+        ];
+
+        $this->call('POST', '/lessons/-1/exercises-many', $parameters);
+
+        $this->assertResponseNotFound();
+    }
+
+    /** @test */
+    public function itShould_notStoreManyExercises_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many');
 
         $this->assertResponseInvalidInput();
     }

@@ -83,6 +83,14 @@
                     </a>
                 @endif
 
+                @if($canModify)
+                    <a href="/lessons/{{ $userLesson->lesson_id }}/exercises/create-many"
+                       class="btn btn-success margin-bottom" role="button">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        Add many exercises
+                    </a>
+                @endif
+
                 <a href="/lessons/{{ $userLesson->lesson_id }}/exercises" class="btn btn-default margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                     Exercises

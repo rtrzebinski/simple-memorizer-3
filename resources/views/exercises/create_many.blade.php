@@ -8,19 +8,18 @@
                 @include('shared.manage_lesson')
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Add exercise</div>
+                    <div class="panel-heading">Add many exercises</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <form method="POST" action="/lessons/{{ $userLesson->lesson_id }}/exercises">
+                                <p>
+                                    Provide each exercise in separated line using "question - answer" format. Invalid lines (without "-") will be ignored.
+                                </p>
+                                <form method="POST" action="/lessons/{{ $userLesson->lesson_id }}/exercises-many">
                                     {{ csrf_field() }}
-                                    <div class="form-group {{ $errors->has('question') ? 'has-error' : false }}">
-                                        <label>Question</label>
-                                        <textarea name="question" class="form-control" rows="4"></textarea>
-                                    </div>
-                                    <div class="form-group {{ $errors->has('answer') ? 'has-error' : false }}">
-                                        <label>Correct answer</label>
-                                        <textarea name="answer" class="form-control" rows="4"></textarea>
+                                    <div class="form-group">
+                                        <label>Exercises</label>
+                                        <textarea name="exercises" class="form-control" rows="20"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-default">Submit</button>
                                 </form>

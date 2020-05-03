@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class StoreExerciseRequest extends Request
+class StoreManyExercisesRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class StoreExerciseRequest extends Request
     public function rules()
     {
         return [
-            'question' => 'required',
-            'answer' => 'required',
+            'exercises' => 'required|string',
         ];
     }
 }
