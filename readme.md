@@ -64,3 +64,4 @@ Thanks to [Laradock](https://laradock.io) project has a built in [Docker](https:
 - `make ssh` - ssh to workspace container
 - `make test` - run phpunit test suite
 - `make test-filter` - run phpunit filtered by class or test name
+- `make paratest` - run phpunit paratest suite (8 processed in parallel)

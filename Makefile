@@ -64,3 +64,6 @@ test:
 
 test-filter:
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/phpunit --filter $(call args)
+
+paratest:
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace ./vendor/bin/paratest --runner SqliteRunner
