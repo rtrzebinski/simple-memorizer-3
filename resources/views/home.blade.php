@@ -14,12 +14,12 @@
                                     Lessons created by you and lesson you subscribe.
                                 </p>
                                 <p>
-                                    <a href="/lessons/create" class="btn btn-success" role="button">
+                                    <a href="/lessons/create" class="btn btn-success margin-bottom" role="button">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Create new lesson
                                     </a>
                                     @if(isset($subscribedLessons) && !empty($subscribedLessons))
-                                        <a href="/learn/all" class="btn btn-primary"
+                                        <a href="/learn/all" class="btn btn-primary margin-bottom"
                                            role="button">
                                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                             Learn all
