@@ -3,8 +3,9 @@
 namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Structures\UserLesson\UserLesson;
+use WebTestCase;
 
-class MainControllerTest extends TestCase
+class MainControllerTest extends WebTestCase
 {
     /** @test */
     public function itShould_displayMainPage_authenticatedUser()

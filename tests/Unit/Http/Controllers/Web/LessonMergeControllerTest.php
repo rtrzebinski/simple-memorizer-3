@@ -3,8 +3,9 @@
 namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Events\ExercisesMerged;
+use WebTestCase;
 
-class LessonMergeControllerTest extends TestCase
+class LessonMergeControllerTest extends WebTestCase
 {
     // index
 

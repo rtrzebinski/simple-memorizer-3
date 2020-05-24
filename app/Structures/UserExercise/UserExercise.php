@@ -14,6 +14,7 @@ class UserExercise extends AbstractStructure
 {
     public ?int $exercise_id = null;
     public ?int $lesson_id = null;
+    public ?int $lesson_owner_id = null;
     public ?string $lesson_name = null;
     public ?string $question = null;
     public ?string $answer = null;

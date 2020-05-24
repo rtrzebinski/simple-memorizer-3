@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Http\Controllers\Api;
 
+use ApiTestCase;
 use App\Events\ExerciseDeleted;
 use App\Models\Exercise;
 
-class ExerciseControllerTest extends TestCase
+class ExerciseControllerTest extends ApiTestCase
 {
     // storeExercise
 

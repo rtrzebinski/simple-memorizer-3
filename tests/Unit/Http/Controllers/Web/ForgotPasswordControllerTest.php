@@ -4,8 +4,9 @@ namespace Tests\Unit\Http\Controllers\Web;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
+use WebTestCase;
 
-class ForgotPasswordControllerTest extends TestCase
+class ForgotPasswordControllerTest extends WebTestCase
 {
     /** @test */
     public function itShould_showLinkRequestForm()

@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Http\Controllers\Web;
 
-class ExerciseSearchControllerTest extends TestCase
+use WebTestCase;
+
+class ExerciseSearchControllerTest extends WebTestCase
 {
     // searchForExercises
 

@@ -282,6 +282,18 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     /**
      * @param Lesson $lesson
      * @param int    $userId
+     * @param bool   $bidirectional
+     */
+    protected function updateBidirectional(Lesson $lesson, int $userId, bool $bidirectional)
+    {
+        $subscriberPivot = $this->subscriberPivot($lesson, $userId);
+        $subscriberPivot->bidirectional = $bidirectional;
+        $subscriberPivot->save();
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @param int    $userId
      * @return Pivot|null
      */
     protected function subscriberPivot(Lesson $lesson, int $userId): ?Pivot

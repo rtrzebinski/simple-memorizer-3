@@ -1,14 +1,12 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers\Web;
-
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class TestCase extends \TestCase
+class WebTestCase extends \TestCase
 {
     protected TestResponse $response;
 
@@ -144,5 +142,10 @@ class TestCase extends \TestCase
     protected function dump()
     {
         dd($this->response->content());
+    }
+
+    protected function dumpView()
+    {
+        dd($this->view()->getData());
     }
 }

@@ -29,7 +29,7 @@
                 @if($canSubscribe || !$user)
                     <button type="submit" form="subscribe-and-learn" class="btn btn-primary margin-bottom">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                        Subscribe and start
+                        Subscribe and learn
                     </button>
                     <button type="submit" form="subscribe" class="btn btn-danger margin-bottom">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -41,7 +41,7 @@
                     @can('learn', $userLesson)
                         <a href="/learn/lessons/{{ $userLesson->lesson_id }}" class="btn btn-primary margin-bottom" role="button">
                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                            Start
+                            Learn
                         </a>
                     @endcan
                 @endif

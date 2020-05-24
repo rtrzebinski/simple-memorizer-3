@@ -19,7 +19,7 @@ interface AbstractUserLessonRepositoryInterface
     public function fetchUserLesson(int $lessonId): ?UserLesson;
 
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchAvailableUserLessons(): Collection;
 }

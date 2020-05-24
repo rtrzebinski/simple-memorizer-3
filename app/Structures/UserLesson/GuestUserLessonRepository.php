@@ -41,7 +41,7 @@ class GuestUserLessonRepository implements AbstractUserLessonRepositoryInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchAvailableUserLessons(): Collection
     {

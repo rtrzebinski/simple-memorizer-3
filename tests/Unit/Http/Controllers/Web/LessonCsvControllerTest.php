@@ -4,8 +4,9 @@ namespace Tests\Unit\Http\Controllers\Web;
 
 use Illuminate\Http\UploadedFile;
 use League\Csv\Writer;
+use WebTestCase;
 
-class LessonCsvControllerTest extends TestCase
+class LessonCsvControllerTest extends WebTestCase
 {
     // exportLessonToCsv
 

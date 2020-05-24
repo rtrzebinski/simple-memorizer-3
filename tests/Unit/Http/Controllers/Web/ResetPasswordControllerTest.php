@@ -4,8 +4,9 @@ namespace Tests\Unit\Http\Controllers\Web;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use WebTestCase;
 
-class ResetPasswordControllerTest extends TestCase
+class ResetPasswordControllerTest extends WebTestCase
 {
     /** @test */
     public function itShould_showResetForm()

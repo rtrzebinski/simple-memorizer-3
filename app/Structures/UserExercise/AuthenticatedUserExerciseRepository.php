@@ -37,6 +37,8 @@ class AuthenticatedUserExerciseRepository implements AbstractUserExerciseReposit
             ->select([
                 'l_child.id AS child_id',
                 'l.id AS lesson_id',
+                'l.name AS lesson_name',
+                'l.owner_id AS lesson_owner_id',
             ])
             ->leftJoin('lesson_aggregate AS la', 'la.parent_lesson_id', '=', 'l.id')
             ->leftJoin('lessons AS l_child', 'la.child_lesson_id', '=', 'l_child.id')
@@ -46,6 +48,8 @@ class AuthenticatedUserExerciseRepository implements AbstractUserExerciseReposit
             ->select([
                 'e.id AS exercise_id',
                 'e.lesson_id AS lesson_id',
+                'lessons.lesson_name AS lesson_name',
+                'lessons.lesson_owner_id AS lesson_owner_id',
                 'e.question AS question',
                 'e.answer AS answer',
                 DB::raw('COALESCE(er.number_of_good_answers, 0) AS number_of_good_answers'),
@@ -139,6 +143,43 @@ class AuthenticatedUserExerciseRepository implements AbstractUserExerciseReposit
                 $joinClause
                     ->on('er.exercise_id', '=', 'e.id')
                     ->where('er.user_id', '=', $this->user->id);
+            })
+            ->get()
+            ->mapInto(UserExercise::class);
+    }
+
+    /**
+     * @return Collection|UserExercise[]
+     */
+    public function fetchUserExercisesOfSubscribedLessons(): Collection
+    {
+        return DB::table('exercises AS e')
+            ->select([
+                'e.id AS exercise_id',
+                'e.lesson_id AS lesson_id',
+                'l.name AS lesson_name',
+                'l.owner_id AS lesson_owner_id',
+                'e.question AS question',
+                'e.answer AS answer',
+                DB::raw('COALESCE(er.number_of_good_answers, 0) AS number_of_good_answers'),
+                DB::raw('COALESCE(er.number_of_good_answers_today, 0) AS number_of_good_answers_today'),
+                'er.latest_good_answer AS latest_good_answer',
+                DB::raw('COALESCE(er.number_of_bad_answers, 0) AS number_of_bad_answers'),
+                DB::raw('COALESCE(er.number_of_bad_answers_today, 0) AS number_of_bad_answers_today'),
+                'er.latest_bad_answer AS latest_bad_answer',
+                DB::raw('COALESCE(er.percent_of_good_answers, 0) AS percent_of_good_answers'),
+            ])
+            ->leftJoin('exercise_results AS er', function (JoinClause $joinClause) {
+                $joinClause
+                    ->on('er.exercise_id', '=', 'e.id')
+                    ->where('er.user_id', '=', $this->user->id);
+            })
+            ->join('lessons AS l', function (JoinClause $join) {
+                $join->on('l.id', '=', 'e.lesson_id');
+            })
+            ->join('lesson_user AS lu', function (JoinClause $join) {
+                $join->on('lu.lesson_id', '=', 'l.id')
+                    ->where('lu.user_id', '=', $this->user->id);
             })
             ->get()
             ->mapInto(UserExercise::class);

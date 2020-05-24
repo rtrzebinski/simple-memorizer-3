@@ -24,4 +24,9 @@ interface AuthenticatedUserExerciseRepositoryInterface extends AbstractUserExerc
      * @return Collection|UserExercise[]
      */
     public function fetchUserExercisesWithPhrase(string $phrase): Collection;
+
+    /**
+     * @return Collection|UserExercise[]
+     */
+    public function fetchUserExercisesOfSubscribedLessons(): Collection;
 }

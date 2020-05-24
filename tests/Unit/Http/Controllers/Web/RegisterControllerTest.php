@@ -4,8 +4,9 @@ namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Models\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use WebTestCase;
 
-class RegisterControllerTest extends TestCase
+class RegisterControllerTest extends WebTestCase
 {
     /**
      * @var UserRepository|MockObject
