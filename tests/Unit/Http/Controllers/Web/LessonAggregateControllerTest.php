@@ -3,8 +3,9 @@
 namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Events\LessonAggregatesUpdated;
+use WebTestCase;
 
-class LessonAggregateControllerTest extends TestCase
+class LessonAggregateControllerTest extends WebTestCase
 {
     // index
 

@@ -2,17 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Exercise;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserExercise\UserExercise;
-use App\Structures\UserLesson\UserLesson;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Collection;
 
 /**
  * Based on history of answers of a user,
  * find out which exercise should be present to him
- * in order to memorize the entire lesson in most effective way.
+ * in order to memorize the entire set in most effective way.
  *
  * Class LearningService
  * @package App\Services
@@ -31,20 +30,19 @@ class LearningService
     }
 
     /**
-     * Fetch pseudo random exercise of lesson. Should be served to a user in learning mode.
-     *
-     * @param UserLesson $userLesson
+     * @param Collection $userExercises
      * @param int|null   $previousExerciseId
-     * @return Exercise|null
+     * @return UserExercise|null
      * @throws Exception
      */
-    public function fetchRandomExerciseOfLesson(UserLesson $userLesson, int $previousExerciseId = null): ?UserExercise
+    public function findUserExerciseToLearn(Collection $userExercises, int $previousExerciseId = null): ?UserExercise
     {
-        $userExercises = $this->authenticatedUserExerciseRepository->fetchUserExercisesOfLesson($userLesson->lesson_id)
-            ->filter(function (UserExercise $userExercise) use ($previousExerciseId) {
-                // exclude previous exercise
+        // exclude previous exercise if provided
+        if ($previousExerciseId) {
+            $userExercises = $userExercises->filter(function (UserExercise $userExercise) use ($previousExerciseId) {
                 return $userExercise->exercise_id != $previousExerciseId;
             });
+        }
 
         // case here is exercise deleted by the owner during the lesson
         if ($userExercises->isEmpty()) {
@@ -85,21 +83,7 @@ class LearningService
             return null;
         }
 
-        /**
-         * get a random $key and return matching exercise
-         * @var Exercise $winner
-         */
-        $winner = $userExercises[$tmp[array_rand($tmp)]];
-
-        // if lesson is bidirectional flip question and answer with 50% chance
-        if ($userLesson->is_bidirectional && rand(0, 1) == 1) {
-            $flippedWinner = clone $winner;
-            $flippedWinner->question = $winner->answer;
-            $flippedWinner->answer = $winner->question;
-            return $flippedWinner;
-        }
-
-        return $winner;
+        return $userExercises[$tmp[array_rand($tmp)]];
     }
 
     /**

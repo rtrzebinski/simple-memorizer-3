@@ -3,8 +3,9 @@
 namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Models\Lesson;
+use WebTestCase;
 
-class LessonControllerTest extends TestCase
+class LessonControllerTest extends WebTestCase
 {
     // create
 

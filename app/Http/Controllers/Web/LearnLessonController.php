@@ -7,29 +7,34 @@ use App\Events\ExerciseGoodAnswer;
 use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Services\LearningService;
+use App\Services\UserExerciseModifier;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
-use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
 use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class LearningController extends Controller
+class LearnLessonController extends Controller
 {
     /**
      * @param int                                          $lessonId
      * @param Request                                      $request
      * @param LearningService                              $learningService
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
-     * @param AbstractUserLessonRepositoryInterface        $userLessonRepository
+     * @param AuthenticatedUserLessonRepositoryInterface   $userLessonRepository
+     * @param UserExerciseModifier                         $userExerciseModifier
      * @return View|Response
-     * @throws Exception
      */
-    public function learnLesson(int $lessonId, Request $request, LearningService $learningService, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository, AbstractUserLessonRepositoryInterface $userLessonRepository)
-    {
+    public function learnLesson(
+        int $lessonId,
+        Request $request,
+        LearningService $learningService,
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
+        AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
+        UserExerciseModifier $userExerciseModifier
+    ) {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         // lesson does not exist
@@ -47,10 +52,16 @@ class LearningController extends Controller
             // ensure user can access this exercise
             $this->authorizeForUser($this->user(), 'access', $userExercise);
         } else {
-            $userExercise = $learningService->fetchRandomExerciseOfLesson($userLesson, $request->get('previous_exercise_id'));
+            $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lessonId);
+            $userExercise = $learningService->findUserExerciseToLearn($userExercises, $request->get('previous_exercise_id'));
         }
 
-        return view('learn.learn', [
+        if ($userExercise && $userLesson->is_bidirectional) {
+            // if lesson is bidirectional swap question and answer with 50% chance
+            $userExercise = $userExerciseModifier->swapQuestionWithAnswer($userExercise, $probability = 50);
+        }
+
+        return view('learn.lesson', [
             'userLesson' => $userLesson,
             'userExercise' => $userExercise,
             'canModifyExercise' => $userLesson->owner_id == $this->user()->id,
@@ -63,11 +74,17 @@ class LearningController extends Controller
      * @param LearningService                              $learningService
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @param AuthenticatedUserLessonRepositoryInterface   $userLessonRepository
+     * @param UserExerciseModifier                         $userExerciseModifier
      * @return View
-     * @throws Exception
      */
-    public function handleAnswer(int $lessonId, Request $request, LearningService $learningService, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository, AuthenticatedUserLessonRepositoryInterface $userLessonRepository)
-    {
+    public function handleAnswer(
+        int $lessonId,
+        Request $request,
+        LearningService $learningService,
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
+        AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
+        UserExerciseModifier $userExerciseModifier
+    ) {
         $this->validate($request, [
             'answer' => 'required|in:good,bad',
             'previous_exercise_id' => 'required|int',
@@ -83,7 +100,7 @@ class LearningController extends Controller
             event(new ExerciseBadAnswer($previousExerciseId, $this->user()));
         }
 
-        return $this->learnLesson($lessonId, $request, $learningService, $userExerciseRepository, $userLessonRepository);
+        return $this->learnLesson($lessonId, $request, $learningService, $userExerciseRepository, $userLessonRepository, $userExerciseModifier);
     }
 
     /**

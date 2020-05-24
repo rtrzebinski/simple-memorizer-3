@@ -18,6 +18,13 @@
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Create new lesson
                                     </a>
+                                    @if(isset($subscribedLessons) && !empty($subscribedLessons))
+                                        <a href="/learn/all" class="btn btn-primary"
+                                           role="button">
+                                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                            Learn all
+                                        </a>
+                                    @endif
                                 </p>
                             </div>
                             <div class="col-md-4 no-padding">
@@ -56,7 +63,7 @@
                                                     <a href="/learn/lessons/{{ $row->lesson_id }}" class="btn btn-primary margin-bottom"
                                                        role="button">
                                                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                                        Start
+                                                        Learn
                                                     </a>
                                                 @endcan
                                                 <a href="/lessons/{{ $row->lesson_id }}/exercises/create" class="btn btn-success margin-bottom" role="button">
@@ -94,7 +101,7 @@
                                                    class="btn btn-primary margin-bottom"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                                    Start
+                                                    Learn
                                                 </a>
                                                 <button type="submit" form="unsubscribe-{{ $row->lesson_id }}"
                                                         class="btn btn-danger margin-bottom">
@@ -169,7 +176,7 @@
                                                     class="btn btn-primary margin-bottom">
                                                     <span class="glyphicon glyphicon-play"
                                                           aria-hidden="true"></span>
-                                                Subscribe and start
+                                                Subscribe and learn
                                             </button>
                                             <button type="submit" form="subscribe-{{ $row->lesson_id }}"
                                                     class="btn btn-danger margin-bottom">

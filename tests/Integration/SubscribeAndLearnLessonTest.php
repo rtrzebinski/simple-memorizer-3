@@ -6,10 +6,10 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\TestResponse;
 use TestCase;
 
-class SubscribeAndStartLearningLessonTest extends TestCase
+class SubscribeAndLearnLessonTest extends TestCase
 {
     /** @test */
-    public function itShould_subscribeAndStartLearningLesson_authenticatedUser()
+    public function itShould_subscribeAndLearnLesson_authenticatedUser()
     {
         // create public lesson that can be accessed by anyone
         $lesson = $this->createPublicLesson();
@@ -29,7 +29,7 @@ class SubscribeAndStartLearningLessonTest extends TestCase
             'password' => $password,
         ]);
 
-        // click 'subscribe and start' button
+        // click 'subscribe and learn' button
         /** @var TestResponse $response */
         $response = $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
@@ -45,12 +45,12 @@ class SubscribeAndStartLearningLessonTest extends TestCase
     }
 
     /** @test */
-    public function itShould_subscribeAndStartLearningLesson_guestUser_signup()
+    public function itShould_subscribeAndLearnLesson_guestUser_signup()
     {
         // create public lesson that can be accessed by anyone
         $lesson = $this->createPublicLesson();
 
-        // click 'subscribe and start' button
+        // click 'subscribe and learn' button
         /** @var TestResponse $response */
         $response = $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
@@ -81,12 +81,12 @@ class SubscribeAndStartLearningLessonTest extends TestCase
     }
 
     /** @test */
-    public function itShould_subscribeAndStartLearningLesson_guestUser_login()
+    public function itShould_subscribeAndLearnLesson_guestUser_login()
     {
         // create public lesson that can be accessed by anyone
         $lesson = $this->createPublicLesson();
 
-        // click 'subscribe and start' button
+        // click 'subscribe and learn' button
         /** @var TestResponse $response */
         $response = $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
@@ -120,12 +120,12 @@ class SubscribeAndStartLearningLessonTest extends TestCase
     }
 
     /** @test */
-    public function itShould_subscribeAndStartLearningLesson_guestUser_login_lessonAlreadySubscribed()
+    public function itShould_subscribeAndLearnLesson_guestUser_login_lessonAlreadySubscribed()
     {
         // create public lesson that can be accessed by anyone
         $lesson = $this->createPublicLesson();
 
-        // click 'subscribe and start' button
+        // click 'subscribe and learn' button
         /** @var TestResponse $response */
         $response = $this->call('POST', '/lessons/' . $lesson->id . '/subscribe-and-learn');
 
@@ -140,7 +140,7 @@ class SubscribeAndStartLearningLessonTest extends TestCase
             'password' => bcrypt($password),
         ]);
 
-        // subscribe user and ensure he can still use 'subscribe and start' as a guest
+        // subscribe user and ensure he can still use 'subscribe and learn' as a guest
         $lesson->subscribe($user);
 
         // send login request

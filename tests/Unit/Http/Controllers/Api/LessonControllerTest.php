@@ -2,9 +2,10 @@
 
 namespace Tests\Unit\Http\Controllers\Api;
 
+use ApiTestCase;
 use App\Models\Lesson;
 
-class LessonControllerTest extends TestCase
+class LessonControllerTest extends ApiTestCase
 {
     // storeLesson
 

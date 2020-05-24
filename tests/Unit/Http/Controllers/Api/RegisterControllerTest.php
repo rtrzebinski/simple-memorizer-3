@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Http\Controllers\Api;
 
+use ApiTestCase;
 use App\Models\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class RegisterControllerTest extends TestCase
+class RegisterControllerTest extends ApiTestCase
 {
     /**
      * @var UserRepository|MockObject

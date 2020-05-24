@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Http\Controllers\Web;
 
-class HomeControllerTest extends TestCase
+use WebTestCase;
+
+class HomeControllerTest extends WebTestCase
 {
     // index
 

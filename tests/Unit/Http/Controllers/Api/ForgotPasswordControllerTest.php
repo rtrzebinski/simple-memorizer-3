@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Http\Controllers\Api;
 
+use ApiTestCase;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
 
-class ForgotPasswordControllerTest extends TestCase
+class ForgotPasswordControllerTest extends ApiTestCase
 {
     // sendResetLinkEmail
 

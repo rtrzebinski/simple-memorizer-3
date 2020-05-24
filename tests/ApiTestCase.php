@@ -1,14 +1,12 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers\Api;
-
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Http\Response;
 
-class TestCase extends \TestCase
+class ApiTestCase extends \TestCase
 {
-    private TestResponse $response;
+    protected TestResponse $response;
 
     /**
      * Call api route as guest, or authenticated user.

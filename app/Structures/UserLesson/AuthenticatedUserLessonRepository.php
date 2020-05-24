@@ -64,7 +64,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     }
 
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchOwnedUserLessons(): Collection
     {
@@ -94,7 +94,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     }
 
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchSubscribedUserLessons(): Collection
     {
@@ -124,7 +124,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     }
 
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchAvailableUserLessons(): Collection
     {

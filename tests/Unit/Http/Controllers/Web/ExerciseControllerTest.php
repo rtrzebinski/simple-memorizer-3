@@ -4,8 +4,9 @@ namespace Tests\Unit\Http\Controllers\Web;
 
 use App\Events\ExerciseCreated;
 use App\Models\Exercise;
+use WebTestCase;
 
-class ExerciseControllerTest extends TestCase
+class ExerciseControllerTest extends WebTestCase
 {
     // create
 
