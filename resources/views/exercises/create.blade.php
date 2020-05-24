@@ -16,11 +16,11 @@
                                     {{ csrf_field() }}
                                     <div class="form-group {{ $errors->has('question') ? 'has-error' : false }}">
                                         <label>Question</label>
-                                        <textarea name="question" class="form-control" rows="4"></textarea>
+                                        <textarea id="textarea_question" name="question" class="form-control" rows="4"></textarea>
                                     </div>
                                     <div class="form-group {{ $errors->has('answer') ? 'has-error' : false }}">
                                         <label>Correct answer</label>
-                                        <textarea name="answer" class="form-control" rows="4"></textarea>
+                                        <textarea id="textarea_answer" name="answer" class="form-control" rows="4"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-default">Submit</button>
                                 </form>
@@ -33,3 +33,10 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script type="text/javascript" language="JavaScript">
+        $(document).ready(function () {
+            $("#textarea_question").focus();
+        });
+    </script>
+@endpush

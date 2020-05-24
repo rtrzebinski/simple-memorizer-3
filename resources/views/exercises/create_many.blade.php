@@ -19,7 +19,7 @@
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <label>Exercises</label>
-                                        <textarea name="exercises" class="form-control" rows="20"></textarea>
+                                        <textarea id="textarea_exercises" name="exercises" class="form-control" rows="20"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-default">Submit</button>
                                 </form>
@@ -32,3 +32,10 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script type="text/javascript" language="JavaScript">
+        $(document).ready(function () {
+            $("#textarea_exercises").focus();
+        });
+    </script>
+@endpush
