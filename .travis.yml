@@ -9,4 +9,4 @@ before_script:
   - cp env-dev .env
 
 script:
-  - ./vendor/bin/phpunit
+  - ./vendor/bin/paratest --runner SqliteRunner
