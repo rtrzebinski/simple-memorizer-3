@@ -49,19 +49,14 @@ Thanks to [Laradock](https://laradock.io) project has a built in [Docker](https:
 
 ### Commands
 
-- `make build` - build or rebuild docker services
-- `make up` - start docker services
-- `make down` - stop docker services
-- `make restart` - restart docker services
-- `make run` - prepare and run application
-- `make start` - start docker services, prepare and run application
+- `make start` - start docker services, install composer dependencies, migrate and seed local MySQL database, run application on localhost
 - `make composer-install` - install composer dependencies
 - `make composer-update` - update composer dependencies
-- `make artisan-migrate` - run all migrations
-- `make artisan-seed` - seed the database with records
+- `make artisan-migrate` - run migrations
+- `make artisan-seed` - seed local MySQL database
 - `make artisan-telescope-clear` - clear all entries from telescope
 - `make mysql` - connect to dev database via mysql cli client
 - `make ssh` - ssh to workspace container
-- `make test` - run phpunit test suite
-- `make test-filter` - run phpunit filtered by class or test name
-- `make paratest` - run phpunit paratest suite (8 processed in parallel)
+- `make test` - run tests with phpunit
+- `make test-filter` - run tests with phpunit filtered by class or test name
+- `make paratest` - run tests with paratest
