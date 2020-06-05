@@ -758,4 +758,64 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(0, $result);
     }
+
+    // fetchUserExercisesOfFavouriteLessons
+
+    /** @test */
+    public function itShould_fetchUserExercisesOfFavouriteLessons()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson(['owner_id' => $user->id]);
+        $lesson->subscribe($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
+
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $exerciseResult = $this->createExerciseResult([
+            'user_id' => $user->id,
+            'exercise_id' => $exercise->id,
+            "number_of_good_answers" => 2,
+            "number_of_good_answers_today" => 1,
+            "latest_good_answer" => Carbon::today()->addHours(1),
+            "number_of_bad_answers" => 4,
+            "number_of_bad_answers_today" => 3,
+            "latest_bad_answer" => Carbon::today()->addHours(2),
+            "percent_of_good_answers" => 5,
+        ]);
+
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesOfFavouriteLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(UserExercise::class, $result[0]);
+        $this->assertEquals($exercise->id, $result[0]->exercise_id);
+        $this->assertEquals($exercise->lesson_id, $result[0]->lesson_id);
+        $this->assertEquals($exercise->question, $result[0]->question);
+        $this->assertEquals($exercise->answer, $result[0]->answer);
+        $this->assertEquals($exerciseResult->number_of_good_answers, $result[0]->number_of_good_answers);
+        $this->assertEquals($exerciseResult->number_of_good_answers_today, $result[0]->number_of_good_answers_today);
+        $this->assertEquals($exerciseResult->latest_good_answer, $result[0]->latest_good_answer);
+        $this->assertEquals($exerciseResult->number_of_bad_answers, $result[0]->number_of_bad_answers);
+        $this->assertEquals($exerciseResult->number_of_bad_answers_today, $result[0]->number_of_bad_answers_today);
+        $this->assertEquals($exerciseResult->latest_bad_answer, $result[0]->latest_bad_answer);
+        $this->assertEquals($exerciseResult->percent_of_good_answers, $result[0]->percent_of_good_answers);
+        $this->assertEquals($lesson->name, $result[0]->lesson_name);
+        $this->assertEquals($lesson->owner_id, $result[0]->lesson_owner_id);
+    }
+
+    /** @test */
+    public function itShould_fetchUserExercisesOfFavouriteLessons_notFavourite()
+    {
+        $user = $this->createUser();
+        $lesson = $this->createLesson(['owner_id' => $user->id]);
+        $lesson->subscribe($user);
+
+        $this->createExercise(['lesson_id' => $lesson->id]);
+
+        $repository = new AuthenticatedUserExerciseRepository($user);
+        $result = $repository->fetchUserExercisesOfFavouriteLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(0, $result);
+    }
 }

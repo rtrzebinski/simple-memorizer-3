@@ -23,4 +23,5 @@ class UserLesson extends AbstractStructure
     public ?int $subscribers_count = null;
     public ?int $child_lessons_count = null;
     public ?int $is_subscriber = null;
+    public ?int $is_favourite = null;
 }

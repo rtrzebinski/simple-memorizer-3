@@ -600,4 +600,60 @@ class LessonControllerTest extends WebTestCase
 
         $this->assertResponseNotFound();
     }
+
+    // saveFavourite
+
+    /**
+     * @test
+     * @dataProvider trueFalseProvider
+     * @param bool $bool
+     * @throws \Exception
+     */
+    public function itShould_saveFavourite(bool $bool)
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->updateFavourite($lesson, $user->id, !$bool);
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/favourite', [
+            'favourite' => $bool,
+        ]);
+
+        $this->assertResponseRedirectedTo('/home');
+        $this->assertEquals($bool, $this->isFavourite($lesson, $user->id));
+    }
+
+    /** @test */
+    public function itShould_notSaveFavourite_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('POST', '/lessons/-1/favourite', [
+            'favourite' => '1',
+        ]);
+
+        $this->assertResponseNotFound();
+    }
+
+    /** @test */
+    public function itShould_notSaveFavourite_unauthorized()
+    {
+        $this->call('POST', '/lessons/1/favourite',);
+
+        $this->assertResponseUnauthorized();
+    }
+
+    /** @test */
+    public function itShould_notSaveFavourite_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+
+        $this->call('POST', '/lessons/'.$lesson->id.'/favourite', [
+            'favourite' => uniqid(),
+        ]);
+
+        $this->assertResponseInvalidInput();
+    }
 }

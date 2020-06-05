@@ -294,6 +294,33 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     /**
      * @param Lesson $lesson
      * @param int    $userId
+     * @return bool
+     * @throws Exception
+     */
+    protected function isFavourite(Lesson $lesson, int $userId): bool
+    {
+        if ($pivot = $this->subscriberPivot($lesson, $userId)) {
+            return $pivot->favourite;
+        }
+
+        throw new \Exception('User does not subscribe lesson: '.$lesson->id);
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @param int    $userId
+     * @param bool   $favourite
+     */
+    protected function updateFavourite(Lesson $lesson, int $userId, bool $favourite)
+    {
+        $subscriberPivot = $this->subscriberPivot($lesson, $userId);
+        $subscriberPivot->favourite = $favourite;
+        $subscriberPivot->save();
+    }
+
+    /**
+     * @param Lesson $lesson
+     * @param int    $userId
      * @return Pivot|null
      */
     protected function subscriberPivot(Lesson $lesson, int $userId): ?Pivot
@@ -305,5 +332,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
 
         return null;
+    }
+
+    public function trueFalseProvider()
+    {
+        return [
+            [true],
+            [false],
+        ];
     }
 }

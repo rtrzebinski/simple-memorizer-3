@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 interface AuthenticatedUserExerciseRepositoryInterface extends AbstractUserExerciseRepositoryInterface
 {
     /**
-     * @param int  $exerciseId
+     * @param int $exerciseId
      * @return UserExercise
      * @throws \Exception
      */
@@ -29,4 +29,9 @@ interface AuthenticatedUserExerciseRepositoryInterface extends AbstractUserExerc
      * @return Collection|UserExercise[]
      */
     public function fetchUserExercisesOfSubscribedLessons(): Collection;
+
+    /**
+     * @return Collection|UserExercise[]
+     */
+    public function fetchUserExercisesOfFavouriteLessons(): Collection;
 }

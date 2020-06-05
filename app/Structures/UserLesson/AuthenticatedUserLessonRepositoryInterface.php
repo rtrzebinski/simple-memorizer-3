@@ -13,12 +13,12 @@ use Illuminate\Support\Collection;
 interface AuthenticatedUserLessonRepositoryInterface extends AbstractUserLessonRepositoryInterface
 {
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchOwnedUserLessons(): Collection;
 
     /**
-     * @return Collection
+     * @return Collection|UserLesson[]
      */
     public function fetchSubscribedUserLessons(): Collection;
 }

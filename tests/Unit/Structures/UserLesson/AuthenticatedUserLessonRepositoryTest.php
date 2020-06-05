@@ -37,6 +37,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(0, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -67,6 +68,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -94,6 +96,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(1, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -121,6 +124,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -144,6 +148,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -167,6 +172,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -191,6 +197,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -218,6 +225,39 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(50, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
+    }
+
+    /** @test */
+    public function itShould_fetchUserLesson_favourite()
+    {
+        $user = $this->createUser(['id' => 5]);
+        $lesson = $this->createLesson([
+            'owner_id' => $user->id,
+            'name' => uniqid(),
+            'exercises_count' => 5,
+            'subscribers_count' => 6,
+            'child_lessons_count' => 7,
+        ]);
+        $lesson->subscribe($user);
+        $lesson->subscribedUsers()->updateExistingPivot($user->id, ['favourite' => 1]);
+
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchUserLesson($lesson->id);
+
+        $this->assertInstanceOf(UserLesson::class, $result);
+        $this->assertEquals($user->id, $result->user_id);
+        $this->assertEquals($lesson->id, $result->lesson_id);
+        $this->assertEquals($lesson->owner_id, $result->owner_id);
+        $this->assertEquals($lesson->name, $result->name);
+        $this->assertEquals($lesson->visibility, $result->visibility);
+        $this->assertEquals($lesson->exercises_count, $result->exercises_count);
+        $this->assertEquals($lesson->subscribers_count, $result->subscribers_count);
+        $this->assertEquals($lesson->child_lessons_count, $result->child_lessons_count);
+        $this->assertEquals(1, $result->is_subscriber);
+        $this->assertEquals(0, $result->is_bidirectional);
+        $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(1, $result->is_favourite);
     }
 
     // fetchOwnedUserLessons
@@ -252,6 +292,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result1->is_subscriber);
         $this->assertEquals(0, $result1->is_bidirectional);
         $this->assertEquals(0, $result1->percent_of_good_answers);
+        $this->assertEquals(0, $result1->is_favourite);
 
         /** @var UserLesson $result2 */
         $result2 = $result[1];
@@ -267,6 +308,37 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(1, $result2->is_subscriber);
         $this->assertEquals(0, $result2->is_bidirectional);
         $this->assertEquals(0, $result2->percent_of_good_answers);
+        $this->assertEquals(0, $result2->is_favourite);
+    }
+
+    /** @test */
+    public function itShould_fetchOwnedUserLessons_favourite()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $lesson->subscribedUsers()->updateExistingPivot($user->id, ['favourite' => 1]);
+
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchOwnedUserLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(1, $result);
+
+        /** @var UserLesson $userLesson */
+        $userLesson = $result[0];
+        $this->assertInstanceOf(UserLesson::class, $userLesson);
+        $this->assertEquals($user->id, $userLesson->user_id);
+        $this->assertEquals($lesson->id, $userLesson->lesson_id);
+        $this->assertEquals($lesson->owner_id, $userLesson->owner_id);
+        $this->assertEquals($lesson->name, $userLesson->name);
+        $this->assertEquals($lesson->visibility, $userLesson->visibility);
+        $this->assertEquals($lesson->exercises_count, $userLesson->exercises_count);
+        $this->assertEquals($lesson->subscribers_count, $userLesson->subscribers_count);
+        $this->assertEquals($lesson->child_lessons_count, $userLesson->child_lessons_count);
+        $this->assertEquals(1, $userLesson->is_subscriber);
+        $this->assertEquals(0, $userLesson->is_bidirectional);
+        $this->assertEquals(0, $userLesson->percent_of_good_answers);
+        $this->assertEquals(1, $userLesson->is_favourite);
     }
 
     // fetchSubscribedUserLessons
@@ -287,20 +359,51 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(1, $result);
 
-        /** @var UserLesson $result2 $result1 */
-        $result1 = $result[0];
-        $this->assertInstanceOf(UserLesson::class, $result1);
-        $this->assertEquals($user->id, $result1->user_id);
-        $this->assertEquals($subscribedLesson->id, $result1->lesson_id);
-        $this->assertEquals($subscribedLesson->owner_id, $result1->owner_id);
-        $this->assertEquals($subscribedLesson->name, $result1->name);
-        $this->assertEquals($subscribedLesson->visibility, $result1->visibility);
-        $this->assertEquals($subscribedLesson->exercises_count, $result1->exercises_count);
-        $this->assertEquals($subscribedLesson->subscribers_count, $result1->subscribers_count);
-        $this->assertEquals($subscribedLesson->child_lessons_count, $result1->child_lessons_count);
-        $this->assertEquals(1, $result1->is_subscriber);
-        $this->assertEquals(0, $result1->is_bidirectional);
-        $this->assertEquals(0, $result1->percent_of_good_answers);
+        /** @var UserLesson $userLesson */
+        $userLesson = $result[0];
+        $this->assertInstanceOf(UserLesson::class, $userLesson);
+        $this->assertEquals($user->id, $userLesson->user_id);
+        $this->assertEquals($subscribedLesson->id, $userLesson->lesson_id);
+        $this->assertEquals($subscribedLesson->owner_id, $userLesson->owner_id);
+        $this->assertEquals($subscribedLesson->name, $userLesson->name);
+        $this->assertEquals($subscribedLesson->visibility, $userLesson->visibility);
+        $this->assertEquals($subscribedLesson->exercises_count, $userLesson->exercises_count);
+        $this->assertEquals($subscribedLesson->subscribers_count, $userLesson->subscribers_count);
+        $this->assertEquals($subscribedLesson->child_lessons_count, $userLesson->child_lessons_count);
+        $this->assertEquals(1, $userLesson->is_subscriber);
+        $this->assertEquals(0, $userLesson->is_bidirectional);
+        $this->assertEquals(0, $userLesson->percent_of_good_answers);
+        $this->assertEquals(0, $userLesson->is_favourite);
+    }
+
+    public function itShould_fetchSubscribedUserLessons_favourite()
+    {
+        $this->be($user = $this->createUser());
+        $subscribedLesson = $this->createLesson();
+        $subscribedLesson->subscribe($user);
+        $subscribedLesson->subscribedUsers()->updateExistingPivot($user->id, ['favourite' => 1]);
+
+        $repository = new AuthenticatedUserLessonRepository($user);
+        $result = $repository->fetchSubscribedUserLessons();
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(1, $result);
+
+        /** @var UserLesson $userLesson */
+        $userLesson = $result[0];
+        $this->assertInstanceOf(UserLesson::class, $userLesson);
+        $this->assertEquals($user->id, $userLesson->user_id);
+        $this->assertEquals($subscribedLesson->id, $userLesson->lesson_id);
+        $this->assertEquals($subscribedLesson->owner_id, $userLesson->owner_id);
+        $this->assertEquals($subscribedLesson->name, $userLesson->name);
+        $this->assertEquals($subscribedLesson->visibility, $userLesson->visibility);
+        $this->assertEquals($subscribedLesson->exercises_count, $userLesson->exercises_count);
+        $this->assertEquals($subscribedLesson->subscribers_count, $userLesson->subscribers_count);
+        $this->assertEquals($subscribedLesson->child_lessons_count, $userLesson->child_lessons_count);
+        $this->assertEquals(1, $userLesson->is_subscriber);
+        $this->assertEquals(0, $userLesson->is_bidirectional);
+        $this->assertEquals(0, $userLesson->percent_of_good_answers);
+        $this->assertEquals(1, $userLesson->is_favourite);
     }
 
     // fetchAvailableUserLessons
@@ -337,6 +440,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(0, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -371,6 +475,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->assertEquals(0, $result->is_subscriber);
         $this->assertEquals(0, $result->is_bidirectional);
         $this->assertEquals(0, $result->percent_of_good_answers);
+        $this->assertEquals(0, $result->is_favourite);
     }
 
     /** @test */
@@ -396,7 +501,7 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
         $this->be($user = $this->createUser());
 
         // lesson without exercises
-        $lesson = $this->createLesson();
+        $this->createLesson();
 
         $repository = new AuthenticatedUserLessonRepository($user);
         $result = $repository->fetchAvailableUserLessons();

@@ -25,6 +25,13 @@
                                             Learn all
                                         </a>
                                     @endif
+                                    @if($userCanLearnFavouriteLessons)
+                                        <a href="/learn/favourites" class="btn btn-warning margin-bottom"
+                                           role="button">
+                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                            Learn favourites
+                                        </a>
+                                    @endif
                                 </p>
                             </div>
                             <div class="col-md-4 no-padding">
@@ -50,13 +57,13 @@
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                                <a href="/lessons/{{ $row->lesson_id }}">{{ $row->name }}</a>
+                                                <a href="/lessons/{{ $row->lesson_id }}/exercises">{{ $row->name }}</a>
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->exercises_count }} </br>
+                                                Number of exercises: {{ $row->exercises_count }} <br/>
                                                 {{-- - 1 because owner is always subscribing --}}
-                                                Number of subscribers: {{ $row->subscribers_count - 1 }} </br>
-                                                Percent of good answers: {{ $row->percent_of_good_answers }} </br>
+                                                Number of subscribers: {{ $row->subscribers_count - 1 }} <br/>
+                                                Percent of good answers: {{ $row->percent_of_good_answers }} <br/>
                                             </p>
                                             <p>
                                                 @can('learn', $row)
@@ -70,11 +77,30 @@
                                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                     Add exercise
                                                 </a>
-                                                <a href="/lessons/{{ $row->lesson_id }}/exercises" class="btn btn-default margin-bottom">
-                                                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                                    Exercises
-                                                </a>
+                                                @if($row->is_favourite)
+                                                    <button type="submit" form="unfavourite-{{ $row->lesson_id }}"
+                                                            class="btn btn-warning margin-bottom">
+                                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                                    </button>
+                                                @else
+                                                    <button type="submit" form="favourite-{{ $row->lesson_id }}"
+                                                            class="btn btn-default margin-bottom">
+                                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                                    </button>
+                                                @endif
                                             </p>
+                                            <form id="favourite-{{ $row->lesson_id }}"
+                                                  action="/lessons/{{ $row->lesson_id }}/favourite"
+                                                  method="POST">
+                                                <input type="hidden" name="favourite" value="1">
+                                                {{ csrf_field() }}
+                                            </form>
+                                            <form id="unfavourite-{{ $row->lesson_id }}"
+                                                  action="/lessons/{{ $row->lesson_id }}/favourite"
+                                                  method="POST">
+                                                <input type="hidden" name="favourite" value="0">
+                                                {{ csrf_field() }}
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -88,13 +114,13 @@
                                         <div class="caption">
                                             <h4>
                                                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                                <a href="/lessons/{{ $row->lesson_id }}">{{ $row->name }}</a>
+                                                <a href="/lessons/{{ $row->lesson_id }}/exercises">{{ $row->name }}</a>
                                             </h4>
                                             <p>
-                                                Number of exercises: {{ $row->exercises_count }} </br>
+                                                Number of exercises: {{ $row->exercises_count }} <br/>
                                                 {{-- - 1 because owner is always subscribing --}}
-                                                Number of subscribers: {{ $row->subscribers_count - 1 }} </br>
-                                                Percent of good answers: {{ $row->percent_of_good_answers }} </br>
+                                                Number of subscribers: {{ $row->subscribers_count - 1 }} <br/>
+                                                Percent of good answers: {{ $row->percent_of_good_answers }} <br/>
                                             </p>
                                             <p>
                                                 <a href="/learn/lessons/{{ $row->lesson_id }}"
@@ -109,16 +135,35 @@
                                                       aria-hidden="true"></span>
                                                     Unsubscribe
                                                 </button>
-                                                <a href="/lessons/{{ $row->lesson_id }}/exercises" class="btn btn-default margin-bottom">
-                                                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                                    Exercises
-                                                </a>
+                                                @if($row->is_favourite)
+                                                    <button type="submit" form="unfavourite-{{ $row->lesson_id }}"
+                                                            class="btn btn-warning margin-bottom">
+                                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                                    </button>
+                                                @else
+                                                    <button type="submit" form="favourite-{{ $row->lesson_id }}"
+                                                            class="btn btn-default margin-bottom">
+                                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                                    </button>
+                                                @endif
+                                            </p>
                                             <form id="unsubscribe-{{ $row->lesson_id }}"
                                                   action="/lessons/{{ $row->lesson_id }}/unsubscribe"
                                                   method="POST">
                                                 {{ csrf_field() }}
                                             </form>
-                                            </p>
+                                            <form id="favourite-{{ $row->lesson_id }}"
+                                                  action="/lessons/{{ $row->lesson_id }}/favourite"
+                                                  method="POST">
+                                                <input type="hidden" name="favourite" value="1">
+                                                {{ csrf_field() }}
+                                            </form>
+                                            <form id="unfavourite-{{ $row->lesson_id }}"
+                                                  action="/lessons/{{ $row->lesson_id }}/favourite"
+                                                  method="POST">
+                                                <input type="hidden" name="favourite" value="0">
+                                                {{ csrf_field() }}
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -167,9 +212,9 @@
                                             <a href="/lessons/{{ $row->lesson_id }}/exercises">{{ $row->name }}</a>
                                         </h4>
                                         <p>
-                                            Number of exercises: {{ $row->exercises_count }} </br>
+                                            Number of exercises: {{ $row->exercises_count }} <br/>
                                             {{-- - 1 because owner is always subscribing --}}
-                                            Number of subscribers: {{ $row->subscribers_count - 1 }} </br>
+                                            Number of subscribers: {{ $row->subscribers_count - 1 }} <br/>
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->lesson_id }}"
@@ -184,10 +229,7 @@
                                                           aria-hidden="true"></span>
                                                 Subscribe
                                             </button>
-                                            <a href="/lessons/{{ $row->lesson_id }}/exercises" class="btn btn-default margin-bottom">
-                                                <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                                Exercises
-                                            </a>
+                                        </p>
                                         <form id="subscribe-{{ $row->lesson_id }}"
                                               action="/lessons/{{ $row->lesson_id }}/subscribe"
                                               method="POST">
@@ -198,7 +240,6 @@
                                               method="POST">
                                             {{ csrf_field() }}
                                         </form>
-                                        </p>
                                     </div>
                                 </div>
                             </div>

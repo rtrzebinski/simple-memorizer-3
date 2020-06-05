@@ -5,12 +5,12 @@ namespace Tests\Integration\Http\Controllers\Web;
 use App\Structures\UserExercise\UserExercise;
 use WebTestCase;
 
-class LearnAllControllerTest extends WebTestCase
+class LearnFavouritesControllerTest extends WebTestCase
 {
-    // learnAll
+    // learnFavourites
 
     /** @test */
-    public function itShould_showLearnAllPage()
+    public function itShould_showLearnFavouritesPage()
     {
         $this->be($user = $this->createUser());
 
@@ -18,8 +18,9 @@ class LearnAllControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson();
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $lesson->subscribe($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
 
-        $this->call('GET', '/learn/all');
+        $this->call('GET', '/learn/favourites');
 
         $this->assertResponseOk();
 
@@ -49,15 +50,16 @@ class LearnAllControllerTest extends WebTestCase
     }
 
     /** @test */
-    public function itShould_showLearnAllPage_withPreviousExercise()
+    public function itShould_showLearnFavouritesPage_withPreviousExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createExercise()->lesson;
         $lesson->subscribe($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $previous = $lesson->exercises[0];
 
-        $this->call('GET', '/learn/all?previous_exercise_id='.$previous->id);
+        $this->call('GET', '/learn/favourites?previous_exercise_id='.$previous->id);
 
         $this->assertResponseOk();
 
@@ -87,14 +89,15 @@ class LearnAllControllerTest extends WebTestCase
     }
 
     /** @test */
-    public function itShould_showLearnAllPage_withRequestedExercise()
+    public function itShould_showLearnFavouritesPage_withRequestedExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $requested = $lesson->exercises[0];
 
-        $this->call('GET', '/learn/all/?requested_exercise_id='.$requested->id);
+        $this->call('GET', '/learn/favourites/?requested_exercise_id='.$requested->id);
 
         $this->assertFalse(isset($this->view()->getData()['userLesson']));
 
@@ -121,22 +124,22 @@ class LearnAllControllerTest extends WebTestCase
     }
 
     /** @test */
-    public function itShould_notShowLearnAllPage_unauthorized()
+    public function itShould_notShowLearnFavouritesPage_unauthorized()
     {
-        $this->call('GET', '/learn/all/');
+        $this->call('GET', '/learn/favourites/');
 
         $this->assertResponseUnauthorized();
     }
 
     /** @test */
-    public function itShould_notShowLearnAllPage_forbiddenToAccessRequestedExercise()
+    public function itShould_notShowLearnFavouritesPage_forbiddenToAccessRequestedExercise()
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $requested = $this->createExercise();
 
-        $this->call('GET', '/learn/all?requested_exercise_id='.$requested->id);
+        $this->call('GET', '/learn/favourites?requested_exercise_id='.$requested->id);
 
         $this->assertResponseForbidden();
     }
@@ -148,6 +151,7 @@ class LearnAllControllerTest extends WebTestCase
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises->first();
 
@@ -156,7 +160,7 @@ class LearnAllControllerTest extends WebTestCase
             'answer' => 'good'
         ];
 
-        $this->call('POST', '/learn/all', $data);
+        $this->call('POST', '/learn/favourites', $data);
 
         $this->assertResponseOk();
 
@@ -174,7 +178,7 @@ class LearnAllControllerTest extends WebTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/all');
+        $this->call('POST', '/learn/favourites');
 
         $this->assertResponseUnauthorized();
     }
@@ -186,7 +190,7 @@ class LearnAllControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/all');
+        $this->call('POST', '/learn/favourites');
 
         $this->assertResponseInvalidInput();
     }
@@ -198,6 +202,7 @@ class LearnAllControllerTest extends WebTestCase
     {
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises->first();
 
@@ -206,7 +211,7 @@ class LearnAllControllerTest extends WebTestCase
             'answer' => 'bad'
         ];
 
-        $this->call('POST', '/learn/all', $data);
+        $this->call('POST', '/learn/favourites', $data);
 
         $this->assertResponseOk();
 
@@ -221,7 +226,7 @@ class LearnAllControllerTest extends WebTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/all');
+        $this->call('POST', '/learn/favourites');
 
         $this->assertResponseUnauthorized();
     }
@@ -233,7 +238,7 @@ class LearnAllControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/all');
+        $this->call('POST', '/learn/favourites');
 
         $this->assertResponseInvalidInput();
     }
@@ -252,9 +257,9 @@ class LearnAllControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/learn/all/'.$exercise->id, $parameters);
+        $this->call('PUT', '/learn/favourites/'.$exercise->id, $parameters);
 
-        $this->assertResponseRedirectedTo('/learn/all/?requested_exercise_id='.$exercise->id);
+        $this->assertResponseRedirectedTo('/learn/favourites/?requested_exercise_id='.$exercise->id);
         $exercise = $exercise->fresh();
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
@@ -271,7 +276,7 @@ class LearnAllControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/learn/all/'.$exercise->id, $parameters);
+        $this->call('PUT', '/learn/favourites/'.$exercise->id, $parameters);
 
         $this->assertResponseUnauthorized();
     }
@@ -288,7 +293,7 @@ class LearnAllControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/learn/all/'.$exercise->id, $parameters);
+        $this->call('PUT', '/learn/favourites/'.$exercise->id, $parameters);
 
         $this->assertResponseForbidden();
     }
@@ -303,7 +308,7 @@ class LearnAllControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/learn/all/-1', $parameters);
+        $this->call('PUT', '/learn/favourites/-1', $parameters);
 
         $this->assertResponseNotFound();
     }
@@ -315,7 +320,7 @@ class LearnAllControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('PUT', '/learn/all/'.$exercise->id);
+        $this->call('PUT', '/learn/favourites/'.$exercise->id);
 
         $this->assertResponseInvalidInput();
     }

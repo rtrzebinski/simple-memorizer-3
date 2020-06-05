@@ -122,7 +122,7 @@ class Lesson extends Model
     {
         return $this->belongsToMany(User::class)
             // required for percent_of_good_answers to be included in the result
-            ->withPivot(['percent_of_good_answers', 'bidirectional'])
+            ->withPivot(['percent_of_good_answers', 'bidirectional', 'favourite'])
             ->withTimestamps();
     }
 

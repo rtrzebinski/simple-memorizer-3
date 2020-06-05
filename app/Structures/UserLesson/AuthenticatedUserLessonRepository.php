@@ -48,6 +48,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 'l.child_lessons_count AS child_lessons_count',
                 DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
                 DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
                 DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
@@ -80,6 +81,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 'l.child_lessons_count AS child_lessons_count',
                 DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
                 DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
                 DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
@@ -110,6 +112,7 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 'l.child_lessons_count AS child_lessons_count',
                 DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
                 DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
                 DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
@@ -138,9 +141,6 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
                 'l.exercises_count AS exercises_count',
                 'l.subscribers_count AS subscribers_count',
                 'l.child_lessons_count AS child_lessons_count',
-                DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
-                DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
-                DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
             ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) {
