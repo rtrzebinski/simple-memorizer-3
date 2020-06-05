@@ -18,7 +18,7 @@
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Create new lesson
                                     </a>
-                                    @if(isset($subscribedLessons) && !empty($subscribedLessons))
+                                    @if($userCanLearnAllLessons)
                                         <a href="/learn/all" class="btn btn-primary margin-bottom"
                                            role="button">
                                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>

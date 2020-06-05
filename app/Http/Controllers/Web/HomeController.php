@@ -24,10 +24,12 @@ class HomeController extends Controller
 
         $data['userHasOwnedOrSubscribedLessons'] = (bool)(count($data['ownedLessons']) + count($data['subscribedLessons']));
 
+        $exercisesTotal = 0;
         $favouriteExercisesTotal = 0;
 
         /** @var UserLesson $userLesson */
         foreach ($data['ownedLessons'] as $userLesson) {
+            $exercisesTotal += $userLesson->exercises_count;
             if ($userLesson->is_favourite) {
                 $favouriteExercisesTotal += $userLesson->exercises_count;
             }
@@ -35,11 +37,13 @@ class HomeController extends Controller
 
         /** @var UserLesson $userLesson */
         foreach ($data['subscribedLessons'] as $userLesson) {
+            $exercisesTotal += $userLesson->exercises_count;
             if ($userLesson->is_favourite) {
                 $favouriteExercisesTotal += $userLesson->exercises_count;
             }
         }
 
+        $data['userCanLearnAllLessons'] = $exercisesTotal >= config('app.min_exercises_to_learn_lesson');
         $data['userCanLearnFavouriteLessons'] = $favouriteExercisesTotal >= config('app.min_exercises_to_learn_lesson');
 
         return view('home', $data);

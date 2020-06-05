@@ -29,11 +29,47 @@ class HomeControllerTest extends WebTestCase
         $this->assertCount(1, $this->view()->subscribedLessons);
         $this->assertCount(1, $this->view()->availableLessons);
         $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertViewHas('userCanLearnAllLessons', false);
         $this->assertViewHas('userCanLearnFavouriteLessons', false);
     }
 
     /** @test */
-    public function itShould_displayHomePage_userHasOwnedFavouriteLessonsWithEnoughExercises()
+    public function itShould_displayHomePage_userOwnsLessonWithEnoughExercisesToLearn()
+    {
+        $this->be($user = $this->createUser());
+
+        // ownedLessons
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('GET', '/home');
+
+        $this->assertResponseOk();
+        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertViewHas('userCanLearnAllLessons', true);
+        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+    }
+
+    /** @test */
+    public function itShould_displayHomePage_userSubscribesLessonWithEnoughExercisesToLearn()
+    {
+        $this->be($user = $this->createUser());
+
+        // subscribedLessons
+        $lesson = $this->createLesson();
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $lesson->subscribe($user);
+
+        $this->call('GET', '/home');
+
+        $this->assertResponseOk();
+        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertViewHas('userCanLearnAllLessons', true);
+        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+    }
+
+    /** @test */
+    public function itShould_displayHomePage_userOwnsFavouriteLessonWithEnoughExercisesToLearn()
     {
         $this->be($user = $this->createUser());
 
@@ -45,11 +81,13 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
+        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertViewHas('userCanLearnAllLessons', true);
         $this->assertViewHas('userCanLearnFavouriteLessons', true);
     }
 
     /** @test */
-    public function itShould_displayHomePage_userHasSubscribedFavouriteLessons()
+    public function itShould_displayHomePage_userSubscribesFavouriteLessonWithEnoughExercisesToLearn()
     {
         $this->be($user = $this->createUser());
 
@@ -62,6 +100,8 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
+        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertViewHas('userCanLearnAllLessons', true);
         $this->assertViewHas('userCanLearnFavouriteLessons', true);
     }
 
@@ -77,6 +117,8 @@ class HomeControllerTest extends WebTestCase
         $this->assertCount(0, $this->view()->subscribedLessons);
         $this->assertCount(0, $this->view()->availableLessons);
         $this->assertViewHas('userHasOwnedOrSubscribedLessons', false);
+        $this->assertViewHas('userCanLearnAllLessons', false);
+        $this->assertViewHas('userCanLearnFavouriteLessons', false);
     }
 
     /** @test */
