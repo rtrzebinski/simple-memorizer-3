@@ -29,6 +29,40 @@ class HomeControllerTest extends WebTestCase
         $this->assertCount(1, $this->view()->subscribedLessons);
         $this->assertCount(1, $this->view()->availableLessons);
         $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+    }
+
+    /** @test */
+    public function itShould_displayHomePage_userHasOwnedFavouriteLessonsWithEnoughExercises()
+    {
+        $this->be($user = $this->createUser());
+
+        // ownedLessons
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
+
+        $this->call('GET', '/home');
+
+        $this->assertResponseOk();
+        $this->assertViewHas('userCanLearnFavouriteLessons', true);
+    }
+
+    /** @test */
+    public function itShould_displayHomePage_userHasSubscribedFavouriteLessons()
+    {
+        $this->be($user = $this->createUser());
+
+        // subscribedLessons
+        $lesson = $this->createLesson();
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $lesson->subscribe($user);
+        $this->updateFavourite($lesson, $user->id, $favourite = true);
+
+        $this->call('GET', '/home');
+
+        $this->assertResponseOk();
+        $this->assertViewHas('userCanLearnFavouriteLessons', true);
     }
 
     /** @test */

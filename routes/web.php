@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/lessons/merge/{lesson}', 'Web\LessonMergeController@merge');
 
+    Route::post('/lessons/{lesson}/favourite', 'Web\LessonController@saveFavourite');
+
     // lesson CSV export and import
 
     Route::get('/lessons/{lesson}/csv', 'Web\LessonCsvController@exportLessonToCsv');
@@ -82,6 +84,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/learn/all', 'Web\LearnAllController@handleAnswer');
 
     Route::put('/learn/all/{exercise}', 'Web\LearnAllController@updateExercise');
+
+    // learn favourites
+
+    Route::get('/learn/favourites', 'Web\LearnFavouritesController@learnFavourites');
+
+    Route::post('/learn/favourites', 'Web\LearnFavouritesController@handleAnswer');
+
+    Route::put('/learn/favourites/{exercise}', 'Web\LearnFavouritesController@updateExercise');
 
     // learn lesson
 

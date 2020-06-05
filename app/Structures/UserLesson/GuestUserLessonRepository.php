@@ -29,9 +29,6 @@ class GuestUserLessonRepository implements AbstractUserLessonRepositoryInterface
                 'l.exercises_count AS exercises_count',
                 'l.subscribers_count AS subscribers_count',
                 'l.child_lessons_count AS child_lessons_count',
-                DB::raw('0 AS is_subscriber'),
-                DB::raw('0 AS is_bidirectional'),
-                DB::raw('0 AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
             ->where('l.id', $lessonId)
@@ -54,9 +51,6 @@ class GuestUserLessonRepository implements AbstractUserLessonRepositoryInterface
                 'l.exercises_count AS exercises_count',
                 'l.subscribers_count AS subscribers_count',
                 'l.child_lessons_count AS child_lessons_count',
-                DB::raw('0 AS is_subscriber'),
-                DB::raw('0 AS is_bidirectional'),
-                DB::raw('0 AS percent_of_good_answers'),
             ])
             ->from('lessons AS l')
             ->where('l.visibility', '=', Lesson::VISIBILITY_PUBLIC)
