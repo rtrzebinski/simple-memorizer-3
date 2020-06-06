@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e83533c0-5610-4d18-b39e-9905a82f0ca6" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1XFHcpxvBUIWaOjE2EQRZfjeLZR" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs/subfolder" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/subfolder" />
+      <recent name="$PROJECT_DIR$/tests/integration" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner scope="XML" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e83533c0-5610-4d18-b39e-9905a82f0ca6" name="Default Changelist" comment="" />
+      <created>1580635005562</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580635005562</updated>
+      <workItem from="1580635010908" duration="491000" />
+      <workItem from="1580635519271" duration="2176000" />
+      <workItem from="1580642843574" duration="120000" />
+      <workItem from="1580811432857" duration="952000" />
+      <workItem from="1580967932287" duration="53000" />
+      <workItem from="1581393562116" duration="5700000" />
+      <workItem from="1585990137227" duration="34000" />
+      <workItem from="1585990225886" duration="119000" />
+      <workItem from="1586098577240" duration="352000" />
+      <workItem from="1586766102717" duration="17204000" />
+      <workItem from="1586797667816" duration="101000" />
+      <workItem from="1587578507686" duration="939000" />
+      <workItem from="1590384668746" duration="124000" />
+      <workItem from="1591421053511" duration="1862000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="Makefile" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="444" y="206" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1585990164417">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state x="444" y="206" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/72.23.1368.877@72.23.1368.877" timestamp="1585990164417" />
+    <state x="344" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1586787364709">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state x="344" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/72.23.1368.877@72.23.1368.877" timestamp="1586787364709" />
+    <state x="494" y="225" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1586790111620">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state x="494" y="225" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/72.23.1368.877@72.23.1368.877" timestamp="1586790111620" />
+    <state x="481" y="293" key="NewPhpClassDialog" timestamp="1586770269781">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state x="481" y="293" key="NewPhpClassDialog/72.23.1368.877@72.23.1368.877" timestamp="1586770269781" />
+    <state width="200" height="445" key="SwitcherDM" timestamp="1591421737042">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state width="200" height="445" key="SwitcherDM/72.23.1368.877@72.23.1368.877" timestamp="1591421737042" />
+    <state width="910" height="720" key="SwitcherDM/72.23.2488.1417@72.23.2488.1417" timestamp="1587580778342" />
+    <state x="433" y="107" width="645" height="708" key="find.popup" timestamp="1586772068022">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state x="433" y="107" width="645" height="708" key="find.popup/72.23.1368.877@72.23.1368.877" timestamp="1586772068022" />
+    <state x="421" y="213" width="670" height="676" key="search.everywhere.popup" timestamp="1586791213866">
+      <screen x="72" y="23" width="1368" height="877" />
+    </state>
+    <state x="421" y="213" width="670" height="676" key="search.everywhere.popup/72.23.1368.877@72.23.1368.877" timestamp="1586791213866" />
+  </component>
+</project>
