@@ -14,7 +14,7 @@ use ErrorException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class ExerciseController extends Controller
@@ -97,17 +97,21 @@ class ExerciseController extends Controller
     /**
      * @param Exercise                              $exercise
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
+     * @param Request                               $request
      * @return View
      * @throws AuthorizationException
      */
-    public function edit(Exercise $exercise, AbstractUserLessonRepositoryInterface $userLessonRepository): View
+    public function edit(Exercise $exercise, AbstractUserLessonRepositoryInterface $userLessonRepository, Request $request): View
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 
         $userLesson = $userLessonRepository->fetchUserLesson($exercise->lesson_id);
 
+        $redirectTo = $request->redirect_to ?? URL::previous();
+
         return view('exercises.edit', [
                 'exercise' => $exercise,
+                'redirectTo' => $redirectTo,
             ] + $this->lessonViewData($userLesson));
     }
 
@@ -136,6 +140,6 @@ class ExerciseController extends Controller
 
         event(new ExerciseDeleted($exercise->lesson, $this->user()));
 
-        return redirect(url()->previous());
+        return redirect(URL::previous());
     }
 }

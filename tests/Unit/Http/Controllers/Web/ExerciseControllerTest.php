@@ -270,11 +270,30 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $redirectTo = $this->randomUrl();
 
-        $this->call('GET', '/exercises/'.$exercise->id.'/edit');
+        $this->call('GET', '/exercises/'.$exercise->id.'/edit?redirect_to='.urlencode($redirectTo));
 
         $this->assertResponseOk();
         $this->assertEquals($exercise->id, $this->view()->exercise->id);
+        $this->assertEquals($redirectTo, $this->view()->redirectTo);
+    }
+
+    /** @test */
+    public function itShould_showExerciseEditPage_defaultToPreviousPageIfRedirectUrlNotDefined()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $redirectTo = $this->randomUrl();
+
+        $this->call('GET', '/exercises/'.$exercise->id.'/edit', $parameters = [], $cookies = [], $files = [], $server = [
+            'HTTP_REFERER' => $redirectTo,
+        ]);
+
+        $this->assertResponseOk();
+        $this->assertEquals($exercise->id, $this->view()->exercise->id);
+        $this->assertEquals($redirectTo, $this->view()->redirectTo);
     }
 
     /** @test */
