@@ -6,7 +6,7 @@
             <div class="col-md-12">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Learning</div>
+                    <div class="panel-heading">Learning a <u>single lesson</u></div>
                     <div class="panel-body">
 
                         @if($userExercise)

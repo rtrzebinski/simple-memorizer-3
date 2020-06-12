@@ -6,7 +6,7 @@
             <div class="col-md-12">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Learning</div>
+                    <div class="panel-heading">Learning <u>all your lessons</u></div>
                     <div class="panel-body">
 
                         @if($userExercise)
@@ -15,7 +15,7 @@
                                 <div class="col-md-8 col-md-offset-2">
                                     <h4>
                                         <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-                                        Learning all your exercises
+                                        <a href="/lessons/{{ $userExercise->lesson_id }}">{{ $userExercise->lesson_name }}</a>
                                     </h4>
                                     {{--check if user can modify lesson without db query--}}
                                     @if($canEditExercise)
