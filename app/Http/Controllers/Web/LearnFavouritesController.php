@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Events\ExerciseBadAnswer;
 use App\Events\ExerciseGoodAnswer;
-use App\Http\Requests\UpdateExerciseRequest;
-use App\Models\Exercise;
 use App\Services\LearningService;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class LearnFavouritesController extends Controller
@@ -36,9 +33,15 @@ class LearnFavouritesController extends Controller
             $userExercise = $learningService->findUserExerciseToLearn($userExercises, $request->previous_exercise_id);
         }
 
+        $redirectUrl = '/learn/favourites/?requested_exercise_id='.$userExercise->exercise_id;
+        $editExerciseUrl = URL::to('/exercises/'.$userExercise->exercise_id.'/edit?redirect_to='.urlencode($redirectUrl));
+
+        $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
+
         return view('learn.favourites', [
             'userExercise' => $userExercise,
-            'canModifyExercise' => $userExercise->lesson_owner_id == $this->user()->id,
+            'canEditExercise' => $canEditExercise,
+            'editExerciseUrl' => $editExerciseUrl,
         ]);
     }
 
@@ -69,20 +72,5 @@ class LearnFavouritesController extends Controller
         }
 
         return $this->learnFavourites($request, $learningService, $userExerciseRepository);
-    }
-
-    /**
-     * @param Exercise              $exercise
-     * @param UpdateExerciseRequest $request
-     * @return RedirectResponse
-     * @throws AuthorizationException
-     */
-    public function updateExercise(Exercise $exercise, UpdateExerciseRequest $request): RedirectResponse
-    {
-        $this->authorizeForUser($this->user(), 'modify', $exercise);
-
-        $exercise->update($request->all());
-
-        return redirect('/learn/favourites/?requested_exercise_id='.$exercise->id);
     }
 }

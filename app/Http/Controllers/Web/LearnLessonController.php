@@ -4,16 +4,13 @@ namespace App\Http\Controllers\Web;
 
 use App\Events\ExerciseBadAnswer;
 use App\Events\ExerciseGoodAnswer;
-use App\Http\Requests\UpdateExerciseRequest;
-use App\Models\Exercise;
 use App\Services\LearningService;
 use App\Services\UserExerciseModifier;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class LearnLessonController extends Controller
@@ -61,10 +58,16 @@ class LearnLessonController extends Controller
             $userExercise = $userExerciseModifier->swapQuestionWithAnswer($userExercise, $probability = 50);
         }
 
+        $redirectUrl = '/learn/lessons/'.$lessonId.'?requested_exercise_id='.$userExercise->exercise_id;
+        $editExerciseUrl = URL::to('/exercises/'.$userExercise->exercise_id.'/edit?redirect_to='.urlencode($redirectUrl));
+
+        $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
+
         return view('learn.lesson', [
             'userLesson' => $userLesson,
             'userExercise' => $userExercise,
-            'canModifyExercise' => $userLesson->owner_id == $this->user()->id,
+            'canEditExercise' => $canEditExercise,
+            'editExerciseUrl' => $editExerciseUrl,
         ]);
     }
 
@@ -101,21 +104,5 @@ class LearnLessonController extends Controller
         }
 
         return $this->learnLesson($lessonId, $request, $learningService, $userExerciseRepository, $userLessonRepository, $userExerciseModifier);
-    }
-
-    /**
-     * @param Exercise              $exercise
-     * @param int                   $lessonId
-     * @param UpdateExerciseRequest $request
-     * @return RedirectResponse
-     * @throws AuthorizationException
-     */
-    public function updateExercise(Exercise $exercise, int $lessonId, UpdateExerciseRequest $request): RedirectResponse
-    {
-        $this->authorizeForUser($this->user(), 'modify', $exercise);
-
-        $exercise->update($request->all());
-
-        return redirect('/learn/lessons/'.$lessonId.'?requested_exercise_id='.$exercise->id);
     }
 }

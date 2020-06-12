@@ -83,23 +83,17 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/learn/all', 'Web\LearnAllController@handleAnswer');
 
-    Route::put('/learn/all/{exercise}', 'Web\LearnAllController@updateExercise');
-
     // learn favourites
 
     Route::get('/learn/favourites', 'Web\LearnFavouritesController@learnFavourites');
 
     Route::post('/learn/favourites', 'Web\LearnFavouritesController@handleAnswer');
 
-    Route::put('/learn/favourites/{exercise}', 'Web\LearnFavouritesController@updateExercise');
-
     // learn lesson
 
     Route::get('/learn/lessons/{lesson_id}', 'Web\LearnLessonController@learnLesson');
 
     Route::post('/learn/lessons/{lesson_id}', 'Web\LearnLessonController@handleAnswer');
-
-    Route::put('/learn/lessons/{exercise}/{lesson}', 'Web\LearnLessonController@updateExercise');
 });
 
 // guest users only

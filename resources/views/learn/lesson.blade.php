@@ -18,12 +18,13 @@
                                         <a href="/lessons/{{ $userLesson->lesson_id }}">{{ $userLesson->name }}</a>
                                     </h4>
                                     {{--check if user can modify lesson without db query--}}
-                                    @if($canModifyExercise)
-                                        <button type="submit" form="update-exercise-form"
-                                                class="btn btn-default margin-bottom">
-                                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                                            Save changes
-                                        </button>
+                                    @if($canEditExercise)
+                                        <a href="{{ $editExerciseUrl }}">
+                                            <button class="btn btn-default margin-bottom">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                Edit
+                                            </button>
+                                        </a>
                                     @endif
                                     <button id="show_answer_button" class="btn btn-default margin-bottom">
                                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
@@ -41,29 +42,22 @@
                             <br/>
 
                             <div class="row">
-                                <form method="POST" id="update-exercise-form" action="/learn/lessons/{{ $userExercise->exercise_id }}/{{ $userLesson->lesson_id }}">
-                                    {{ csrf_field() }}
-                                    <input name="_method" type="hidden" value="PUT">
-                                    <div class="col-md-8 col-md-offset-2 margin-bottom">
-                                        <label>
-                                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                                            Question
-                                        </label>
-                                        <textarea name="question" class="form-control" rows="{{ substr_count( $userExercise->question, "\n" ) + 1 }}">{{ $userExercise->question }}</textarea>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div id="answer_input" class="col-md-8 col-md-offset-2 margin-bottom hidden">
-                                        <br/>
-                                        <label>
-                                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
-                                            Correct answer
-                                        </label>
-                                        <textarea name="answer" class="form-control" rows="{{ substr_count( $userExercise->answer, "\n" ) + 1 }}">{{ $userExercise->answer }}</textarea>
-                                    </div>
-                                </form>
+                                <div class="col-md-8 col-md-offset-2">
+                                    <label>
+                                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                        Question
+                                    </label>
+                                    <div class="well well-sm">{{ $userExercise->question }}</div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div id="answer_input" class="col-md-8 col-md-offset-2 hidden">
+                                    <label>
+                                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                        Correct answer
+                                    </label>
+                                    <div class="well well-sm">{{ $userExercise->answer }}</div>
+                                </div>
                             </div>
-
-                            <br/>
 
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">

@@ -15,7 +15,7 @@
                                 <form method="POST" action="/exercises/{{ $exercise->id }}">
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="PUT">
-                                    <input name="redirect_to" type="hidden" value="{{ url()->previous() }}">
+                                    <input name="redirect_to" type="hidden" value="{{ $redirectTo }}">
                                     <a href="/exercises/{{ $exercise->id }}" class="btn btn-default margin-bottom">
                                         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                         Browse exercises
