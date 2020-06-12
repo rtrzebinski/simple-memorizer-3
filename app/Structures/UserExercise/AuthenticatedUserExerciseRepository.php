@@ -85,6 +85,8 @@ class AuthenticatedUserExerciseRepository implements AbstractUserExerciseReposit
             ->select([
                 'e.id AS exercise_id',
                 'e.lesson_id AS lesson_id',
+                'l.name AS lesson_name',
+                'l.owner_id AS lesson_owner_id',
                 'e.question AS question',
                 'e.answer AS answer',
                 DB::raw('COALESCE(er.number_of_good_answers, 0) AS number_of_good_answers'),
@@ -95,6 +97,9 @@ class AuthenticatedUserExerciseRepository implements AbstractUserExerciseReposit
                 'er.latest_bad_answer AS latest_bad_answer',
                 DB::raw('COALESCE(er.percent_of_good_answers, 0) AS percent_of_good_answers'),
             ])
+            ->join('lessons AS l', function (JoinClause $join) {
+                $join->on('l.id', '=', 'e.lesson_id');
+            })
             ->leftJoin('exercise_results AS er', function (JoinClause $joinClause) {
                 $joinClause
                     ->on('er.exercise_id', '=', 'e.id')

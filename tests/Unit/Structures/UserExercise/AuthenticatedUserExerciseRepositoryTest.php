@@ -465,6 +465,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $this->assertEquals($exerciseResult->number_of_bad_answers_today, $result->number_of_bad_answers_today);
         $this->assertEquals($exerciseResult->latest_bad_answer, $result->latest_bad_answer);
         $this->assertEquals($exerciseResult->percent_of_good_answers, $result->percent_of_good_answers);
+        $this->assertEquals($lesson->owner_id, $result->lesson_owner_id);
+        $this->assertEquals($lesson->name, $result->lesson_name);
     }
 
     /** @test */
@@ -489,6 +491,8 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $this->assertSame(0, $result->number_of_bad_answers_today);
         $this->assertSame(null, $result->latest_bad_answer);
         $this->assertSame(0, $result->percent_of_good_answers);
+        $this->assertEquals($lesson->owner_id, $result->lesson_owner_id);
+        $this->assertEquals($lesson->name, $result->lesson_name);
     }
 
     // fetchUserExercisesWithPhrase
