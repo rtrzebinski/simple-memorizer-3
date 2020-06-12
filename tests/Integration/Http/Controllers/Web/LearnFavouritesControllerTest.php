@@ -33,7 +33,7 @@ class LearnFavouritesControllerTest extends WebTestCase
         $userExercise = $this->view()->getData()['userExercise'];
 
         $editExerciseUrl = $this->view()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?redirect_to=%2Flearn%2Ffavourites%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Ffavourites%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
 
         $this->assertInstanceOf(UserExercise::class, $userExercise);
         $this->assertIsInt($userExercise->exercise_id);
@@ -76,7 +76,7 @@ class LearnFavouritesControllerTest extends WebTestCase
         $userExercise = $this->view()->getData()['userExercise'];
 
         $editExerciseUrl = $this->view()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?redirect_to=%2Flearn%2Ffavourites%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Ffavourites%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
@@ -116,7 +116,7 @@ class LearnFavouritesControllerTest extends WebTestCase
         $userExercise = $this->view()->getData()['userExercise'];
 
         $editExerciseUrl = $this->view()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?redirect_to=%2Flearn%2Ffavourites%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Ffavourites%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);

@@ -279,6 +279,25 @@ class ExerciseControllerTest extends WebTestCase
         $this->assertEquals($redirectTo, $this->view()->redirectTo);
     }
 
+    /**
+     * @test
+     * @dataProvider trueFalseProvider
+     * @param bool $hideLesson
+     */
+    public function itShould_showExerciseEditPage_hideLesson(bool $hideLesson)
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
+        $redirectTo = $this->randomUrl();
+
+        $this->call('GET', '/exercises/'.$exercise->id.'/edit?hide_lesson='.$hideLesson);
+
+        $this->assertResponseOk();
+        $this->assertEquals($exercise->id, $this->view()->exercise->id);
+        $this->assertEquals($hideLesson, $this->view()->hideLesson);
+    }
+
     /** @test */
     public function itShould_showExerciseEditPage_defaultToPreviousPageIfRedirectUrlNotDefined()
     {

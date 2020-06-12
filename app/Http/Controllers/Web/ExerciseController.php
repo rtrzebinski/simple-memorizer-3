@@ -109,9 +109,12 @@ class ExerciseController extends Controller
 
         $redirectTo = $request->redirect_to ?? URL::previous();
 
+        $hideLesson = $request->hide_lesson;
+
         return view('exercises.edit', [
                 'exercise' => $exercise,
                 'redirectTo' => $redirectTo,
+                'hideLesson' => $hideLesson,
             ] + $this->lessonViewData($userLesson));
     }
 

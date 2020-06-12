@@ -5,7 +5,9 @@
         <div class="row">
             <div class="col-md-12">
 
-                @include('shared.manage_lesson')
+                @if(!$hideLesson)
+                    @include('shared.manage_lesson')
+                @endif
 
                 <div class="panel panel-default">
                     <div class="panel-heading">Edit exercise</div>
@@ -16,11 +18,6 @@
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="PUT">
                                     <input name="redirect_to" type="hidden" value="{{ $redirectTo }}">
-                                    <a href="/exercises/{{ $exercise->id }}" class="btn btn-default margin-bottom">
-                                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                                        Browse exercises
-                                    </a>
-                                    <hr>
                                     <div class="form-group {{ $errors->has('question') ? 'has-error' : false }}">
                                         <label>Question</label>
                                         <textarea name="question" class="form-control" rows="4">{{ $exercise->question }}</textarea>
