@@ -34,7 +34,7 @@ class LearnAllController extends Controller
         }
 
         $redirectUrl = '/learn/all/?requested_exercise_id='.$userExercise->exercise_id;
-        $editExerciseUrl = URL::to('/exercises/'.$userExercise->exercise_id.'/edit?redirect_to='.urlencode($redirectUrl));
+        $editExerciseUrl = URL::to('/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to='.urlencode($redirectUrl));
 
         $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
 

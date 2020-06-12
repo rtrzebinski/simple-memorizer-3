@@ -32,7 +32,7 @@ class LearnAllControllerTest extends WebTestCase
         $userExercise = $this->view()->getData()['userExercise'];
 
         $editExerciseUrl = $this->view()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?redirect_to=%2Flearn%2Fall%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Fall%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
 
         $userExercise = $this->view()->getData()['userExercise'];
         $this->assertInstanceOf(UserExercise::class, $userExercise);
@@ -75,7 +75,7 @@ class LearnAllControllerTest extends WebTestCase
         $userExercise = $this->view()->getData()['userExercise'];
 
         $editExerciseUrl = $this->view()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?redirect_to=%2Flearn%2Fall%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Fall%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
@@ -114,7 +114,7 @@ class LearnAllControllerTest extends WebTestCase
         $userExercise = $this->view()->getData()['userExercise'];
 
         $editExerciseUrl = $this->view()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?redirect_to=%2Flearn%2Fall%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Fall%2F%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
