@@ -110,7 +110,7 @@ class LearnFavouritesControllerTest extends WebTestCase
         $this->assertFalse(isset($this->view()->getData()['userLesson']));
 
         $canModifyExercise = $this->view()->getData()['canEditExercise'];
-        $this->assertFalse($canModifyExercise);
+        $this->assertTrue($canModifyExercise);
 
         /** @var UserExercise $userExercise */
         $userExercise = $this->view()->getData()['userExercise'];
@@ -120,7 +120,8 @@ class LearnFavouritesControllerTest extends WebTestCase
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
-        $this->assertNull($userExercise->lesson_name);
+        $this->assertEquals($lesson->name, $userExercise->lesson_name);
+        $this->assertEquals($lesson->owner_id, $userExercise->lesson_owner_id);
         $this->assertIsString($userExercise->question);
         $this->assertTrue(strlen($userExercise->question) > 0);
         $this->assertIsString($userExercise->answer);
