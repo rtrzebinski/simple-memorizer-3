@@ -49,14 +49,24 @@ Thanks to [Laradock](https://laradock.io) project has a built in [Docker](https:
 
 ### Commands
 
-- `make start` - start docker services, install composer dependencies, migrate and seed local MySQL database, run application on localhost
-- `make composer-install` - install composer dependencies
-- `make composer-update` - update composer dependencies
-- `make artisan-migrate` - run migrations
-- `make artisan-seed` - seed local MySQL database
-- `make artisan-telescope-clear` - clear all entries from telescope
-- `make mysql` - connect to dev database via mysql cli client
-- `make ssh` - ssh to workspace container
-- `make test` - run tests with phpunit
-- `make test-filter` - run tests with phpunit filtered by class or test name
-- `make paratest` - run tests with paratest
+To start local environment simply run `make start`.
+
+Other commands:
+
+```
+simple-memorizer-3 $ make
+target                         help
+------                         ----
+help                           Show this help
+clean                          Stop all running docker containers (recommended to run before 'start' command to ensure ports are not taken)
+start                          Create and start containers, composer dependencies, db migrate and seed etc. - everything in one command
+build                          Build or re-build containers
+up                             Start containers
+down                           Stop and remove containers, networks, images, and volumes
+composer-install               Composer install
+composer-update                Composer update
+bash                           SSH workspace container (run bash)
+test                           Run all unit tests or given test file
+test-filter                    Run unit tests of given class or test method
+paratest                       Run test with paratest
+```

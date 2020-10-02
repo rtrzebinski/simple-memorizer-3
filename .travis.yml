@@ -6,7 +6,7 @@ php:
 before_script:
   - phpenv config-rm xdebug.ini
   - composer install --prefer-dist --optimize-autoloader --no-interaction
-  - cp env-dev .env
+  - cp .env.dev .env
 
 script:
   - ./vendor/bin/paratest --runner SqliteRunner
