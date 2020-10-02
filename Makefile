@@ -51,17 +51,17 @@ composer-install: ## Composer install
 composer-update: ## Composer update
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock exec -T workspace composer update
 
-db-create:
+db-create: ## Create dev mysql database
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS dev;"
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "CREATE DATABASE dev;"
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "DROP USER IF EXISTS dev;"
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "CREATE USER dev IDENTIFIED BY 'dev';"
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "GRANT ALL ON *.* TO dev;"
 
-db-migrate:
+db-migrate: ## Migrate dev mysql database
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace php artisan migrate
 
-db-seed:
+db-seed: ## Seed dev mysql database
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace php artisan db:seed
 
 bash: ## SSH workspace container (run bash)

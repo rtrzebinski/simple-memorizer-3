@@ -49,9 +49,7 @@ Thanks to [Laradock](https://laradock.io) project has a built in [Docker](https:
 
 ### Commands
 
-To start local environment simply run `make start`.
-
-Other commands:
+To start local environment simply run `$ make start`.
 
 ```
 simple-memorizer-3 $ make
@@ -65,6 +63,9 @@ up                             Start containers
 down                           Stop and remove containers, networks, images, and volumes
 composer-install               Composer install
 composer-update                Composer update
+db-create                      Create dev mysql database
+db-migrate                     Migrate dev mysql database
+db-seed                        Seed dev mysql database
 bash                           SSH workspace container (run bash)
 test                           Run all unit tests or given test file
 test-filter                    Run unit tests of given class or test method
