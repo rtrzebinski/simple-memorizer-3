@@ -2,6 +2,7 @@ SHELL := /bin/bash
 default: help
 
 args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+services = workspace php-fpm nginx mysql redis
 
 help: ## Show this help
 	@IFS=$$'\n' ; \
@@ -42,10 +43,10 @@ build: ## Build or re-build containers
 	rm -rf laradock
 	git clone git@github.com:rtrzebinski/laradock.git
 	cp .laradock.env.example laradock/.env
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock build workspace php-fpm nginx mysql
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock build $(services)
 
 up: ## Start containers
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock up -d workspace php-fpm nginx mysql
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock up -d $(services)
 
 down: ## Stop and remove containers, networks, images, and volumes
 	@docker-compose --file laradock/docker-compose.yml --project-directory laradock down

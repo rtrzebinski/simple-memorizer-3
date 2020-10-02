@@ -1,5 +1,7 @@
 <?php
 
+$redisUrl = parse_url(env('REDIS_URL'));
+
 return [
 
     /*
@@ -116,9 +118,9 @@ return [
         'clusters' => [
             'default' => [
                 [
-                    'host' => env('REDIS_HOST', '127.0.0.1'),
-                    'password' => env('REDIS_PASSWORD', null),
-                    'port' => env('REDIS_PORT', 6379),
+                    'host' => $redisUrl['host'] ?? '127.0.0.1',
+                    'password' => $redisUrl['pass'] ?? null,
+                    'port' => $redisUrl['port'] ?? 6379,
                     'database' => 0,
                 ],
             ],
