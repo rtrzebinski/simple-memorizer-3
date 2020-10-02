@@ -26,11 +26,11 @@ start: ## Create and start containers, composer dependencies, db migrate and see
 	make build
 	make up
 	make composer-install
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "drop database if exists dev;"
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "create database dev;"
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "DROP USER IF EXISTS 'dev';"
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "CREATE USER 'dev' IDENTIFIED BY 'dev';"
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "GRANT ALL ON *.* TO 'dev';"
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "DROP DATABASE IF EXISTS dev;"
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "CREATE DATABASE dev;"
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "DROP USER IF EXISTS dev;"
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "CREATE USER dev IDENTIFIED BY 'dev';"
+	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace mysql -h mysql -u root -proot -e "GRANT ALL ON *.* TO dev;"
 	rm -f .env
 	cp .env.dev .env
 	docker-compose --file laradock/docker-compose.yml --project-directory laradock exec workspace php artisan key:generate
