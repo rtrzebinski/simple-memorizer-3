@@ -10,7 +10,8 @@
         "league/csv": "^8.1",
         "laravel/telescope": "^3.5",
         "predis/predis": "^1.1",
-        "laravel/ui": "^2.0"
+        "laravel/ui": "^2.0",
+        "moontoast/math": "1.1.2 as 1.999.999"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
