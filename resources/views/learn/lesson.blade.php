@@ -97,7 +97,7 @@
                                 <a href="/lessons/{{ $userLesson->lesson_id }}">{{ $userLesson->name }}</a>
                             </h4>
 
-                            Well done! You've answered correctly to all questions in this lesson today. Please come back tomorrow or <a href=" {{ url('/home') }}">select another lesson</a>.
+                            Well done! You've answered all questions of this lesson today. Please come back tomorrow or <a href=" {{ url('/home') }}">select another lesson</a>.
 
                         </div>
                     </div>
