@@ -27,11 +27,11 @@ class MainControllerTest extends WebTestCase
         $this->call('GET', '/');
 
         $this->assertResponseOk();
-        $this->assertViewHas('ownedLessons', []);
-        $this->assertViewHas('subscribedLessons', []);
-        $this->assertCount(1, $this->view()->availableLessons);
-        $this->assertInstanceOf(UserLesson::class, $this->view()->availableLessons[0]);
-        $this->assertEquals($publicLesson->id, $this->view()->availableLessons[0]->lesson_id);
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', false);
+        $this->assertResponseViewHas('ownedLessons', []);
+        $this->assertResponseViewHas('subscribedLessons', []);
+        $this->assertCount(1, $this->responseView()->availableLessons);
+        $this->assertInstanceOf(UserLesson::class, $this->responseView()->availableLessons[0]);
+        $this->assertEquals($publicLesson->id, $this->responseView()->availableLessons[0]->lesson_id);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', false);
     }
 }

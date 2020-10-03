@@ -93,7 +93,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected function createUser(array $data = [])
     {
-        return factory(User::class)->create($data);
+        return User::factory()->create($data);
     }
 
     /**
@@ -102,7 +102,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected function createExercise(array $data = [])
     {
-        return factory(Exercise::class)->create($data);
+        return Exercise::factory()->create($data);
     }
 
     /**
@@ -111,7 +111,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected function createLesson(array $data = [])
     {
-        return factory(Lesson::class)->create($data);
+        return Lesson::factory()->create($data);
     }
 
     /**
@@ -120,7 +120,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected function createExerciseResult(array $data = [])
     {
-        return factory(ExerciseResult::class)->create($data);
+        return ExerciseResult::factory()->create($data);
     }
 
     /**

@@ -15,10 +15,10 @@ class WebTestCase extends \TestCase
      *
      * @param string $method
      * @param string $uri
-     * @param array  $parameters
-     * @param array  $cookies
-     * @param array  $files
-     * @param array  $server
+     * @param array $parameters
+     * @param array $cookies
+     * @param array $files
+     * @param array $server
      * @param string $content
      */
     public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -116,7 +116,7 @@ class WebTestCase extends \TestCase
     /**
      * @return View
      */
-    protected function view(): View
+    protected function responseView(): View
     {
         return $this->response->original;
     }
@@ -126,7 +126,7 @@ class WebTestCase extends \TestCase
      * @param      $key
      * @param null $value
      */
-    protected function assertViewHas($key, $value = null)
+    protected function assertResponseViewHas($key, $value = null)
     {
         $this->response->assertViewHas($key, $value);
     }
@@ -144,8 +144,8 @@ class WebTestCase extends \TestCase
         dd($this->response->content());
     }
 
-    protected function dumpView()
+    protected function dumpResponseView()
     {
-        dd($this->view()->getData());
+        dd($this->responseView()->getData());
     }
 }

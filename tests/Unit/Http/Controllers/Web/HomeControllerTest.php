@@ -25,12 +25,12 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertCount(2, $this->view()->ownedLessons);
-        $this->assertCount(1, $this->view()->subscribedLessons);
-        $this->assertCount(1, $this->view()->availableLessons);
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
-        $this->assertViewHas('userCanLearnAllLessons', false);
-        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+        $this->assertCount(2, $this->responseView()->ownedLessons);
+        $this->assertCount(1, $this->responseView()->subscribedLessons);
+        $this->assertCount(1, $this->responseView()->availableLessons);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertResponseViewHas('userCanLearnAllLessons', false);
+        $this->assertResponseViewHas('userCanLearnFavouriteLessons', false);
     }
 
     /** @test */
@@ -45,9 +45,9 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
-        $this->assertViewHas('userCanLearnAllLessons', true);
-        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertResponseViewHas('userCanLearnAllLessons', true);
+        $this->assertResponseViewHas('userCanLearnFavouriteLessons', false);
     }
 
     /** @test */
@@ -63,9 +63,9 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
-        $this->assertViewHas('userCanLearnAllLessons', true);
-        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertResponseViewHas('userCanLearnAllLessons', true);
+        $this->assertResponseViewHas('userCanLearnFavouriteLessons', false);
     }
 
     /** @test */
@@ -81,9 +81,9 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
-        $this->assertViewHas('userCanLearnAllLessons', true);
-        $this->assertViewHas('userCanLearnFavouriteLessons', true);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertResponseViewHas('userCanLearnAllLessons', true);
+        $this->assertResponseViewHas('userCanLearnFavouriteLessons', true);
     }
 
     /** @test */
@@ -100,9 +100,9 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', true);
-        $this->assertViewHas('userCanLearnAllLessons', true);
-        $this->assertViewHas('userCanLearnFavouriteLessons', true);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', true);
+        $this->assertResponseViewHas('userCanLearnAllLessons', true);
+        $this->assertResponseViewHas('userCanLearnFavouriteLessons', true);
     }
 
     /** @test */
@@ -113,12 +113,12 @@ class HomeControllerTest extends WebTestCase
         $this->call('GET', '/home');
 
         $this->assertResponseOk();
-        $this->assertCount(0, $this->view()->ownedLessons);
-        $this->assertCount(0, $this->view()->subscribedLessons);
-        $this->assertCount(0, $this->view()->availableLessons);
-        $this->assertViewHas('userHasOwnedOrSubscribedLessons', false);
-        $this->assertViewHas('userCanLearnAllLessons', false);
-        $this->assertViewHas('userCanLearnFavouriteLessons', false);
+        $this->assertCount(0, $this->responseView()->ownedLessons);
+        $this->assertCount(0, $this->responseView()->subscribedLessons);
+        $this->assertCount(0, $this->responseView()->availableLessons);
+        $this->assertResponseViewHas('userHasOwnedOrSubscribedLessons', false);
+        $this->assertResponseViewHas('userCanLearnAllLessons', false);
+        $this->assertResponseViewHas('userCanLearnFavouriteLessons', false);
     }
 
     /** @test */

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Events\ExerciseCreated;
 use App\Events\LessonAggregatesUpdated;
 use App\Models\Exercise;
@@ -10,7 +12,7 @@ use App\Models\Lesson;
 class TestDataSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeders.
      *
      * @return void
      */
@@ -121,185 +123,238 @@ class TestDataSeeder extends Seeder
         ];
         $this->lesson('English: Common irregular verbs 2 (h-z)', $exercises, $bidirectional = true);
 
-        $user = factory(User::class)->create([
-            'email' => 'admin@example.com',
-            'password' => '$2y$12$/WfobkrcnlmQRIAAWcyw5OU6c9cj13SxGJNYtLSiTVhn8c0jQr1Au', // password: admin@example.com
-        ]);
+        $user = User::factory()->create(
+            [
+                'email' => 'admin@example.com',
+                'password' => '$2y$12$/WfobkrcnlmQRIAAWcyw5OU6c9cj13SxGJNYtLSiTVhn8c0jQr1Au',
+                // password: admin@example.com
+            ]
+        );
 
         // private lessons
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Private lesson with no exercises',
-            'visibility' => 'private',
-            'owner_id' => $user->id,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Private lesson with no exercises',
+                'visibility' => 'private',
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
 
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Private lesson with one exercise',
-            'visibility' => 'private',
-            'owner_id' => $user->id,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Private lesson with one exercise',
+                'visibility' => 'private',
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
-        factory(Exercise::class)->create([
-            'lesson_id' => $lesson->id,
-        ]);
+        Exercise::factory()->create(
+            [
+                'lesson_id' => $lesson->id,
+            ]
+        );
         event(new ExerciseCreated($lesson, $lesson->owner));
 
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Private lesson with two exercises',
-            'visibility' => 'private',
-            'owner_id' => $user->id,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Private lesson with two exercises',
+                'visibility' => 'private',
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
-        factory(Exercise::class, 2)->create([
-            'lesson_id' => $lesson->id,
-        ]);
+        Exercise::factory()
+            ->count(2)
+            ->create(
+                [
+                    'lesson_id' => $lesson->id,
+                ]
+            );
         event(new ExerciseCreated($lesson, $lesson->owner));
 
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Private lesson with three exercises',
-            'visibility' => 'private',
-            'owner_id' => $user->id,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Private lesson with three exercises',
+                'visibility' => 'private',
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
-        factory(Exercise::class, 3)->create([
-            'lesson_id' => $lesson->id,
-        ]);
+        Exercise::factory()
+            ->count(3)
+            ->create(
+                [
+                    'lesson_id' => $lesson->id,
+                ]
+            );
         event(new ExerciseCreated($lesson, $lesson->owner));
 
         // owned lessons
-        $ownedMathLesson1 = factory(Lesson::class)->create([
-            'name' => 'Math: multiplication table 1-100',
-            'owner_id' => $user->id,
-        ]);
+        $ownedMathLesson1 = Lesson::factory()->create(
+            [
+                'name' => 'Math: multiplication table 1-100',
+                'owner_id' => $user->id,
+            ]
+        );
         $ownedMathLesson1->subscribe($user);
         for ($i = 1; $i <= 10; $i++) {
             for ($j = 1; $j <= 10; $j++) {
-                factory(Exercise::class)->create([
-                    'lesson_id' => $ownedMathLesson1->id,
-                    'question' => $i.' x '.$j,
-                    'answer' => $i * $j,
-                ]);
+                Exercise::factory()->create(
+                    [
+                        'lesson_id' => $ownedMathLesson1->id,
+                        'question' => $i . ' x ' . $j,
+                        'answer' => $i * $j,
+                    ]
+                );
             }
         }
         event(new ExerciseCreated($ownedMathLesson1, $lesson->owner));
 
-        $ownedMathLesson2 = factory(Lesson::class)->create([
-            'name' => 'Math: multiplication table 100-400',
-            'owner_id' => $user->id,
-        ]);
+        $ownedMathLesson2 = Lesson::factory()->create(
+            [
+                'name' => 'Math: multiplication table 100-400',
+                'owner_id' => $user->id,
+            ]
+        );
         $ownedMathLesson2->subscribe($user);
         for ($i = 10; $i <= 20; $i++) {
             for ($j = 10; $j <= 20; $j++) {
-                factory(Exercise::class)->create([
-                    'lesson_id' => $ownedMathLesson2->id,
-                    'question' => $i.' x '.$j,
-                    'answer' => $i * $j,
-                ]);
+                Exercise::factory()->create(
+                    [
+                        'lesson_id' => $ownedMathLesson2->id,
+                        'question' => $i . ' x ' . $j,
+                        'answer' => $i * $j,
+                    ]
+                );
             }
         }
         event(new ExerciseCreated($ownedMathLesson2, $ownedMathLesson2->owner));
 
         // owned aggregate lesson
         /** @var Lesson $lesson */
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'All my math lessons aggregated',
-            'owner_id' => $user->id,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'All my math lessons aggregated',
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
         $lesson->childLessons()->attach($ownedMathLesson1);
         $lesson->childLessons()->attach($ownedMathLesson2);
         event(new LessonAggregatesUpdated($lesson, $ownedMathLesson2->owner));
 
         // subscribed lesson
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Math: multiplication table 400-900',
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Math: multiplication table 400-900',
+            ]
+        );
         $lesson->subscribe($lesson->owner);
         for ($i = 20; $i <= 30; $i++) {
             for ($j = 20; $j <= 30; $j++) {
-                factory(Exercise::class)->create([
-                    'lesson_id' => $lesson->id,
-                    'question' => $i.' x '.$j,
-                    'answer' => $i * $j,
-                ]);
+                Exercise::factory()->create(
+                    [
+                        'lesson_id' => $lesson->id,
+                        'question' => $i . ' x ' . $j,
+                        'answer' => $i * $j,
+                    ]
+                );
                 event(new ExerciseCreated($lesson, $lesson->owner));
             }
         }
         $lesson->subscribe($user);
 
         // other lessons
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Math: adding integer numbers',
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Math: adding integer numbers',
+            ]
+        );
         for ($i = 1; $i <= 100; $i++) {
             $a = rand(100, 10000);
             $b = rand(100, 10000);
-            factory(Exercise::class)->create([
-                'lesson_id' => $lesson->id,
-                'question' => $a.' + '.$b,
-                'answer' => $a + $b,
-            ]);
+            Exercise::factory()->create(
+                [
+                    'lesson_id' => $lesson->id,
+                    'question' => $a . ' + ' . $b,
+                    'answer' => $a + $b,
+                ]
+            );
             event(new ExerciseCreated($lesson, $lesson->owner));
         }
         $lesson->subscribe($lesson->owner);
 
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Math: subtracting integer numbers',
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Math: subtracting integer numbers',
+            ]
+        );
         for ($i = 1; $i <= 100; $i++) {
             $a = rand(100, 10000);
             $b = rand(100, 10000);
-            factory(Exercise::class)->create([
-                'lesson_id' => $lesson->id,
-                'question' => $a.' - '.$b,
-                'answer' => $a - $b,
-            ]);
+            Exercise::factory()->create(
+                [
+                    'lesson_id' => $lesson->id,
+                    'question' => $a . ' - ' . $b,
+                    'answer' => $a - $b,
+                ]
+            );
         }
         event(new ExerciseCreated($lesson, $lesson->owner));
         $lesson->subscribe($lesson->owner);
 
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Private lesson of another user',
-            'visibility' => 'private',
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Private lesson of another user',
+                'visibility' => 'private',
+            ]
+        );
         for ($i = 1; $i <= 5; $i++) {
             $a = rand(10, 100);
             $b = rand(10, 100);
-            factory(Exercise::class)->create([
-                'lesson_id' => $lesson->id,
-                'question' => $a.' - '.$b,
-                'answer' => $a - $b,
-            ]);
+            Exercise::factory()->create(
+                [
+                    'lesson_id' => $lesson->id,
+                    'question' => $a . ' - ' . $b,
+                    'answer' => $a - $b,
+                ]
+            );
         }
         event(new ExerciseCreated($lesson, $lesson->owner));
         $lesson->subscribe($lesson->owner);
 
-        $lesson = factory(Lesson::class)->create([
-            'name' => 'Just one exercise lesson',
-            'visibility' => 'public',
-        ]);
-        factory(Exercise::class)->create([
-            'lesson_id' => $lesson->id,
-            'question' => $a.' - '.$b,
-            'answer' => $a - $b,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => 'Just one exercise lesson',
+                'visibility' => 'public',
+            ]
+        );
+        Exercise::factory()->create(
+            [
+                'lesson_id' => $lesson->id,
+                'question' => $a . ' - ' . $b,
+                'answer' => $a - $b,
+            ]
+        );
         event(new ExerciseCreated($lesson, $lesson->owner));
         $lesson->subscribe($lesson->owner);
     }
 
     /**
      * @param string $name
-     * @param array  $exercises
-     * @param bool   $bidirectional
+     * @param array $exercises
+     * @param bool $bidirectional
      * @return Lesson
      */
     private function lesson(string $name, array $exercises, bool $bidirectional): Lesson
     {
         /** @var Lesson $lesson */
-        $lesson = factory(Lesson::class)->create([
-            'name' => $name,
-        ]);
+        $lesson = Lesson::factory()->create(
+            [
+                'name' => $name,
+            ]
+        );
 
         $lesson->subscribe($lesson->owner);
 
@@ -308,11 +363,13 @@ class TestDataSeeder extends Seeder
             ->update(['bidirectional' => $bidirectional]);
 
         foreach ($exercises as $k => $v) {
-            factory(Exercise::class)->create([
-                'lesson_id' => $lesson->id,
-                'question' => $k,
-                'answer' => $v,
-            ]);
+            Exercise::factory()->create(
+                [
+                    'lesson_id' => $lesson->id,
+                    'question' => $k,
+                    'answer' => $v,
+                ]
+            );
         }
         event(new ExerciseCreated($lesson, $lesson->owner));
 

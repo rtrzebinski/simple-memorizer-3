@@ -24,7 +24,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->assertResponseOk();
 
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEquals($lesson->id, $viewData['userLesson']->lesson_id);
         $this->assertEquals([
@@ -50,7 +50,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->assertResponseOk();
 
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEquals($lesson->id, $viewData['userLesson']->lesson_id);
         $this->assertEquals([], $viewData['lessons']);
@@ -74,7 +74,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->assertResponseOk();
 
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEquals($lesson->id, $viewData['userLesson']->lesson_id);
         $this->assertEquals([], $viewData['lessons']);

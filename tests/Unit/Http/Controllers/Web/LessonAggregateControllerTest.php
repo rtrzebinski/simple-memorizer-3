@@ -23,7 +23,7 @@ class LessonAggregateControllerTest extends WebTestCase
         $this->call('GET', '/lessons/aggregate/'.$parentLesson->id);
         $this->assertResponseOk();
 
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEquals($parentLesson->id, $viewData['userLesson']->lesson_id);
 

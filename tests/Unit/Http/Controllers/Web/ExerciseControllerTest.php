@@ -19,7 +19,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -130,7 +130,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
     }
 
     /** @test */
@@ -275,8 +275,8 @@ class ExerciseControllerTest extends WebTestCase
         $this->call('GET', '/exercises/'.$exercise->id.'/edit?redirect_to='.urlencode($redirectTo));
 
         $this->assertResponseOk();
-        $this->assertEquals($exercise->id, $this->view()->exercise->id);
-        $this->assertEquals($redirectTo, $this->view()->redirectTo);
+        $this->assertEquals($exercise->id, $this->responseView()->exercise->id);
+        $this->assertEquals($redirectTo, $this->responseView()->redirectTo);
     }
 
     /**
@@ -294,8 +294,8 @@ class ExerciseControllerTest extends WebTestCase
         $this->call('GET', '/exercises/'.$exercise->id.'/edit?hide_lesson='.$hideLesson);
 
         $this->assertResponseOk();
-        $this->assertEquals($exercise->id, $this->view()->exercise->id);
-        $this->assertEquals($hideLesson, $this->view()->hideLesson);
+        $this->assertEquals($exercise->id, $this->responseView()->exercise->id);
+        $this->assertEquals($hideLesson, $this->responseView()->hideLesson);
     }
 
     /** @test */
@@ -311,8 +311,8 @@ class ExerciseControllerTest extends WebTestCase
         ]);
 
         $this->assertResponseOk();
-        $this->assertEquals($exercise->id, $this->view()->exercise->id);
-        $this->assertEquals($redirectTo, $this->view()->redirectTo);
+        $this->assertEquals($exercise->id, $this->responseView()->exercise->id);
+        $this->assertEquals($redirectTo, $this->responseView()->redirectTo);
     }
 
     /** @test */

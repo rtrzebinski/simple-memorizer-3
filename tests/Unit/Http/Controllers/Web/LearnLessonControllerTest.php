@@ -40,8 +40,8 @@ class LearnLessonControllerTest extends WebTestCase
         $this->call('GET', '/learn/lessons/'.$lesson->id);
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
-        $this->assertEquals($exercise->id, $this->view()->userExercise->exercise_id);
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
+        $this->assertEquals($exercise->id, $this->responseView()->userExercise->exercise_id);
     }
 
     /** @test */
@@ -73,8 +73,8 @@ class LearnLessonControllerTest extends WebTestCase
         $this->call('GET', '/learn/lessons/'.$lesson->id.'?previous_exercise_id='.$previous->id);
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
-        $this->assertEquals($exercise->id, $this->view()->userExercise->exercise_id);
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
+        $this->assertEquals($exercise->id, $this->responseView()->userExercise->exercise_id);
     }
 
     /** @test */
@@ -95,8 +95,8 @@ class LearnLessonControllerTest extends WebTestCase
         $this->call('GET', '/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$requested->id);
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
-        $this->assertEquals($requested->id, $this->view()->userExercise->exercise_id);
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
+        $this->assertEquals($requested->id, $this->responseView()->userExercise->exercise_id);
     }
 
     /** @test */
@@ -134,8 +134,8 @@ class LearnLessonControllerTest extends WebTestCase
         $this->call('GET', '/learn/lessons/'.$lesson->id);
 
         $this->assertResponseOk();
-        $this->assertEquals($lesson->id, $this->view()->userLesson->lesson_id);
-        $this->assertEquals($exercise->id, $this->view()->userExercise->exercise_id);
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
+        $this->assertEquals($exercise->id, $this->responseView()->userExercise->exercise_id);
     }
 
     /** @test */

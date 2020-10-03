@@ -21,7 +21,7 @@ class ExerciseSearchControllerTest extends WebTestCase
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
         $this->assertResponseOk();
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEquals($viewData['userExercises'][0]->exercise_id, $exercise->id);
         $this->assertEquals(0, $viewData['userExercises'][0]->percent_of_good_answers);
@@ -38,7 +38,7 @@ class ExerciseSearchControllerTest extends WebTestCase
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
         $this->assertResponseOk();
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEmpty($viewData['userExercises']);
         $this->assertEquals($viewData['phrase'], $phrase);
@@ -57,7 +57,7 @@ class ExerciseSearchControllerTest extends WebTestCase
         $this->call('GET', '/exercises/search?phrase='.$phrase);
 
         $this->assertResponseOk();
-        $viewData = $this->view()->getData();
+        $viewData = $this->responseView()->getData();
 
         $this->assertEmpty($viewData['userExercises']);
     }
