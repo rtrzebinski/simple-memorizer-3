@@ -139,6 +139,40 @@ class LearnLessonControllerTest extends WebTestCase
     }
 
     /** @test */
+    public function itShould_showLessonLearnPage_noMoreExercisesForToday()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createExercise()->lesson;
+        $lesson->subscribe($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $this->createExercise();
+        $userExercise = $this->createUserExercise($user, $exercise);
+        $userExercises = collect([$userExercise]);
+
+        /** @var AuthenticatedUserExerciseRepositoryInterface|MockObject $userExerciseRepository */
+        $userExerciseRepository = $this->createMock(AuthenticatedUserExerciseRepositoryInterface::class);
+        $this->instance(AuthenticatedUserExerciseRepositoryInterface::class, $userExerciseRepository);
+        $userExerciseRepository->method('fetchUserExercisesOfLesson')->with($lesson->id)
+            ->willReturn($userExercises);
+
+        /** @var LearningService|MockObject $learningService */
+        $learningService = $this->createMock(LearningService::class);
+        $this->instance(LearningService::class, $learningService);
+
+        $learningService->method('findUserExerciseToLearn')
+            ->with($userExercises)
+            ->willReturn(null);
+
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseOk();
+        $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
+        $this->assertEquals(null, $this->responseView()->userExercise);
+        $this->assertEquals(null, $this->responseView()->canEditExercise);
+        $this->assertEquals(null, $this->responseView()->editExerciseUrl);
+    }
+
+    /** @test */
     public function itShould_notShowLessonLearnPage_unauthorized()
     {
         $lesson = $this->createLesson();
