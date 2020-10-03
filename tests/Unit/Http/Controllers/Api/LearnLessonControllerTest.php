@@ -49,8 +49,12 @@ class LearnLessonControllerTest extends ApiTestCase
         $this->instance(UserExerciseModifier::class, $userExerciseModifier);
         $userExerciseModifier->expects($this->never())->method('swapQuestionWithAnswer');
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
-            ['previous_exercise_id' => $previous->id], $user);
+        $this->callApi(
+            'GET',
+            '/lessons/' . $lesson->id . '/exercises/random',
+            ['previous_exercise_id' => $previous->id],
+            $user
+        );
 
         $this->assertResponseOk();
         $this->seeJsonFragment((array)$userExercise);
@@ -93,8 +97,12 @@ class LearnLessonControllerTest extends ApiTestCase
         $userExerciseModifier->expects($this->once())->method('swapQuestionWithAnswer')
             ->with($userExercise)->willReturn($userExercise);
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
-            ['previous_exercise_id' => $previous->id], $user);
+        $this->callApi(
+            'GET',
+            '/lessons/' . $lesson->id . '/exercises/random',
+            ['previous_exercise_id' => $previous->id],
+            $user
+        );
 
         $this->assertResponseOk();
         $this->seeJsonFragment((array)$userExercise);
@@ -103,7 +111,7 @@ class LearnLessonControllerTest extends ApiTestCase
     /** @test */
     public function itShould_notFindUserExerciseToLearn_unauthorized()
     {
-        $this->callApi('GET', '/lessons/'.$this->createLesson()->id.'/exercises/random', $data = []);
+        $this->callApi('GET', '/lessons/' . $this->createLesson()->id . '/exercises/random', $data = []);
 
         $this->assertResponseUnauthorised();
     }
@@ -113,7 +121,7 @@ class LearnLessonControllerTest extends ApiTestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('GET', '/lessons/'.$this->createPrivateLesson()->id.'/exercises/random', $data = [], $user);
+        $this->callApi('GET', '/lessons/' . $this->createPrivateLesson()->id . '/exercises/random', $data = [], $user);
 
         $this->assertResponseForbidden();
     }
@@ -134,8 +142,12 @@ class LearnLessonControllerTest extends ApiTestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
-            ['previous_exercise_id' => -1], $user);
+        $this->callApi(
+            'GET',
+            '/lessons/' . $lesson->id . '/exercises/random',
+            ['previous_exercise_id' => -1],
+            $user
+        );
 
         $this->assertResponseInvalidInput();
     }
@@ -152,7 +164,7 @@ class LearnLessonControllerTest extends ApiTestCase
         $userExerciseRepository->method('fetchUserExercisesOfLesson')
             ->with($lesson->id)->willReturn(collect([]));
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', [], $user);
 
         $this->assertResponseOk();
         $this->seeJson([]);
@@ -177,7 +189,7 @@ class LearnLessonControllerTest extends ApiTestCase
         $userLessonRepository->expects($this->once())->method('fetchUserLesson')->with($lesson->id)
             ->willReturn($userLesson);
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', [], $user);
 
         $this->assertResponseOk();
         $this->seeJson([]);
@@ -193,7 +205,7 @@ class LearnLessonControllerTest extends ApiTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises->first();
 
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer', $data = [], $user);
+        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-good-answer', $data = [], $user);
 
         $this->assertResponseOk();
 
@@ -210,7 +222,7 @@ class LearnLessonControllerTest extends ApiTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-good-answer');
+        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-good-answer');
 
         $this->assertResponseUnauthorised();
     }
@@ -220,8 +232,13 @@ class LearnLessonControllerTest extends ApiTestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('POST', '/exercises/-1/handle-good-answer', $data =
-            [], $user);
+        $this->callApi(
+            'POST',
+            '/exercises/-1/handle-good-answer',
+            $data =
+                [],
+            $user
+        );
 
         $this->assertResponseNotFound();
     }
@@ -236,7 +253,7 @@ class LearnLessonControllerTest extends ApiTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $exercise = $lesson->exercises->first();
 
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer', $data = [], $user);
+        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-bad-answer', $data = [], $user);
 
         $this->assertResponseOk();
 
@@ -250,7 +267,7 @@ class LearnLessonControllerTest extends ApiTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('POST', '/exercises/'.$exercise->id.'/handle-bad-answer');
+        $this->callApi('POST', '/exercises/' . $exercise->id . '/handle-bad-answer');
 
         $this->assertResponseUnauthorised();
     }
@@ -260,8 +277,13 @@ class LearnLessonControllerTest extends ApiTestCase
     {
         $user = $this->createUser();
 
-        $this->callApi('POST', '/exercises/-1/handle-bad-answer', $data =
-            [], $user);
+        $this->callApi(
+            'POST',
+            '/exercises/-1/handle-bad-answer',
+            $data =
+                [],
+            $user
+        );
 
         $this->assertResponseNotFound();
     }

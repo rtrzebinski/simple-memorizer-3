@@ -12,7 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class LessonController extends Controller
 {
@@ -31,10 +31,13 @@ class LessonController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->validate($request, [
-            'visibility' => 'required|in:'.implode(',', Lesson::VISIBILITIES),
-            'name' => 'required|string',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'visibility' => 'required|in:' . implode(',', Lesson::VISIBILITIES),
+                'name' => 'required|string',
+            ]
+        );
 
         $lesson = new Lesson($request->all());
         $lesson->owner_id = $this->user()->id;
@@ -43,11 +46,11 @@ class LessonController extends Controller
         // always subscribe owned lesson
         $lesson->subscribe($this->user());
 
-        return redirect('/lessons/'.$lesson->id);
+        return redirect('/lessons/' . $lesson->id);
     }
 
     /**
-     * @param int                                   $lessonId
+     * @param int $lessonId
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
@@ -62,14 +65,17 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson                                  $lesson
-     * @param AbstractUserLessonRepositoryInterface   $userLessonRepository
+     * @param Lesson $lesson
+     * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @param AbstractUserExerciseRepositoryInterface $userExerciseRepository
      * @return mixed
      * @throws AuthorizationException
      */
-    public function exercises(Lesson $lesson, AbstractUserLessonRepositoryInterface $userLessonRepository, AbstractUserExerciseRepositoryInterface $userExerciseRepository): View
-    {
+    public function exercises(
+        Lesson $lesson,
+        AbstractUserLessonRepositoryInterface $userLessonRepository,
+        AbstractUserExerciseRepositoryInterface $userExerciseRepository
+    ): View {
         $this->authorizeForUser($this->user(), 'access', $lesson);
 
         $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lesson->id);
@@ -85,7 +91,7 @@ class LessonController extends Controller
     }
 
     /**
-     * @param int                                   $lessonId
+     * @param int $lessonId
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
@@ -101,7 +107,7 @@ class LessonController extends Controller
 
     /**
      * @param Request $request
-     * @param Lesson  $lesson
+     * @param Lesson $lesson
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws ValidationException
@@ -110,17 +116,20 @@ class LessonController extends Controller
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
 
-        $this->validate($request, [
-            'visibility' => 'required|in:'.implode(',', Lesson::VISIBILITIES),
-            'name' => 'required|string',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'visibility' => 'required|in:' . implode(',', Lesson::VISIBILITIES),
+                'name' => 'required|string',
+            ]
+        );
 
         $lesson->update($request->all());
-        return redirect('/lessons/'.$lesson->id.'/edit');
+        return redirect('/lessons/' . $lesson->id . '/edit');
     }
 
     /**
-     * @param int                                   $lessonId
+     * @param int $lessonId
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View|Response
      */
@@ -138,25 +147,30 @@ class LessonController extends Controller
 
     /**
      * @param Request $request
-     * @param Lesson  $lesson
+     * @param Lesson $lesson
      * @return RedirectResponse
      * @throws ValidationException
      */
     public function saveSettings(Request $request, Lesson $lesson): RedirectResponse
     {
         if (!Gate::forUser($this->user())->denies('subscribe', $lesson)) {
-            return redirect('/lessons/'.$lesson->id);
+            return redirect('/lessons/' . $lesson->id);
         }
 
-        $this->validate($request, [
-            'bidirectional' => 'required|boolean',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'bidirectional' => 'required|boolean',
+            ]
+        );
 
-        $lesson->subscribedUsers()->where('user_id', $this->user()->id)->first()->pivot->update([
-            'bidirectional' => $request->bidirectional,
-        ]);
+        $lesson->subscribedUsers()->where('user_id', $this->user()->id)->first()->pivot->update(
+            [
+                'bidirectional' => $request->bidirectional,
+            ]
+        );
 
-        return redirect('/lessons/'.$lesson->id.'/settings');
+        return redirect('/lessons/' . $lesson->id . '/settings');
     }
 
     /**
@@ -213,7 +227,7 @@ class LessonController extends Controller
      */
     public function subscribeAndLearn(Lesson $lesson): RedirectResponse
     {
-        $redirectUrl = '/learn/lessons/'.$lesson->id;
+        $redirectUrl = '/learn/lessons/' . $lesson->id;
 
         // authenticated user
         if (Auth::check()) {
@@ -232,18 +246,23 @@ class LessonController extends Controller
 
     /**
      * @param Request $request
-     * @param Lesson  $lesson
+     * @param Lesson $lesson
      * @return RedirectResponse
      */
     public function saveFavourite(Request $request, Lesson $lesson): RedirectResponse
     {
-        $this->validate($request, [
-            'favourite' => 'required|bool',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'favourite' => 'required|bool',
+            ]
+        );
 
-        $lesson->subscribedUsers()->where('user_id', $this->user()->id)->first()->pivot->update([
-            'favourite' => $request->favourite,
-        ]);
+        $lesson->subscribedUsers()->where('user_id', $this->user()->id)->first()->pivot->update(
+            [
+                'favourite' => $request->favourite,
+            ]
+        );
 
         return redirect('/home');
     }

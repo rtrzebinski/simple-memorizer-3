@@ -12,11 +12,13 @@ class ExerciseResultUpdatedTest extends \TestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $exerciseResult = $this->createExerciseResult([
-            'exercise_id' => $exercise->id,
-            'user_id' => $user->id,
-            'percent_of_good_answers' => 20,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'exercise_id' => $exercise->id,
+                'user_id' => $user->id,
+                'percent_of_good_answers' => 20,
+            ]
+        );
 
         $this->assertEquals(20, $exerciseResult->percent_of_good_answers);
 

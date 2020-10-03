@@ -14,13 +14,15 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_notSubscribed()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-            'name' => uniqid(),
-            'exercises_count' => 2,
-            'subscribers_count' => 3,
-            'child_lessons_count' => 4,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+                'name' => uniqid(),
+                'exercises_count' => 2,
+                'subscribers_count' => 3,
+                'child_lessons_count' => 4,
+            ]
+        );
 
         $repository = new AuthenticatedUserLessonRepository($user);
         $result = $repository->fetchUserLesson($lesson->id);
@@ -44,13 +46,15 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_subscribed()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-            'name' => uniqid(),
-            'exercises_count' => 5,
-            'subscribers_count' => 6,
-            'child_lessons_count' => 7,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+                'name' => uniqid(),
+                'exercises_count' => 5,
+                'subscribers_count' => 6,
+                'child_lessons_count' => 7,
+            ]
+        );
         $lesson->subscribe($user);
 
         $repository = new AuthenticatedUserLessonRepository($user);
@@ -75,9 +79,11 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_bidirectional()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
         $lesson->subscribedUsers()->updateExistingPivot($user->id, ['bidirectional' => true]);
 
@@ -103,9 +109,11 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_notBidirectional()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
         $lesson->subscribedUsers()->updateExistingPivot($user->id, ['bidirectional' => false]);
 
@@ -204,9 +212,11 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_percentOfGoodAnswers()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+            ]
+        );
         $lesson->subscribe($user);
         $lesson->subscribedUsers()->updateExistingPivot($user->id, ['percent_of_good_answers' => 50]);
 
@@ -232,13 +242,15 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_favourite()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-            'name' => uniqid(),
-            'exercises_count' => 5,
-            'subscribers_count' => 6,
-            'child_lessons_count' => 7,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+                'name' => uniqid(),
+                'exercises_count' => 5,
+                'subscribers_count' => 6,
+                'child_lessons_count' => 7,
+            ]
+        );
         $lesson->subscribe($user);
         $lesson->subscribedUsers()->updateExistingPivot($user->id, ['favourite' => 1]);
 
@@ -483,9 +495,11 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     {
         $this->be($user = $this->createUser());
 
-        $lesson = $this->createLesson([
-            'visibility' => 'private',
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'visibility' => 'private',
+            ]
+        );
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
         $repository = new AuthenticatedUserLessonRepository($user);
@@ -496,7 +510,8 @@ class AuthenticatedUserLessonRepositoryTest extends \TestCase
     }
 
     /** @test */
-    public function itShould_fetchAvailableUserLessons_authenticated_excludeLessonsWithNotEnoughExercisesRequiredToLearn()
+    public function itShould_fetchAvailableUserLessons_authenticated_excludeLessonsWithNotEnoughExercisesRequiredToLearn(
+    )
     {
         $this->be($user = $this->createUser());
 

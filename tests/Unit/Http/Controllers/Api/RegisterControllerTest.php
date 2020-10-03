@@ -32,16 +32,22 @@ class RegisterControllerTest extends ApiTestCase
         $this->userRepositoryMock
             ->expects($this->once())
             ->method('create')
-            ->with([
-                'email' => $email,
-                'password' => $password,
-            ])
+            ->with(
+                [
+                    'email' => $email,
+                    'password' => $password,
+                ]
+            )
             ->willReturn($user);
 
-        $this->callApi('POST', '/register', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $this->callApi(
+            'POST',
+            '/register',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         $this->assertResponseOk();
         $this->seeJsonFragment($user->makeVisible('api_token')->toArray());

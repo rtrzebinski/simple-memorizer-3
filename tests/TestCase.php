@@ -26,7 +26,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
@@ -39,7 +39,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function randomUrl(): string
     {
-        return 'http://'.uniqid().'.example.com';
+        return 'http://' . uniqid() . '.example.com';
     }
 
     /**
@@ -48,7 +48,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected function randomEmail(): string
     {
-        return uniqid().'@example.com';
+        return uniqid() . '@example.com';
     }
 
     /**
@@ -170,7 +170,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * @param User     $user
+     * @param User $user
      * @param Exercise $exercise
      * @return UserExercise
      */
@@ -218,7 +218,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     /**
      * @param Exercise $exercise
-     * @param int      $userId
+     * @param int $userId
      * @return int
      */
     protected function numberOfGoodAnswers(Exercise $exercise, int $userId): int
@@ -229,7 +229,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     /**
      * @param Exercise $exercise
-     * @param int      $userId
+     * @param int $userId
      * @return int
      */
     protected function numberOfBadAnswers(Exercise $exercise, int $userId): int
@@ -240,7 +240,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     /**
      * @param Exercise $exercise
-     * @param int      $userId
+     * @param int $userId
      * @return int
      */
     protected function percentOfGoodAnswersOfExercise(Exercise $exercise, int $userId): int
@@ -251,7 +251,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     /**
      * @param Lesson $lesson
-     * @param int    $userId
+     * @param int $userId
      * @return int
      * @throws Exception
      */
@@ -261,12 +261,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             return $pivot->percent_of_good_answers;
         }
 
-        throw new \Exception('User does not subscribe lesson: '.$lesson->id);
+        throw new \Exception('User does not subscribe lesson: ' . $lesson->id);
     }
 
     /**
      * @param Lesson $lesson
-     * @param int    $userId
+     * @param int $userId
      * @return bool
      * @throws Exception
      */
@@ -276,13 +276,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             return $pivot->bidirectional;
         }
 
-        throw new \Exception('User does not subscribe lesson: '.$lesson->id);
+        throw new \Exception('User does not subscribe lesson: ' . $lesson->id);
     }
 
     /**
      * @param Lesson $lesson
-     * @param int    $userId
-     * @param bool   $bidirectional
+     * @param int $userId
+     * @param bool $bidirectional
      */
     protected function updateBidirectional(Lesson $lesson, int $userId, bool $bidirectional)
     {
@@ -293,7 +293,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     /**
      * @param Lesson $lesson
-     * @param int    $userId
+     * @param int $userId
      * @return bool
      * @throws Exception
      */
@@ -303,13 +303,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             return $pivot->favourite;
         }
 
-        throw new \Exception('User does not subscribe lesson: '.$lesson->id);
+        throw new \Exception('User does not subscribe lesson: ' . $lesson->id);
     }
 
     /**
      * @param Lesson $lesson
-     * @param int    $userId
-     * @param bool   $favourite
+     * @param int $userId
+     * @param bool $favourite
      */
     protected function updateFavourite(Lesson $lesson, int $userId, bool $favourite)
     {
@@ -320,7 +320,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     /**
      * @param Lesson $lesson
-     * @param int    $userId
+     * @param int $userId
      * @return Pivot|null
      */
     protected function subscriberPivot(Lesson $lesson, int $userId): ?Pivot

@@ -25,15 +25,21 @@ class LoginControllerTest extends WebTestCase
     {
         $email = $this->randomEmail();
         $password = $this->randomPassword();
-        $user = $this->createUser([
-            'email' => $email,
-            'password' => bcrypt($password),
-        ]);
+        $user = $this->createUser(
+            [
+                'email' => $email,
+                'password' => bcrypt($password),
+            ]
+        );
 
-        $this->call('POST', '/login', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $this->call(
+            'POST',
+            '/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         $this->assertEquals($user->id, auth()->user()->id);
         $this->assertResponseRedirectedTo('/home');
@@ -42,10 +48,14 @@ class LoginControllerTest extends WebTestCase
     /** @test */
     public function itShould_notLoginUser_invalidCredentials()
     {
-        $this->call('POST', '/login', [
-            'email' => uniqid(),
-            'password' => uniqid(),
-        ]);
+        $this->call(
+            'POST',
+            '/login',
+            [
+                'email' => uniqid(),
+                'password' => uniqid(),
+            ]
+        );
 
         $this->assertNull(auth()->user());
         $this->assertResponseInvalidInput();

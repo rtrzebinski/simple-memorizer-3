@@ -35,10 +35,14 @@ class LoginControllerTest extends ApiTestCase
             ->with($email, $password)
             ->willReturn($user);
 
-        $this->callApi('POST', '/login', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $this->callApi(
+            'POST',
+            '/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         $this->assertResponseOk();
         $this->seeJsonFragment($user->makeVisible('api_token')->toArray());
@@ -67,10 +71,14 @@ class LoginControllerTest extends ApiTestCase
             ->method('findByCredentials')
             ->with($email, $password);
 
-        $this->callApi('POST', '/login', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $this->callApi(
+            'POST',
+            '/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         $this->assertResponseUnauthorised();
     }

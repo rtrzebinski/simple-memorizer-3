@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use App\Structures\UserLesson\UserLesson;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
@@ -22,7 +22,9 @@ class HomeController extends Controller
             'availableLessons' => $userLessonRepository->fetchAvailableUserLessons(),
         ];
 
-        $data['userHasOwnedOrSubscribedLessons'] = (bool)(count($data['ownedLessons']) + count($data['subscribedLessons']));
+        $data['userHasOwnedOrSubscribedLessons'] = (bool)(count($data['ownedLessons']) + count(
+                $data['subscribedLessons']
+            ));
 
         $exercisesTotal = 0;
         $favouriteExercisesTotal = 0;

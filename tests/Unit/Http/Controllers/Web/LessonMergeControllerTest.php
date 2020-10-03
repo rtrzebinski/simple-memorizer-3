@@ -20,19 +20,22 @@ class LessonMergeControllerTest extends WebTestCase
         $ownedLesson = $this->createPublicLesson($user);
         $this->createExercise(['lesson_id' => $ownedLesson->id]);
 
-        $this->call('GET', '/lessons/merge/'.$lesson->id);
+        $this->call('GET', '/lessons/merge/' . $lesson->id);
 
         $this->assertResponseOk();
 
         $viewData = $this->responseView()->getData();
 
         $this->assertEquals($lesson->id, $viewData['userLesson']->lesson_id);
-        $this->assertEquals([
+        $this->assertEquals(
             [
-                'id' => $ownedLesson->id,
-                'name' => $ownedLesson->name,
+                [
+                    'id' => $ownedLesson->id,
+                    'name' => $ownedLesson->name,
+                ],
             ],
-        ], $viewData['lessons']);
+            $viewData['lessons']
+        );
     }
 
     /** @test */
@@ -46,7 +49,7 @@ class LessonMergeControllerTest extends WebTestCase
         // another lesson, without any exercises
         $this->createPublicLesson($user);
 
-        $this->call('GET', '/lessons/merge/'.$lesson->id);
+        $this->call('GET', '/lessons/merge/' . $lesson->id);
 
         $this->assertResponseOk();
 
@@ -70,7 +73,7 @@ class LessonMergeControllerTest extends WebTestCase
         // subscriber other than owner
         $ownedLesson->subscribe($this->createUser());
 
-        $this->call('GET', '/lessons/merge/'.$lesson->id);
+        $this->call('GET', '/lessons/merge/' . $lesson->id);
 
         $this->assertResponseOk();
 
@@ -95,7 +98,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $lesson = $this->createPublicLesson($this->createUser());
 
-        $this->call('GET', '/lessons/merge/'.$lesson->id);
+        $this->call('GET', '/lessons/merge/' . $lesson->id);
 
         $this->assertResponseForbidden();
     }
@@ -122,9 +125,9 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->expectsEvents(ExercisesMerged::class);
 
-        $this->call('POST', '/lessons/merge/'.$lesson->id, $data);
+        $this->call('POST', '/lessons/merge/' . $lesson->id, $data);
 
-        $this->assertResponseRedirectedTo('/lessons/merge/'.$lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/merge/' . $lesson->id);
 
         $this->assertEquals(2, $lesson->exercises()->count(), 'exercises not merged');
         $this->assertNull($ownedLesson->fresh(), 'merged lesson not deleted');
@@ -154,9 +157,9 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->expectsEvents(ExercisesMerged::class);
 
-        $this->call('POST', '/lessons/merge/'.$lesson->id, $data);
+        $this->call('POST', '/lessons/merge/' . $lesson->id, $data);
 
-        $this->assertResponseRedirectedTo('/lessons/merge/'.$lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/merge/' . $lesson->id);
 
         $this->assertEquals(3, $lesson->exercises()->count(), 'exercises not merged');
         $this->assertNull($ownedLesson1->fresh(), 'merged lesson not deleted');
@@ -193,7 +196,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->doesntExpectEvents(ExercisesMerged::class);
 
-        $this->call('POST', '/lessons/merge/'.$lesson->id, $data);
+        $this->call('POST', '/lessons/merge/' . $lesson->id, $data);
 
         $this->assertResponseForbidden();
     }
@@ -218,7 +221,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->doesntExpectEvents(ExercisesMerged::class);
 
-        $this->call('POST', '/lessons/merge/'.$lesson->id, $data);
+        $this->call('POST', '/lessons/merge/' . $lesson->id, $data);
 
         $this->assertResponseForbidden();
     }
@@ -253,7 +256,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->doesntExpectEvents(ExercisesMerged::class);
 
-        $this->call('POST', '/lessons/merge/'.$lesson->id, $data);
+        $this->call('POST', '/lessons/merge/' . $lesson->id, $data);
 
         $this->assertResponseNotFound();
     }
@@ -269,7 +272,7 @@ class LessonMergeControllerTest extends WebTestCase
 
         $this->doesntExpectEvents(ExercisesMerged::class);
 
-        $this->call('POST', '/lessons/merge/'.$lesson->id);
+        $this->call('POST', '/lessons/merge/' . $lesson->id);
 
         $this->assertResponseInvalidInput();
     }

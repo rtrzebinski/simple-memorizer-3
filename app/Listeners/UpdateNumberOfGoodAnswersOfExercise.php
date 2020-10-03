@@ -26,7 +26,6 @@ class UpdateNumberOfGoodAnswersOfExercise
         $exerciseResult = ExerciseResult::whereExerciseId($exerciseId)->whereUserId($user->id)->first();
 
         if (is_null($exerciseResult)) {
-
             // create new exercise result if user never answered before
 
             $exerciseResult = new ExerciseResult();
@@ -37,12 +36,12 @@ class UpdateNumberOfGoodAnswersOfExercise
             $exerciseResult->latest_good_answer = Carbon::now();
             $exerciseResult->save();
         } else {
-
             // exercise result already exist, we need to update it,
 
             $data = [];
 
-            if ($exerciseResult->latest_good_answer instanceof Carbon && $exerciseResult->latest_good_answer->isToday()) {
+            if ($exerciseResult->latest_good_answer instanceof Carbon && $exerciseResult->latest_good_answer->isToday(
+                )) {
                 // increment number_of_good_answers_today if there was good answer today already
                 $data['number_of_good_answers_today'] = DB::raw('number_of_good_answers_today + 1');
             } else {

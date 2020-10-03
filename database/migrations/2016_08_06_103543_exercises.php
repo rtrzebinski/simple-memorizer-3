@@ -12,14 +12,17 @@ class Exercises extends Migration
      */
     public function up()
     {
-        Schema::create('exercises', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('question');
-            $table->string('answer');
-            $table->integer('lesson_id')->unsigned();
-            $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
-            $table->timestamps();
-        });
+        Schema::create(
+            'exercises',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('question');
+                $table->string('answer');
+                $table->integer('lesson_id')->unsigned();
+                $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

@@ -16,7 +16,7 @@ class ExerciseController extends Controller
 {
     /**
      * @param StoreExerciseRequest $request
-     * @param Lesson               $lesson
+     * @param Lesson $lesson
      * @return JsonResponse
      */
     public function storeExercise(StoreExerciseRequest $request, Lesson $lesson): JsonResponse
@@ -54,7 +54,7 @@ class ExerciseController extends Controller
 
     /**
      * @param UpdateExerciseRequest $request
-     * @param Exercise              $exercise
+     * @param Exercise $exercise
      * @return JsonResponse
      */
     public function updateExercise(UpdateExerciseRequest $request, Exercise $exercise): JsonResponse

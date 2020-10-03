@@ -12,20 +12,26 @@ use App\Models\Lesson;
 use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
 use ErrorException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
-use Illuminate\View\View;
 
 class ExerciseController extends Controller
 {
     /**
-     * @param int                                   $lessonId
+     * @param int $lessonId
+     * @param AbstractUserLessonRepositoryInterface $userLessonRepository
+     * @throws AuthorizationException
+     */
+
+    /**
+     * @param int $lessonId
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
      */
-    public function create(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository): View
+    public function create(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository)
     {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
@@ -35,7 +41,7 @@ class ExerciseController extends Controller
     }
 
     /**
-     * @param Lesson               $lesson
+     * @param Lesson $lesson
      * @param StoreExerciseRequest $request
      * @return RedirectResponse
      */
@@ -47,11 +53,11 @@ class ExerciseController extends Controller
 
         event(new ExerciseCreated($lesson, $this->user()));
 
-        return redirect('/lessons/'.$lesson->id.'/exercises');
+        return redirect('/lessons/' . $lesson->id . '/exercises');
     }
 
     /**
-     * @param int                                   $lessonId
+     * @param int $lessonId
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
@@ -66,7 +72,7 @@ class ExerciseController extends Controller
     }
 
     /**
-     * @param Lesson                    $lesson
+     * @param Lesson $lesson
      * @param StoreManyExercisesRequest $request
      * @return RedirectResponse
      */
@@ -91,18 +97,21 @@ class ExerciseController extends Controller
             event(new ExerciseCreated($lesson, $this->user()));
         }
 
-        return redirect('/lessons/'.$lesson->id.'/exercises');
+        return redirect('/lessons/' . $lesson->id . '/exercises');
     }
 
     /**
-     * @param Exercise                              $exercise
+     * @param Exercise $exercise
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
-     * @param Request                               $request
+     * @param Request $request
      * @return View
      * @throws AuthorizationException
      */
-    public function edit(Exercise $exercise, AbstractUserLessonRepositoryInterface $userLessonRepository, Request $request): View
-    {
+    public function edit(
+        Exercise $exercise,
+        AbstractUserLessonRepositoryInterface $userLessonRepository,
+        Request $request
+    ): View {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 
         $userLesson = $userLessonRepository->fetchUserLesson($exercise->lesson_id);
@@ -111,15 +120,18 @@ class ExerciseController extends Controller
 
         $hideLesson = $request->hide_lesson;
 
-        return view('exercises.edit', [
+        return view(
+            'exercises.edit',
+            [
                 'exercise' => $exercise,
                 'redirectTo' => $redirectTo,
                 'hideLesson' => $hideLesson,
-            ] + $this->lessonViewData($userLesson));
+            ] + $this->lessonViewData($userLesson)
+        );
     }
 
     /**
-     * @param Exercise              $exercise
+     * @param Exercise $exercise
      * @param UpdateExerciseRequest $request
      * @return RedirectResponse
      */

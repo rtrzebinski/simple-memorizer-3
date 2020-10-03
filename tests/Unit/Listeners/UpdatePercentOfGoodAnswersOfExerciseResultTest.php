@@ -55,12 +55,14 @@ class UpdatePercentOfGoodAnswersOfExerciseResultTest extends \TestCase
         $exercise = $this->createExercise();
         $user = $this->createUser();
 
-        $exerciseResult = $this->createExerciseResult([
-            'exercise_id' => $exercise->id,
-            'user_id' => $user->id,
-            'number_of_good_answers' => $numberOfGoodAnswers,
-            'number_of_bad_answers' => $numberOfBadAnswers,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'exercise_id' => $exercise->id,
+                'user_id' => $user->id,
+                'number_of_good_answers' => $numberOfGoodAnswers,
+                'number_of_bad_answers' => $numberOfBadAnswers,
+            ]
+        );
 
         $this->expectsEvents(ExerciseResultPercentOfGoodAnswersUpdated::class);
 

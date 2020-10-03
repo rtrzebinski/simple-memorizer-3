@@ -13,9 +13,11 @@ class ExerciseResultPercentOfGoodAnswersUpdatedTest extends \TestCase
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->subscriberPivot($lesson, $user->id)->update([
-            'percent_of_good_answers' => 20,
-        ]);
+        $this->subscriberPivot($lesson, $user->id)->update(
+            [
+                'percent_of_good_answers' => 20,
+            ]
+        );
 
         $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 

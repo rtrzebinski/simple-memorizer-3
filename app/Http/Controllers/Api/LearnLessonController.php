@@ -17,12 +17,12 @@ use Illuminate\Http\JsonResponse;
 class LearnLessonController extends Controller
 {
     /**
-     * @param Lesson                                       $lesson
-     * @param FetchRandomExerciseOfLessonRequest           $request
+     * @param Lesson $lesson
+     * @param FetchRandomExerciseOfLessonRequest $request
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
-     * @param LearningService                              $learningService
-     * @param AuthenticatedUserLessonRepositoryInterface   $userLessonRepository
-     * @param UserExerciseModifier                         $userExerciseModifier
+     * @param LearningService $learningService
+     * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
+     * @param UserExerciseModifier $userExerciseModifier
      * @return JsonResponse
      * @throws Exception
      */

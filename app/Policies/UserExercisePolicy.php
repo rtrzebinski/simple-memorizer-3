@@ -14,7 +14,7 @@ class UserExercisePolicy
     /**
      * User must subscribe lesson to access user exercise;
      *
-     * @param User         $user
+     * @param User $user
      * @param UserExercise $userExercise
      * @return bool
      */

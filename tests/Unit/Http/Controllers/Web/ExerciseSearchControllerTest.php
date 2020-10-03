@@ -18,7 +18,7 @@ class ExerciseSearchControllerTest extends WebTestCase
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
+        $this->call('GET', '/exercises/search?phrase=' . $phrase);
 
         $this->assertResponseOk();
         $viewData = $this->responseView()->getData();
@@ -35,7 +35,7 @@ class ExerciseSearchControllerTest extends WebTestCase
 
         $phrase = uniqid();
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
+        $this->call('GET', '/exercises/search?phrase=' . $phrase);
 
         $this->assertResponseOk();
         $viewData = $this->responseView()->getData();
@@ -54,7 +54,7 @@ class ExerciseSearchControllerTest extends WebTestCase
 
         $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
 
-        $this->call('GET', '/exercises/search?phrase='.$phrase);
+        $this->call('GET', '/exercises/search?phrase=' . $phrase);
 
         $this->assertResponseOk();
         $viewData = $this->responseView()->getData();

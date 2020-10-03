@@ -17,40 +17,50 @@ class LessonCsvControllerTest extends WebTestCase
         $this->be($user);
         $lesson = $this->createPrivateLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $result = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'number_of_good_answers' => 3,
-            'number_of_bad_answers' => 1,
-            'percent_of_good_answers' => 75,
-        ]);
+        $result = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'number_of_good_answers' => 3,
+                'number_of_bad_answers' => 1,
+                'percent_of_good_answers' => 75,
+            ]
+        );
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/csv');
+        $this->call('GET', '/lessons/' . $lesson->id . '/csv');
 
         $this->assertEquals('application/force-download', $this->response->headers->get('content-type'));
-        $this->assertEquals('attachment; filename="'.$lesson->name.'.csv"',
-            $this->response->headers->get('content-Disposition'));
+        $this->assertEquals(
+            'attachment; filename="' . $lesson->name . '.csv"',
+            $this->response->headers->get('content-Disposition')
+        );
 
         $content = $this->response->content();
         $lines = explode(PHP_EOL, $content);
 
         $header = str_getcsv($lines[0]);
-        $this->assertEquals([
-            'question',
-            'answer',
-            'number_of_good_answers',
-            'number_of_bad_answers',
-            'percent_of_good_answers',
-        ], $header);
+        $this->assertEquals(
+            [
+                'question',
+                'answer',
+                'number_of_good_answers',
+                'number_of_bad_answers',
+                'percent_of_good_answers',
+            ],
+            $header
+        );
 
         $first = str_getcsv($lines[1]);
-        $this->assertEquals([
-            $exercise->question,
-            $exercise->answer,
-            $result->number_of_good_answers,
-            $result->number_of_bad_answers,
-            $result->percent_of_good_answers,
-        ], $first);
+        $this->assertEquals(
+            [
+                $exercise->question,
+                $exercise->answer,
+                $result->number_of_good_answers,
+                $result->number_of_bad_answers,
+                $result->percent_of_good_answers,
+            ],
+            $first
+        );
     }
 
     /** @test */
@@ -61,32 +71,40 @@ class LessonCsvControllerTest extends WebTestCase
         $lesson = $this->createPrivateLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/csv');
+        $this->call('GET', '/lessons/' . $lesson->id . '/csv');
 
         $this->assertEquals('application/force-download', $this->response->headers->get('content-type'));
-        $this->assertEquals('attachment; filename="'.$lesson->name.'.csv"',
-            $this->response->headers->get('content-Disposition'));
+        $this->assertEquals(
+            'attachment; filename="' . $lesson->name . '.csv"',
+            $this->response->headers->get('content-Disposition')
+        );
 
         $content = $this->response->content();
         $lines = explode(PHP_EOL, $content);
 
         $header = str_getcsv($lines[0]);
-        $this->assertEquals([
-            'question',
-            'answer',
-            'number_of_good_answers',
-            'number_of_bad_answers',
-            'percent_of_good_answers',
-        ], $header);
+        $this->assertEquals(
+            [
+                'question',
+                'answer',
+                'number_of_good_answers',
+                'number_of_bad_answers',
+                'percent_of_good_answers',
+            ],
+            $header
+        );
 
         $first = str_getcsv($lines[1]);
-        $this->assertEquals([
-            $exercise->question,
-            $exercise->answer,
-            0,
-            0,
-            0,
-        ], $first);
+        $this->assertEquals(
+            [
+                $exercise->question,
+                $exercise->answer,
+                0,
+                0,
+                0,
+            ],
+            $first
+        );
     }
 
     /** @test */
@@ -94,7 +112,7 @@ class LessonCsvControllerTest extends WebTestCase
     {
         $lesson = $this->createPrivateLesson();
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/csv');
+        $this->call('GET', '/lessons/' . $lesson->id . '/csv');
 
         $this->assertResponseUnauthorized();
     }
@@ -127,25 +145,29 @@ class LessonCsvControllerTest extends WebTestCase
         /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
-        $writer->insertOne([
-            'question',
-            'answer',
-            'number_of_good_answers',
-            'number_of_bad_answers',
-            'percent_of_good_answers',
-        ]);
+        $writer->insertOne(
+            [
+                'question',
+                'answer',
+                'number_of_good_answers',
+                'number_of_bad_answers',
+                'percent_of_good_answers',
+            ]
+        );
 
-        $writer->insertOne($data = [
-            $question = uniqid(),
-            $answer = uniqid(),
-            $numberOfGoodAnswers = 2,
-            $numberOfBadAnswers = 8,
-            $percentOfGoodAnswers = 80,
-        ]);
+        $writer->insertOne(
+            $data = [
+                $question = uniqid(),
+                $answer = uniqid(),
+                $numberOfGoodAnswers = 2,
+                $numberOfBadAnswers = 8,
+                $percentOfGoodAnswers = 80,
+            ]
+        );
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id);
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id);
         $this->assertCount(1, $lesson->exercises);
 
         $exercise = $lesson->exercises->first();
@@ -171,23 +193,27 @@ class LessonCsvControllerTest extends WebTestCase
         /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
-        $writer->insertOne([
-            'question',
-            'answer',
-            'number_of_good_answers',
-            'number_of_bad_answers',
-            'percent_of_good_answers',
-        ]);
+        $writer->insertOne(
+            [
+                'question',
+                'answer',
+                'number_of_good_answers',
+                'number_of_bad_answers',
+                'percent_of_good_answers',
+            ]
+        );
 
-        $writer->insertOne($data = [
-            $question = uniqid(),
-            $answer = uniqid(),
-            $numberOfGoodAnswers = 2,
-            $numberOfBadAnswers = 8,
-            $percentOfGoodAnswers = 80,
-        ]);
+        $writer->insertOne(
+            $data = [
+                $question = uniqid(),
+                $answer = uniqid(),
+                $numberOfGoodAnswers = 2,
+                $numberOfBadAnswers = 8,
+                $percentOfGoodAnswers = 80,
+            ]
+        );
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
         $this->assertResponseUnauthorized();
     }
@@ -208,23 +234,27 @@ class LessonCsvControllerTest extends WebTestCase
         /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
-        $writer->insertOne([
-            'question',
-            'answer',
-            'number_of_good_answers',
-            'number_of_bad_answers',
-            'percent_of_good_answers',
-        ]);
+        $writer->insertOne(
+            [
+                'question',
+                'answer',
+                'number_of_good_answers',
+                'number_of_bad_answers',
+                'percent_of_good_answers',
+            ]
+        );
 
-        $writer->insertOne($data = [
-            $question = uniqid(),
-            $answer = uniqid(),
-            $numberOfGoodAnswers = 2,
-            $numberOfBadAnswers = 8,
-            $percentOfGoodAnswers = 80,
-        ]);
+        $writer->insertOne(
+            $data = [
+                $question = uniqid(),
+                $answer = uniqid(),
+                $numberOfGoodAnswers = 2,
+                $numberOfBadAnswers = 8,
+                $percentOfGoodAnswers = 80,
+            ]
+        );
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
         $this->assertResponseForbidden();
     }
@@ -244,21 +274,25 @@ class LessonCsvControllerTest extends WebTestCase
         /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
-        $writer->insertOne([
-            'question',
-            'answer',
-            'number_of_good_answers',
-            'number_of_bad_answers',
-            'percent_of_good_answers',
-        ]);
+        $writer->insertOne(
+            [
+                'question',
+                'answer',
+                'number_of_good_answers',
+                'number_of_bad_answers',
+                'percent_of_good_answers',
+            ]
+        );
 
-        $writer->insertOne($data = [
-            $question = uniqid(),
-            $answer = uniqid(),
-            $numberOfGoodAnswers = 2,
-            $numberOfBadAnswers = 8,
-            $percentOfGoodAnswers = 80,
-        ]);
+        $writer->insertOne(
+            $data = [
+                $question = uniqid(),
+                $answer = uniqid(),
+                $numberOfGoodAnswers = 2,
+                $numberOfBadAnswers = 8,
+                $percentOfGoodAnswers = 80,
+            ]
+        );
 
         $this->call('POST', '/lessons/-1/csv', $parameters = [], $cookies = [], ['csv_file' => $file]);
 
@@ -272,7 +306,7 @@ class LessonCsvControllerTest extends WebTestCase
         $this->be($user);
         $lesson = $this->createPrivateLesson($user);
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/csv');
+        $this->call('POST', '/lessons/' . $lesson->id . '/csv');
 
         $this->assertResponseInvalidInput();
     }

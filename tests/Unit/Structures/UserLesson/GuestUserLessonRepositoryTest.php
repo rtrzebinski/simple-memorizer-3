@@ -14,13 +14,15 @@ class GuestUserLessonRepositoryTest extends \TestCase
     public function itShould_fetchUserLesson_guest()
     {
         $user = $this->createUser(['id' => 5]);
-        $lesson = $this->createLesson([
-            'owner_id' => $user->id,
-            'name' => uniqid(),
-            'exercises_count' => 2,
-            'subscribers_count' => 3,
-            'child_lessons_count' => 4,
-        ]);
+        $lesson = $this->createLesson(
+            [
+                'owner_id' => $user->id,
+                'name' => uniqid(),
+                'exercises_count' => 2,
+                'subscribers_count' => 3,
+                'child_lessons_count' => 4,
+            ]
+        );
 
         $repository = new GuestUserLessonRepository();
         $result = $repository->fetchUserLesson($lesson->id);

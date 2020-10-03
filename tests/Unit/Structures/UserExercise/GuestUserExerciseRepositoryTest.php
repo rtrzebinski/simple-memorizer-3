@@ -44,17 +44,19 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new GuestUserExerciseRepository();
         $result = $repository->fetchUserExercisesOfLesson($lesson->id);
@@ -82,30 +84,34 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
         $exercise1 = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult1 = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise1->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult1 = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise1->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $exercise2 = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult2 = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise2->id,
-            "number_of_good_answers" => 4,
-            "number_of_good_answers_today" => 2,
-            "latest_good_answer" => Carbon::today()->addHours(2),
-            "number_of_bad_answers" => 8,
-            "number_of_bad_answers_today" => 6,
-            "latest_bad_answer" => Carbon::today()->addHours(4),
-            "percent_of_good_answers" => 10,
-        ]);
+        $exerciseResult2 = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise2->id,
+                "number_of_good_answers" => 4,
+                "number_of_good_answers_today" => 2,
+                "latest_good_answer" => Carbon::today()->addHours(2),
+                "number_of_bad_answers" => 8,
+                "number_of_bad_answers_today" => 6,
+                "latest_bad_answer" => Carbon::today()->addHours(4),
+                "percent_of_good_answers" => 10,
+            ]
+        );
 
         $repository = new GuestUserExerciseRepository();
         $result = $repository->fetchUserExercisesOfLesson($lesson->id);
@@ -173,17 +179,19 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
         $exercise1 = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult1 = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise1->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult1 = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise1->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $exercise2 = $this->createExercise(['lesson_id' => $lesson->id]);
 
@@ -268,17 +276,19 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new GuestUserExerciseRepository();
         $result = $repository->fetchUserExercisesOfLesson($lesson->id);
@@ -308,16 +318,20 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $parentLesson->childLessons()->save($childLesson);
 
         $exercise = $this->createExercise(['lesson_id' => $parentLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         // some unrelated exercise (should be excluded)
         $this->createExercise();
@@ -338,10 +352,12 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $parentLesson->childLessons()->save($childLesson);
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         // some unrelated exercise (should be excluded)
         $this->createExercise();
@@ -384,10 +400,12 @@ class GuestUserExerciseRepositoryTest extends \TestCase
         $childLesson->childLessons()->save($grandchildLesson);
 
         $exercise = $this->createExercise(['lesson_id' => $grandchildLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         // some unrelated exercise (should be excluded)
         $this->createExercise();

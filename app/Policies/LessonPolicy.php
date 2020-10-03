@@ -14,7 +14,7 @@ class LessonPolicy
     /**
      * User must be the owner of lesson or lesson must be public.
      *
-     * @param User   $user
+     * @param User $user
      * @param Lesson $lesson
      * @return bool
      */
@@ -29,17 +29,19 @@ class LessonPolicy
         }
 
         return Lesson::whereId($lesson->id)
-            ->where(function (Builder $query) use ($user) {
-                $query->where('visibility', '=', Lesson::VISIBILITY_PUBLIC)
-                    ->orWhere('owner_id', '=', $user->id);
-            })
+            ->where(
+                function (Builder $query) use ($user) {
+                    $query->where('visibility', '=', Lesson::VISIBILITY_PUBLIC)
+                        ->orWhere('owner_id', '=', $user->id);
+                }
+            )
             ->exists();
     }
 
     /**
      * User must be the owner of lesson.
      *
-     * @param User   $user
+     * @param User $user
      * @param Lesson $lesson
      * @return bool
      */
@@ -54,7 +56,7 @@ class LessonPolicy
     /**
      * User must not subscribe lesson and not be the owner.
      *
-     * @param User   $user
+     * @param User $user
      * @param Lesson $lesson
      * @return bool
      */
@@ -71,7 +73,7 @@ class LessonPolicy
     /**
      * User must subscribe lesson and not be the owner.
      *
-     * @param User   $user
+     * @param User $user
      * @param Lesson $lesson
      * @return bool
      */
@@ -88,7 +90,7 @@ class LessonPolicy
     /**
      * Lesson must have certain number of exercises, and user must have access.
      *
-     * @param User   $user
+     * @param User $user
      * @param Lesson $lesson
      * @return bool
      */

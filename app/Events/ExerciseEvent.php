@@ -13,7 +13,7 @@ abstract class ExerciseEvent implements LessonEventInterface
     /**
      * Create a new event instance.
      *
-     * @param int  $exerciseId
+     * @param int $exerciseId
      * @param User $user
      */
     public function __construct(int $exerciseId, User $user)

@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Web;
 
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class ExerciseSearchController extends Controller
 {
     /**
-     * @param Request                                      $request
+     * @param Request $request
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @return View
      */
-    public function searchForExercises(Request $request, AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository)
-    {
+    public function searchForExercises(
+        Request $request,
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+    ) {
         $phrase = $request->get('phrase');
 
         if ($phrase) {
@@ -24,9 +26,12 @@ class ExerciseSearchController extends Controller
             $userExercises = collect();
         }
 
-        return view('exercises.search', [
-            'userExercises' => $userExercises,
-            'phrase' => $phrase,
-        ]);
+        return view(
+            'exercises.search',
+            [
+                'userExercises' => $userExercises,
+                'phrase' => $phrase,
+            ]
+        );
     }
 }

@@ -11,17 +11,17 @@ use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class LearnLessonController extends Controller
 {
     /**
-     * @param int                                          $lessonId
-     * @param Request                                      $request
-     * @param LearningService                              $learningService
+     * @param int $lessonId
+     * @param Request $request
+     * @param LearningService $learningService
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
-     * @param AuthenticatedUserLessonRepositoryInterface   $userLessonRepository
-     * @param UserExerciseModifier                         $userExerciseModifier
+     * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
+     * @param UserExerciseModifier $userExerciseModifier
      * @return View|Response
      */
     public function learnLesson(
@@ -50,7 +50,10 @@ class LearnLessonController extends Controller
             $this->authorizeForUser($this->user(), 'access', $userExercise);
         } else {
             $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lessonId);
-            $userExercise = $learningService->findUserExerciseToLearn($userExercises, $request->get('previous_exercise_id'));
+            $userExercise = $learningService->findUserExerciseToLearn(
+                $userExercises,
+                $request->get('previous_exercise_id')
+            );
         }
 
         if ($userExercise && $userLesson->is_bidirectional) {
@@ -58,26 +61,31 @@ class LearnLessonController extends Controller
             $userExercise = $userExerciseModifier->swapQuestionWithAnswer($userExercise, $probability = 50);
         }
 
-        $redirectUrl = '/learn/lessons/'.$lessonId.'?requested_exercise_id='.$userExercise->exercise_id;
-        $editExerciseUrl = URL::to('/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to='.urlencode($redirectUrl));
+        $redirectUrl = '/learn/lessons/' . $lessonId . '?requested_exercise_id=' . $userExercise->exercise_id;
+        $editExerciseUrl = URL::to(
+            '/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=' . urlencode($redirectUrl)
+        );
 
         $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
 
-        return view('learn.lesson', [
-            'userLesson' => $userLesson,
-            'userExercise' => $userExercise,
-            'canEditExercise' => $canEditExercise,
-            'editExerciseUrl' => $editExerciseUrl,
-        ]);
+        return view(
+            'learn.lesson',
+            [
+                'userLesson' => $userLesson,
+                'userExercise' => $userExercise,
+                'canEditExercise' => $canEditExercise,
+                'editExerciseUrl' => $editExerciseUrl,
+            ]
+        );
     }
 
     /**
-     * @param int                                          $lessonId
-     * @param Request                                      $request
-     * @param LearningService                              $learningService
+     * @param int $lessonId
+     * @param Request $request
+     * @param LearningService $learningService
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
-     * @param AuthenticatedUserLessonRepositoryInterface   $userLessonRepository
-     * @param UserExerciseModifier                         $userExerciseModifier
+     * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
+     * @param UserExerciseModifier $userExerciseModifier
      * @return View
      */
     public function handleAnswer(
@@ -88,10 +96,13 @@ class LearnLessonController extends Controller
         AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
         UserExerciseModifier $userExerciseModifier
     ) {
-        $this->validate($request, [
-            'answer' => 'required|in:good,bad',
-            'previous_exercise_id' => 'required|int',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'answer' => 'required|in:good,bad',
+                'previous_exercise_id' => 'required|int',
+            ]
+        );
 
         $previousExerciseId = $request->previous_exercise_id;
 
@@ -103,6 +114,13 @@ class LearnLessonController extends Controller
             event(new ExerciseBadAnswer($previousExerciseId, $this->user()));
         }
 
-        return $this->learnLesson($lessonId, $request, $learningService, $userExerciseRepository, $userLessonRepository, $userExerciseModifier);
+        return $this->learnLesson(
+            $lessonId,
+            $request,
+            $learningService,
+            $userExerciseRepository,
+            $userLessonRepository,
+            $userExerciseModifier
+        );
     }
 }

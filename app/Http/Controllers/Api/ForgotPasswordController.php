@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Password;
+use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
 {

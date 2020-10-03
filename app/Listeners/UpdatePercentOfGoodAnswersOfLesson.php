@@ -31,7 +31,7 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
 
     /**
      * @param Lesson $lesson
-     * @param User   $user
+     * @param User $user
      */
     private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user)
     {
@@ -48,20 +48,24 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
             DB::table('lesson_user')
                 ->where('lesson_user.lesson_id', '=', $lesson->id)
                 ->where('lesson_user.user_id', '=', $user->id)
-                ->update([
-                    'percent_of_good_answers' => $percentOfGoodAnswersOfLesson,
-                    'updated_at' => Carbon::now(),
+                ->update(
+                    [
+                        'percent_of_good_answers' => $percentOfGoodAnswersOfLesson,
+                        'updated_at' => Carbon::now(),
 
-                ]);
+                    ]
+                );
         } else {
             // no answers - set percent_of_good_answers to 0
             DB::table('lesson_user')
                 ->where('lesson_user.lesson_id', '=', $lesson->id)
                 ->where('lesson_user.user_id', '=', $user->id)
-                ->update([
-                    'percent_of_good_answers' => 0,
-                    'updated_at' => Carbon::now(),
-                ]);
+                ->update(
+                    [
+                        'percent_of_good_answers' => 0,
+                        'updated_at' => Carbon::now(),
+                    ]
+                );
         }
 
         // recursively run for each parent lesson

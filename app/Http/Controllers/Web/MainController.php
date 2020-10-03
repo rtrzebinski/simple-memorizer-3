@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Structures\UserLesson\AbstractUserLessonRepositoryInterface;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class MainController extends Controller
 {
@@ -14,7 +12,7 @@ class MainController extends Controller
      * Show the application main page.
      *
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
-     * @return Factory|Response|View
+     * @return View
      */
     public function index(AbstractUserLessonRepositoryInterface $userLessonRepository)
     {
@@ -22,11 +20,14 @@ class MainController extends Controller
             redirect('/home');
         }
 
-        return view('home', [
-            'ownedLessons' => [],
-            'subscribedLessons' => [],
-            'availableLessons' => $userLessonRepository->fetchAvailableUserLessons(),
-            'userHasOwnedOrSubscribedLessons' => false,
-        ]);
+        return view(
+            'home',
+            [
+                'ownedLessons' => [],
+                'subscribedLessons' => [],
+                'availableLessons' => $userLessonRepository->fetchAvailableUserLessons(),
+                'userHasOwnedOrSubscribedLessons' => false,
+            ]
+        );
     }
 }

@@ -9,13 +9,13 @@ use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class LearnAllController extends Controller
 {
     /**
-     * @param Request                                      $request
-     * @param LearningService                              $learningService
+     * @param Request $request
+     * @param LearningService $learningService
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @return View|Response
      */
@@ -33,21 +33,26 @@ class LearnAllController extends Controller
             $userExercise = $learningService->findUserExerciseToLearn($userExercises, $request->previous_exercise_id);
         }
 
-        $redirectUrl = '/learn/all/?requested_exercise_id='.$userExercise->exercise_id;
-        $editExerciseUrl = URL::to('/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to='.urlencode($redirectUrl));
+        $redirectUrl = '/learn/all/?requested_exercise_id=' . $userExercise->exercise_id;
+        $editExerciseUrl = URL::to(
+            '/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=' . urlencode($redirectUrl)
+        );
 
         $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
 
-        return view('learn.all', [
-            'userExercise' => $userExercise,
-            'canEditExercise' => $canEditExercise,
-            'editExerciseUrl' => $editExerciseUrl,
-        ]);
+        return view(
+            'learn.all',
+            [
+                'userExercise' => $userExercise,
+                'canEditExercise' => $canEditExercise,
+                'editExerciseUrl' => $editExerciseUrl,
+            ]
+        );
     }
 
     /**
-     * @param Request                                      $request
-     * @param LearningService                              $learningService
+     * @param Request $request
+     * @param LearningService $learningService
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @return Response|View
      */
@@ -56,10 +61,13 @@ class LearnAllController extends Controller
         LearningService $learningService,
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
     ) {
-        $this->validate($request, [
-            'answer' => 'required|in:good,bad',
-            'previous_exercise_id' => 'required|int',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'answer' => 'required|in:good,bad',
+                'previous_exercise_id' => 'required|int',
+            ]
+        );
 
         $previousExerciseId = $request->previous_exercise_id;
 

@@ -16,7 +16,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
+        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
@@ -27,7 +27,7 @@ class ExerciseControllerTest extends WebTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
+        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
 
         $this->assertResponseUnauthorized();
     }
@@ -38,7 +38,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create');
+        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create');
 
         $this->assertResponseForbidden();
     }
@@ -66,13 +66,13 @@ class ExerciseControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises', $parameters);
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises', $parameters);
 
         /** @var Exercise $exercise */
         $exercise = $this->last(Exercise::class);
         $this->assertEquals($parameters['question'], $exercise->question);
         $this->assertEquals($parameters['answer'], $exercise->answer);
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id . '/exercises');
     }
 
     /** @test */
@@ -88,7 +88,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises');
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises');
 
         $this->assertResponseForbidden();
     }
@@ -114,7 +114,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises');
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises');
 
         $this->assertResponseInvalidInput();
     }
@@ -127,7 +127,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
+        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create-many');
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
@@ -138,7 +138,7 @@ class ExerciseControllerTest extends WebTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
+        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create-many');
 
         $this->assertResponseUnauthorized();
     }
@@ -149,7 +149,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/'.$lesson->id.'/exercises/create-many');
+        $this->call('GET', '/lessons/' . $lesson->id . '/exercises/create-many');
 
         $this->assertResponseForbidden();
     }
@@ -178,9 +178,9 @@ class ExerciseControllerTest extends WebTestCase
 
         $this->expectsEvents(ExerciseCreated::class);
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many', $parameters);
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises-many', $parameters);
 
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id . '/exercises');
 
         $exercises = Exercise::query()->get();
         $this->assertCount(2, $exercises);
@@ -206,9 +206,9 @@ class ExerciseControllerTest extends WebTestCase
 
         $this->expectsEvents(ExerciseCreated::class);
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many', $parameters);
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises-many', $parameters);
 
-        $this->assertResponseRedirectedTo('/lessons/'.$lesson->id.'/exercises');
+        $this->assertResponseRedirectedTo('/lessons/' . $lesson->id . '/exercises');
 
         $exercises = Exercise::query()->get();
         $this->assertCount(1, $exercises);
@@ -231,7 +231,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPrivateLesson();
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many');
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises-many');
 
         $this->assertResponseForbidden();
     }
@@ -257,7 +257,7 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
 
-        $this->call('POST', '/lessons/'.$lesson->id.'/exercises-many');
+        $this->call('POST', '/lessons/' . $lesson->id . '/exercises-many');
 
         $this->assertResponseInvalidInput();
     }
@@ -272,7 +272,7 @@ class ExerciseControllerTest extends WebTestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
         $redirectTo = $this->randomUrl();
 
-        $this->call('GET', '/exercises/'.$exercise->id.'/edit?redirect_to='.urlencode($redirectTo));
+        $this->call('GET', '/exercises/' . $exercise->id . '/edit?redirect_to=' . urlencode($redirectTo));
 
         $this->assertResponseOk();
         $this->assertEquals($exercise->id, $this->responseView()->exercise->id);
@@ -291,7 +291,7 @@ class ExerciseControllerTest extends WebTestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
         $redirectTo = $this->randomUrl();
 
-        $this->call('GET', '/exercises/'.$exercise->id.'/edit?hide_lesson='.$hideLesson);
+        $this->call('GET', '/exercises/' . $exercise->id . '/edit?hide_lesson=' . $hideLesson);
 
         $this->assertResponseOk();
         $this->assertEquals($exercise->id, $this->responseView()->exercise->id);
@@ -306,9 +306,16 @@ class ExerciseControllerTest extends WebTestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
         $redirectTo = $this->randomUrl();
 
-        $this->call('GET', '/exercises/'.$exercise->id.'/edit', $parameters = [], $cookies = [], $files = [], $server = [
-            'HTTP_REFERER' => $redirectTo,
-        ]);
+        $this->call(
+            'GET',
+            '/exercises/' . $exercise->id . '/edit',
+            $parameters = [],
+            $cookies = [],
+            $files = [],
+            $server = [
+                'HTTP_REFERER' => $redirectTo,
+            ]
+        );
 
         $this->assertResponseOk();
         $this->assertEquals($exercise->id, $this->responseView()->exercise->id);
@@ -321,7 +328,7 @@ class ExerciseControllerTest extends WebTestCase
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('GET', '/exercises/'.$exercise->id.'/edit');
+        $this->call('GET', '/exercises/' . $exercise->id . '/edit');
 
         $this->assertResponseUnauthorized();
     }
@@ -333,7 +340,7 @@ class ExerciseControllerTest extends WebTestCase
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('GET', '/exercises/'.$exercise->id.'/edit');
+        $this->call('GET', '/exercises/' . $exercise->id . '/edit');
 
         $this->assertResponseForbidden();
     }
@@ -364,7 +371,7 @@ class ExerciseControllerTest extends WebTestCase
             'redirect_to' => $redirectTo,
         ];
 
-        $this->call('PUT', '/exercises/'.$exercise->id, $parameters);
+        $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
 
         /** @var Exercise $exercise */
         $exercise = $exercise->fresh();
@@ -384,7 +391,7 @@ class ExerciseControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/exercises/'.$exercise->id, $parameters);
+        $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
 
         $this->assertResponseUnauthorized();
     }
@@ -401,7 +408,7 @@ class ExerciseControllerTest extends WebTestCase
             'answer' => uniqid(),
         ];
 
-        $this->call('PUT', '/exercises/'.$exercise->id, $parameters);
+        $this->call('PUT', '/exercises/' . $exercise->id, $parameters);
 
         $this->assertResponseForbidden();
     }
@@ -428,7 +435,7 @@ class ExerciseControllerTest extends WebTestCase
         $lesson = $this->createPrivateLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('PUT', '/exercises/'.$exercise->id);
+        $this->call('PUT', '/exercises/' . $exercise->id);
 
         $this->assertResponseInvalidInput();
     }
@@ -443,9 +450,16 @@ class ExerciseControllerTest extends WebTestCase
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
         $redirectTo = $this->randomUrl();
 
-        $this->call('DELETE', '/exercises/'.$exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
-            'HTTP_REFERER' => $redirectTo,
-        ]);
+        $this->call(
+            'DELETE',
+            '/exercises/' . $exercise->id,
+            $parameters = [],
+            $cookies = [],
+            $files = [],
+            $server = [
+                'HTTP_REFERER' => $redirectTo,
+            ]
+        );
 
         $this->assertNull($exercise->fresh());
         $this->assertResponseRedirectedTo($redirectTo);
@@ -465,9 +479,16 @@ class ExerciseControllerTest extends WebTestCase
         $lesson->subscribedUsers[0]->pivot->save();
         $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
-        $this->call('DELETE', '/exercises/'.$exercise->id, $parameters = [], $cookies = [], $files = [], $server = [
-            'HTTP_REFERER' => $redirectTo,
-        ]);
+        $this->call(
+            'DELETE',
+            '/exercises/' . $exercise->id,
+            $parameters = [],
+            $cookies = [],
+            $files = [],
+            $server = [
+                'HTTP_REFERER' => $redirectTo,
+            ]
+        );
 
         $this->assertNull($exercise->fresh());
         $this->assertResponseRedirectedTo($redirectTo);
@@ -482,7 +503,7 @@ class ExerciseControllerTest extends WebTestCase
         $lesson = $this->createLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('DELETE', '/exercises/'.$exercise->id);
+        $this->call('DELETE', '/exercises/' . $exercise->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -494,7 +515,7 @@ class ExerciseControllerTest extends WebTestCase
         $lesson = $this->createPrivateLesson();
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->call('DELETE', '/exercises/'.$exercise->id);
+        $this->call('DELETE', '/exercises/' . $exercise->id);
 
         $this->assertResponseForbidden();
     }

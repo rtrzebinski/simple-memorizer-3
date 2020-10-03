@@ -25,26 +25,33 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
      * @param int $expectedResult
      * @throws \Exception
      */
-    public function itShould_updatePercentOfGoodAnswersOfLesson(int $exercise1percentOfGoodAnswers, int $exercise2percentOfGoodAnswers, int $expectedResult)
-    {
+    public function itShould_updatePercentOfGoodAnswersOfLesson(
+        int $exercise1percentOfGoodAnswers,
+        int $exercise2percentOfGoodAnswers,
+        int $expectedResult
+    ) {
         $user = $this->createUser();
 
         $lesson = $this->createLesson();
         $lesson->subscribe($user);
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => $exercise1percentOfGoodAnswers,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => $exercise1percentOfGoodAnswers,
+            ]
+        );
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => $exercise2percentOfGoodAnswers,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => $exercise2percentOfGoodAnswers,
+            ]
+        );
 
         $listener = new UpdatePercentOfGoodAnswersOfLesson();
         $event = new ExerciseGoodAnswer($exercise->id, $user);
@@ -62,11 +69,13 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         $lesson->subscribe($user);
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => 100,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => 100,
+            ]
+        );
 
         // this should be considered 0%, as it has no answers
         $this->createExercise(['lesson_id' => $lesson->id]);
@@ -99,18 +108,22 @@ class UpdatePercentOfGoodAnswersOfLessonTest extends \TestCase
         $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($childLesson, $user->id));
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => 50,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => 50,
+            ]
+        );
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            'percent_of_good_answers' => 100,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => 100,
+            ]
+        );
 
         $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($childLesson, $user->id));
         $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($parentLesson, $user->id));

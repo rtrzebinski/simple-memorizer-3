@@ -17,17 +17,23 @@ class SubscribeLessonTest extends TestCase
         // create a user
         $email = $this->randomEmail();
         $password = $this->randomPassword();
-        $user = $this->createUser([
-            'email' => $email,
-            'password' => bcrypt($password),
-        ]);
+        $user = $this->createUser(
+            [
+                'email' => $email,
+                'password' => bcrypt($password),
+            ]
+        );
 
         // send login request
         /** @var TestResponse $response */
-        $this->call('POST', '/login', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $this->call(
+            'POST',
+            '/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         // click 'subscribe' button
         /** @var TestResponse $response */
@@ -60,11 +66,15 @@ class SubscribeLessonTest extends TestCase
         // send signup request
         $email = $this->randomEmail();
         $password = $this->randomPassword();
-        $response = $this->call('POST', '/register', [
-            'email' => $email,
-            'password' => $password,
-            'password_confirmation' => $password,
-        ]);
+        $response = $this->call(
+            'POST',
+            '/register',
+            [
+                'email' => $email,
+                'password' => $password,
+                'password_confirmation' => $password,
+            ]
+        );
 
         /** @var User $user */
         $user = User::whereEmail($email)->first();
@@ -96,17 +106,23 @@ class SubscribeLessonTest extends TestCase
         // create a user
         $email = $this->randomEmail();
         $password = $this->randomPassword();
-        $user = $this->createUser([
-            'email' => $email,
-            'password' => bcrypt($password),
-        ]);
+        $user = $this->createUser(
+            [
+                'email' => $email,
+                'password' => bcrypt($password),
+            ]
+        );
 
         // send login request
         /** @var TestResponse $response */
-        $response = $this->call('POST', '/login', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $response = $this->call(
+            'POST',
+            '/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         // ensure user is authenticated
         $this->assertEquals($user->id, auth()->user()->id);
@@ -135,20 +151,26 @@ class SubscribeLessonTest extends TestCase
         // create user
         $email = $this->randomEmail();
         $password = $this->randomPassword();
-        $user = $this->createUser([
-            'email' => $email,
-            'password' => bcrypt($password),
-        ]);
+        $user = $this->createUser(
+            [
+                'email' => $email,
+                'password' => bcrypt($password),
+            ]
+        );
 
         // subscribe user and ensure he can still use 'subscribe' as a guest
         $lesson->subscribe($user);
 
         // send login request
         /** @var TestResponse $response */
-        $response = $this->call('POST', '/login', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $response = $this->call(
+            'POST',
+            '/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
         // ensure user is authenticated
         $this->assertEquals($user->id, auth()->user()->id);

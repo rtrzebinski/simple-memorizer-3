@@ -44,10 +44,12 @@ class UserRepositoryTest extends TestCase
         $email = $this->randomEmail();
         $password = uniqid();
 
-        $user = $this->createUser([
-            'email' => $email,
-            'password' => Hash::make($password),
-        ]);
+        $user = $this->createUser(
+            [
+                'email' => $email,
+                'password' => Hash::make($password),
+            ]
+        );
 
         $this->assertEquals($user->id, $this->repository->findByCredentials($email, $password)->id);
     }

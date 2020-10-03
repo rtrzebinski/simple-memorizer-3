@@ -10,7 +10,7 @@ class UserExerciseModifier
     /**
      * Swap question with answer of given UserExercise.
      * @param UserExercise $userExercise
-     * @param int          $probability
+     * @param int $probability
      * @return UserExercise
      * @throws InvalidArgumentException
      */

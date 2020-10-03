@@ -31,7 +31,7 @@ class LearningService
 
     /**
      * @param Collection $userExercises
-     * @param int|null   $previousExerciseId
+     * @param int|null $previousExerciseId
      * @return UserExercise|null
      * @throws Exception
      */
@@ -39,9 +39,11 @@ class LearningService
     {
         // exclude previous exercise if provided
         if ($previousExerciseId) {
-            $userExercises = $userExercises->filter(function (UserExercise $userExercise) use ($previousExerciseId) {
-                return $userExercise->exercise_id != $previousExerciseId;
-            });
+            $userExercises = $userExercises->filter(
+                function (UserExercise $userExercise) use ($previousExerciseId) {
+                    return $userExercise->exercise_id != $previousExerciseId;
+                }
+            );
         }
 
         // case here is exercise deleted by the owner during the lesson
@@ -67,8 +69,9 @@ class LearningService
         if (empty($tmp)) {
             // but perhaps previous has some points? let's check
             if ($previousExerciseId) {
-
-                $previousUserExercise = $this->authenticatedUserExerciseRepository->fetchUserExerciseOfExercise($previousExerciseId);
+                $previousUserExercise = $this->authenticatedUserExerciseRepository->fetchUserExerciseOfExercise(
+                    $previousExerciseId
+                );
 
                 $previousPoints = $this->calculatePoints($previousUserExercise);
 
@@ -110,7 +113,8 @@ class LearningService
         // check for answers today first
 
         // user had both good and bad answers today
-        if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday() && $latestBadAnswer->isToday()) {
+        if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday(
+            ) && $latestBadAnswer->isToday()) {
             // if good answer was the most recent - return 0 point to not bother user with this question anymore today
             // it makes more sense to serve it another day than serve again today
             if ($latestGoodAnswer->isAfter($latestBadAnswer)) {

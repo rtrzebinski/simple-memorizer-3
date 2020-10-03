@@ -20,25 +20,28 @@ class LessonAggregateControllerTest extends WebTestCase
         $parentLesson->childLessons()->attach($childLesson);
         $anotherLesson = $this->createPrivateLesson($user);
 
-        $this->call('GET', '/lessons/aggregate/'.$parentLesson->id);
+        $this->call('GET', '/lessons/aggregate/' . $parentLesson->id);
         $this->assertResponseOk();
 
         $viewData = $this->responseView()->getData();
 
         $this->assertEquals($parentLesson->id, $viewData['userLesson']->lesson_id);
 
-        $this->assertEquals([
+        $this->assertEquals(
             [
-                'id' => $childLesson->id,
-                'name' => $childLesson->name,
-                'is_aggregated' => true,
+                [
+                    'id' => $childLesson->id,
+                    'name' => $childLesson->name,
+                    'is_aggregated' => true,
+                ],
+                [
+                    'id' => $anotherLesson->id,
+                    'name' => $anotherLesson->name,
+                    'is_aggregated' => false,
+                ],
             ],
-            [
-                'id' => $anotherLesson->id,
-                'name' => $anotherLesson->name,
-                'is_aggregated' => false,
-            ],
-        ], $viewData['lessons']);
+            $viewData['lessons']
+        );
     }
 
     /** @test */
@@ -46,7 +49,7 @@ class LessonAggregateControllerTest extends WebTestCase
     {
         $parentLesson = $this->createLesson();
 
-        $this->call('GET', '/lessons/aggregate/'.$parentLesson->id);
+        $this->call('GET', '/lessons/aggregate/' . $parentLesson->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -70,8 +73,8 @@ class LessonAggregateControllerTest extends WebTestCase
 
         $this->expectsEvents(LessonAggregatesUpdated::class);
 
-        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id, $data);
-        $this->assertResponseRedirectedTo('/lessons/aggregate/'.$parentLesson->id);
+        $this->call('POST', '/lessons/aggregate/' . $parentLesson->id, $data);
+        $this->assertResponseRedirectedTo('/lessons/aggregate/' . $parentLesson->id);
 
         $parentLesson = $parentLesson->fresh();
         $this->assertCount(1, $parentLesson->childLessons);
@@ -90,8 +93,8 @@ class LessonAggregateControllerTest extends WebTestCase
 
         $this->expectsEvents(LessonAggregatesUpdated::class);
 
-        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id);
-        $this->assertResponseRedirectedTo('/lessons/aggregate/'.$parentLesson->id);
+        $this->call('POST', '/lessons/aggregate/' . $parentLesson->id);
+        $this->assertResponseRedirectedTo('/lessons/aggregate/' . $parentLesson->id);
 
         $parentLesson = $parentLesson->fresh();
         $this->assertCount(0, $parentLesson->childLessons);
@@ -102,7 +105,7 @@ class LessonAggregateControllerTest extends WebTestCase
     {
         $parentLesson = $this->createLesson();
 
-        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id);
+        $this->call('POST', '/lessons/aggregate/' . $parentLesson->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -119,7 +122,7 @@ class LessonAggregateControllerTest extends WebTestCase
             'aggregates' => uniqid(), // should be an array
         ];
 
-        $this->call('POST', '/lessons/aggregate/'.$parentLesson->id, $data);
+        $this->call('POST', '/lessons/aggregate/' . $parentLesson->id, $data);
 
         $this->assertResponseInvalidInput();
     }

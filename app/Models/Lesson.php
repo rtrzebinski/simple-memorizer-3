@@ -14,22 +14,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\Lesson
  *
- * @property int                                                                  $id
- * @property int                                                                  $owner_id
- * @property string                                                               $name
- * @property string                                                               $visibility
- * @property int                                                                  $exercises_count
- * @property int                                                                  $subscribers_count
- * @property int                                                                  $child_lessons_count
- * @property \Illuminate\Support\Carbon|null                                      $created_at
- * @property \Illuminate\Support\Carbon|null                                      $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $childLessons
+ * @property int $id
+ * @property int $owner_id
+ * @property string $name
+ * @property string $visibility
+ * @property int $exercises_count
+ * @property int $subscribers_count
+ * @property int $child_lessons_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[] $childLessons
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exercise[] $exercises
- * @property-read \App\Models\User                                                $owner
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[]   $parentLessons
- * @property-read int|null                                                        $parent_lessons_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[]     $subscribedUsers
- * @property-read int|null                                                        $subscribed_users_count
+ * @property-read \App\Models\User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[] $parentLessons
+ * @property-read int|null $parent_lessons_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $subscribedUsers
+ * @property-read int|null $subscribed_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lesson query()
@@ -146,7 +146,7 @@ class Lesson extends Model
     {
         // just in case as policy already prevents this
         if ($this->owner_id == $user->id) {
-            throw new \Exception('Unable to unsubscribe owned lesson: '.$this->id);
+            throw new \Exception('Unable to unsubscribe owned lesson: ' . $this->id);
         }
 
         $this->subscribedUsers()->detach($user);

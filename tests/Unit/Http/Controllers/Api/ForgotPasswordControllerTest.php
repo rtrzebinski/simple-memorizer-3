@@ -17,9 +17,13 @@ class ForgotPasswordControllerTest extends ApiTestCase
 
         Notification::fake();
 
-        $this->callApi('POST', '/password/email', [
-            'email' => $user->email,
-        ]);
+        $this->callApi(
+            'POST',
+            '/password/email',
+            [
+                'email' => $user->email,
+            ]
+        );
 
         $this->assertResponseOk();
         Notification::assertSentTo($user, ResetPassword::class);

@@ -45,17 +45,19 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesOfLesson($lesson->id);
@@ -85,30 +87,34 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
         $exercise1 = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult1 = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise1->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult1 = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise1->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $exercise2 = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult2 = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise2->id,
-            "number_of_good_answers" => 4,
-            "number_of_good_answers_today" => 2,
-            "latest_good_answer" => Carbon::today()->addHours(2),
-            "number_of_bad_answers" => 8,
-            "number_of_bad_answers_today" => 6,
-            "latest_bad_answer" => Carbon::today()->addHours(4),
-            "percent_of_good_answers" => 10,
-        ]);
+        $exerciseResult2 = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise2->id,
+                "number_of_good_answers" => 4,
+                "number_of_good_answers_today" => 2,
+                "latest_good_answer" => Carbon::today()->addHours(2),
+                "number_of_bad_answers" => 8,
+                "number_of_bad_answers_today" => 6,
+                "latest_bad_answer" => Carbon::today()->addHours(4),
+                "percent_of_good_answers" => 10,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesOfLesson($lesson->id);
@@ -182,17 +188,19 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
         $exercise1 = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult1 = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise1->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult1 = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise1->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $exercise2 = $this->createExercise(['lesson_id' => $lesson->id]);
 
@@ -285,17 +293,19 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($this->createUser());
         $result = $repository->fetchUserExercisesOfLesson($lesson->id);
@@ -327,16 +337,20 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $parentLesson->childLessons()->save($childLesson);
 
         $exercise = $this->createExercise(['lesson_id' => $parentLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         // some unrelated exercise (should be excluded)
         $this->createExercise();
@@ -357,10 +371,12 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $parentLesson->childLessons()->save($childLesson);
 
         $exercise = $this->createExercise(['lesson_id' => $childLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         // some unrelated exercise (should be excluded)
         $this->createExercise();
@@ -403,10 +419,12 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $childLesson->childLessons()->save($grandchildLesson);
 
         $exercise = $this->createExercise(['lesson_id' => $grandchildLesson->id]);
-        $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-        ]);
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+            ]
+        );
 
         // some unrelated exercise (should be excluded)
         $this->createExercise();
@@ -438,17 +456,19 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExerciseOfExercise($exercise->id);
@@ -534,11 +554,13 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $phrase = uniqid();
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $phrase]);
-        $this->createExerciseResult([
-            'exercise_id' => $exercise->id,
-            'user_id' => $user->id,
-            'percent_of_good_answers' => 66,
-        ]);
+        $this->createExerciseResult(
+            [
+                'exercise_id' => $exercise->id,
+                'user_id' => $user->id,
+                'percent_of_good_answers' => 66,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesWithPhrase($phrase)[0];
@@ -566,7 +588,7 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $phrase = uniqid();
 
-        $question = uniqid().$phrase.uniqid();
+        $question = uniqid() . $phrase . uniqid();
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'question' => $question]);
 
@@ -624,7 +646,7 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
 
         $phrase = uniqid();
 
-        $answer = uniqid().$phrase.uniqid();
+        $answer = uniqid() . $phrase . uniqid();
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id, 'answer' => $answer]);
 
@@ -715,17 +737,19 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $lesson->subscribe($user);
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesOfSubscribedLessons();
@@ -774,17 +798,19 @@ class AuthenticatedUserExerciseRepositoryTest extends \TestCase
         $this->updateFavourite($lesson, $user->id, $favourite = true);
 
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $exerciseResult = $this->createExerciseResult([
-            'user_id' => $user->id,
-            'exercise_id' => $exercise->id,
-            "number_of_good_answers" => 2,
-            "number_of_good_answers_today" => 1,
-            "latest_good_answer" => Carbon::today()->addHours(1),
-            "number_of_bad_answers" => 4,
-            "number_of_bad_answers_today" => 3,
-            "latest_bad_answer" => Carbon::today()->addHours(2),
-            "percent_of_good_answers" => 5,
-        ]);
+        $exerciseResult = $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                "number_of_good_answers" => 2,
+                "number_of_good_answers_today" => 1,
+                "latest_good_answer" => Carbon::today()->addHours(1),
+                "number_of_bad_answers" => 4,
+                "number_of_bad_answers_today" => 3,
+                "latest_bad_answer" => Carbon::today()->addHours(2),
+                "percent_of_good_answers" => 5,
+            ]
+        );
 
         $repository = new AuthenticatedUserExerciseRepository($user);
         $result = $repository->fetchUserExercisesOfFavouriteLessons();

@@ -26,7 +26,6 @@ class UpdateNumberOfBadAnswersOfExercise
         $exerciseResult = ExerciseResult::whereExerciseId($exerciseId)->whereUserId($user->id)->first();
 
         if (is_null($exerciseResult)) {
-
             // create new exercise result if user never answered before
 
             $exerciseResult = new ExerciseResult();
@@ -37,7 +36,6 @@ class UpdateNumberOfBadAnswersOfExercise
             $exerciseResult->latest_bad_answer = Carbon::now();
             $exerciseResult->save();
         } else {
-
             // exercise result already exist, we need to update it,
 
             $data = [];

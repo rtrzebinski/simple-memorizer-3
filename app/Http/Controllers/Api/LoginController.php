@@ -12,16 +12,19 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class LoginController extends Controller
 {
     /**
-     * @param Request        $request
+     * @param Request $request
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
     public function login(Request $request, UserRepository $userRepository)
     {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'email' => 'required|email',
+                'password' => 'required',
+            ]
+        );
 
         $user = $userRepository->findByCredentials($request->email, $request->password);
 

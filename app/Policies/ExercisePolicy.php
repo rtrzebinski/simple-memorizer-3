@@ -14,7 +14,7 @@ class ExercisePolicy
     /**
      * User must subscribe lesson in order to access exercise.
      *
-     * @param User     $user
+     * @param User $user
      * @param Exercise $exercise
      * @return bool
      */
@@ -30,7 +30,7 @@ class ExercisePolicy
     /**
      * User must be the owner of lesson exercise belongs to in order to modify exercise.
      *
-     * @param User     $user
+     * @param User $user
      * @param Exercise $exercise
      * @return bool
      */

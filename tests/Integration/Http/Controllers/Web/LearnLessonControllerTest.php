@@ -17,7 +17,7 @@ class LearnLessonControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseOk();
 
@@ -42,7 +42,10 @@ class LearnLessonControllerTest extends WebTestCase
         $userExercise = $this->responseView()->getData()['userExercise'];
 
         $editExerciseUrl = $this->responseView()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals(
+            'http://localhost/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D' . $userExercise->exercise_id,
+            $editExerciseUrl
+        );
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
@@ -70,7 +73,7 @@ class LearnLessonControllerTest extends WebTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $previous = $lesson->exercises[0];
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id.'?previous_exercise_id='.$previous->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id . '?previous_exercise_id=' . $previous->id);
 
         $this->assertResponseOk();
 
@@ -95,7 +98,10 @@ class LearnLessonControllerTest extends WebTestCase
         $userExercise = $this->responseView()->getData()['userExercise'];
 
         $editExerciseUrl = $this->responseView()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals(
+            'http://localhost/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D' . $userExercise->exercise_id,
+            $editExerciseUrl
+        );
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
@@ -123,7 +129,7 @@ class LearnLessonControllerTest extends WebTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $requested = $lesson->exercises[0];
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$requested->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id . '?requested_exercise_id=' . $requested->id);
 
         /** @var UserLesson $userLesson */
         $userLesson = $this->responseView()->getData()['userLesson'];
@@ -146,7 +152,10 @@ class LearnLessonControllerTest extends WebTestCase
         $userExercise = $this->responseView()->getData()['userExercise'];
 
         $editExerciseUrl = $this->responseView()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals(
+            'http://localhost/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D' . $userExercise->exercise_id,
+            $editExerciseUrl
+        );
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);
@@ -174,7 +183,7 @@ class LearnLessonControllerTest extends WebTestCase
         $this->updateBidirectional($lesson, $user->id, $bidirectional = true);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseOk();
 
@@ -198,7 +207,10 @@ class LearnLessonControllerTest extends WebTestCase
         $userExercise = $this->responseView()->getData()['userExercise'];
 
         $editExerciseUrl = $this->responseView()->getData()['editExerciseUrl'];
-        $this->assertEquals('http://localhost/exercises/'.$userExercise->exercise_id.'/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D'.$userExercise->exercise_id, $editExerciseUrl);
+        $this->assertEquals(
+            'http://localhost/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=%2Flearn%2Flessons%2F1%3Frequested_exercise_id%3D' . $userExercise->exercise_id,
+            $editExerciseUrl
+        );
 
         $this->assertIsInt($userExercise->exercise_id);
         $this->assertIsInt($userExercise->lesson_id);

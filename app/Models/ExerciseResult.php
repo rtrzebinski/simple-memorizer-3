@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\ExerciseResult
  *
- * @property int                             $id
- * @property int                             $user_id
- * @property int                             $exercise_id
- * @property int                             $number_of_good_answers
- * @property int                             $number_of_good_answers_today
+ * @property int $id
+ * @property int $user_id
+ * @property int $exercise_id
+ * @property int $number_of_good_answers
+ * @property int $number_of_good_answers_today
  * @property \Illuminate\Support\Carbon|null $latest_good_answer
- * @property int                             $number_of_bad_answers
- * @property int                             $number_of_bad_answers_today
+ * @property int $number_of_bad_answers
+ * @property int $number_of_bad_answers_today
  * @property \Illuminate\Support\Carbon|null $latest_bad_answer
- * @property int                             $percent_of_good_answers
+ * @property int $percent_of_good_answers
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ExerciseResult newModelQuery()

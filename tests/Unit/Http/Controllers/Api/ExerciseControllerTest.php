@@ -21,15 +21,17 @@ class ExerciseControllerTest extends ApiTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input, $user);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
 
         $this->assertResponseOk();
 
-        $this->seeJsonFragment([
-            'question' => $input['question'],
-            'answer' => $input['answer'],
-            'lesson_id' => $lesson->id,
-        ]);
+        $this->seeJsonFragment(
+            [
+                'question' => $input['question'],
+                'answer' => $input['answer'],
+                'lesson_id' => $lesson->id,
+            ]
+        );
 
         /** @var Exercise $exercise */
         $exercise = $this->last(Exercise::class);
@@ -55,15 +57,17 @@ class ExerciseControllerTest extends ApiTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input, $user);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
 
         $this->assertResponseOk();
 
-        $this->seeJsonFragment([
-            'question' => $input['question'],
-            'answer' => $input['answer'],
-            'lesson_id' => $lesson->id,
-        ]);
+        $this->seeJsonFragment(
+            [
+                'question' => $input['question'],
+                'answer' => $input['answer'],
+                'lesson_id' => $lesson->id,
+            ]
+        );
 
         /** @var Exercise $exercise */
         $exercise = $this->last(Exercise::class);
@@ -80,7 +84,7 @@ class ExerciseControllerTest extends ApiTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises');
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises');
 
         $this->assertResponseUnauthorised();
     }
@@ -91,7 +95,7 @@ class ExerciseControllerTest extends ApiTestCase
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id]);
 
-        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
 
         $this->assertResponseInvalidInput();
     }
@@ -107,7 +111,7 @@ class ExerciseControllerTest extends ApiTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('POST', '/lessons/'.$lesson->id.'/exercises', $input, $user);
+        $this->callApi('POST', '/lessons/' . $lesson->id . '/exercises', $input, $user);
 
         $this->assertResponseForbidden();
     }
@@ -131,7 +135,7 @@ class ExerciseControllerTest extends ApiTestCase
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
+        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
         $this->seeJsonFragment($exercise->toArray());
@@ -142,7 +146,7 @@ class ExerciseControllerTest extends ApiTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('GET', '/exercises/'.$exercise->id);
+        $this->callApi('GET', '/exercises/' . $exercise->id);
 
         $this->assertResponseUnauthorised();
     }
@@ -153,7 +157,7 @@ class ExerciseControllerTest extends ApiTestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->callApi('GET', '/exercises/'.$exercise->id, $input = [], $user);
+        $this->callApi('GET', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseForbidden();
     }
@@ -177,7 +181,7 @@ class ExerciseControllerTest extends ApiTestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
 
         $this->assertResponseOk();
         $this->seeJsonFragment([$exercise->toArray()]);
@@ -188,7 +192,7 @@ class ExerciseControllerTest extends ApiTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises');
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises');
 
         $this->assertResponseUnauthorised();
     }
@@ -199,7 +203,7 @@ class ExerciseControllerTest extends ApiTestCase
         $user = $this->createUser();
         $lesson = $this->createPrivateLesson();
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises', $input = [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises', $input = [], $user);
 
         $this->assertResponseForbidden();
     }
@@ -228,14 +232,16 @@ class ExerciseControllerTest extends ApiTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('PATCH', '/exercises/'.$exercise->id, $input, $user);
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
 
         $this->assertResponseOk();
 
-        $this->seeJsonFragment([
-            'question' => $input['question'],
-            'answer' => $input['answer'],
-        ]);
+        $this->seeJsonFragment(
+            [
+                'question' => $input['question'],
+                'answer' => $input['answer'],
+            ]
+        );
 
         /** @var Exercise $exercise */
         $exercise = $exercise->fresh();
@@ -248,7 +254,7 @@ class ExerciseControllerTest extends ApiTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('PATCH', '/exercises/'.$exercise->id);
+        $this->callApi('PATCH', '/exercises/' . $exercise->id);
 
         $this->assertResponseUnauthorised();
     }
@@ -260,7 +266,7 @@ class ExerciseControllerTest extends ApiTestCase
         $lesson = $this->createLesson(['owner_id' => $user->id]);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('PATCH', '/exercises/'.$exercise->id, $input = [], $user);
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseInvalidInput();
     }
@@ -276,7 +282,7 @@ class ExerciseControllerTest extends ApiTestCase
             'answer' => uniqid(),
         ];
 
-        $this->callApi('PATCH', '/exercises/'.$exercise->id, $input, $user);
+        $this->callApi('PATCH', '/exercises/' . $exercise->id, $input, $user);
 
         $this->assertResponseForbidden();
     }
@@ -302,7 +308,7 @@ class ExerciseControllerTest extends ApiTestCase
 
         $this->expectsEvents(ExerciseDeleted::class);
 
-        $this->callApi('DELETE', '/exercises/'.$exercise->id, $input = [], $user);
+        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
         $this->assertNull($exercise->fresh());
@@ -321,7 +327,7 @@ class ExerciseControllerTest extends ApiTestCase
         $lesson->subscribedUsers[0]->pivot->save();
         $this->assertEquals(20, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
 
-        $this->callApi('DELETE', '/exercises/'.$exercise->id, $input = [], $user);
+        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseOk();
         $this->assertNull($exercise->fresh());
@@ -335,7 +341,7 @@ class ExerciseControllerTest extends ApiTestCase
     {
         $exercise = $this->createExercise();
 
-        $this->callApi('DELETE', '/exercises/'.$exercise->id);
+        $this->callApi('DELETE', '/exercises/' . $exercise->id);
 
         $this->assertResponseUnauthorised();
     }
@@ -346,7 +352,7 @@ class ExerciseControllerTest extends ApiTestCase
         $user = $this->createUser();
         $exercise = $this->createExercise();
 
-        $this->callApi('DELETE', '/exercises/'.$exercise->id, $input = [], $user);
+        $this->callApi('DELETE', '/exercises/' . $exercise->id, $input = [], $user);
 
         $this->assertResponseForbidden();
     }

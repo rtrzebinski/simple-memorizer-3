@@ -33,29 +33,41 @@ class StructuresServiceProvider extends ServiceProvider
     public function register()
     {
         // UserExercise operations valid for all users
-        $this->app->bind(AbstractUserExerciseRepositoryInterface::class, function () {
-            if (Auth::check()) {
-                return new AuthenticatedUserExerciseRepository(Auth::user());
+        $this->app->bind(
+            AbstractUserExerciseRepositoryInterface::class,
+            function () {
+                if (Auth::check()) {
+                    return new AuthenticatedUserExerciseRepository(Auth::user());
+                }
+                return new GuestUserExerciseRepository();
             }
-            return new GuestUserExerciseRepository();
-        });
+        );
 
         // UserExercise operations valid for authenticated users only
-        $this->app->bind(AuthenticatedUserExerciseRepositoryInterface::class, function () {
-            return new AuthenticatedUserExerciseRepository(Auth::user());
-        });
+        $this->app->bind(
+            AuthenticatedUserExerciseRepositoryInterface::class,
+            function () {
+                return new AuthenticatedUserExerciseRepository(Auth::user());
+            }
+        );
 
         // UserLesson operations valid for all users
-        $this->app->bind(AbstractUserLessonRepositoryInterface::class, function () {
-            if (Auth::check()) {
-                return new AuthenticatedUserLessonRepository(Auth::user());
+        $this->app->bind(
+            AbstractUserLessonRepositoryInterface::class,
+            function () {
+                if (Auth::check()) {
+                    return new AuthenticatedUserLessonRepository(Auth::user());
+                }
+                return new GuestUserLessonRepository();
             }
-            return new GuestUserLessonRepository();
-        });
+        );
 
         // UserLesson operations valid for authenticated users only
-        $this->app->bind(AuthenticatedUserLessonRepositoryInterface::class, function () {
-            return new AuthenticatedUserLessonRepository(Auth::user());
-        });
+        $this->app->bind(
+            AuthenticatedUserLessonRepositoryInterface::class,
+            function () {
+                return new AuthenticatedUserLessonRepository(Auth::user());
+            }
+        );
     }
 }

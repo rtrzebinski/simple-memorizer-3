@@ -20,10 +20,13 @@ class LessonTest extends \TestCase
 
         $this->assertCount(1, $parentLesson->childLessons);
 
-        $this->assertDatabaseHas('lesson_aggregate', [
-            'parent_lesson_id' => $parentLesson->id,
-            'child_lesson_id' => $childLesson->id,
-        ]);
+        $this->assertDatabaseHas(
+            'lesson_aggregate',
+            [
+                'parent_lesson_id' => $parentLesson->id,
+                'child_lesson_id' => $childLesson->id,
+            ]
+        );
     }
 
     // parentLessons()
@@ -38,10 +41,13 @@ class LessonTest extends \TestCase
 
         $this->assertCount(1, $childLesson->parentLessons);
 
-        $this->assertDatabaseHas('lesson_aggregate', [
-            'parent_lesson_id' => $parentLesson->id,
-            'child_lesson_id' => $childLesson->id,
-        ]);
+        $this->assertDatabaseHas(
+            'lesson_aggregate',
+            [
+                'parent_lesson_id' => $parentLesson->id,
+                'child_lesson_id' => $childLesson->id,
+            ]
+        );
     }
 
     // allExercises
@@ -152,20 +158,26 @@ class LessonTest extends \TestCase
         $lesson = $this->createPublicLesson($user);
 
         $this->assertEquals(1, $lesson->subscribedUsers()->count());
-        $this->assertDatabaseHas('lesson_user', [
-            'user_id' => $user->id,
-            'lesson_id' => $lesson->id,
-            'percent_of_good_answers' => 0,
-        ]);
+        $this->assertDatabaseHas(
+            'lesson_user',
+            [
+                'user_id' => $user->id,
+                'lesson_id' => $lesson->id,
+                'percent_of_good_answers' => 0,
+            ]
+        );
 
         $this->expectsEvents(LessonSubscribed::class);
 
         $lesson->subscribe($user = $this->createUser());
         $this->assertEquals(2, $lesson->subscribedUsers()->count());
-        $this->assertDatabaseHas('lesson_user', [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        $this->assertDatabaseHas(
+            'lesson_user',
+            [
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]
+        );
 
         $this->expectsEvents(LessonUnsubscribed::class);
 
@@ -181,11 +193,14 @@ class LessonTest extends \TestCase
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
 
-        $this->assertDatabaseHas('lesson_user', [
-            'user_id' => $user->id,
-            'lesson_id' => $lesson->id,
-            'percent_of_good_answers' => 0,
-        ]);
+        $this->assertDatabaseHas(
+            'lesson_user',
+            [
+                'user_id' => $user->id,
+                'lesson_id' => $lesson->id,
+                'percent_of_good_answers' => 0,
+            ]
+        );
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unable to unsubscribe owned lesson: 1');

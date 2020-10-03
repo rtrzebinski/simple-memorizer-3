@@ -29,17 +29,23 @@ class RegisterControllerTest extends WebTestCase
 
         $this->userRepositoryMock
             ->expects($this->once())
-            ->method('create')->with([
+            ->method('create')->with(
+                [
+                    'email' => $email,
+                    'password' => $password,
+                    'password_confirmation' => $password,
+                ]
+            )->willReturn($user);
+
+        $this->call(
+            'POST',
+            '/register',
+            [
                 'email' => $email,
                 'password' => $password,
                 'password_confirmation' => $password,
-            ])->willReturn($user);
-
-        $this->call('POST', '/register', [
-            'email' => $email,
-            'password' => $password,
-            'password_confirmation' => $password,
-        ]);
+            ]
+        );
 
         $this->assertEquals($user->id, auth()->user()->id);
         $this->assertResponseRedirectedTo('/home');

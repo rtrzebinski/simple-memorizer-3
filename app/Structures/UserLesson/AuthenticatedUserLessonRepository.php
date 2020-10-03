@@ -37,27 +37,32 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     public function fetchUserLesson(int $lessonId): ?UserLesson
     {
         return DB::table('lessons')
-            ->select([
-                DB::raw($this->user->id.' AS user_id'),
-                'l.id AS lesson_id',
-                'l.owner_id AS owner_id',
-                'l.name AS name',
-                'l.visibility AS visibility',
-                'l.exercises_count AS exercises_count',
-                'l.subscribers_count AS subscribers_count',
-                'l.child_lessons_count AS child_lessons_count',
-                DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
-                DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
-                DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
-                DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
-            ])
+            ->select(
+                [
+                    DB::raw($this->user->id . ' AS user_id'),
+                    'l.id AS lesson_id',
+                    'l.owner_id AS owner_id',
+                    'l.name AS name',
+                    'l.visibility AS visibility',
+                    'l.exercises_count AS exercises_count',
+                    'l.subscribers_count AS subscribers_count',
+                    'l.child_lessons_count AS child_lessons_count',
+                    DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
+                    DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                    DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
+                    DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
+                ]
+            )
             ->from('lessons AS l')
-            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) use ($lessonId) {
-                $joinClause
-                    ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $this->user->id)
-                    ->where('lu.lesson_id', '=', $lessonId);
-            })
+            ->leftJoin(
+                'lesson_user AS lu',
+                function (JoinClause $joinClause) use ($lessonId) {
+                    $joinClause
+                        ->on('lu.lesson_id', '=', 'l.id')
+                        ->where('lu.user_id', '=', $this->user->id)
+                        ->where('lu.lesson_id', '=', $lessonId);
+                }
+            )
             ->where('l.id', $lessonId)
             ->get()
             ->mapInto(UserLesson::class)
@@ -70,26 +75,31 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     public function fetchOwnedUserLessons(): Collection
     {
         return DB::table('lessons')
-            ->select([
-                DB::raw($this->user->id.' AS user_id'),
-                'l.id AS lesson_id',
-                'l.owner_id AS owner_id',
-                'l.name AS name',
-                'l.visibility AS visibility',
-                'l.exercises_count AS exercises_count',
-                'l.subscribers_count AS subscribers_count',
-                'l.child_lessons_count AS child_lessons_count',
-                DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
-                DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
-                DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
-                DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
-            ])
+            ->select(
+                [
+                    DB::raw($this->user->id . ' AS user_id'),
+                    'l.id AS lesson_id',
+                    'l.owner_id AS owner_id',
+                    'l.name AS name',
+                    'l.visibility AS visibility',
+                    'l.exercises_count AS exercises_count',
+                    'l.subscribers_count AS subscribers_count',
+                    'l.child_lessons_count AS child_lessons_count',
+                    DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
+                    DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                    DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
+                    DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
+                ]
+            )
             ->from('lessons AS l')
-            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) {
-                $joinClause
-                    ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $this->user->id);
-            })
+            ->leftJoin(
+                'lesson_user AS lu',
+                function (JoinClause $joinClause) {
+                    $joinClause
+                        ->on('lu.lesson_id', '=', 'l.id')
+                        ->where('lu.user_id', '=', $this->user->id);
+                }
+            )
             ->where('l.owner_id', $this->user->id)
             ->get()
             ->mapInto(UserLesson::class);
@@ -101,26 +111,31 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     public function fetchSubscribedUserLessons(): Collection
     {
         return DB::table('lessons')
-            ->select([
-                DB::raw($this->user->id.' AS user_id'),
-                'l.id AS lesson_id',
-                'l.owner_id AS owner_id',
-                'l.name AS name',
-                'l.visibility AS visibility',
-                'l.exercises_count AS exercises_count',
-                'l.subscribers_count AS subscribers_count',
-                'l.child_lessons_count AS child_lessons_count',
-                DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
-                DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
-                DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
-                DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
-            ])
+            ->select(
+                [
+                    DB::raw($this->user->id . ' AS user_id'),
+                    'l.id AS lesson_id',
+                    'l.owner_id AS owner_id',
+                    'l.name AS name',
+                    'l.visibility AS visibility',
+                    'l.exercises_count AS exercises_count',
+                    'l.subscribers_count AS subscribers_count',
+                    'l.child_lessons_count AS child_lessons_count',
+                    DB::raw('CASE WHEN lu.id IS NOT NULL THEN 1 ELSE 0 END AS is_subscriber'),
+                    DB::raw('COALESCE(lu.bidirectional, 0) AS is_bidirectional'),
+                    DB::raw('COALESCE(lu.favourite, 0) AS is_favourite'),
+                    DB::raw('COALESCE(lu.percent_of_good_answers, 0) AS percent_of_good_answers'),
+                ]
+            )
             ->from('lessons AS l')
-            ->join('lesson_user AS lu', function (JoinClause $joinClause) {
-                $joinClause
-                    ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $this->user->id);
-            })
+            ->join(
+                'lesson_user AS lu',
+                function (JoinClause $joinClause) {
+                    $joinClause
+                        ->on('lu.lesson_id', '=', 'l.id')
+                        ->where('lu.user_id', '=', $this->user->id);
+                }
+            )
             ->where('l.owner_id', '!=', $this->user->id)
             ->get()
             ->mapInto(UserLesson::class);
@@ -132,22 +147,27 @@ class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonReposi
     public function fetchAvailableUserLessons(): Collection
     {
         return DB::table('lessons')
-            ->select([
-                DB::raw($this->user->id.' AS user_id'),
-                'l.id AS lesson_id',
-                'l.owner_id AS owner_id',
-                'l.name AS name',
-                'l.visibility AS visibility',
-                'l.exercises_count AS exercises_count',
-                'l.subscribers_count AS subscribers_count',
-                'l.child_lessons_count AS child_lessons_count',
-            ])
+            ->select(
+                [
+                    DB::raw($this->user->id . ' AS user_id'),
+                    'l.id AS lesson_id',
+                    'l.owner_id AS owner_id',
+                    'l.name AS name',
+                    'l.visibility AS visibility',
+                    'l.exercises_count AS exercises_count',
+                    'l.subscribers_count AS subscribers_count',
+                    'l.child_lessons_count AS child_lessons_count',
+                ]
+            )
             ->from('lessons AS l')
-            ->leftJoin('lesson_user AS lu', function (JoinClause $joinClause) {
-                $joinClause
-                    ->on('lu.lesson_id', '=', 'l.id')
-                    ->where('lu.user_id', '=', $this->user->id);
-            })
+            ->leftJoin(
+                'lesson_user AS lu',
+                function (JoinClause $joinClause) {
+                    $joinClause
+                        ->on('lu.lesson_id', '=', 'l.id')
+                        ->where('lu.user_id', '=', $this->user->id);
+                }
+            )
             ->whereNull('lu.id')
             ->where('l.visibility', '=', Lesson::VISIBILITY_PUBLIC)
             ->where('l.exercises_count', '>=', config('app.min_exercises_to_learn_lesson'))

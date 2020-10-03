@@ -10,18 +10,18 @@ class ApiTestCase extends \TestCase
 
     /**
      * Call api route as guest, or authenticated user.
-     * @param string    $method
-     * @param string    $uri
-     * @param array     $data
+     * @param string $method
+     * @param string $uri
+     * @param array $data
      * @param User|null $user
      */
     protected function callApi(string $method, string $uri, array $data = [], User $user = null)
     {
         $headers = [];
         if ($user instanceof User) {
-            $headers = ['Authorization' => 'Bearer '.$user->api_token];
+            $headers = ['Authorization' => 'Bearer ' . $user->api_token];
         }
-        $this->response = parent::json($method, 'api'.$uri, $data, $headers);
+        $this->response = parent::json($method, 'api' . $uri, $data, $headers);
     }
 
     /**

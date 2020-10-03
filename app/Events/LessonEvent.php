@@ -14,7 +14,7 @@ abstract class LessonEvent implements LessonEventInterface
      * Create a new event instance.
      *
      * @param Lesson $lesson
-     * @param User   $user
+     * @param User $user
      */
     public function __construct(Lesson $lesson, User $user)
     {

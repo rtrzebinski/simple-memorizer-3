@@ -14,7 +14,7 @@ class UserLessonPolicy
     /**
      * Lesson must be public or user must be lesson owner.
      *
-     * @param User|null       $user
+     * @param User|null $user
      * @param UserLesson $userLesson
      * @return bool
      */
@@ -26,7 +26,7 @@ class UserLessonPolicy
     /**
      * Lesson must have certain number of exercises, and user must have access.
      *
-     * @param User       $user
+     * @param User $user
      * @param UserLesson $userLesson
      * @return bool
      */
@@ -39,7 +39,7 @@ class UserLessonPolicy
     /**
      * Owner can modify.
      *
-     * @param User       $user
+     * @param User $user
      * @param UserLesson $userLesson
      * @return bool
      */

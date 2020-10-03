@@ -15,7 +15,7 @@ class LearnLessonControllerTest extends ApiTestCase
         $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', $data = [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', $data = [], $user);
 
         $this->assertResponseOk();
         $response = $this->response->decodeResponseJson();
@@ -44,8 +44,12 @@ class LearnLessonControllerTest extends ApiTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $previous = $this->createExercise(['lesson_id' => $lesson->id]);
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random',
-            ['previous_exercise_id' => $previous->id], $user);
+        $this->callApi(
+            'GET',
+            '/lessons/' . $lesson->id . '/exercises/random',
+            ['previous_exercise_id' => $previous->id],
+            $user
+        );
 
         $this->assertResponseOk();
         $response = $this->response->decodeResponseJson();
@@ -76,7 +80,7 @@ class LearnLessonControllerTest extends ApiTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $this->updateBidirectional($lesson, $user->id, $bidirectional = true);
 
-        $this->callApi('GET', '/lessons/'.$lesson->id.'/exercises/random', $data = [], $user);
+        $this->callApi('GET', '/lessons/' . $lesson->id . '/exercises/random', $data = [], $user);
 
         $response = $this->response->decodeResponseJson();
         $this->assertResponseOk();

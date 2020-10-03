@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\JsonResponse;
@@ -21,16 +22,16 @@ class Controller extends BaseController
      * @param array $headers
      * @return JsonResponse
      */
-    protected function response($data = null, int $statusCode = 200, array $headers = []) : JsonResponse
+    protected function response($data = null, int $statusCode = 200, array $headers = []): JsonResponse
     {
         return JsonResponse::create($data, $statusCode, $headers);
     }
 
     /**
      * User authenticated with API token.
-     * @return User
+     * @return User|Authenticatable
      */
-    protected function user() : User
+    protected function user(): User
     {
         return Auth::guard('api')->user();
     }

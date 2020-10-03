@@ -16,10 +16,13 @@ class LessonController extends Controller
      */
     public function storeLesson(Request $request): JsonResponse
     {
-        $this->validate($request, [
-            'visibility' => 'required|in:'.implode(',', Lesson::VISIBILITIES),
-            'name' => 'required|string',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'visibility' => 'required|in:' . implode(',', Lesson::VISIBILITIES),
+                'name' => 'required|string',
+            ]
+        );
 
         $lesson = new Lesson($request->all());
         $lesson->owner_id = $this->user()->id;
@@ -80,7 +83,7 @@ class LessonController extends Controller
 
     /**
      * @param PatchLessonRequest $request
-     * @param Lesson             $lesson
+     * @param Lesson $lesson
      * @return JsonResponse
      */
     public function updateLesson(PatchLessonRequest $request, Lesson $lesson): JsonResponse

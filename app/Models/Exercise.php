@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\Exercise
  *
- * @property int                                                                        $id
- * @property string                                                                     $question
- * @property string                                                                     $answer
- * @property int                                                                        $lesson_id
- * @property \Illuminate\Support\Carbon|null                                            $created_at
- * @property \Illuminate\Support\Carbon|null                                            $updated_at
- * @property-read \App\Models\Lesson                                                    $lesson
+ * @property int $id
+ * @property string $question
+ * @property string $answer
+ * @property int $lesson_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Lesson $lesson
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExerciseResult[] $results
- * @property-read int|null                                                              $results_count
+ * @property-read int|null $results_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Exercise query()

@@ -24,9 +24,13 @@ class ForgotPasswordControllerTest extends WebTestCase
 
         Notification::fake();
 
-        $this->call('POST', 'password/email', [
-            'email' => $user->email,
-        ]);
+        $this->call(
+            'POST',
+            'password/email',
+            [
+                'email' => $user->email,
+            ]
+        );
 
         Notification::assertSentTo($user, ResetPassword::class);
         $this->assertSessionHas('status', 'We have e-mailed your password reset link!');

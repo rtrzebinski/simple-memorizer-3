@@ -37,7 +37,7 @@ class LearnLessonControllerTest extends WebTestCase
             ->with($userExercises)
             ->willReturn($userExercise);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
@@ -70,7 +70,7 @@ class LearnLessonControllerTest extends WebTestCase
             ->with($userExercises, $previous->id)
             ->willReturn($userExercise);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id.'?previous_exercise_id='.$previous->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id . '?previous_exercise_id=' . $previous->id);
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
@@ -92,7 +92,7 @@ class LearnLessonControllerTest extends WebTestCase
         $userExerciseRepository->method('fetchUserExerciseOfExercise')->with($requested->id)
             ->willReturn($userExercise);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$requested->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id . '?requested_exercise_id=' . $requested->id);
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
@@ -131,7 +131,7 @@ class LearnLessonControllerTest extends WebTestCase
         $userExerciseModifier->expects($this->once())->method('swapQuestionWithAnswer')
             ->with($userExercise)->willReturn($userExercise);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseOk();
         $this->assertEquals($lesson->id, $this->responseView()->userLesson->lesson_id);
@@ -143,7 +143,7 @@ class LearnLessonControllerTest extends WebTestCase
     {
         $lesson = $this->createLesson();
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -156,7 +156,7 @@ class LearnLessonControllerTest extends WebTestCase
         $this->createExercisesRequiredToLearnLesson($lesson->id);
         $requested = $this->createExercise();
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id.'?requested_exercise_id='.$requested->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id . '?requested_exercise_id=' . $requested->id);
 
         $this->assertResponseForbidden();
     }
@@ -178,7 +178,7 @@ class LearnLessonControllerTest extends WebTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('GET', '/learn/lessons/'.$lesson->id);
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseForbidden();
     }
@@ -198,7 +198,7 @@ class LearnLessonControllerTest extends WebTestCase
             'answer' => 'good'
         ];
 
-        $this->call('POST', '/learn/lessons/'.$lesson->id, $data);
+        $this->call('POST', '/learn/lessons/' . $lesson->id, $data);
 
         $this->assertResponseOk();
 
@@ -216,7 +216,7 @@ class LearnLessonControllerTest extends WebTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/lessons/'.$lesson->id);
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -228,7 +228,7 @@ class LearnLessonControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/lessons/'.$lesson->id);
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseInvalidInput();
     }
@@ -248,7 +248,7 @@ class LearnLessonControllerTest extends WebTestCase
             'answer' => 'bad'
         ];
 
-        $this->call('POST', '/learn/lessons/'.$lesson->id, $data);
+        $this->call('POST', '/learn/lessons/' . $lesson->id, $data);
 
         $this->assertResponseOk();
 
@@ -263,7 +263,7 @@ class LearnLessonControllerTest extends WebTestCase
         $lesson = $this->createExercise()->lesson;
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/lessons/'.$lesson->id);
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseUnauthorized();
     }
@@ -275,7 +275,7 @@ class LearnLessonControllerTest extends WebTestCase
         $lesson = $this->createPublicLesson($user);
         $this->createExercisesRequiredToLearnLesson($lesson->id);
 
-        $this->call('POST', '/learn/lessons/'.$lesson->id);
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
 
         $this->assertResponseInvalidInput();
     }

@@ -8,12 +8,12 @@ use App\Structures\UserLesson\AuthenticatedUserLessonRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class LessonMergeController extends Controller
 {
     /**
-     * @param Lesson                                     $lesson
+     * @param Lesson $lesson
      * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
      * @return View|Response
      */
@@ -30,7 +30,6 @@ class LessonMergeController extends Controller
         $lessons = [];
 
         foreach ($ownedLessons as $ownedLesson) {
-
             // skip current lesson, impossible to merge itself
             if ($ownedLesson->id == $lesson->id) {
                 continue;
@@ -54,21 +53,27 @@ class LessonMergeController extends Controller
 
         $userLesson = $userLessonRepository->fetchUserLesson($lesson->id);
 
-        return view('lessons.merge', [
+        return view(
+            'lessons.merge',
+            [
                 'lessons' => $lessons,
-            ] + $this->lessonViewData($userLesson));
+            ] + $this->lessonViewData($userLesson)
+        );
     }
 
     /**
-     * @param Lesson  $lesson
+     * @param Lesson $lesson
      * @param Request $request
      * @return RedirectResponse|Response
      */
     public function merge(Lesson $lesson, Request $request)
     {
-        $this->validate($request, [
-            'toBeMerged' => 'required|array'
-        ]);
+        $this->validate(
+            $request,
+            [
+                'toBeMerged' => 'required|array'
+            ]
+        );
 
         // user is not the owner of the lesson
         if ($lesson->owner_id != $this->user()->id) {
@@ -97,6 +102,6 @@ class LessonMergeController extends Controller
             event(new ExercisesMerged($lesson, $this->user()));
         }
 
-        return redirect('/lessons/merge/'.$lesson->id);
+        return redirect('/lessons/merge/' . $lesson->id);
     }
 }

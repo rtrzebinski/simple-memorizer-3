@@ -27,7 +27,7 @@ class PatchLessonRequest extends Request
     public function rules()
     {
         return [
-            'visibility' => 'in:'.implode(',', Lesson::VISIBILITIES),
+            'visibility' => 'in:' . implode(',', Lesson::VISIBILITIES),
             'name' => 'string',
         ];
     }
