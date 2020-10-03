@@ -3,7 +3,7 @@
 namespace Tests\Integration;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Testing\TestResponse;
 use TestCase;
 
 class SubscribeLessonTest extends TestCase

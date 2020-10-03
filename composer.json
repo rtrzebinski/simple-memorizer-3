@@ -5,11 +5,12 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "laravel/framework": "^6.0",
+        "laravel/framework": "^7.0",
         "php": "~7.4.0",
         "league/csv": "^8.1",
-        "laravel/telescope": "^2.1",
-        "predis/predis": "^1.1"
+        "laravel/telescope": "^3.5",
+        "predis/predis": "^1.1",
+        "laravel/ui": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

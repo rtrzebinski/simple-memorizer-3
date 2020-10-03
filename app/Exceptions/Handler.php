@@ -3,11 +3,11 @@
 namespace App\Exceptions;
 
 use App;
-use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -30,32 +30,32 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param Throwable $e
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $e)
     {
-        parent::report($exception);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param Throwable $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $e)
     {
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Auth\AuthenticationException $exception
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|Response
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
@@ -69,18 +69,18 @@ class Handler extends ExceptionHandler
     /**
      * Create a Symfony response for the given exception.
      *
-     * @param  \Exception $exception
+     * @param Throwable $e
      * @return Response
      */
-    protected function convertExceptionToResponse(Exception $exception)
+    protected function convertExceptionToResponse(Throwable $e)
     {
         if (App::runningInConsole()) {
             // display exception response in console readable form
-            $message = get_class($exception) . PHP_EOL;
-            $message .= $exception->getMessage() . PHP_EOL . $exception->getTraceAsString();
-            $statusCode = FlattenException::create($exception)->getStatusCode();
+            $message = get_class($e) . PHP_EOL;
+            $message .= $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            $statusCode = FlattenException::create($e)->getStatusCode();
             return \Illuminate\Http\Response::create($message, $statusCode);
         }
-        return parent::convertExceptionToResponse($exception);
+        return parent::convertExceptionToResponse($e);
     }
 }
