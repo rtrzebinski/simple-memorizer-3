@@ -813,6 +813,73 @@ class LearningServiceTest extends TestCase
         $this->assertEquals($points, $result);
     }
 
+    /** @test */
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer_max_exercise_bad_answers_per_day_reached()
+    {
+        $numberOfBadAnswersToday = 1;
+
+        config(
+            [
+                'app.max_exercise_bad_answers_per_day' => $numberOfBadAnswersToday,
+            ]
+        );
+
+        $user = $this->createUser();
+        $exercise = $this->createExercise();
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => 50,
+                'latest_bad_answer' => Carbon::today(),
+                'number_of_bad_answers_today' => $numberOfBadAnswersToday,
+                // do not leave these two empty, to avoid a '100' returned for no answers at all
+                'number_of_good_answers' => 1,
+                'number_of_bad_answers' => 1,
+            ]
+        );
+        $userExercise = $this->createUserExercise($user, $exercise);
+
+        $learningService = new LearningService(new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
+
+        $this->assertEquals(0, $result);
+    }
+
+    /** @test */
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer_max_exercise_bad_answers_per_day_exceeded()
+    {
+        $numberOfBadAnswersToday = 1;
+
+        config(
+            [
+                'app.max_exercise_bad_answers_per_day' => $numberOfBadAnswersToday,
+            ]
+        );
+
+        $user = $this->createUser();
+        $exercise = $this->createExercise();
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => 50,
+                'latest_bad_answer' => Carbon::today(),
+                // might happen that exercise is served too many times if queue processing is delayed
+                'number_of_bad_answers_today' => $numberOfBadAnswersToday + 1,
+                // do not leave these two empty, to avoid a '100' returned for no answers at all
+                'number_of_good_answers' => 1,
+                'number_of_bad_answers' => 1,
+            ]
+        );
+        $userExercise = $this->createUserExercise($user, $exercise);
+
+        $learningService = new LearningService(new AuthenticatedUserExerciseRepository($user));
+        $result = $learningService->calculatePoints($userExercise);
+
+        $this->assertEquals(0, $result);
+    }
+
     /**
      * @test
      * @dataProvider justBadAnswersTodayProvider

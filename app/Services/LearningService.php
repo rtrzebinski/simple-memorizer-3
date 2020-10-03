@@ -131,10 +131,15 @@ class LearningService
 
         // user had just bad answers today
         if ($latestBadAnswer instanceof Carbon && $latestBadAnswer->isToday()) {
+            // first check whether 'max_exercise_bad_answers_per_day' was reached
+            // if was return 0 points, so exercise is not served
+            if ($userExercise->number_of_bad_answers_today >= config('app.max_exercise_bad_answers_per_day')) {
+                return 0;
+            }
+
             // here we decrease points with incoming bad answers today
             // so user is not overloaded with this question
             // but he still see it once a while
-
             if ($userExercise->number_of_bad_answers_today == 1) {
                 return 80;
             }

@@ -5,7 +5,13 @@ return [
     /*
      * Minimum number of exercises lesson must have, to allow user to start learning it.
      */
-    'min_exercises_to_learn_lesson' => 2,
+    'min_exercises_to_learn_lesson' => env('MIN_EXERCISES_TO_LEARN_LESSON', 2),
+
+    /*
+     * Number of bad answers for given exercise allowed per day.
+     * Once reached an exercise will no longer be served on same day.
+     */
+    'max_exercise_bad_answers_per_day' => env('MAX_EXERCISE_BAD_ANSWERS_PER_DAY', 5),
 
     /*
     |--------------------------------------------------------------------------
