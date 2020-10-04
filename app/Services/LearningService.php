@@ -65,7 +65,7 @@ class LearningService
             $points = $this->pointsCalculator->calculatePoints($userExercise);
 
             /*
-             * Fill $tmp array with exercises $key multiplied by number of points.
+             * Fill $keys array with exercises $key multiplied by number of points.
              * This way exercises with higher number of points (so lower user knowledge) have bigger chance to be returned.
              */
             for ($i = $points; $i > 0; $i--) {
