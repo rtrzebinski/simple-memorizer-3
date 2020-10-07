@@ -1,5 +1,3 @@
-## About
-
 Simple memorizer helps efficiently memorizing any question-answer sets.
 
 [Documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki)
