@@ -17,22 +17,22 @@ use Illuminate\Support\Collection;
  */
 class LearningService
 {
-    private AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository;
+    private AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository;
     private PointsCalculator $pointsCalculator;
     private ArrayRandomizer $arrayRandomizer;
 
     /**
      * LearningService constructor.
-     * @param AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository
+     * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @param PointsCalculator $pointsCalculator
      * @param ArrayRandomizer $randomizationService
      */
     public function __construct(
-        AuthenticatedUserExerciseRepositoryInterface $authenticatedUserExerciseRepository,
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         PointsCalculator $pointsCalculator,
         ArrayRandomizer $randomizationService
     ) {
-        $this->authenticatedUserExerciseRepository = $authenticatedUserExerciseRepository;
+        $this->userExerciseRepository = $userExerciseRepository;
         $this->pointsCalculator = $pointsCalculator;
         $this->arrayRandomizer = $randomizationService;
     }
@@ -77,7 +77,7 @@ class LearningService
         if (empty($keys)) {
             // but perhaps previous has some points? let's check
             if ($previousExerciseId) {
-                $previousUserExercise = $this->authenticatedUserExerciseRepository->fetchUserExerciseOfExercise(
+                $previousUserExercise = $this->userExerciseRepository->fetchUserExerciseOfExercise(
                     $previousExerciseId
                 );
 
