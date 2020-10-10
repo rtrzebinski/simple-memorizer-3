@@ -128,29 +128,6 @@ class LearnFavouritesControllerTest extends WebTestCase
         $this->assertEquals(null, $this->responseView()->editExerciseUrl);
     }
 
-    /** @test */
-    public function itShould_notShowLearnFavouritesPage_unauthorized()
-    {
-        $lesson = $this->createLesson();
-
-        $this->call('GET', '/learn/favourites/');
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notShowLearnFavouritesPage_forbiddenToAccessRequestedExercise()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPrivateLesson($user);
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-        $requested = $this->createExercise();
-
-        $this->call('GET', '/learn/favourites/?requested_exercise_id=' . $requested->id);
-
-        $this->assertResponseForbidden();
-    }
-
     // handleGoodAnswer
 
     /** @test */
@@ -194,29 +171,6 @@ class LearnFavouritesControllerTest extends WebTestCase
         $this->assertEquals(50, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
-    /** @test */
-    public function itShould_notHandleGoodAnswer_unauthorized()
-    {
-        $lesson = $this->createExercise()->lesson;
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/favourites/');
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notHandleGoodAnswer_invalidInput()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPublicLesson($user);
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/favourites/');
-
-        $this->assertResponseInvalidInput();
-    }
-
     // handleBadAnswer
 
     /** @test */
@@ -255,28 +209,5 @@ class LearnFavouritesControllerTest extends WebTestCase
         $this->assertEquals(0, $this->numberOfGoodAnswers($exercise, $user->id));
         $this->assertEquals(0, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
         $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
-    }
-
-    /** @test */
-    public function itShould_notHandleBadAnswer_unauthorized()
-    {
-        $lesson = $this->createExercise()->lesson;
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/favourites/');
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notHandleBadAnswer_invalidInput()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPublicLesson($user);
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/favourites/');
-
-        $this->assertResponseInvalidInput();
     }
 }

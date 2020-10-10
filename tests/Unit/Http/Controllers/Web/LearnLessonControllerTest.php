@@ -172,51 +172,6 @@ class LearnLessonControllerTest extends WebTestCase
         $this->assertEquals(null, $this->responseView()->editExerciseUrl);
     }
 
-    /** @test */
-    public function itShould_notShowLessonLearnPage_unauthorized()
-    {
-        $lesson = $this->createLesson();
-
-        $this->call('GET', '/learn/lessons/' . $lesson->id);
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPrivateLesson($user);
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-        $requested = $this->createExercise();
-
-        $this->call('GET', '/learn/lessons/' . $lesson->id . '?requested_exercise_id=' . $requested->id);
-
-        $this->assertResponseForbidden();
-    }
-
-    /** @test */
-    public function itShould_notShowLessonLearnPage_lessonNotFound()
-    {
-        $this->be($user = $this->createUser());
-
-        $this->call('GET', '/learn/lessons/-1');
-
-        $this->assertResponseNotFound();
-    }
-
-    /** @test */
-    public function itShould_notShowLessonLearnPage_userDoesNotSubscribeLesson()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createExercise()->lesson;
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('GET', '/learn/lessons/' . $lesson->id);
-
-        $this->assertResponseForbidden();
-    }
-
     // handleGoodAnswer
 
     /** @test */
@@ -261,29 +216,6 @@ class LearnLessonControllerTest extends WebTestCase
         $this->assertEquals(50, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
-    /** @test */
-    public function itShould_notHandleGoodAnswer_unauthorized()
-    {
-        $lesson = $this->createExercise()->lesson;
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/lessons/' . $lesson->id);
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notHandleGoodAnswer_invalidInput()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPublicLesson($user);
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/lessons/' . $lesson->id);
-
-        $this->assertResponseInvalidInput();
-    }
-
     // handleBadAnswer
 
     /** @test */
@@ -322,28 +254,5 @@ class LearnLessonControllerTest extends WebTestCase
         $this->assertEquals(0, $this->numberOfGoodAnswers($exercise, $user->id));
         $this->assertEquals(0, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
         $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
-    }
-
-    /** @test */
-    public function itShould_notHandleBadAnswer_unauthorized()
-    {
-        $lesson = $this->createExercise()->lesson;
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/lessons/' . $lesson->id);
-
-        $this->assertResponseUnauthorized();
-    }
-
-    /** @test */
-    public function itShould_notHandleBadAnswer_invalidInput()
-    {
-        $this->be($user = $this->createUser());
-        $lesson = $this->createPublicLesson($user);
-        $this->createExercisesRequiredToLearnLesson($lesson->id);
-
-        $this->call('POST', '/learn/lessons/' . $lesson->id);
-
-        $this->assertResponseInvalidInput();
     }
 }

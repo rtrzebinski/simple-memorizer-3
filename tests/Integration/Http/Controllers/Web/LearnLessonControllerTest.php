@@ -2,8 +2,11 @@
 
 namespace Tests\Integration\Http\Controllers\Web;
 
+use App\Services\LearningService;
+use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use App\Structures\UserExercise\UserExercise;
 use App\Structures\UserLesson\UserLesson;
+use PHPUnit\Framework\MockObject\MockObject;
 use WebTestCase;
 
 class LearnLessonControllerTest extends WebTestCase
@@ -227,5 +230,149 @@ class LearnLessonControllerTest extends WebTestCase
         $this->assertSame(0, $userExercise->number_of_bad_answers_today);
         $this->assertNull($userExercise->latest_bad_answer);
         $this->assertSame(0, $userExercise->percent_of_good_answers);
+    }
+
+    /** @test */
+    public function itShould_notShowLessonLearnPage_unauthorized()
+    {
+        $lesson = $this->createLesson();
+
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseUnauthorized();
+    }
+
+    /** @test */
+    public function itShould_notShowLessonLearnPage_forbiddenToAccessRequestedExercise()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPrivateLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $requested = $this->createExercise();
+
+        $this->call('GET', '/learn/lessons/' . $lesson->id . '?requested_exercise_id=' . $requested->id);
+
+        $this->assertResponseForbidden();
+    }
+
+    /** @test */
+    public function itShould_notShowLessonLearnPage_lessonNotFound()
+    {
+        $this->be($user = $this->createUser());
+
+        $this->call('GET', '/learn/lessons/-1');
+
+        $this->assertResponseNotFound();
+    }
+
+    /** @test */
+    public function itShould_notShowLessonLearnPage_userDoesNotSubscribeLesson()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createExercise()->lesson;
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('GET', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseForbidden();
+    }
+
+    // handleGoodAnswer
+
+    /** @test */
+    public function itShould_handleGoodAnswer()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $lesson->exercises->first();
+        $this->createUserExercise($user, $exercise);
+
+        $data = [
+            'previous_exercise_id' => $exercise->id,
+            'answer' => 'good'
+        ];
+
+        $this->call('POST', '/learn/lessons/' . $lesson->id, $data);
+
+        $this->assertResponseOk();
+
+        $this->assertEquals(1, $this->numberOfGoodAnswers($exercise, $user->id));
+        $this->assertEquals(100, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
+        // 10 because 2 exercises are required to learn a lesson,
+        // so one will be 0%, another will be 100%
+        // (0 + 100) / 2 = 50
+        $this->assertEquals(50, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
+    }
+
+    /** @test */
+    public function itShould_notHandleGoodAnswer_unauthorized()
+    {
+        $lesson = $this->createExercise()->lesson;
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseUnauthorized();
+    }
+
+    /** @test */
+    public function itShould_notHandleGoodAnswer_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseInvalidInput();
+    }
+
+    // handleBadAnswer
+
+    /** @test */
+    public function itShould_handleBadAnswer()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+        $exercise = $lesson->exercises->first();
+        $this->createUserExercise($user, $exercise);
+
+        $data = [
+            'previous_exercise_id' => $exercise->id,
+            'answer' => 'bad'
+        ];
+
+        $this->call('POST', '/learn/lessons/' . $lesson->id, $data);
+
+        $this->assertResponseOk();
+
+        $this->assertEquals(0, $this->numberOfGoodAnswers($exercise, $user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
+        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
+    }
+
+    /** @test */
+    public function itShould_notHandleBadAnswer_unauthorized()
+    {
+        $lesson = $this->createExercise()->lesson;
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseUnauthorized();
+    }
+
+    /** @test */
+    public function itShould_notHandleBadAnswer_invalidInput()
+    {
+        $this->be($user = $this->createUser());
+        $lesson = $this->createPublicLesson($user);
+        $this->createExercisesRequiredToLearnLesson($lesson->id);
+
+        $this->call('POST', '/learn/lessons/' . $lesson->id);
+
+        $this->assertResponseInvalidInput();
     }
 }
