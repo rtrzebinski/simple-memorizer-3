@@ -78,7 +78,7 @@ class Handler extends ExceptionHandler
             // display exception response in console readable form
             $message = get_class($e) . PHP_EOL;
             $message .= $e->getMessage() . PHP_EOL . $e->getTraceAsString();
-            $statusCode = FlattenException::create($e)->getStatusCode();
+            $statusCode = FlattenException::createFromThrowable($e)->getStatusCode();
             return \Illuminate\Http\Response::create($message, $statusCode);
         }
         return parent::convertExceptionToResponse($e);

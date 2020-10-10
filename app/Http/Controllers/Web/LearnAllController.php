@@ -33,19 +33,25 @@ class LearnAllController extends Controller
             $userExercise = $learningService->findUserExerciseToLearn($userExercises, $request->previous_exercise_id);
         }
 
-        $redirectUrl = '/learn/all/?requested_exercise_id=' . $userExercise->exercise_id;
-        $editExerciseUrl = URL::to(
-            '/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=' . urlencode($redirectUrl)
-        );
+        if ($userExercise) {
+            $redirectUrl = '/learn/all/?requested_exercise_id=' . $userExercise->exercise_id;
+            $editExerciseUrl = URL::to(
+                '/exercises/' . $userExercise->exercise_id . '/edit?hide_lesson=true&redirect_to=' . urlencode(
+                    $redirectUrl
+                )
+            );
+        }
 
-        $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
+        if ($userExercise) {
+            $canEditExercise = $userExercise->lesson_owner_id == $this->user()->id;
+        }
 
         return view(
             'learn.all',
             [
                 'userExercise' => $userExercise,
-                'canEditExercise' => $canEditExercise,
-                'editExerciseUrl' => $editExerciseUrl,
+                'canEditExercise' => $canEditExercise ?? null,
+                'editExerciseUrl' => $editExerciseUrl ?? null,
             ]
         );
     }
