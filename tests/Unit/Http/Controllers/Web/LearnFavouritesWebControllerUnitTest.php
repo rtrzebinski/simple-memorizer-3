@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Http\Controllers\Web;
 
+use App\Events\ExerciseBadAnswer;
+use App\Events\ExerciseGoodAnswer;
 use App\Services\LearningService;
 use App\Structures\UserExercise\AuthenticatedUserExerciseRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -159,16 +161,11 @@ class LearnFavouritesWebControllerUnitTest extends WebTestCase
             'answer' => 'good'
         ];
 
+        $this->expectsEvents(ExerciseGoodAnswer::class);
+
         $this->call('POST', '/learn/favourites/', $data);
 
         $this->assertResponseOk();
-
-        $this->assertEquals(1, $this->numberOfGoodAnswers($exercise, $user->id));
-        $this->assertEquals(100, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
-        // 10 because 2 exercises are required to learn a lesson,
-        // so one will be 0%, another will be 100%
-        // (0 + 100) / 2 = 50
-        $this->assertEquals(50, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 
     // handleBadAnswer
@@ -202,12 +199,10 @@ class LearnFavouritesWebControllerUnitTest extends WebTestCase
             'answer' => 'bad'
         ];
 
+        $this->expectsEvents(ExerciseBadAnswer::class);
+
         $this->call('POST', '/learn/favourites/', $data);
 
         $this->assertResponseOk();
-
-        $this->assertEquals(0, $this->numberOfGoodAnswers($exercise, $user->id));
-        $this->assertEquals(0, $this->percentOfGoodAnswersOfExercise($exercise, $user->id));
-        $this->assertEquals(0, $this->percentOfGoodAnswersOfLesson($lesson, $user->id));
     }
 }
