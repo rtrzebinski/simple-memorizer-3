@@ -14,7 +14,7 @@ class LearnLessonControllerTest extends ApiTestCase
     // fetchRandomExerciseOfLesson
 
     /** @test */
-    public function itShould_findUserExerciseToLearn()
+    public function itShould_fetchRandomExerciseOfLesson()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
@@ -61,7 +61,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_findUserExerciseToLearn_lessonIsBidirectional()
+    public function itShould_fetchRandomExerciseOfLesson_lessonIsBidirectional()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);

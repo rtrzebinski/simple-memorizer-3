@@ -105,7 +105,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_notFindUserExerciseToLearn_unauthorized()
+    public function itShould_notFetchRandomExerciseOfLesson_unauthorized()
     {
         $this->callApi('GET', '/lessons/' . $this->createLesson()->id . '/exercises/random', $data = []);
 
@@ -113,7 +113,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_notFindUserExerciseToLearn_forbidden()
+    public function itShould_notFetchRandomExerciseOfLesson_forbidden()
     {
         $user = $this->createUser();
 
@@ -123,7 +123,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_notFindUserExerciseToLearn_notFound()
+    public function itShould_notFetchRandomExerciseOfLesson_notFound()
     {
         $user = $this->createUser();
 
@@ -133,7 +133,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_notFindUserExerciseToLearn_invalidPreviousExerciseId()
+    public function itShould_notFetchRandomExerciseOfLesson_invalidPreviousExerciseId()
     {
         $user = $this->createUser();
         $lesson = $this->createLesson(['owner_id' => $user->id])->fresh();
@@ -149,7 +149,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_notFindUserExerciseToLearn_noExercises()
+    public function itShould_notFetchRandomExerciseOfLesson_noExercises()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
@@ -167,7 +167,7 @@ class LearnLessonControllerTest extends ApiTestCase
     }
 
     /** @test */
-    public function itShould_notFindUserExerciseToLearn_noExercises_lessonBidirectional()
+    public function itShould_notFetchRandomExerciseOfLesson_noExercises_lessonBidirectional()
     {
         $user = $this->createUser();
         $lesson = $this->createPublicLesson($user);
