@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration;
+namespace Tests\Functional;
 
 use App\Models\User;
 use Illuminate\Testing\TestResponse;

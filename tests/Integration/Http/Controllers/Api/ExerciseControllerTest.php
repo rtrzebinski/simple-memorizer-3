@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers\Api;
+namespace Tests\Integration\Http\Controllers\Api;
 
 use ApiTestCase;
 use App\Events\ExerciseDeleted;

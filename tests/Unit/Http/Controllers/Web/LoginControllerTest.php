@@ -2,24 +2,10 @@
 
 namespace Tests\Unit\Http\Controllers\Web;
 
-use App\Models\UserRepository;
-use PHPUnit\Framework\MockObject\MockObject;
 use WebTestCase;
 
 class LoginControllerTest extends WebTestCase
 {
-    /**
-     * @var UserRepository|MockObject
-     */
-    private $userRepositoryMock;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->userRepositoryMock = $this->createMock(UserRepository::class);
-        $this->app->instance(UserRepository::class, $this->userRepositoryMock);
-    }
-
     /** @test */
     public function itShould_loginUser()
     {

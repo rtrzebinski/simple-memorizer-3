@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers\Web;
+namespace Tests\Integration\Http\Controllers\Web;
 
 use App\Events\ExerciseCreated;
 use App\Models\Exercise;
@@ -289,7 +289,6 @@ class ExerciseControllerTest extends WebTestCase
         $this->be($user = $this->createUser());
         $lesson = $this->createPublicLesson($user);
         $exercise = $this->createExercise(['lesson_id' => $lesson->id]);
-        $redirectTo = $this->randomUrl();
 
         $this->call('GET', '/exercises/' . $exercise->id . '/edit?hide_lesson=' . $hideLesson);
 

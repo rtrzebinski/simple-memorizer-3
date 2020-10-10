@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers\Web;
+namespace Tests\Integration\Http\Controllers\Web;
 
 use App\Structures\UserLesson\UserLesson;
 use WebTestCase;

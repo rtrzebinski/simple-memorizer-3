@@ -1,21 +1,14 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers\Web;
+namespace Tests\Integration\Http\Controllers\Api;
 
+use ApiTestCase;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
-use WebTestCase;
 
-class ForgotPasswordControllerTest extends WebTestCase
+class ForgotPasswordControllerTest extends ApiTestCase
 {
-    /** @test */
-    public function itShould_showLinkRequestForm()
-    {
-        $this->call('GET', 'password/reset');
-
-        $this->assertResponseOk();
-        $this->see('Reset Password');
-    }
+    // sendResetLinkEmail
 
     /** @test */
     public function itShould_sendResetLinkEmail()
@@ -24,23 +17,22 @@ class ForgotPasswordControllerTest extends WebTestCase
 
         Notification::fake();
 
-        $this->call(
+        $this->callApi(
             'POST',
-            'password/email',
+            '/password/email',
             [
                 'email' => $user->email,
             ]
         );
 
+        $this->assertResponseOk();
         Notification::assertSentTo($user, ResetPassword::class);
-        $this->assertSessionHas('status', 'We have e-mailed your password reset link!');
-        $this->assertResponseRedirectedTo('/');
     }
 
     /** @test */
     public function itShould_notSendResetLinkEmail_missingEmail()
     {
-        $this->call('POST', 'password/email');
+        $this->callApi('POST', '/password/email');
 
         $this->assertResponseInvalidInput();
     }
@@ -48,7 +40,7 @@ class ForgotPasswordControllerTest extends WebTestCase
     /** @test */
     public function itShould_notSendResetLinkEmail_invalidEmail()
     {
-        $this->call('POST', 'password/email', ['email' => uniqid()]);
+        $this->callApi('POST', '/password/email', ['email' => uniqid()]);
 
         $this->assertResponseInvalidInput();
     }
@@ -56,8 +48,8 @@ class ForgotPasswordControllerTest extends WebTestCase
     /** @test */
     public function itShould_notSendResetLinkEmail_emailDoesNotBelongToAnyUser()
     {
-        $this->call('POST', 'password/email', ['email' => $this->randomEmail()]);
+        $this->callApi('POST', '/password/email', ['email' => $this->randomEmail()]);
 
-        $this->assertResponseInvalidInput();
+        $this->assertResponseStatus(450);
     }
 }
