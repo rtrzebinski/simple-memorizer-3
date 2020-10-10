@@ -142,7 +142,6 @@ class LessonCsvWebControllerIntegrationTest extends WebTestCase
         $file = $this->createUploadedFileMock('csv');
         $file->method('getRealPath')->willReturn($path);
 
-        /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
         $writer->insertOne(
@@ -187,10 +186,8 @@ class LessonCsvWebControllerIntegrationTest extends WebTestCase
         /** @var string $path */
         $path = tempnam(sys_get_temp_dir(), uniqid());
 
-        /** @var UploadedFile $file */
         $file = new UploadedFile($path, uniqid());
 
-        /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
         $writer->insertOne(
@@ -228,10 +225,8 @@ class LessonCsvWebControllerIntegrationTest extends WebTestCase
         /** @var string $path */
         $path = tempnam(sys_get_temp_dir(), uniqid());
 
-        /** @var UploadedFile $file */
         $file = new UploadedFile($path, uniqid());
 
-        /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
         $writer->insertOne(
@@ -268,10 +263,8 @@ class LessonCsvWebControllerIntegrationTest extends WebTestCase
         /** @var string $path */
         $path = tempnam(sys_get_temp_dir(), uniqid());
 
-        /** @var UploadedFile $file */
         $file = new UploadedFile($path, uniqid());
 
-        /** @var Writer $writer */
         $writer = Writer::createFromPath($path);
 
         $writer->insertOne(
