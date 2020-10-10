@@ -9,7 +9,7 @@ use WebTestCase;
 
 class LearnFavouritesControllerTest extends WebTestCase
 {
-    // learn
+    // learnFavourites
 
     /** @test */
     public function itShould_showLearnFavouritesPage()

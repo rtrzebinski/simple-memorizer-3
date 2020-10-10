@@ -9,7 +9,7 @@ use WebTestCase;
 
 class LearnAllControllerTest extends WebTestCase
 {
-    // learn
+    // learnAll
 
     /** @test */
     public function itShould_showLearnAllPage()
