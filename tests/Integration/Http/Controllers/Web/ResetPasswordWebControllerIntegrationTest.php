@@ -22,12 +22,13 @@ class ResetPasswordWebControllerIntegrationTest extends WebTestCase
     {
         $user = $this->createUser();
         $password = $this->randomPassword();
-        $token = uniqid();
+        $token = 'test';
+        $hash = '$2y$12$GrUG15bDSNGIS02sy6aineus/VkyS1whJ49jNXGCd1BNgCcvWYMTm';
 
         DB::table('password_resets')->insert(
             [
                 'email' => $user->email,
-                'token' => bcrypt($token),
+                'token' => $hash,
                 'created_at' => Carbon::now(),
             ]
         );

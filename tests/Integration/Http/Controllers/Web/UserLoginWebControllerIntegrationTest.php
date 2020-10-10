@@ -10,11 +10,12 @@ class UserLoginWebControllerIntegrationTest extends WebTestCase
     public function itShould_loginUser()
     {
         $email = $this->randomEmail();
-        $password = $this->randomPassword();
+        $password = 'test';
+        $hash = '$2y$12$GrUG15bDSNGIS02sy6aineus/VkyS1whJ49jNXGCd1BNgCcvWYMTm';
         $user = $this->createUser(
             [
                 'email' => $email,
-                'password' => bcrypt($password),
+                'password' => $hash,
             ]
         );
 
