@@ -13,45 +13,45 @@
 |
 */
 
-Route::post('/register', 'Api\RegisterController@register');
+Route::post('/register', 'Api\UserRegisterApiController@register');
 
-Route::post('/login', 'Api\LoginController@login');
+Route::post('/login', 'Api\UserLoginApiController@login');
 
-Route::post('/password/email', 'Api\ForgotPasswordController@sendResetLinkEmail');
+Route::post('/password/email', 'Api\ForgotPasswordApiController@sendResetLinkEmail');
 
 Route::group(
     ['middleware' => ['auth:api', 'throttle:60,1']],
     function () {
-        Route::post('/lessons', 'Api\LessonController@storeLesson');
+        Route::post('/lessons', 'Api\LessonApiController@storeLesson');
 
-        Route::get('/lessons/owned', 'Api\LessonController@fetchOwnedLessons');
+        Route::get('/lessons/owned', 'Api\LessonApiController@fetchOwnedLessons');
 
-        Route::post('/lessons/{lesson}/user', 'Api\LessonController@subscribeLesson');
+        Route::post('/lessons/{lesson}/user', 'Api\LessonApiController@subscribeLesson');
 
-        Route::delete('/lessons/{lesson}/user', 'Api\LessonController@unsubscribeLesson');
+        Route::delete('/lessons/{lesson}/user', 'Api\LessonApiController@unsubscribeLesson');
 
-        Route::get('/lessons/subscribed', 'Api\LessonController@fetchSubscribedLessons');
+        Route::get('/lessons/subscribed', 'Api\LessonApiController@fetchSubscribedLessons');
 
-        Route::get('/lessons/{lesson}', 'Api\LessonController@fetchLesson');
+        Route::get('/lessons/{lesson}', 'Api\LessonApiController@fetchLesson');
 
-        Route::patch('/lessons/{lesson}', 'Api\LessonController@updateLesson');
+        Route::patch('/lessons/{lesson}', 'Api\LessonApiController@updateLesson');
 
-        Route::delete('/lessons/{lesson}', 'Api\LessonController@deleteLesson');
+        Route::delete('/lessons/{lesson}', 'Api\LessonApiController@deleteLesson');
 
-        Route::post('/lessons/{lesson}/exercises', 'Api\ExerciseController@storeExercise');
+        Route::post('/lessons/{lesson}/exercises', 'Api\ExerciseApiController@storeExercise');
 
-        Route::get('/exercises/{exercise}', 'Api\ExerciseController@fetchExercise');
+        Route::get('/exercises/{exercise}', 'Api\ExerciseApiController@fetchExercise');
 
-        Route::get('/lessons/{lesson}/exercises', 'Api\ExerciseController@fetchExercisesOfLesson');
+        Route::get('/lessons/{lesson}/exercises', 'Api\ExerciseApiController@fetchExercisesOfLesson');
 
-        Route::patch('/exercises/{exercise}', 'Api\ExerciseController@updateExercise');
+        Route::patch('/exercises/{exercise}', 'Api\ExerciseApiController@updateExercise');
 
-        Route::delete('/exercises/{exercise}', 'Api\ExerciseController@deleteExercise');
+        Route::delete('/exercises/{exercise}', 'Api\ExerciseApiController@deleteExercise');
 
-        Route::get('/lessons/{lesson}/exercises/random', 'Api\LearnLessonController@fetchRandomExerciseOfLesson');
+        Route::get('/lessons/{lesson}/exercises/random', 'Api\LearnLessonApiController@fetchRandomExerciseOfLesson');
 
-        Route::post('/exercises/{exercise}/handle-good-answer', 'Api\LearnLessonController@handleGoodAnswer');
+        Route::post('/exercises/{exercise}/handle-good-answer', 'Api\LearnLessonApiController@handleGoodAnswer');
 
-        Route::post('/exercises/{exercise}/handle-bad-answer', 'Api\LearnLessonController@handleBadAnswer');
+        Route::post('/exercises/{exercise}/handle-bad-answer', 'Api\LearnLessonApiController@handleBadAnswer');
     }
 );
