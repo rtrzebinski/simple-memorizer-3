@@ -3,6 +3,7 @@ default: help
 
 args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 services = workspace php-fpm nginx mysql redis
+git-repo = git@github.com:rtrzebinski/laradock.git
 
 help: ## Show this help
 	@IFS=$$'\n' ; \
@@ -25,17 +26,17 @@ clean: ## Stop all running docker containers (recommended to run before 'start' 
 	@docker ps -q | xargs docker stop 1>/dev/null
 
 start: ## Create and start containers, composer dependencies, db migrate and seed etc. - everything in one command
-	@if [ ! -e ".env" ]; then cp .env.example .env; fi
+	@if [ ! -d "laradock" ]; then make build; fi
 	@make up
+	@if [ ! -e ".env" ]; then cp .env.example .env; fi
 	@make composer-install
 	@make db-fresh
 	@printf "\n=========> Server is available at: http://localhost\n"
 
 build: ## Build or re-build containers
-	rm -rf laradock
-	git clone git@github.com:rtrzebinski/laradock.git
-	cp .laradock.env.example laradock/.env
-	docker-compose --file laradock/docker-compose.yml --project-directory laradock build $(services)
+	@if [ ! -d "laradock" ]; then git clone $(git-repo); fi
+	@cp .laradock.env.example laradock/.env
+	@docker-compose --file laradock/docker-compose.yml --project-directory laradock build $(services)
 
 up: ## Start containers
 	@echo 'Starting application containers...'
