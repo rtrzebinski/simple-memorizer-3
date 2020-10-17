@@ -24,7 +24,15 @@ New features and improvements are actively being added to the system. The goal o
 
 - Project has a built in local environment with [Docker](https://www.docker.com) support.
 
-## More
+### Desktop screenshots
+
+<img src="/images/screenshot_web_1.png" width="220" /> <img src="/images/screenshot_web_2.png" width="220" /> <img src="/images/screenshot_web_3.png" width="220" /> <img src="/images/screenshot_web_4.png" width="220" />
+
+### Mobile screenshots
+
+<img src="/images/screenshot_iphone_1.PNG" width="220" /> <img src="/images/screenshot_iphone_2.PNG" width="220" /> <img src="/images/screenshot_iphone_3.PNG" width="220" /> <img src="/images/screenshot_iphone_4.PNG" width="220" />
+
+## Misc
 
 [Documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki)
 
@@ -33,10 +41,3 @@ New features and improvements are actively being added to the system. The goal o
 [Live demo](https://simple-memorizer.online)
 
 [![Build Status](https://travis-ci.com/rtrzebinski/simple-memorizer-3.svg?branch=master)](https://travis-ci.com/rtrzebinski/simple-memorizer-3)
-
-## Screenshots
-
-### Desktop
-
-### Mobile
-
