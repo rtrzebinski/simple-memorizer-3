@@ -4,6 +4,10 @@ Simple memorizer is an educational tool using [spaced repetition](https://en.wik
 
 Although the principle is useful in many contexts, spaced repetition is commonly applied when a learner must acquire many items and retain them indefinitely in memory. It is, therefore, well suited for the problem of vocabulary acquisition in the course of **second-language learning**.
 
+[Documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki) | [Project board](https://github.com/rtrzebinski/simple-memorizer-3/projects/1) | [Live demo](https://simple-memorizer.online)
+
+[![Build Status](https://travis-ci.com/rtrzebinski/simple-memorizer-3.svg?branch=master)](https://travis-ci.com/rtrzebinski/simple-memorizer-3)
+
 ## Description
 
 During daily sessions the user is presented a series of exercises and provides feedback whether he knows the answer or not. This data is being collected making the tool more adequate the more it is used. Application algorithms analyse multiple factors like ratio between good and bad answers, number of answers on a given day or order in which these are given.
@@ -31,13 +35,3 @@ New features and improvements are actively being added to the system. The goal o
 ### Mobile screenshots
 
 <img src="/images/screenshot_iphone_1.PNG" width="220" /> <img src="/images/screenshot_iphone_2.PNG" width="220" /> <img src="/images/screenshot_iphone_3.PNG" width="220" /> <img src="/images/screenshot_iphone_4.PNG" width="220" />
-
-## Misc
-
-[Documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki)
-
-[Project board](https://github.com/rtrzebinski/simple-memorizer-3/projects/1)
-
-[Live demo](https://simple-memorizer.online)
-
-[![Build Status](https://travis-ci.com/rtrzebinski/simple-memorizer-3.svg?branch=master)](https://travis-ci.com/rtrzebinski/simple-memorizer-3)
