@@ -26,7 +26,7 @@ New features and improvements are actively being added to the system. The goal o
 
 - App is covered by automated tests written with [PHPUnit](https://phpunit.de) framework. Tests are set up to run using in memory [SQLite](https://www.sqlite.org/) database, which significantly speeds up testing process.
 
-- Project has a built in local environment with [Docker](https://www.docker.com) support.
+- Project has a built in [local environment](https://github.com/rtrzebinski/simple-memorizer-3/wiki/Docker-support) with [Docker](https://www.docker.com) support.
 
 ### Mobile screenshots
 
