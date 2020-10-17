@@ -10,7 +10,7 @@ Although the principle is useful in many contexts, spaced repetition is commonly
 
 ## Description
 
-During daily sessions the user is presented a series of exercises and provides feedback whether he knows the answer or not. This data is being collected making the tool more adequate the more it is used. Application algorithms analyse multiple factors like ratio between good and bad answers, number of answers on a given day or order in which these are given.
+During daily sessions a user is presented a series of exercises and provides feedback whether he knows the answer or not. This data is being collected making the tool more adequate the more it is used. Application algorithms analyse multiple factors like ratio between good and bad answers, number of answers on a given day or order in which these are given.
 
 User interface is **minimalistic and optimised to run very fast**. Providing feedback only requires pressing either the 'Good answer' or 'Bad answer' button. Doing so is concluded with the next exercise being loaded, making the process smooth and easy to follow. Another advantage of this approach is ease of use on mobile devices without a need to type an answer in. It also increases the number of exercises served in a time allowing it to be useful even during shorter sessions.
 
