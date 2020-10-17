@@ -7,3 +7,4 @@ _ide_helper.php
 .idea/
 .phpunit.result.cache
 /laradock
+.DS_Store
