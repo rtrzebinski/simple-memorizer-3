@@ -16,7 +16,7 @@ User interface is **minimalistic and optimised to run very fast**. Providing fee
 
 New features and improvements are actively being added to the system. The goal of the project is creating an **efficient and user friendly application that is easy to use and effective**.
 
-## Implementation details
+## Technical details
 
 - Web application is developed with [PHP](http://php.net) and [Laravel framework](https://laravel.com).
 
