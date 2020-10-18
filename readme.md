@@ -28,10 +28,11 @@ New features and improvements are actively being added to the system. The goal o
 
 - Project has a built in [local environment](https://github.com/rtrzebinski/simple-memorizer-3/wiki/Docker-support) with [Docker](https://www.docker.com) support.
 
+### Desktop screenshots 
+
+<img src="/images/screenshot_web_1.png" width="200" /> <img src="/images/screenshot_web_2.png" width="200" /> <img src="/images/screenshot_web_3.png" width="200" />
+
 ### Mobile screenshots
 
 <img src="/images/screenshot_iphone_1.PNG" width="200" /> <img src="/images/screenshot_iphone_2.PNG" width="200" /> <img src="/images/screenshot_iphone_3.PNG" width="200" /> <img src="/images/screenshot_iphone_4.PNG" width="200" />
 
-### Desktop screenshots
-
-<img src="/images/screenshot_web_1.png" width="200" /> <img src="/images/screenshot_web_2.png" width="200" /> <img src="/images/screenshot_web_3.png" width="200" />
