@@ -61,27 +61,27 @@
 
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
-                                    <button type="submit" form="handle-good-answer-form" id="good-answer-button" class="btn btn-default btn-success margin-bottom">
-                                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                        Good answer
-                                    </button>
                                     <button type="submit" form="handle-bad-answer-form" id="bad-answer-button" class="btn btn-default btn-danger margin-bottom">
                                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                                         Bad answer
                                     </button>
+                                    <button type="submit" form="handle-good-answer-form" id="good-answer-button" class="btn btn-default btn-success margin-bottom">
+                                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                        Good answer
+                                    </button>
                                 </div>
-                                <form id="handle-good-answer-form"
-                                      action="/learn/all"
-                                      method="POST">
-                                    <input type="hidden" name="previous_exercise_id" value="{{ $userExercise->exercise_id }}">
-                                    <input type="hidden" name="answer" value="good">
-                                    {{ csrf_field() }}
-                                </form>
                                 <form id="handle-bad-answer-form"
                                       action="/learn/all"
                                       method="POST">
                                     <input type="hidden" name="previous_exercise_id" value="{{ $userExercise->exercise_id }}">
                                     <input type="hidden" name="answer" value="bad">
+                                    {{ csrf_field() }}
+                                </form>
+                                <form id="handle-good-answer-form"
+                                      action="/learn/all"
+                                      method="POST">
+                                    <input type="hidden" name="previous_exercise_id" value="{{ $userExercise->exercise_id }}">
+                                    <input type="hidden" name="answer" value="good">
                                     {{ csrf_field() }}
                                 </form>
                             </div>
