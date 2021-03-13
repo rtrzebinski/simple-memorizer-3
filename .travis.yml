@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 7.4
+  - 8.0
 
 before_script:
   - phpenv config-rm xdebug.ini
@@ -9,4 +9,4 @@ before_script:
   - cp .env.dev .env
 
 script:
-  - ./vendor/bin/paratest --runner SqliteRunner
+  - ./vendor/bin/paratest
