@@ -128,6 +128,7 @@ class TestDataSeeder extends Seeder
                 'email' => 'admin@example.com',
                 'password' => '$2y$12$/WfobkrcnlmQRIAAWcyw5OU6c9cj13SxGJNYtLSiTVhn8c0jQr1Au',
                 // password: admin@example.com
+                'api_token' => 'admin-example-com-api-token',
             ]
         );
 
