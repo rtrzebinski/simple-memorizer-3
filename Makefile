@@ -27,6 +27,7 @@ start: ## create, migrate and seed db; install dependencies; run application
 	cp .env.dev .env
 	php artisan migrate
 	php artisan db:seed
+	php artisan config:clear
 	@printf "\033[1m================================================\033[0m \n"
 	@printf "\033[1mTest user email: admin@example.com\033[0m \n"
 	@printf "\033[1mTest user password: admin@example.com\033[0m \n"
