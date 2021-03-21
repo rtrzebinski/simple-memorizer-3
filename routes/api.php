@@ -20,7 +20,7 @@ Route::post('/login', 'Api\UserLoginApiController@login');
 Route::post('/password/email', 'Api\ForgotPasswordApiController@sendResetLinkEmail');
 
 Route::group(
-    ['middleware' => ['auth:api', 'throttle:60,1']],
+    ['middleware' => ['auth:api']],
     function () {
         Route::post('/lessons', 'Api\LessonApiController@storeLesson');
 
