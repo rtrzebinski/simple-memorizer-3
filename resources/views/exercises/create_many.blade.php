@@ -21,7 +21,7 @@
                                         <label>Exercises</label>
                                         <textarea id="textarea_exercises" name="exercises" class="form-control" rows="20"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
+                                    <button type="submit" class="btn btn-default btn-lg">Submit</button>
                                 </form>
                             </div>
                         </div>

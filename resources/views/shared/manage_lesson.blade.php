@@ -27,11 +27,11 @@
         <div class="col-md-6 no-padding">
             <p>
                 @if($canSubscribe || !$user)
-                    <button type="submit" form="subscribe-and-learn" class="btn btn-primary margin-bottom">
+                    <button type="submit" form="subscribe-and-learn" class="btn btn-primary btn-lg margin-bottom">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                         Subscribe and learn
                     </button>
-                    <button type="submit" form="subscribe" class="btn btn-danger margin-bottom">
+                    <button type="submit" form="subscribe" class="btn btn-danger btn-lg margin-bottom">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         Subscribe
                     </button>
@@ -39,7 +39,7 @@
 
                 @if($canNotSubscribe)
                     @can('learn', $userLesson)
-                        <a href="/learn/lessons/{{ $userLesson->lesson_id }}" class="btn btn-primary margin-bottom" role="button">
+                        <a href="/learn/lessons/{{ $userLesson->lesson_id }}" class="btn btn-primary btn-lg margin-bottom" role="button">
                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                             Learn
                         </a>
@@ -47,28 +47,28 @@
                 @endif
 
                 @if($canUnsubscribe)
-                    <button type="submit" form="unsubscribe" class="btn btn-danger margin-bottom">
+                    <button type="submit" form="unsubscribe" class="btn btn-danger btn-lg margin-bottom">
                         <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
                         Unsubscribe
                     </button>
                 @endif
 
                 @if($canModify)
-                    <a href="/lessons/{{ $userLesson->lesson_id }}/edit" class="btn btn-info margin-bottom" role="button">
+                    <a href="/lessons/{{ $userLesson->lesson_id }}/edit" class="btn btn-info btn-lg margin-bottom" role="button">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         Edit
                     </a>
                 @endif
 
                 @if($canNotSubscribe && $user)
-                    <a href="/lessons/{{ $userLesson->lesson_id }}/settings" class="btn btn-info margin-bottom" role="button">
+                    <a href="/lessons/{{ $userLesson->lesson_id }}/settings" class="btn btn-info btn-lg margin-bottom" role="button">
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                         Settings
                     </a>
                 @endif
 
                 @if($canModify)
-                    <button class="btn btn-danger margin-bottom" data-title="Delete"
+                    <button class="btn btn-danger btn-lg margin-bottom" data-title="Delete"
                             data-toggle="modal" data-target="#delete_lesson">
                         <span class="glyphicon glyphicon-trash"></span>
                         Delete
@@ -77,7 +77,7 @@
 
                 @if($canModify)
                     <a href="/lessons/{{ $userLesson->lesson_id }}/exercises/create"
-                       class="btn btn-success margin-bottom" role="button">
+                       class="btn btn-success btn-lg margin-bottom" role="button">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         Add exercise
                     </a>
@@ -85,26 +85,26 @@
 
                 @if($canModify)
                     <a href="/lessons/{{ $userLesson->lesson_id }}/exercises/create-many"
-                       class="btn btn-success margin-bottom" role="button">
+                       class="btn btn-success btn-lg margin-bottom" role="button">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         Add many exercises
                     </a>
                 @endif
 
-                <a href="/lessons/{{ $userLesson->lesson_id }}/exercises" class="btn btn-default margin-bottom">
+                <a href="/lessons/{{ $userLesson->lesson_id }}/exercises" class="btn btn-default btn-lg margin-bottom">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                     Exercises
                 </a>
 
                 @if($canModify)
-                    <a href="/lessons/aggregate/{{ $userLesson->lesson_id }}" class="btn btn-default margin-bottom">
+                    <a href="/lessons/aggregate/{{ $userLesson->lesson_id }}" class="btn btn-default btn-lg margin-bottom">
                         <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                         Aggregate
                     </a>
                 @endif
 
                 @if($canModify)
-                    <a href="/lessons/merge/{{ $userLesson->lesson_id }}" class="btn btn-default margin-bottom">
+                    <a href="/lessons/merge/{{ $userLesson->lesson_id }}" class="btn btn-default btn-lg margin-bottom">
                         <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                         Merge
                     </a>
@@ -140,10 +140,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" form="delete-lesson" type="button" class="btn btn-success">
+                <button type="submit" form="delete-lesson" type="button" class="btn btn-success btn-lg">
                     <span class="glyphicon glyphicon-ok-sign"></span> Yes
                 </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">
+                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">
                     <span class="glyphicon glyphicon-remove"></span> No
                 </button>
             </div>

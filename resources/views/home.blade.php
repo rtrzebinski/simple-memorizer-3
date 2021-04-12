@@ -14,19 +14,19 @@
                                     Lessons created by you and lesson you subscribe.
                                 </p>
                                 <p>
-                                    <a href="/lessons/create" class="btn btn-success margin-bottom" role="button">
+                                    <a href="/lessons/create" class="btn btn-success btn-lg margin-bottom" role="button">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Create new lesson
                                     </a>
                                     @if($userCanLearnAllLessons)
-                                        <a href="/learn/all" class="btn btn-primary margin-bottom"
+                                        <a href="/learn/all" class="btn btn-primary btn-lg margin-bottom"
                                            role="button">
                                             <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                             Learn all
                                         </a>
                                     @endif
                                     @if($userCanLearnFavouriteLessons)
-                                        <a href="/learn/favourites" class="btn btn-warning margin-bottom"
+                                        <a href="/learn/favourites" class="btn btn-warning btn-lg margin-bottom"
                                            role="button">
                                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                             Learn favourites
@@ -67,24 +67,24 @@
                                             </p>
                                             <p>
                                                 @can('learn', $row)
-                                                    <a href="/learn/lessons/{{ $row->lesson_id }}" class="btn btn-primary margin-bottom"
+                                                    <a href="/learn/lessons/{{ $row->lesson_id }}" class="btn btn-primary btn-lg margin-bottom"
                                                        role="button">
                                                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                         Learn
                                                     </a>
                                                 @endcan
-                                                <a href="/lessons/{{ $row->lesson_id }}/exercises/create" class="btn btn-success margin-bottom" role="button">
+                                                <a href="/lessons/{{ $row->lesson_id }}/exercises/create" class="btn btn-success btn-lg margin-bottom" role="button">
                                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                     Add exercise
                                                 </a>
                                                 @if($row->is_favourite)
                                                     <button type="submit" form="unfavourite-{{ $row->lesson_id }}"
-                                                            class="btn btn-warning margin-bottom">
+                                                            class="btn btn-warning btn-lg margin-bottom">
                                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                                     </button>
                                                 @else
                                                     <button type="submit" form="favourite-{{ $row->lesson_id }}"
-                                                            class="btn btn-default margin-bottom">
+                                                            class="btn btn-default btn-lg margin-bottom">
                                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                                     </button>
                                                 @endif
@@ -124,25 +124,25 @@
                                             </p>
                                             <p>
                                                 <a href="/learn/lessons/{{ $row->lesson_id }}"
-                                                   class="btn btn-primary margin-bottom"
+                                                   class="btn btn-primary btn-lg margin-bottom"
                                                    role="button">
                                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                                     Learn
                                                 </a>
                                                 <button type="submit" form="unsubscribe-{{ $row->lesson_id }}"
-                                                        class="btn btn-danger margin-bottom">
+                                                        class="btn btn-danger btn-lg margin-bottom">
                                                 <span class="glyphicon glyphicon-remove-sign"
                                                       aria-hidden="true"></span>
                                                     Unsubscribe
                                                 </button>
                                                 @if($row->is_favourite)
                                                     <button type="submit" form="unfavourite-{{ $row->lesson_id }}"
-                                                            class="btn btn-warning margin-bottom">
+                                                            class="btn btn-warning btn-lg margin-bottom">
                                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                                     </button>
                                                 @else
                                                     <button type="submit" form="favourite-{{ $row->lesson_id }}"
-                                                            class="btn btn-default margin-bottom">
+                                                            class="btn btn-default btn-lg margin-bottom">
                                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                                     </button>
                                                 @endif
@@ -181,7 +181,7 @@
                             </p>
                             <p>
                                 @if(!$userHasOwnedOrSubscribedLessons)
-                                    <a href="/lessons/create" class="btn btn-success" role="button">
+                                    <a href="/lessons/create" class="btn btn-success btn-lg" role="button">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Create your own lesson
                                     </a>
@@ -218,13 +218,13 @@
                                         </p>
                                         <p>
                                             <button type="submit" form="subscribe-and-learn-{{ $row->lesson_id }}"
-                                                    class="btn btn-primary margin-bottom">
+                                                    class="btn btn-primary btn-lg margin-bottom">
                                                     <span class="glyphicon glyphicon-play"
                                                           aria-hidden="true"></span>
                                                 Subscribe and learn
                                             </button>
                                             <button type="submit" form="subscribe-{{ $row->lesson_id }}"
-                                                    class="btn btn-danger margin-bottom">
+                                                    class="btn btn-danger btn-lg margin-bottom">
                                                     <span class="glyphicon glyphicon-ok"
                                                           aria-hidden="true"></span>
                                                 Subscribe

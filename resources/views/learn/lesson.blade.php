@@ -20,18 +20,18 @@
                                     {{--check if user can modify lesson without db query--}}
                                     @if($canEditExercise)
                                         <a href="{{ $editExerciseUrl }}">
-                                            <button class="btn btn-default margin-bottom">
+                                            <button class="btn btn-default btn-lg margin-bottom">
                                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                                 Edit
                                             </button>
                                         </a>
                                     @endif
-                                    <button id="show_answer_button" class="btn btn-default margin-bottom">
+                                    <button id="show_answer_button" class="btn btn-default btn-lg margin-bottom">
                                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                         Show answer
                                     </button>
                                     <a href="/learn/lessons/{{ $userLesson->lesson_id }}?previous_exercise_id={{ $userExercise->exercise_id }}">
-                                        <button class="btn btn-default margin-bottom" id="next-button">
+                                        <button class="btn btn-default btn-lg margin-bottom" id="next-button">
                                             <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
                                             Next
                                         </button>
@@ -61,11 +61,11 @@
 
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
-                                    <button type="submit" form="handle-bad-answer-form" id="bad-answer-button" class="btn btn-default btn-danger margin-bottom">
+                                    <button type="submit" form="handle-bad-answer-form" id="bad-answer-button" class="btn btn-default btn-lg btn-danger btn-lg margin-bottom">
                                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                                         Bad answer
                                     </button>
-                                    <button type="submit" form="handle-good-answer-form" id="good-answer-button" class="btn btn-default btn-success margin-bottom">
+                                    <button type="submit" form="handle-good-answer-form" id="good-answer-button" class="btn btn-default btn-lg btn-success btn-lg margin-bottom">
                                         <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                                         Good answer
                                     </button>

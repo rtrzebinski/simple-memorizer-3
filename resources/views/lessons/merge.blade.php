@@ -33,7 +33,7 @@
                                 </table>
                                 {{ csrf_field() }}
 
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <button type="submit" class="btn btn-default btn-lg">Submit</button>
 
                             </form>
                         </div>

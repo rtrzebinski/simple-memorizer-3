@@ -14,24 +14,24 @@
                             @if($canModifyLesson)
                                 <p>
                                     <a href="/lessons/{{ $userLesson->lesson_id }}/exercises/create"
-                                       class="btn btn-success margin-bottom" role="button">
+                                       class="btn btn-success btn-lg margin-bottom" role="button">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         Add exercise
                                     </a>
-                                    <button class="btn btn-danger margin-bottom" data-title="Delete"
+                                    <button class="btn btn-danger btn-lg margin-bottom" data-title="Delete"
                                             data-toggle="modal" data-target="#delete">
                                         <span class="glyphicon glyphicon-trash"></span>
                                         Delete selected
                                     </button>
 
                                     @if($canModifyLesson)
-                                        <a href="" class="btn btn-default margin-bottom">
+                                        <a href="" class="btn btn-default btn-lg margin-bottom">
                                             <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
                                             Import from CSV
                                         </a>
                                     @endif
 
-                                    <a href="/lessons/{{ $userLesson->lesson_id }}/csv" class="btn btn-default margin-bottom">
+                                    <a href="/lessons/{{ $userLesson->lesson_id }}/csv" class="btn btn-default btn-lg margin-bottom">
                                         <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                                         Export to CSV
                                     </a>
@@ -77,12 +77,12 @@
                                         @endif
                                         @if($canModifyLesson)
                                             <td>
-                                                <a href="/exercises/{{ $row->exercise_id }}/edit" class="btn btn-info btn-xs">
+                                                <a href="/exercises/{{ $row->exercise_id }}/edit" class="btn btn-info btn-lg btn-xs">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </a>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger btn-xs" data-title="Delete"
+                                                <button class="btn btn-danger btn-lg btn-xs" data-title="Delete"
                                                         data-toggle="modal" data-target="#delete-exercise-{{ $row->exercise_id }}">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </button>
@@ -109,10 +109,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" form="delete-exercise-form-{{ $row->exercise_id }}" class="btn btn-success">
+                                                    <button type="submit" form="delete-exercise-form-{{ $row->exercise_id }}" class="btn btn-success btn-lg">
                                                         <span class="glyphicon glyphicon-ok-sign"></span> Yes
                                                     </button>
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">
                                                         <span class="glyphicon glyphicon-remove"></span> No
                                                     </button>
                                                 </div>

@@ -22,7 +22,7 @@
                                         <label>Correct answer</label>
                                         <textarea id="textarea_answer" name="answer" class="form-control" rows="4"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
+                                    <button type="submit" class="btn btn-default btn-lg">Submit</button>
                                 </form>
                             </div>
                         </div>

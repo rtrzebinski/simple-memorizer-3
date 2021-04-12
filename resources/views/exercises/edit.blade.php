@@ -26,7 +26,7 @@
                                         <label>Correct answer</label>
                                         <textarea name="answer" class="form-control" rows="4">{{ $exercise->answer }}</textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
+                                    <button type="submit" class="btn btn-default btn-lg">Submit</button>
                                 </form>
                             </div>
                         </div>

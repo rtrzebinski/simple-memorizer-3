@@ -10,7 +10,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-8 margin-bottom">
-                                <a href="/home" class="btn btn-default margin-bottom">
+                                <a href="/home" class="btn btn-default btn-lg margin-bottom">
                                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                                     Browse lessons
                                 </a>
@@ -35,7 +35,7 @@
                                             Private lessons are only visible for you.
                                         </span>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
+                                    <button type="submit" class="btn btn-default btn-lg">Submit</button>
                                 </form>
                             </div>
                         </div>
