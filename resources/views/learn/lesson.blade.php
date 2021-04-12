@@ -47,7 +47,7 @@
                                         <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                                         Question
                                     </label>
-                                    <div class="well well-sm">{{ $userExercise->question }}</div>
+                                    <div class="well well-sm text-lg">{{ $userExercise->question }}</div>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div id="answer_input" class="col-md-8 col-md-offset-2 hidden">
@@ -55,7 +55,7 @@
                                         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                                         Correct answer
                                     </label>
-                                    <div class="well well-sm">{{ $userExercise->answer }}</div>
+                                    <div class="well well-sm text-lg">{{ $userExercise->answer }}</div>
                                 </div>
                             </div>
 

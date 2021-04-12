@@ -13,3 +13,7 @@ a, a:hover {
     color: #000;
     text-decoration: none;
 }
+
+.text-lg {
+    font-size: 18px;
+}
