@@ -32,8 +32,7 @@ class PointsCalculator
         // check for answers today first
 
         // user had both good and bad answers today
-        if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday(
-            ) && $latestBadAnswer->isToday()) {
+        if ($latestGoodAnswer instanceof Carbon && $latestBadAnswer instanceof Carbon && $latestGoodAnswer->isToday() && $latestBadAnswer->isToday()) {
             // if good answer was the most recent - return 0 point to not bother user with this question anymore today
             // it makes more sense to serve it another day than serve again today
             if ($latestGoodAnswer->isAfter($latestBadAnswer)) {
@@ -54,6 +53,13 @@ class PointsCalculator
             // if was return 0 points, so exercise is not served
             if ($userExercise->number_of_bad_answers_today >= config('app.max_exercise_bad_answers_per_day')) {
                 return 0;
+            }
+
+            // important for new lessons with many new exercises, case of a new exercise user never knew:
+            // give it double max points to it has a chance to be served couple times during first session it appeared
+            // better to serve less exercises few times more, than show a lot just once
+            if ($userExercise->number_of_good_answers == 0) {
+                return 200;
             }
 
             // here we decrease points with incoming bad answers today

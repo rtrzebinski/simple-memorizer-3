@@ -145,7 +145,7 @@ class PointsCalculatorTest extends \TestCase
      * @param int $points
      * @throws \Exception
      */
-    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer(int $numberOfBadAnswersToday, int $points)
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswerToday(int $numberOfBadAnswersToday, int $points)
     {
         $user = $this->createUser();
         $exercise = $this->createExercise();
@@ -169,7 +169,7 @@ class PointsCalculatorTest extends \TestCase
     }
 
     /** @test */
-    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer_max_exercise_bad_answers_per_day_reached()
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswerToday_max_exercise_bad_answers_per_day_reached()
     {
         $numberOfBadAnswersToday = 1;
 
@@ -201,7 +201,7 @@ class PointsCalculatorTest extends \TestCase
     }
 
     /** @test */
-    public function itShould_calculatePoints_badAnswersToday_noGoodAnswer_max_exercise_bad_answers_per_day_exceeded()
+    public function itShould_calculatePoints_badAnswersToday_noGoodAnswerToday_max_exercise_bad_answers_per_day_exceeded()
     {
         $numberOfBadAnswersToday = 1;
 
@@ -257,6 +257,51 @@ class PointsCalculatorTest extends \TestCase
                 // do not leave these two empty, to avoid a '100' returned for no answers at all
                 'number_of_good_answers' => 1,
                 'number_of_bad_answers' => 1,
+            ]
+        );
+        $userExercise = $this->createUserExercise($user, $exercise);
+
+        $result = $this->pointsCalculator->calculatePoints($userExercise);
+
+        $this->assertEquals($points, $result);
+    }
+
+    public function badAnswersOnlyProvider()
+    {
+        return [
+            [$numberOfBadAnswersToday = 1, $points = 200],
+            [$numberOfBadAnswersToday = 2, $points = 200],
+            [$numberOfBadAnswersToday = 3, $points = 0],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider badAnswersOnlyProvider
+     * @param int $numberOfBadAnswers
+     * @param int $points
+     * @throws \Exception
+     */
+    public function itShould_calculatePoints_badAnswersOnly(int $numberOfBadAnswers, int $points)
+    {
+        config(
+            [
+                'app.max_exercise_bad_answers_per_day' => 3,
+            ]
+        );
+
+        $user = $this->createUser();
+        $exercise = $this->createExercise();
+        $this->createExerciseResult(
+            [
+                'user_id' => $user->id,
+                'exercise_id' => $exercise->id,
+                'percent_of_good_answers' => 0,
+                'latest_bad_answer' => Carbon::today(),
+                'number_of_bad_answers' => $numberOfBadAnswers,
+                'number_of_bad_answers_today' => $numberOfBadAnswers,
+                'number_of_good_answers' => 0,
+                'number_of_good_answers_today' => 0,
             ]
         );
         $userExercise = $this->createUserExercise($user, $exercise);
