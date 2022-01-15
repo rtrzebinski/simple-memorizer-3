@@ -22,12 +22,6 @@ class ExerciseWebController extends WebController
     /**
      * @param int $lessonId
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
-     * @throws AuthorizationException
-     */
-
-    /**
-     * @param int $lessonId
-     * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      * @throws AuthorizationException
      */
