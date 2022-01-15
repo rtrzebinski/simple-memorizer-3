@@ -77,7 +77,7 @@ class ExerciseWebController extends WebController
         foreach ($exercises as $row) {
             try {
                 list($question, $answer) = explode('-', $row);
-            } catch (ErrorException $e) {
+            } catch (ErrorException) {
                 // ignore invalid lines
                 continue;
             }
