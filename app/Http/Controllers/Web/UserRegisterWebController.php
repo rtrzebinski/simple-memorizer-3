@@ -32,17 +32,11 @@ class UserRegisterWebController extends WebController
     protected $redirectTo = '/home';
 
     /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
      * Create a new controller instance.
      * @param UserRepository $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     /**

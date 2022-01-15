@@ -17,15 +17,12 @@ use Illuminate\Support\Facades\DB;
 class AuthenticatedUserExerciseRepository implements AbstractUserExerciseRepositoryInterface,
                                                      AuthenticatedUserExerciseRepositoryInterface
 {
-    private Authenticatable $user;
-
     /**
      * AuthenticatedUserExerciseRepository constructor.
      * @param Authenticatable $user
      */
-    public function __construct(Authenticatable $user)
+    public function __construct(private Authenticatable $user)
     {
-        $this->user = $user;
     }
 
     /**

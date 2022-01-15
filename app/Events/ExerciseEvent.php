@@ -7,19 +7,14 @@ use App\Models\User;
 
 abstract class ExerciseEvent implements LessonEventInterface
 {
-    protected int $exerciseId;
-    protected User $user;
-
     /**
      * Create a new event instance.
      *
      * @param int $exerciseId
      * @param User $user
      */
-    public function __construct(int $exerciseId, User $user)
+    public function __construct(protected int $exerciseId, protected User $user,)
     {
-        $this->exerciseId = $exerciseId;
-        $this->user = $user;
     }
 
     public function user(): User

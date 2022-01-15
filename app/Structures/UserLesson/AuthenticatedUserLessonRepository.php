@@ -17,17 +17,11 @@ use Illuminate\Support\Facades\DB;
 class AuthenticatedUserLessonRepository implements AuthenticatedUserLessonRepositoryInterface
 {
     /**
-     * @var Authenticatable
-     */
-    private Authenticatable $user;
-
-    /**
      * AuthenticatedUserLessonRepository constructor.
      * @param Authenticatable $user
      */
-    public function __construct(Authenticatable $user)
+    public function __construct(private Authenticatable $user)
     {
-        $this->user = $user;
     }
 
     /**
