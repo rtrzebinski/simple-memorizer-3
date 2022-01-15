@@ -51,7 +51,6 @@ class LearningServiceTest extends TestCase
             ]
         );
 
-
         $userExercises = collect(
             [
                 $this->createUserExercise($user, $exercise),
