@@ -32,7 +32,7 @@ class LearnLessonApiController extends ApiController
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         LearningService $learningService,
         AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
-        UserExerciseModifier $userExerciseModifier
+        UserExerciseModifier $userExerciseModifier,
     ): JsonResponse {
         $userExercises = $userExerciseRepository->fetchUserExercisesOfLesson($lesson->id);
 

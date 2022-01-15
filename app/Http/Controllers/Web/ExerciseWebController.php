@@ -104,7 +104,7 @@ class ExerciseWebController extends WebController
     public function edit(
         Exercise $exercise,
         AbstractUserLessonRepositoryInterface $userLessonRepository,
-        Request $request
+        Request $request,
     ): View {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 

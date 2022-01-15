@@ -15,7 +15,7 @@ class ExerciseSearchWebController extends WebController
      */
     public function searchForExercises(
         Request $request,
-        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
     ) {
         $phrase = $request->get('phrase');
 

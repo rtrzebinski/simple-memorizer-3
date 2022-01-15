@@ -30,7 +30,7 @@ class LearnLessonWebController extends WebController
         LearningService $learningService,
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
-        UserExerciseModifier $userExerciseModifier
+        UserExerciseModifier $userExerciseModifier,
     ) {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
@@ -100,7 +100,7 @@ class LearnLessonWebController extends WebController
         LearningService $learningService,
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
-        UserExerciseModifier $userExerciseModifier
+        UserExerciseModifier $userExerciseModifier,
     ) {
         $this->validate(
             $request,
@@ -123,7 +123,7 @@ class LearnLessonWebController extends WebController
             $learningService,
             $userExerciseRepository,
             $userLessonRepository,
-            $userExerciseModifier
+            $userExerciseModifier,
         );
     }
 }

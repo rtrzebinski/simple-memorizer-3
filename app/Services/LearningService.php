@@ -30,7 +30,7 @@ class LearningService
     public function __construct(
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         PointsCalculator $pointsCalculator,
-        ArrayRandomizer $randomizationService
+        ArrayRandomizer $randomizationService,
     ) {
         $this->userExerciseRepository = $userExerciseRepository;
         $this->pointsCalculator = $pointsCalculator;

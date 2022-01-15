@@ -22,7 +22,7 @@ class LearnAllWebController extends WebController
     public function learnAll(
         Request $request,
         LearningService $learningService,
-        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
     ) {
         if ($requestedExerciseId = $request->get('requested_exercise_id')) {
             $userExercise = $userExerciseRepository->fetchUserExerciseOfExercise($requestedExerciseId);
@@ -65,7 +65,7 @@ class LearnAllWebController extends WebController
     public function handleAnswer(
         Request $request,
         LearningService $learningService,
-        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
+        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
     ) {
         $this->validate(
             $request,
