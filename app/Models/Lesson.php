@@ -72,6 +72,9 @@ class Lesson extends Model
      */
     protected $casts = [
         'owner_id' => 'int',
+        'exercises_count' => 'int',
+        'subscribers_count' => 'int',
+        'child_lessons_count' => 'int',
     ];
 
     /**

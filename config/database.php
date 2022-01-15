@@ -1,6 +1,6 @@
 <?php
 
-$redisUrl = parse_url(env('REDIS_URL'));
+$redisUrl = env('REDIS_URL') ? parse_url(env('REDIS_URL')) : null;
 
 return [
 
