@@ -23,7 +23,7 @@ class LearnAllWebController extends WebController
         Request $request,
         LearningService $learningService,
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
-    ) {
+    ): View|Response {
         if ($requestedExerciseId = $request->get('requested_exercise_id')) {
             $userExercise = $userExerciseRepository->fetchUserExerciseOfExercise($requestedExerciseId);
             // ensure user can access this exercise
@@ -66,7 +66,7 @@ class LearnAllWebController extends WebController
         Request $request,
         LearningService $learningService,
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
-    ) {
+    ): Response|View {
         $this->validate(
             $request,
             [

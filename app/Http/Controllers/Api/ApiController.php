@@ -31,7 +31,7 @@ class ApiController extends BaseController
      * User authenticated with API token.
      * @return User|Authenticatable
      */
-    protected function user(): User
+    protected function user(): User|Authenticatable
     {
         return Auth::guard('api')->user();
     }
