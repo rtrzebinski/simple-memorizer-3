@@ -4,7 +4,7 @@ Simple memorizer is an educational tool using [spaced repetition](https://en.wik
 
 Although the principle is useful in many contexts, spaced repetition is commonly applied when a learner must acquire many items and retain them indefinitely in memory. It is, therefore, well suited for the problem of vocabulary acquisition in the course of **second-language learning**.
 
-[Documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki) | [Kanban board](https://github.com/rtrzebinski/simple-memorizer-3/projects/1) | [Live demo](https://simple-memorizer.online)
+[Documentation](https://github.com/rtrzebinski/simple-memorizer-3/wiki) | [Kanban board](https://github.com/rtrzebinski/simple-memorizer-3/projects/1) | [Live demo](https://peaceful-chamber-70920.herokuapp.com)
 
 [![Build Status](https://travis-ci.com/rtrzebinski/simple-memorizer-3.svg?branch=master)](https://travis-ci.com/rtrzebinski/simple-memorizer-3)
 
