@@ -77,13 +77,10 @@ class LearnAllWebController extends WebController
 
         $previousExerciseId = $request->previous_exercise_id;
 
-        if ($request->answer == 'good') {
-            event(new ExerciseGoodAnswer($previousExerciseId, $this->user()));
-        }
-
-        if ($request->answer == 'bad') {
-            event(new ExerciseBadAnswer($previousExerciseId, $this->user()));
-        }
+        match ($request->answer) {
+            'good' => event(new ExerciseGoodAnswer($previousExerciseId, $this->user())),
+            'bad' => event(new ExerciseBadAnswer($previousExerciseId, $this->user())),
+        };
 
         return $this->learnAll($request, $learningService, $userExerciseRepository);
     }
