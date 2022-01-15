@@ -74,7 +74,7 @@ class UserRegisterWebController extends WebController
      * @param mixed $user
      * @return mixed
      */
-    protected function registered(Request $request, $user)
+    protected function registered(Request $request, mixed $user)
     {
         if ($request->session()->get('subscribe-lesson-id')) {
             /** @var Lesson $lesson */

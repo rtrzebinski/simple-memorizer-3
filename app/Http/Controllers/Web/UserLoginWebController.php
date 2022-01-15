@@ -35,7 +35,7 @@ class UserLoginWebController extends WebController
      * @param mixed $user
      * @return mixed
      */
-    protected function authenticated(Request $request, $user)
+    protected function authenticated(Request $request, mixed $user)
     {
         if ($request->session()->get('subscribe-lesson-id')) {
             /** @var Lesson $lesson */

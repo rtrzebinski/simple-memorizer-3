@@ -14,7 +14,7 @@ class ArrayRandomizer
      * @param array $items
      * @return mixed
      */
-    public function randomArrayElement(array $items)
+    public function randomArrayElement(array $items): mixed
     {
         return $items[array_rand($items)];
     }

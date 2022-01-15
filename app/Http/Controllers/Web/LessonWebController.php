@@ -68,7 +68,7 @@ class LessonWebController extends WebController
      * @param Lesson $lesson
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @param AbstractUserExerciseRepositoryInterface $userExerciseRepository
-     * @return mixed
+     * @return View
      * @throws AuthorizationException
      */
     public function exercises(
