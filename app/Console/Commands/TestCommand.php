@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Dotenv\Parser\Parser;
 use Illuminate\Console\Command;
 
 /**
@@ -46,6 +47,28 @@ class TestCommand extends Command
      */
     public function handle(string $in): bool
     {
+        $stack = [];
 
+        $brackets = [
+            ')' => '(',
+            ']' => '[',
+            '}' => '{',
+        ];
+
+        foreach (str_split($in) as $c) {
+            // opening exists
+            if (in_array($c, $brackets)) {
+                $stack[] = $c;
+            }
+
+            // closing exists
+            if (array_key_exists($c, $brackets)) {
+                if (array_pop($stack) != $brackets[$c]) {
+                    return false;
+                }
+            }
+        }
+
+        return empty($stack);
     }
 }
