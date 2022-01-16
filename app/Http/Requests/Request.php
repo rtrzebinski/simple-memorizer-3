@@ -13,7 +13,7 @@ abstract class Request extends FormRequest
      *
      * @return User
      */
-    public function detectUser()
+    public function detectUser(): User
     {
         if ($this->ajax() || $this->wantsJson()) {
             return $this->user('api');
@@ -25,9 +25,9 @@ abstract class Request extends FormRequest
     /**
      * Get a guard instance for the current user.
      *
-     * @return Gate
+     * @return \Illuminate\Auth\Access\Gate
      */
-    public function gate()
+    public function gate(): \Illuminate\Auth\Access\Gate
     {
         return Gate::forUser($this->detectUser());
     }

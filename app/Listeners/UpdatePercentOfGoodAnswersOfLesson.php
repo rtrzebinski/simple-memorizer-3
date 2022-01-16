@@ -21,7 +21,7 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
      * @param LessonEventInterface $event
      * @return void
      */
-    public function handle(LessonEventInterface $event)
+    public function handle(LessonEventInterface $event): void
     {
         $lesson = $event->lesson();
         $user = $event->user();
@@ -33,7 +33,7 @@ class UpdatePercentOfGoodAnswersOfLesson implements ShouldQueue
      * @param Lesson $lesson
      * @param User $user
      */
-    private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user)
+    private function updatePercentOfGoodAnswersOfLesson(Lesson $lesson, User $user): void
     {
         // fetch user exercises of a lesson
         $userExerciseRepository = new AuthenticatedUserExerciseRepository($user);

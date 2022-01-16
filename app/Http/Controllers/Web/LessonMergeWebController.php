@@ -17,7 +17,7 @@ class LessonMergeWebController extends WebController
      * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
      * @return View|Response
      */
-    public function index(Lesson $lesson, AuthenticatedUserLessonRepositoryInterface $userLessonRepository)
+    public function index(Lesson $lesson, AuthenticatedUserLessonRepositoryInterface $userLessonRepository): View|Response
     {
         // user is not the owner of the lesson
         if ($lesson->owner_id != $this->user()->id) {
@@ -66,7 +66,7 @@ class LessonMergeWebController extends WebController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function merge(Lesson $lesson, Request $request)
+    public function merge(Lesson $lesson, Request $request): RedirectResponse|Response
     {
         $this->validate(
             $request,

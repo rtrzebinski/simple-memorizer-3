@@ -26,9 +26,9 @@ class UserRepository
     /**
      * @param string $email
      * @param string $password
-     * @return User
+     * @return User|null
      */
-    public function findByCredentials(string $email, string $password)
+    public function findByCredentials(string $email, string $password): ?User
     {
         /** @var User $user */
         $user = User::whereEmail($email)->first();
@@ -36,5 +36,7 @@ class UserRepository
         if ($user && Hash::check($password, $user->password)) {
             return $user;
         }
+
+        return null;
     }
 }

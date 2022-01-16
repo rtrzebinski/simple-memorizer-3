@@ -12,7 +12,7 @@ class ForgotPasswordApiController extends ApiController
      * @param Request $request
      * @return JsonResponse|null
      */
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(Request $request): ?JsonResponse
     {
         $this->validate($request, ['email' => 'required|email']);
 
@@ -23,5 +23,7 @@ class ForgotPasswordApiController extends ApiController
         if ($response !== Password::RESET_LINK_SENT) {
             return $this->response('Unable to send reset link email.', 450);
         }
+
+        return null;
     }
 }

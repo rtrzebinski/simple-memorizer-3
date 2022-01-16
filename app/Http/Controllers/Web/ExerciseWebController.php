@@ -25,7 +25,7 @@ class ExerciseWebController extends WebController
      * @return View
      * @throws AuthorizationException
      */
-    public function create(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository)
+    public function create(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository): View
     {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
@@ -56,7 +56,7 @@ class ExerciseWebController extends WebController
      * @return View
      * @throws AuthorizationException
      */
-    public function createMany(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository)
+    public function createMany(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository): View
     {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
@@ -70,7 +70,7 @@ class ExerciseWebController extends WebController
      * @param StoreManyExercisesRequest $request
      * @return RedirectResponse
      */
-    public function storeMany(Lesson $lesson, StoreManyExercisesRequest $request)
+    public function storeMany(Lesson $lesson, StoreManyExercisesRequest $request): RedirectResponse
     {
         $exercises = explode("\r\n", $request->exercises);
 

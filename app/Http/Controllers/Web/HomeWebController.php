@@ -14,7 +14,7 @@ class HomeWebController extends WebController
      * @param AuthenticatedUserLessonRepositoryInterface $userLessonRepository
      * @return View
      */
-    public function index(AuthenticatedUserLessonRepositoryInterface $userLessonRepository)
+    public function index(AuthenticatedUserLessonRepositoryInterface $userLessonRepository): View
     {
         $data = [
             'ownedLessons' => $userLessonRepository->fetchOwnedUserLessons(),

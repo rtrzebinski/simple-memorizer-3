@@ -54,7 +54,7 @@ class Exercise extends Model
     /**
      * @return BelongsTo
      */
-    public function lesson()
+    public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class);
     }

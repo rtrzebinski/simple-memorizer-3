@@ -133,7 +133,7 @@ class LessonWebController extends WebController
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View|Response
      */
-    public function settings(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository)
+    public function settings(int $lessonId, AbstractUserLessonRepositoryInterface $userLessonRepository): View|Response
     {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 

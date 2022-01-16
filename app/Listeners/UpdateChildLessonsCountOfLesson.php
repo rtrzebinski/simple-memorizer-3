@@ -25,14 +25,17 @@ class UpdateChildLessonsCountOfLesson
      * @param LessonEventInterface $event
      * @return void
      */
-    public function handle(LessonEventInterface $event)
+    public function handle(LessonEventInterface $event): void
     {
         $lesson = $event->lesson();
 
         $this->updateExercisesCountOfLesson($lesson);
     }
 
-    private function updateExercisesCountOfLesson(Lesson $lesson)
+    /**
+     * @param Lesson $lesson
+     */
+    private function updateExercisesCountOfLesson(Lesson $lesson): void
     {
         $lesson->child_lessons_count = $lesson->childLessons()->count();
         $lesson->save();

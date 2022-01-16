@@ -80,7 +80,7 @@ class Lesson extends Model
     /**
      * @return BelongsTo
      */
-    public function owner()
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
@@ -88,7 +88,7 @@ class Lesson extends Model
     /**
      * @return BelongsToMany|Lesson[]
      */
-    public function childLessons()
+    public function childLessons(): BelongsToMany|Collection
     {
         return $this->belongsToMany(Lesson::class, 'lesson_aggregate', 'parent_lesson_id', 'child_lesson_id');
     }
@@ -96,7 +96,7 @@ class Lesson extends Model
     /**
      * @return BelongsToMany|Lesson[]
      */
-    public function parentLessons()
+    public function parentLessons(): BelongsToMany|Collection
     {
         return $this->belongsToMany(Lesson::class, 'lesson_aggregate', 'child_lesson_id', 'parent_lesson_id');
     }
@@ -104,7 +104,7 @@ class Lesson extends Model
     /**
      * @return HasMany
      */
-    public function exercises()
+    public function exercises(): HasMany
     {
         return $this->hasMany(Exercise::class);
     }
@@ -124,7 +124,7 @@ class Lesson extends Model
     /**
      * @return BelongsToMany
      */
-    public function subscribedUsers()
+    public function subscribedUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
             // required for percent_of_good_answers to be included in the result
@@ -135,7 +135,7 @@ class Lesson extends Model
     /**
      * @param User $user
      */
-    public function subscribe(User $user)
+    public function subscribe(User $user): void
     {
         $this->subscribedUsers()->save($user);
         event(new LessonSubscribed($this, $user));
@@ -145,7 +145,7 @@ class Lesson extends Model
      * @param User $user
      * @throws \Exception
      */
-    public function unsubscribe(User $user)
+    public function unsubscribe(User $user): void
     {
         // just in case as policy already prevents this
         if ($this->owner_id == $user->id) {

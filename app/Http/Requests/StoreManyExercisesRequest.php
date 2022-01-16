@@ -2,14 +2,16 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Auth\Access\Response;
+
 class StoreManyExercisesRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return Response
      */
-    public function authorize()
+    public function authorize(): Response
     {
         return $this->gate()->authorize('modify', $this->route('lesson'));
     }
@@ -19,7 +21,7 @@ class StoreManyExercisesRequest extends Request
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'exercises' => 'required|string',

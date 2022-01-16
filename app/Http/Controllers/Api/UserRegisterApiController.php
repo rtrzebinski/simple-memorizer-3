@@ -13,7 +13,7 @@ class UserRegisterApiController extends ApiController
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function register(Request $request, UserRepository $userRepository)
+    public function register(Request $request, UserRepository $userRepository): JsonResponse
     {
         $this->validate(
             $request,

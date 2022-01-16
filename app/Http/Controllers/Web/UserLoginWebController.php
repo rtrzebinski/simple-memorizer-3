@@ -33,7 +33,7 @@ class UserLoginWebController extends WebController
      *
      * @param Request $request
      * @param mixed $user
-     * @return mixed
+     * @return mixed|void
      */
     protected function authenticated(Request $request, mixed $user)
     {

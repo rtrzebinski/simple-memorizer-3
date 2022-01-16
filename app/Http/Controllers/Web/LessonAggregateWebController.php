@@ -16,7 +16,7 @@ class LessonAggregateWebController extends WebController
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      */
-    public function index(Lesson $parentLesson, AbstractUserLessonRepositoryInterface $userLessonRepository)
+    public function index(Lesson $parentLesson, AbstractUserLessonRepositoryInterface $userLessonRepository): View
     {
         // all lessons owned by user
         $ownedLessons = $this->user()->ownedLessons;
@@ -63,7 +63,7 @@ class LessonAggregateWebController extends WebController
      * @param SyncLessonAggregateRequest $request
      * @return RedirectResponse
      */
-    public function sync(Lesson $parentLesson, SyncLessonAggregateRequest $request)
+    public function sync(Lesson $parentLesson, SyncLessonAggregateRequest $request): RedirectResponse
     {
         $parentLesson->childLessons()->sync($request->aggregates);
 

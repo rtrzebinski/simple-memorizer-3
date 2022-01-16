@@ -38,7 +38,7 @@ class LessonApiController extends ApiController
      * @param Lesson $lesson
      * @throws AuthorizationException
      */
-    public function subscribeLesson(Lesson $lesson)
+    public function subscribeLesson(Lesson $lesson): void
     {
         $this->authorizeForUser($this->user(), 'subscribe', $lesson);
         $lesson->subscribe($this->user());
@@ -48,7 +48,7 @@ class LessonApiController extends ApiController
      * @param Lesson $lesson
      * @throws AuthorizationException
      */
-    public function unsubscribeLesson(Lesson $lesson)
+    public function unsubscribeLesson(Lesson $lesson): void
     {
         $this->authorizeForUser($this->user(), 'unsubscribe', $lesson);
         $lesson->unsubscribe($this->user());
@@ -96,7 +96,7 @@ class LessonApiController extends ApiController
      * @param Lesson $lesson
      * @throws AuthorizationException
      */
-    public function deleteLesson(Lesson $lesson)
+    public function deleteLesson(Lesson $lesson): void
     {
         $this->authorizeForUser($this->user(), 'modify', $lesson);
         $lesson->delete();

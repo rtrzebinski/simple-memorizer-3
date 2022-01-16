@@ -51,7 +51,7 @@ class LearnLessonApiController extends ApiController
     /**
      * @param Exercise $exercise
      */
-    public function handleGoodAnswer(Exercise $exercise)
+    public function handleGoodAnswer(Exercise $exercise): void
     {
         event(new ExerciseGoodAnswer($exercise->id, $this->user()));
     }
@@ -59,7 +59,7 @@ class LearnLessonApiController extends ApiController
     /**
      * @param Exercise $exercise
      */
-    public function handleBadAnswer(Exercise $exercise)
+    public function handleBadAnswer(Exercise $exercise): void
     {
         event(new ExerciseBadAnswer($exercise->id, $this->user()));
     }

@@ -59,7 +59,7 @@ class User extends \Illuminate\Foundation\Auth\User
      * Lessons user subscribes.
      * @return BelongsToMany
      */
-    public function subscribedLessons()
+    public function subscribedLessons(): BelongsToMany
     {
         return $this->belongsToMany(Lesson::class)->where('lessons.owner_id', '!=', $this->id);
     }
@@ -68,7 +68,7 @@ class User extends \Illuminate\Foundation\Auth\User
      * Lessons user owns.
      * @return HasMany
      */
-    public function ownedLessons()
+    public function ownedLessons(): HasMany
     {
         return $this->hasMany(Lesson::class, 'owner_id');
     }

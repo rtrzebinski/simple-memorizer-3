@@ -18,7 +18,7 @@ class UpdatePercentOfGoodAnswersOfExerciseResult implements ShouldQueue
      * @param ExerciseEvent $event
      * @return void
      */
-    public function handle(ExerciseEvent $event)
+    public function handle(ExerciseEvent $event): void
     {
         $exerciseId = $event->exerciseId();
         $user = $event->user();

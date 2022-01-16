@@ -31,7 +31,7 @@ class LearnLessonWebController extends WebController
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
         UserExerciseModifier $userExerciseModifier,
-    ) {
+    ): View|Response {
         $userLesson = $userLessonRepository->fetchUserLesson($lessonId);
 
         // lesson does not exist
@@ -101,7 +101,7 @@ class LearnLessonWebController extends WebController
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
         AuthenticatedUserLessonRepositoryInterface $userLessonRepository,
         UserExerciseModifier $userExerciseModifier,
-    ) {
+    ): View {
         $this->validate(
             $request,
             [

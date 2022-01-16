@@ -67,7 +67,7 @@ class ExerciseApiController extends ApiController
      * @param Exercise $exercise
      * @throws Exception
      */
-    public function deleteExercise(Exercise $exercise)
+    public function deleteExercise(Exercise $exercise): void
     {
         $this->authorizeForUser($this->user(), 'modify', $exercise);
 

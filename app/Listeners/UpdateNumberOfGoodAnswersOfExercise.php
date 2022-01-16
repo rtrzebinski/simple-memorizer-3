@@ -18,7 +18,7 @@ class UpdateNumberOfGoodAnswersOfExercise
      * @param ExerciseGoodAnswer $event
      * @return void
      */
-    public function handle(ExerciseGoodAnswer $event)
+    public function handle(ExerciseGoodAnswer $event): void
     {
         $exerciseId = $event->exerciseId();
         $user = $event->user();

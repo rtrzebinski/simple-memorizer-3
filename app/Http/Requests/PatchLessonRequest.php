@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Lesson;
+use Illuminate\Auth\Access\Response;
 
 /**
  * @property mixed lesson_id
@@ -12,9 +13,9 @@ class PatchLessonRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return Response
      */
-    public function authorize()
+    public function authorize(): Response
     {
         return $this->gate()->authorize('modify', $this->route('lesson'));
     }
@@ -24,7 +25,7 @@ class PatchLessonRequest extends Request
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'visibility' => 'in:' . implode(',', Lesson::VISIBILITIES),

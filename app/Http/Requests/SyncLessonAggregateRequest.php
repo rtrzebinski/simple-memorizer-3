@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Auth\Access\Response;
+
 /**
  * @property array|int[] aggregates
  */
@@ -10,9 +12,9 @@ class SyncLessonAggregateRequest extends Request
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return Response
      */
-    public function authorize()
+    public function authorize(): Response
     {
         return $this->gate()->authorize('modify', $this->route('parentLesson'));
     }
@@ -22,7 +24,7 @@ class SyncLessonAggregateRequest extends Request
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'aggregates' => 'array',

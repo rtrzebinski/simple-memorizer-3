@@ -24,7 +24,7 @@ class UpdateSubscribersCountOfLesson
      * @param LessonEvent $event
      * @return void
      */
-    public function handle(LessonEvent $event)
+    public function handle(LessonEvent $event): void
     {
         $lesson = $event->lesson();
 

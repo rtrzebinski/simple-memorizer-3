@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Models\Lesson;
 use App\Models\UserRepository;
 use App\Models\User;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -43,9 +44,9 @@ class UserRegisterWebController extends WebController
      * Get a validator for an incoming registration request.
      *
      * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return ValidatorContract
      */
-    protected function validator(array $data)
+    protected function validator(array $data): ValidatorContract
     {
         return Validator::make(
             $data,
@@ -62,7 +63,7 @@ class UserRegisterWebController extends WebController
      * @param array $attributes
      * @return User
      */
-    protected function create(array $attributes)
+    protected function create(array $attributes): User
     {
         return $this->userRepository->create($attributes);
     }

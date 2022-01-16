@@ -14,7 +14,7 @@ class MainWebController extends WebController
      * @param AbstractUserLessonRepositoryInterface $userLessonRepository
      * @return View
      */
-    public function index(AbstractUserLessonRepositoryInterface $userLessonRepository)
+    public function index(AbstractUserLessonRepositoryInterface $userLessonRepository): View
     {
         if (!Auth::guest()) {
             redirect('/home');

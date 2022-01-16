@@ -16,7 +16,7 @@ class UserLoginApiController extends ApiController
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function login(Request $request, UserRepository $userRepository)
+    public function login(Request $request, UserRepository $userRepository): JsonResponse
     {
         $this->validate(
             $request,

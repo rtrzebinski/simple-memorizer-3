@@ -16,7 +16,7 @@ class ExerciseSearchWebController extends WebController
     public function searchForExercises(
         Request $request,
         AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
-    ) {
+    ): View {
         $phrase = $request->get('phrase');
 
         if ($phrase) {
