@@ -17,24 +17,17 @@ use Illuminate\Support\Collection;
  */
 class LearningService
 {
-    private AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository;
-    private PointsCalculator $pointsCalculator;
-    private ArrayRandomizer $arrayRandomizer;
-
     /**
      * LearningService constructor.
      * @param AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository
      * @param PointsCalculator $pointsCalculator
-     * @param ArrayRandomizer $randomizationService
+     * @param ArrayRandomizer $arrayRandomizer
      */
     public function __construct(
-        AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
-        PointsCalculator $pointsCalculator,
-        ArrayRandomizer $randomizationService,
+        private AuthenticatedUserExerciseRepositoryInterface $userExerciseRepository,
+        private PointsCalculator $pointsCalculator,
+        private ArrayRandomizer $arrayRandomizer,
     ) {
-        $this->userExerciseRepository = $userExerciseRepository;
-        $this->pointsCalculator = $pointsCalculator;
-        $this->arrayRandomizer = $randomizationService;
     }
 
     /**
