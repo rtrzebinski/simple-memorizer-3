@@ -24,7 +24,7 @@ class ApiController extends BaseController
      */
     protected function response(mixed $data = null, int $statusCode = 200, array $headers = []): JsonResponse
     {
-        return JsonResponse::create($data, $statusCode, $headers);
+        return new JsonResponse($data, $statusCode, $headers);
     }
 
     /**
