@@ -6,6 +6,7 @@ use App\Models\Lesson;
 use App\Models\User;
 use App\Structures\UserExercise\UserExercise;
 use App\Structures\UserLesson\UserLesson;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -18,6 +19,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      * The base URL to use while testing the application.
      */
     protected string $baseUrl = 'http://localhost';
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        Carbon::setTestNow(Carbon::now());
+    }
 
     /**
      * Creates the application.
