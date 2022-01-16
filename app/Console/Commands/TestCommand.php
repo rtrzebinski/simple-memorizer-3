@@ -41,10 +41,34 @@ class TestCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @param string $in
+     * @return bool
      */
-    public function handle()
+    public function handle(string $in): bool
     {
-        return 0;
+        $stack = [];
+
+        $brackets = [
+            '(' => ')',
+            '[' => ']',
+            '{' => '}',
+        ];
+
+        foreach (str_split($in) as $c) {
+            // opening exists
+            if (array_key_exists($c, $brackets)) {
+                $stack[] = $c;
+            }
+
+            // closing exists
+            if (in_array($c, $brackets)) {
+                $key = array_search($c, $brackets);
+                if ($key != array_pop($stack)) {
+                    return false;
+                }
+            }
+        }
+
+        return empty($stack);
     }
 }
