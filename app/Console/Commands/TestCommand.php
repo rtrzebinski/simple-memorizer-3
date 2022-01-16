@@ -46,29 +46,6 @@ class TestCommand extends Command
      */
     public function handle(string $in): bool
     {
-        $stack = [];
 
-        $brackets = [
-            '(' => ')',
-            '[' => ']',
-            '{' => '}',
-        ];
-
-        foreach (str_split($in) as $c) {
-            // opening exists
-            if (array_key_exists($c, $brackets)) {
-                $stack[] = $c;
-            }
-
-            // closing exists
-            if (in_array($c, $brackets)) {
-                $key = array_search($c, $brackets);
-                if ($key != array_pop($stack)) {
-                    return false;
-                }
-            }
-        }
-
-        return empty($stack);
     }
 }
